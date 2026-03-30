@@ -333,6 +333,13 @@ td.num{font-family:var(--mono);text-align:right;}
 .mob-field-value.gold{color:var(--gold);}
 .mob-open-btn{display:block;width:100%;padding:11px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;margin-top:4px;}
 .mob-no-result{text-align:center;padding:32px 16px;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.8;}
+.mob-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
+.mob-edit-field{display:flex;flex-direction:column;gap:3px;}
+.mob-edit-input{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 12px;font-family:var(--mono);font-size:14px;background:#fff;color:var(--ink);outline:none;-webkit-appearance:none;}
+.mob-edit-input:focus{border-color:var(--ink);border-width:2px;}
+.mob-status-sel{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 12px;font-family:var(--mono);font-size:13px;background:#fff;color:var(--ink);outline:none;-webkit-appearance:none;}
+.mob-log-area{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 12px;font-family:var(--sans);font-size:13px;background:#fff;color:var(--ink);outline:none;resize:none;min-height:72px;-webkit-appearance:none;}
+.mob-log-area:focus,.mob-status-sel:focus{border-color:var(--ink);}
 </style>
 
 </head>
@@ -1224,7 +1231,8 @@ function mobileSearch(q){
   contacts.forEach(c=>{
     const sc=STATUS_CLASS[c.status]||'st-hold';
     const sl=STATUS_LABEL[c.status]||c.status;
-    html+=`<div class="mob-result">
+    const cid=c.id;
+    html+=`<div class="mob-result" id="mob-contact-${cid}">
       <div class="mob-result-header">
         <div>
           <div class="mob-result-vin">${c.contact_type||'broker'} · ${c.region||''}</div>
@@ -1233,18 +1241,129 @@ function mobileSearch(q){
         <span class="status-badge ${sc}" style="margin-left:8px;flex-shrink:0">${sl}</span>
       </div>
       <div class="mob-result-body">
-        <div class="mob-field-grid">
-          ${c.contact_name?`<div class="mob-field" style="grid-column:span 2"><div class="mob-field-label">Contact</div><div class="mob-field-value">${c.contact_name}${c.contact_title?' · <span style="color:var(--muted);font-size:11px">'+c.contact_title+'</span>':''}</div></div>`:''}
-          ${c.phone?`<div class="mob-field"><div class="mob-field-label">Phone</div><div class="mob-field-value"><a href="tel:${c.phone}" style="color:var(--s65);text-decoration:none">${c.phone}</a></div></div>`:''}
-          ${c.email?`<div class="mob-field"><div class="mob-field-label">Email</div><div class="mob-field-value" style="font-size:11px"><a href="mailto:${c.email}" style="color:var(--accent);text-decoration:none">${c.email}</a></div></div>`:''}
-          <div class="mob-field"><div class="mob-field-label">Location</div><div class="mob-field-value">${c.location||'—'}</div></div>
-        </div>
-        <button class="mob-open-btn" onclick="switchTab('crm');openCRMDrawer('${c.id}')">Open CRM →</button>
-      </div>
-    </div>`;
-  });
 
-  el.innerHTML=html;
+        <!-- Read view -->
+        <div id="mob-cread-${cid}">
+          <div class="mob-field-grid">
+            ${c.contact_name?`<div class="mob-field" style="grid-column:span 2"><div class="mob-field-label">Contact</div><div class="mob-field-value">${c.contact_name}${c.contact_title?' · <span style="color:var(--muted);font-size:11px">'+c.contact_title+'</span>':''}</div></div>`:''}
+            ${c.phone?`<div class="mob-field"><div class="mob-field-label">Phone</div><div class="mob-field-value"><a href="tel:${c.phone}" style="color:var(--s65);text-decoration:none">${c.phone}</a></div></div>`:''}
+            ${c.email?`<div class="mob-field" style="grid-column:span 2"><div class="mob-field-label">Email</div><div class="mob-field-value" style="font-size:11px"><a href="mailto:${c.email}" style="color:var(--accent);text-decoration:none">${c.email}</a></div></div>`:''}
+            <div class="mob-field"><div class="mob-field-label">Location</div><div class="mob-field-value">${c.location||'—'}</div></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:4px">
+            <button class="mob-open-btn" style="background:var(--s65)" onclick="mobShowEdit('${cid}')">Edit Contact Info</button>
+            <button class="mob-open-btn" onclick="switchTab('crm');openCRMDrawer('${cid}')">Full CRM →</button>
+          </div>
+        </div>
+
+        <!-- Edit view (hidden by default) -->
+        <div id="mob-cedit-${cid}" style="display:none">
+          <div class="mob-edit-grid">
+            <div class="mob-edit-field">
+              <div class="mob-field-label">Contact Name</div>
+              <input class="mob-edit-input" id="mob-name-${cid}" value="${(c.contact_name||'').replace(/"/g,'&quot;')}" placeholder="e.g. Mike Johnson">
+            </div>
+            <div class="mob-edit-field">
+              <div class="mob-field-label">Title</div>
+              <input class="mob-edit-input" id="mob-title-${cid}" value="${(c.contact_title||'').replace(/"/g,'&quot;')}" placeholder="e.g. Used Car Mgr">
+            </div>
+            <div class="mob-edit-field">
+              <div class="mob-field-label">Phone</div>
+              <input class="mob-edit-input" id="mob-phone-${cid}" type="tel" value="${(c.phone||'').replace(/"/g,'&quot;')}" placeholder="(214) 555-1234">
+            </div>
+            <div class="mob-edit-field">
+              <div class="mob-field-label">Email</div>
+              <input class="mob-edit-input" id="mob-email-${cid}" type="email" value="${(c.email||'').replace(/"/g,'&quot;')}" placeholder="name@dealer.com">
+            </div>
+            <div class="mob-edit-field" style="grid-column:span 2">
+              <div class="mob-field-label">Location</div>
+              <input class="mob-edit-input" id="mob-loc-${cid}" value="${(c.location||'').replace(/"/g,'&quot;')}" placeholder="Dallas, TX">
+            </div>
+          </div>
+
+          <!-- Status selector -->
+          <div class="mob-field-label" style="margin:10px 0 5px">Status</div>
+          <select class="mob-status-sel" id="mob-status-${cid}">
+            <option value="pending" ${c.status==='pending'?'selected':''}>⏳ Pending</option>
+            <option value="active" ${c.status==='active'?'selected':''}>✅ Active</option>
+            <option value="scheduled" ${c.status==='scheduled'?'selected':''}>📅 Call Scheduled</option>
+            <option value="declined" ${c.status==='declined'?'selected':''}>❌ Declined</option>
+            <option value="inbound" ${c.status==='inbound'?'selected':''}>⭐ Inbound</option>
+            <option value="hold" ${c.status==='hold'?'selected':''}>⏸ On Hold</option>
+          </select>
+
+          <!-- Quick log entry -->
+          <div class="mob-field-label" style="margin:10px 0 5px">Quick Log Entry</div>
+          <select class="mob-status-sel" id="mob-logtype-${cid}" style="margin-bottom:6px">
+            <option value="note">📝 Note</option>
+            <option value="call">📞 Call</option>
+            <option value="sent">📤 Email Sent</option>
+            <option value="reply">📥 Reply Received</option>
+            <option value="declined">❌ Declined</option>
+          </select>
+          <textarea class="mob-log-area" id="mob-logtext-${cid}" placeholder="What happened? (optional — leave blank to skip)"></textarea>
+
+```
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="mob-open-btn" onclick="mobSaveContact('${cid}')">Save</button>
+        <button class="mob-open-btn" style="background:#666" onclick="mobShowRead('${cid}')">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div>`;
+```
+
+});
+
+el.innerHTML=html;
+}
+
+function mobShowEdit(cid){
+document.getElementById(‘mob-cread-’+cid).style.display=‘none’;
+document.getElementById(‘mob-cedit-’+cid).style.display=‘block’;
+// Focus first empty field
+const nameEl=document.getElementById(‘mob-name-’+cid);
+if(nameEl&&!nameEl.value) nameEl.focus();
+else document.getElementById(‘mob-phone-’+cid)?.focus();
+}
+function mobShowRead(cid){
+document.getElementById(‘mob-cread-’+cid).style.display=‘block’;
+document.getElementById(‘mob-cedit-’+cid).style.display=‘none’;
+}
+
+async function mobSaveContact(cid){
+const btn=document.querySelector(`#mob-cedit-${cid} .mob-open-btn`);
+if(btn){btn.textContent=‘Saving…’;btn.disabled=true;}
+
+const updates={
+contact_name: document.getElementById(‘mob-name-’+cid).value.trim()||null,
+contact_title:document.getElementById(‘mob-title-’+cid).value.trim()||null,
+phone:        document.getElementById(‘mob-phone-’+cid).value.trim()||null,
+email:        document.getElementById(‘mob-email-’+cid).value.trim()||null,
+location:     document.getElementById(‘mob-loc-’+cid).value.trim()||null,
+status:       document.getElementById(‘mob-status-’+cid).value,
+last_activity:new Date().toISOString(),
+};
+
+const{error}=await db.from(‘contacts’).update(updates).eq(‘id’,cid);
+if(error){toast(’Save failed: ’+error.message,true);if(btn){btn.textContent=‘Save’;btn.disabled=false;}return;}
+
+// Update local cache
+const c=allContacts.find(x=>x.id===cid);
+if(c)Object.assign(c,updates);
+
+// Optional log entry
+const logText=document.getElementById(‘mob-logtext-’+cid).value.trim();
+if(logText){
+const logType=document.getElementById(‘mob-logtype-’+cid).value;
+await db.from(‘contact_log’).insert({contact_id:cid,entry_type:logType,body:logText});
+}
+
+toast(‘Saved ✓’);
+// Re-run search to refresh the read view with new data
+const q=document.getElementById(‘mob-input’).value;
+mobileSearch(q);
 }
 
 loadAll();
