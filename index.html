@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>W222s — Live Database</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<!-- ─── STEP 1: Paste your Supabase credentials here ─── -->
+<script>
+  const SUPABASE_URL = 'https://kevwkxuloxxrevodsukg.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtldndreHVsb3h4cmV2b2RzdWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NjkwNTUsImV4cCI6MjA5MDQ0NTA1NX0.xU3Ii35aYSozwtznzD9ixHtO0swgYAGVS4FBaM3pN0M';
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+  --ink:#0f0f0f; --paper:#f7f5f1; --rule:#d4cfc6;
+  --accent:#8b1a1a; --gold:#b8972e; --muted:#888;
+  --s65:#1a3a5c; --s600:#2d4a2d;
+  --mono:'IBM Plex Mono',monospace;
+  --serif:'Playfair Display',Georgia,serif;
+  --sans:'IBM Plex Sans',sans-serif;
+  --st-pending:#b8972e; --st-active:#1a6b3a; --st-declined:#8b1a1a;
+  --st-scheduled:#1a3a5c; --st-hold:#666; --st-inbound:#5b2d8e;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--sans);background:var(--paper);color:var(--ink);min-height:100vh;}
+
+#loading-banner{position:fixed;top:0;left:0;right:0;z-index:999;background:var(--s65);color:#fff;text-align:center;font-family:var(--mono);font-size:12px;padding:8px;letter-spacing:.08em;transition:opacity .4s;}
+#loading-banner.done{opacity:0;pointer-events:none;}
+#toast{position:fixed;bottom:24px;right:24px;z-index:999;background:var(--ink);color:var(--paper);font-family:var(--mono);font-size:12px;padding:10px 18px;border-radius:4px;opacity:0;transform:translateY(8px);transition:all .2s;pointer-events:none;border-left:3px solid var(--gold);}
+#toast.show{opacity:1;transform:translateY(0);}
+#toast.error{border-left-color:var(--accent);}
+
+header{background:var(--ink);color:var(--paper);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:56px;border-bottom:2px solid var(--accent);position:sticky;top:0;z-index:100;}
+.logo{font-family:var(--serif);font-size:18px;letter-spacing:.04em;}
+.logo span{color:var(--gold);}
+.header-meta{font-family:var(--mono);font-size:11px;color:#aaa;text-align:right;line-height:1.6;}
+.header-sync{display:flex;align-items:center;gap:10px;}
+.sync-btn{padding:5px 12px;border:1px solid #444;border-radius:3px;background:none;color:#aaa;font-family:var(--mono);font-size:11px;cursor:pointer;}
+.sync-btn:hover{border-color:var(--gold);color:var(--gold);}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:#2e7d4f;display:inline-block;}
+.sync-dot.error{background:var(--accent);}
+.sync-dot.loading{background:var(--gold);animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+.tab-bar{background:#fff;border-bottom:1px solid var(--rule);display:flex;padding:0 32px;position:sticky;top:56px;z-index:99;}
+.tab{padding:14px 24px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);transition:all .15s;user-select:none;}
+.tab:hover{color:var(--ink);}
+.tab.active{color:var(--ink);border-bottom-color:var(--accent);}
+.tab-badge{display:inline-block;background:var(--rule);color:var(--muted);font-size:10px;padding:1px 6px;border-radius:10px;margin-left:6px;}
+.tab.active .tab-badge{background:var(--accent);color:#fff;}
+.tab-actions{margin-left:auto;display:flex;align-items:center;gap:10px;}
+
+.page{display:none;}
+.page.active{display:flex;}
+.shell{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 98px);width:100%;}
+aside{background:#fff;border-right:1px solid var(--rule);padding:20px 0;position:sticky;top:98px;height:calc(100vh - 98px);overflow-y:auto;}
+.sidebar-section{padding:0 16px 16px;border-bottom:1px solid var(--rule);margin-bottom:16px;}
+.sidebar-section:last-child{border-bottom:none;}
+.sidebar-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:8px;}
+.filter-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;cursor:pointer;font-size:13px;}
+.filter-row input[type=checkbox]{accent-color:var(--accent);}
+.filter-count{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--muted);}
+.pill-group{display:flex;flex-wrap:wrap;gap:5px;}
+.pill{padding:3px 9px;border-radius:20px;font-size:11px;font-family:var(--mono);cursor:pointer;border:1px solid var(--rule);background:var(--paper);color:var(--muted);transition:all .15s;}
+.pill.on-s65{background:var(--s65);color:#fff;border-color:var(--s65);}
+.pill.on-s600{background:var(--s600);color:#fff;border-color:var(--s600);}
+.pill.on{background:var(--ink);color:#fff;border-color:var(--ink);}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+.stat-box{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px;text-align:center;}
+.stat-num{font-family:var(--serif);font-size:20px;display:block;}
+.stat-lbl{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:2px;display:block;}
+main{padding:16px 20px;flex:1;overflow:hidden;}
+
+.toolbar{display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;}
+.search-wrap{position:relative;flex:1;max-width:340px;}
+.search-wrap input{width:100%;border:1px solid var(--rule);border-radius:4px;padding:7px 12px 7px 30px;font-family:var(--mono);font-size:12px;background:#fff;color:var(--ink);outline:none;}
+.search-wrap input:focus{border-color:var(--ink);}
+.search-icon{position:absolute;left:9px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:13px;}
+.result-count{font-family:var(--mono);font-size:11px;color:var(--muted);margin-left:auto;}
+.sort-select,.filter-select{border:1px solid var(--rule);border-radius:4px;padding:6px 9px;font-family:var(--mono);font-size:11px;background:#fff;color:var(--ink);cursor:pointer;outline:none;}
+.btn{padding:6px 12px;border-radius:4px;font-family:var(--mono);font-size:11px;cursor:pointer;border:1px solid var(--rule);background:#fff;color:var(--ink);transition:all .15s;text-transform:uppercase;letter-spacing:.06em;}
+.btn:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
+.btn-accent{background:var(--accent);color:#fff;border-color:var(--accent);}
+.btn-accent:hover{background:#6b1212;border-color:#6b1212;}
+
+/* ── Wide table ── */
+.table-outer{overflow-x:auto;background:#fff;border:1px solid var(--rule);border-radius:6px;}
+table{width:100%;border-collapse:collapse;font-size:11px;white-space:nowrap;}
+/* Column group headers */
+thead tr.group-row th{background:#1c1c1c;color:#999;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;padding:4px 8px;text-align:center;border-right:1px solid #333;}
+thead tr.group-row th:first-child{border-left:none;}
+thead tr.col-row th{background:var(--ink);color:var(--paper);padding:8px 8px;text-align:left;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:500;cursor:pointer;user-select:none;border-right:1px solid #2a2a2a;}
+thead tr.col-row th:hover{color:var(--gold);}
+/* Group borders */
+.grp-identity{border-left:3px solid #444;}
+.grp-vehicle{border-left:3px solid var(--s65);}
+.grp-scoring{border-left:3px solid var(--gold);}
+.grp-sources{border-left:3px solid #5b2d8e;}
+.grp-contacts{border-left:3px solid #1a6b3a;}
+.grp-mileage{border-left:3px solid #1565c0;}
+.grp-history{border-left:3px solid #555;}
+.grp-observed{border-left:3px solid var(--accent);}
+.grp-depr{border-left:3px solid #6b4c11;}
+.grp-jan28{border-left:3px solid #1a6b3a;}
+
+tbody tr{border-bottom:1px solid var(--rule);transition:background .1s;cursor:pointer;}
+tbody tr:hover{background:#faf9f7;}
+tbody tr.selected{background:#fdf5f5;}
+tbody tr.row-dq{opacity:.55;}
+tbody tr.row-watch td:first-child{border-left:3px solid var(--gold);}
+.empty-row td{padding:28px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);}
+td{padding:7px 8px;vertical-align:middle;border-right:1px solid #f0ede8;}
+td.mono{font-family:var(--mono);}
+td.num{font-family:var(--mono);text-align:right;}
+
+.trim-badge{display:inline-block;padding:2px 7px;border-radius:3px;font-family:var(--mono);font-size:10px;font-weight:500;}
+.s65{background:var(--s65);color:#fff;}
+.s600{background:var(--s600);color:#fff;}
+.state-tag{display:inline-block;padding:1px 5px;border:1px solid var(--rule);border-radius:3px;font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--paper);}
+.acc-dot{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:11px;}
+.acc-dot::before{content:'';width:7px;height:7px;border-radius:50%;display:inline-block;}
+.acc-0::before{background:#2e7d4f;} .acc-1::before{background:var(--gold);} .acc-2::before{background:var(--accent);}
+.bool-yes{color:#1a6b3a;font-family:var(--mono);font-size:10px;font-weight:500;}
+.bool-no{color:#ccc;font-family:var(--mono);font-size:10px;}
+.sale-chain{font-family:var(--mono);font-size:10px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;}
+.sale-item{color:var(--ink);} .sale-item.latest{color:var(--accent);font-weight:500;} .arrow{color:var(--rule);margin:0 1px;}
+.link-cluster{display:flex;gap:4px;align-items:center;}
+.ext-link{display:inline-flex;align-items:center;padding:2px 7px;border-radius:3px;font-family:var(--mono);font-size:9px;font-weight:500;text-decoration:none;text-transform:uppercase;letter-spacing:.04em;transition:all .15s;border:1px solid transparent;}
+.lnk-bat{background:#1a1a2e;color:#e8c870;} .lnk-cb{background:#2d5016;color:#9ecf65;}
+.lnk-cfx{background:#cc0000;color:#fff;} .lnk-more{background:var(--paper);color:var(--muted);border-color:var(--rule);}
+.lnk-more:hover{border-color:var(--ink);color:var(--ink);}
+.gi-hi{color:var(--accent);font-weight:600;}
+.price-offer{color:#1a6b3a;font-weight:600;}
+.price-walk{color:var(--accent);font-weight:600;}
+.status-chip{display:inline-block;padding:1px 7px;border-radius:3px;font-family:var(--mono);font-size:9px;font-weight:500;text-transform:uppercase;}
+.chip-target{background:#fdf0f0;color:var(--accent);border:1px solid #f0b8b8;}
+.chip-active{background:#fdf0f0;color:var(--accent);border:1px solid #f0b8b8;}
+.chip-watch{background:#fdf8ec;color:var(--gold);border:1px solid #f0d89a;}
+.chip-dq{background:#3c0000;color:#f0b8b8;border:1px solid #6b1212;}
+.chip-universe{background:#f5f5f5;color:#999;border:1px solid #ddd;}
+.chip-pending{background:#f5f5f5;color:#666;border:1px solid #ddd;}
+
+.pagination{display:flex;align-items:center;gap:4px;margin-top:12px;justify-content:flex-end;}
+.page-btn{padding:4px 9px;border:1px solid var(--rule);border-radius:3px;background:#fff;cursor:pointer;font-family:var(--mono);font-size:11px;color:var(--muted);}
+.page-btn:hover{border-color:var(--ink);color:var(--ink);}
+.page-btn.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+/* CRM */
+.crm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
+.crm-card{background:#fff;border:1px solid var(--rule);border-radius:6px;overflow:hidden;cursor:pointer;transition:all .15s;}
+.crm-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-1px);}
+.crm-card.selected{border-color:var(--accent);box-shadow:0 0 0 2px rgba(139,26,26,.15);}
+.crm-card-header{padding:12px 14px 8px;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:flex-start;}
+.crm-company{font-family:var(--serif);font-size:14px;line-height:1.3;}
+.crm-location{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px;}
+.status-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-family:var(--mono);font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;flex-shrink:0;margin-left:8px;}
+.st-pending{background:#fdf8ec;color:var(--st-pending);border:1px solid #f0d89a;}
+.st-active{background:#edfaf3;color:var(--st-active);border:1px solid #9ee8bf;}
+.st-declined{background:#fdf0f0;color:var(--st-declined);border:1px solid #f0b8b8;}
+.st-scheduled{background:#edf3fd;color:var(--st-scheduled);border:1px solid #b8cef0;}
+.st-hold{background:#f5f5f5;color:var(--st-hold);border:1px solid #ccc;}
+.st-inbound{background:#f5edfb;color:var(--st-inbound);border:1px solid #d4b8f0;}
+.crm-card-body{padding:10px 14px;}
+.crm-meta-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px;}
+.crm-meta-item{font-family:var(--mono);font-size:10px;color:var(--muted);}
+.crm-meta-item a{color:var(--muted);text-decoration:none;}
+.crm-meta-item a:hover{color:var(--accent);}
+.crm-note{font-size:11px;color:#555;line-height:1.5;padding:6px;background:var(--paper);border-radius:4px;margin-bottom:6px;font-style:italic;}
+.crm-vins{display:flex;flex-wrap:wrap;gap:3px;}
+.crm-vin-tag{font-family:var(--mono);font-size:9px;padding:1px 5px;background:var(--s65);color:#fff;border-radius:3px;}
+.crm-card-footer{padding:6px 14px;border-top:1px solid var(--rule);display:flex;justify-content:space-between;align-items:center;}
+.crm-date{font-family:var(--mono);font-size:10px;color:var(--muted);}
+.crm-btn{padding:3px 9px;border-radius:3px;font-family:var(--mono);font-size:10px;cursor:pointer;border:1px solid var(--rule);background:#fff;color:var(--muted);transition:all .1s;text-transform:uppercase;}
+.crm-btn.primary{background:var(--ink);color:#fff;border-color:var(--ink);}
+
+/* Drawer */
+.drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;opacity:0;pointer-events:none;transition:opacity .2s;}
+.drawer-overlay.open{opacity:1;pointer-events:all;}
+.drawer{position:fixed;top:0;right:0;width:600px;height:100vh;background:#fff;z-index:201;box-shadow:-4px 0 30px rgba(0,0,0,.2);transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column;}
+.drawer.open{transform:translateX(0);}
+.drawer-header{background:var(--ink);color:var(--paper);padding:18px 22px;display:flex;justify-content:space-between;align-items:flex-start;flex-shrink:0;}
+.drawer-eyebrow{font-family:var(--mono);font-size:10px;color:#aaa;margin-bottom:3px;}
+.drawer-title{font-family:var(--serif);font-size:19px;}
+.drawer-subtitle{font-family:var(--mono);font-size:10px;color:#aaa;margin-top:3px;}
+.drawer-close{background:none;border:none;color:#aaa;font-size:22px;cursor:pointer;line-height:1;padding:0;}
+.drawer-close:hover{color:#fff;}
+.drawer-body{padding:20px;flex:1;}
+.section-head{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:8px;margin-top:18px;padding-bottom:4px;border-bottom:1px solid var(--rule);}
+.section-head:first-child{margin-top:0;}
+.drawer-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:4px;}
+.drawer-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
+.drawer-field{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px 10px;}
+.drawer-field-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:2px;}
+.drawer-field-value{font-family:var(--mono);font-size:13px;font-weight:500;}
+.drawer-field-value.accent{color:var(--accent);}
+.drawer-field-value.green{color:#1a6b3a;}
+.drawer-field-value.gold{color:var(--gold);}
+
+/* Jan 2028 scenario row */
+.scenario-row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:4px;}
+.scenario-box{border-radius:4px;padding:8px;text-align:center;border:1px solid var(--rule);}
+.scenario-box .s-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px;}
+.scenario-box .s-val{font-family:var(--serif);font-size:15px;}
+.scenario-box.s-low{background:#fdf5f5;border-color:#f0b8b8;} .scenario-box.s-low .s-val{color:var(--accent);}
+.scenario-box.s-mid{background:#f5f5f5;} .scenario-box.s-mid .s-val{color:#444;}
+.scenario-box.s-offer{background:#edfaf3;border-color:#9ee8bf;} .scenario-box.s-offer .s-val{color:#1a6b3a;font-weight:700;}
+.scenario-box.s-walk{background:#fffdf7;border-color:#f0d89a;} .scenario-box.s-walk .s-val{color:var(--gold);}
+.scenario-box.s-ultra{background:#edf3fd;border-color:#b8cef0;} .scenario-box.s-ultra .s-val{color:var(--s65);}
+
+/* Service timeline */
+.svc-timeline{max-height:260px;overflow-y:auto;border:1px solid var(--rule);border-radius:4px;}
+.svc-row{display:grid;grid-template-columns:100px 90px 1fr;gap:8px;align-items:center;padding:6px 10px;border-bottom:1px solid #f0ede8;font-size:11px;}
+.svc-row:last-child{border-bottom:none;}
+.svc-row:hover{background:#faf9f7;}
+.svc-date{font-family:var(--mono);font-size:10px;color:var(--muted);}
+.svc-odo{font-family:var(--mono);font-size:11px;color:var(--ink);font-weight:500;}
+.svc-loc{font-size:11px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.svc-empty{padding:16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted);}
+
+/* Sale timeline */
+.timeline-item{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px dashed var(--rule);}
+.timeline-item:last-child{border-bottom:none;}
+.timeline-price{font-family:var(--serif);font-size:15px;min-width:80px;}
+.timeline-odo{font-family:var(--mono);font-size:11px;color:var(--muted);flex:1;}
+
+/* Docs */
+.doc-slots{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px;}
+.doc-slot{border:2px dashed var(--rule);border-radius:5px;padding:10px;text-align:center;cursor:pointer;transition:all .15s;position:relative;}
+.doc-slot:hover{border-color:var(--ink);}
+.doc-slot.has-file{border-style:solid;border-color:var(--s65);background:#f0f4f9;}
+.doc-slot.dragover{border-color:var(--accent);background:#fdf5f5;}
+.doc-slot-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px;}
+.doc-slot-icon{font-size:18px;margin-bottom:3px;}
+.doc-slot-status{font-family:var(--mono);font-size:10px;color:var(--muted);}
+.doc-slot.has-file .doc-slot-status{color:var(--s65);font-weight:500;}
+.doc-slot input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+.doc-slot.has-file input[type=file]{pointer-events:none;}
+.doc-slot.has-file{cursor:default;}
+.doc-open-link{display:inline-block;margin-top:6px;font-family:var(--mono);font-size:11px;color:#fff;background:var(--s65);padding:4px 12px;border-radius:3px;text-decoration:none;font-weight:500;}
+.doc-open-link:hover{background:var(--accent);}
+.doc-replace-link{display:inline-block;margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--muted);text-decoration:none;cursor:pointer;}
+.doc-replace-link:hover{color:var(--accent);}
+.img-upload-zone{width:100%;height:120px;border:2px dashed var(--rule);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:all .15s;margin-bottom:14px;position:relative;overflow:hidden;}
+.img-upload-zone:hover{border-color:var(--ink);}
+.img-upload-zone.has-img{border-style:solid;border-color:var(--s65);padding:0;}
+.img-upload-zone img{width:100%;height:100%;object-fit:cover;}
+.img-upload-zone .img-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--mono);font-size:11px;opacity:0;transition:opacity .15s;}
+.img-upload-zone:hover .img-overlay{opacity:1;}
+.img-upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
+
+/* CRM drawer */
+.status-select,.log-input-field{width:100%;border:1px solid var(--rule);border-radius:4px;padding:7px 10px;font-family:var(--mono);font-size:12px;background:#fff;color:var(--ink);outline:none;margin-bottom:10px;cursor:pointer;}
+.log-input-field{font-family:var(--sans);resize:vertical;min-height:64px;background:var(--paper);}
+.log-input-field:focus,.status-select:focus{border-color:var(--ink);}
+.log-type-select{border:1px solid var(--rule);border-radius:4px;padding:5px 9px;font-family:var(--mono);font-size:11px;background:#fff;color:var(--ink);cursor:pointer;margin-bottom:7px;outline:none;}
+.log-entry{padding:10px 0;border-bottom:1px dashed var(--rule);}
+.log-entry:last-child{border-bottom:none;}
+.log-date{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:3px;}
+.log-text{font-size:12px;line-height:1.5;}
+.log-type-tag{display:inline-block;padding:1px 6px;border-radius:3px;font-family:var(--mono);font-size:10px;margin-right:5px;}
+.lt-sent{background:#edf3fd;color:var(--st-scheduled);}
+.lt-reply{background:#edfaf3;color:var(--st-active);}
+.lt-call{background:#fdf8ec;color:var(--st-pending);}
+.lt-note{background:#f5f5f5;color:#555;}
+.lt-declined{background:#fdf0f0;color:var(--st-declined);}
+.alert-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px dashed var(--rule);}
+.alert-row:last-child{border-bottom:none;}
+.alert-vin{font-family:var(--mono);font-size:11px;flex:1;}
+.alert-ceiling{font-family:var(--mono);font-size:11px;color:var(--accent);}
+.alert-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:17px;}
+.alert-remove:hover{color:var(--accent);}
+.add-alert-row{display:flex;gap:7px;margin-top:8px;}
+.add-alert-row input{flex:1;border:1px solid var(--rule);border-radius:4px;padding:5px 9px;font-family:var(--mono);font-size:11px;background:var(--paper);color:var(--ink);outline:none;}
+.info-box{background:#fffdf7;border:1px solid #f0d89a;border-radius:4px;padding:9px 12px;margin-bottom:10px;font-size:12px;color:#7a6020;}
+.notes-area{width:100%;border:1px solid var(--rule);border-radius:4px;padding:8px 10px;font-family:var(--sans);font-size:12px;color:var(--ink);background:var(--paper);resize:vertical;min-height:72px;outline:none;margin-top:4px;}
+.notes-area:focus{border-color:var(--ink);}
+.cd-edit-input{width:100%;border:none;background:transparent;font-family:var(--mono);font-size:12px;color:var(--ink);outline:none;padding:2px 0;border-bottom:1px solid var(--rule);transition:border-color .15s;}
+.cd-edit-input:focus{border-bottom-color:var(--ink);}
+.cd-edit-input::placeholder{color:#ccc;}
+</style>
+</head>
+<body>
+
+<div id="loading-banner">⏳ Connecting to Supabase…</div>
+<div id="toast"></div>
+
+<header>
+  <div class="logo">W222<span>s</span></div>
+  <div class="header-sync">
+    <span class="sync-dot" id="sync-dot"></span>
+    <span style="font-family:var(--mono);font-size:11px;color:#aaa" id="sync-label">Connecting…</span>
+    <button class="sync-btn" onclick="refreshAll()">↻ Refresh</button>
+  </div>
+  <div class="header-meta" id="header-counts">— vehicles · — contacts</div>
+</header>
+
+<div class="tab-bar">
+  <div class="tab active" onclick="switchTab('fleet')">Fleet Database <span class="tab-badge" id="fleet-tab-count">—</span></div>
+  <div class="tab" onclick="switchTab('crm')">Broker CRM <span class="tab-badge" id="crm-tab-count">—</span></div>
+  <div class="tab-actions">
+    <button class="btn btn-accent" onclick="openAddContact()">+ Add Contact</button>
+  </div>
+</div>
+
+<!-- ══ FLEET PAGE ══ -->
+<div class="page active" id="page-fleet">
+<div class="shell">
+  <aside>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Fleet Overview</div>
+      <div class="stats-grid">
+        <div class="stat-box"><span class="stat-num" id="stat-total">—</span><span class="stat-lbl">Total VINs</span></div>
+        <div class="stat-box"><span class="stat-num" id="stat-gold">—</span><span class="stat-lbl">Gold Master</span></div>
+        <div class="stat-box"><span class="stat-num" style="color:var(--s65)" id="stat-s65">—</span><span class="stat-lbl">S65 AMG</span></div>
+        <div class="stat-box"><span class="stat-num" style="color:var(--s600)" id="stat-s600">—</span><span class="stat-lbl">S600</span></div>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Model</div>
+      <div class="pill-group">
+        <span class="pill on-s65" id="pill-s65" onclick="toggleTrimFilter('S65 AMG',this)">S65 AMG</span>
+        <span class="pill on-s600" id="pill-s600" onclick="toggleTrimFilter('S600',this)">S600</span>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Flag</div>
+      <label class="filter-row"><input type="checkbox" id="st-active" checked onchange="applyFilters()"><span style="color:var(--accent);font-weight:500">Target</span><span class="filter-count" id="cnt-active">—</span></label>
+      <label class="filter-row"><input type="checkbox" id="st-watch" checked onchange="applyFilters()"><span style="color:var(--gold)">Watch</span><span class="filter-count" id="cnt-watch">—</span></label>
+      <label class="filter-row"><input type="checkbox" id="st-universe" checked onchange="applyFilters()"><span style="color:var(--muted)">Universe</span><span class="filter-count" id="cnt-universe">—</span></label>
+      <label class="filter-row"><input type="checkbox" id="st-dq" onchange="applyFilters()"><span style="color:#bbb">DQ</span><span class="filter-count" id="cnt-dq">—</span></label>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Model Year</div>
+      <label class="filter-row"><input type="checkbox" id="yr-2017" checked onchange="applyFilters()">2017<span class="filter-count" id="cnt-yr2017">—</span></label>
+      <label class="filter-row"><input type="checkbox" id="yr-2016" checked onchange="applyFilters()">2016<span class="filter-count" id="cnt-yr2016">—</span></label>
+      <label class="filter-row"><input type="checkbox" id="yr-2015" checked onchange="applyFilters()">2015<span class="filter-count" id="cnt-yr2015">—</span></label>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Odometer (mi)</div>
+      <div style="display:flex;gap:5px;align-items:center;margin-bottom:5px">
+        <input id="odo-min" style="width:65px;border:1px solid var(--rule);border-radius:3px;padding:4px 6px;font-family:var(--mono);font-size:11px;background:var(--paper)" placeholder="0" onchange="applyFilters()">
+        <span style="color:var(--muted);font-size:11px">–</span>
+        <input id="odo-max" style="width:75px;border:1px solid var(--rule);border-radius:3px;padding:4px 6px;font-family:var(--mono);font-size:11px;background:var(--paper)" placeholder="150000" onchange="applyFilters()">
+      </div>
+      <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">GI window: 70K–100K highlighted</div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Accidents</div>
+      <label class="filter-row"><input type="checkbox" id="acc-0" checked onchange="applyFilters()"><span style="color:var(--accent)">Clean</span><span class="filter-count" id="cnt-acc0">—</span></label>
+      <label class="filter-row"><input type="checkbox" id="acc-1" checked onchange="applyFilters()">Has accident<span class="filter-count" id="cnt-acc1">—</span></label>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Dataset</div>
+      <label class="filter-row"><input type="checkbox" id="gold-only" onchange="applyFilters()">Gold Master only (55)</label>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Service Wall</div>
+      <label class="filter-row"><input type="checkbox" id="sw-trans" onchange="applyFilters()">Trans confirmed</label>
+      <label class="filter-row"><input type="checkbox" id="sw-ign" onchange="applyFilters()">Ignition confirmed</label>
+      <label class="filter-row"><input type="checkbox" id="sw-susp" onchange="applyFilters()">Suspension confirmed</label>
+    </div>
+  </aside>
+  <main>
+    <div class="toolbar">
+      <div class="search-wrap">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="fleet-search" placeholder="VIN, state, exterior…" oninput="applyFilters()">
+      </div>
+      <select class="sort-select" id="fleet-sort" onchange="applyFilters()">
+        <option value="composite_score.desc">Score ↓</option>
+        <option value="rank.asc">Rank ↑</option>
+        <option value="curr_odo.asc">Odo ↑</option>
+        <option value="proj_mi_jan28.asc">Proj Mi ↑</option>
+        <option value="offer_target.asc">Offer ↑</option>
+        <option value="last_sale_year.desc">Last Sale ↓</option>
+      </select>
+      <span class="result-count" id="fleet-count">Loading…</span>
+    </div>
+    <div class="table-outer">
+      <table id="fleet-table">
+        <thead>
+          <tr class="group-row">
+            <th colspan="4" class="grp-identity">Identity</th>
+            <th colspan="9" class="grp-vehicle">Vehicle</th>
+            <th colspan="4" class="grp-scoring">Scoring</th>
+            <th colspan="4" class="grp-sources">Data Sources</th>
+            <th colspan="3" class="grp-contacts">Contacts</th>
+            <th colspan="4" class="grp-mileage">Mileage</th>
+            <th colspan="1" class="grp-history">Sale History</th>
+            <th colspan="5" class="grp-observed">Observed Pricing</th>
+            <th colspan="3" class="grp-depr">Depreciation</th>
+            <th colspan="5" class="grp-jan28">Jan 2028 Scenarios</th>
+            <th colspan="1"></th>
+          </tr>
+          <tr class="col-row">
+            <!-- Identity -->
+            <th class="grp-identity">Rank</th>
+            <th class="grp-identity">VIN</th>
+            <th class="grp-identity">Model</th>
+            <th class="grp-identity">Flag</th>
+            <!-- Vehicle -->
+            <th class="grp-vehicle">Exterior</th>
+            <th class="grp-vehicle">Upholstery</th>
+            <th class="grp-vehicle">State</th>
+            <th class="grp-vehicle">Yr</th>
+            <th class="grp-vehicle">Owners</th>
+            <th class="grp-vehicle">Acc</th>
+            <th class="grp-vehicle">Trans</th>
+            <th class="grp-vehicle">Ign</th>
+            <th class="grp-vehicle">Susp</th>
+            <!-- Scoring -->
+            <th class="grp-scoring">Brakes</th>
+            <th class="grp-scoring">Svc/Yr</th>
+            <th class="grp-scoring">QS</th>
+            <th class="grp-scoring">PA·PB·MOD</th>
+            <th class="grp-scoring">Score</th>
+            <!-- Data Sources -->
+            <th class="grp-sources">iSC</th>
+            <th class="grp-sources">CFX</th>
+            <th class="grp-sources">ACK</th>
+            <th class="grp-sources">WS</th>
+            <!-- Contacts -->
+            <th class="grp-contacts">Contact</th>
+            <th class="grp-contacts">City/State</th>
+            <th class="grp-contacts">Email</th>
+            <!-- Mileage -->
+            <th class="grp-mileage">Last Odo</th>
+            <th class="grp-mileage">Last Sale Mi</th>
+            <th class="grp-mileage">iSC Est Mi</th>
+            <th class="grp-mileage">Proj @Jan28</th>
+            <!-- Sale History -->
+            <th class="grp-history">Sale History</th>
+            <!-- Observed Pricing -->
+            <th class="grp-observed">S-Class Est</th>
+            <th class="grp-observed"># List</th>
+            <th class="grp-observed">Relist Freq</th>
+            <th class="grp-observed">Last Sale $</th>
+            <th class="grp-observed">Last Sale Yr</th>
+            <!-- Depreciation -->
+            <th class="grp-depr">Depr 5yr</th>
+            <th class="grp-depr">Val @1yr</th>
+            <th class="grp-depr">Val @3yr</th>
+            <!-- Jan 2028 -->
+            <th class="grp-jan28">LOW</th>
+            <th class="grp-jan28">MID</th>
+            <th class="grp-jan28">Offer</th>
+            <th class="grp-jan28">Walk-Away</th>
+            <th class="grp-jan28">ULTRA</th>
+            <!-- Links -->
+            <th>Links</th>
+          </tr>
+        </thead>
+        <tbody id="fleet-tbody"><tr class="empty-row"><td colspan="43">Loading fleet data…</td></tr></tbody>
+      </table>
+    </div>
+    <div class="pagination" id="fleet-pagination"></div>
+  </main>
+</div>
+</div>
+
+<!-- ══ CRM PAGE ══ -->
+<div class="page" id="page-crm">
+<div class="shell">
+  <aside>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Pipeline</div>
+      <div class="stats-grid">
+        <div class="stat-box"><span class="stat-num" id="crm-stat-total">—</span><span class="stat-lbl">Total</span></div>
+        <div class="stat-box"><span class="stat-num" style="color:var(--st-active)" id="crm-stat-active">—</span><span class="stat-lbl">Active</span></div>
+        <div class="stat-box"><span class="stat-num" style="color:var(--st-pending)" id="crm-stat-pending">—</span><span class="stat-lbl">Pending</span></div>
+        <div class="stat-box"><span class="stat-num" style="color:var(--st-declined)" id="crm-stat-declined">—</span><span class="stat-lbl">Declined</span></div>
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Status</div>
+      <select class="filter-select" style="width:100%" id="crm-status-filter" onchange="renderCRM()">
+        <option value="">All statuses</option>
+        <option value="active">Active</option>
+        <option value="scheduled">Call Scheduled</option>
+        <option value="pending">Pending</option>
+        <option value="inbound">Inbound</option>
+        <option value="declined">Declined</option>
+        <option value="hold">On Hold</option>
+      </select>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Type</div>
+      <select class="filter-select" style="width:100%" id="crm-type-filter" onchange="renderCRM()">
+        <option value="">All types</option>
+        <option value="broker">Brokers / Dealers</option>
+        <option value="franchise">MB Franchise</option>
+      </select>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Region</div>
+      <select class="filter-select" style="width:100%" id="crm-region-filter" onchange="renderCRM()">
+        <option value="">All regions</option>
+        <option value="DFW">DFW</option>
+        <option value="CA">California</option>
+        <option value="FL">Florida</option>
+        <option value="AZ">Arizona</option>
+        <option value="National">National</option>
+      </select>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Search</div>
+      <div class="search-wrap" style="max-width:100%">
+        <span class="search-icon">⌕</span>
+        <input type="text" id="crm-search" placeholder="Company, notes…" oninput="renderCRM()" style="width:100%">
+      </div>
+    </div>
+  </aside>
+  <main>
+    <div class="toolbar">
+      <span class="result-count" id="crm-count">Loading…</span>
+      <select class="sort-select" id="crm-sort" onchange="renderCRM()">
+        <option value="last_activity">Most Recent Activity</option>
+        <option value="company">Company A–Z</option>
+        <option value="status">Status</option>
+      </select>
+    </div>
+    <div class="crm-grid" id="crm-grid"><div style="font-family:var(--mono);font-size:12px;color:var(--muted);padding:28px">Loading contacts…</div></div>
+  </main>
+</div>
+</div>
+
+<!-- ══ FLEET DRAWER ══ -->
+<div class="drawer-overlay" id="fleet-overlay" onclick="closeFleetDrawer()"></div>
+<div class="drawer" id="fleet-drawer">
+  <div class="drawer-header">
+    <div>
+      <div class="drawer-eyebrow" id="fd-vin">—</div>
+      <div class="drawer-title" id="fd-title">Vehicle Detail</div>
+      <div class="drawer-subtitle" id="fd-sub">—</div>
+    </div>
+    <button class="drawer-close" onclick="closeFleetDrawer()">×</button>
+  </div>
+  <div class="drawer-body">
+
+    <div class="section-head">Vehicle Photo</div>
+    <div class="img-upload-zone" id="img-zone">
+      <input type="file" accept="image/*" onchange="uploadVehicleImage(this)">
+      <div style="font-size:24px">📷</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--muted)">Drop or click to upload photo</div>
+      <div class="img-overlay">Change photo</div>
+    </div>
+
+    <div class="section-head">Documents</div>
+    <div class="doc-slots" id="fd-docs">
+      <div class="doc-slot" id="slot-carfax" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'carfax')">
+        <input type="file" accept=".pdf" onchange="uploadDoc(this,'carfax')">
+        <div class="doc-slot-label">Carfax</div><div class="doc-slot-icon">📋</div><div class="doc-slot-status">Click or drop PDF</div>
+      </div>
+      <div class="doc-slot" id="slot-goodcar" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'goodcar')">
+        <input type="file" accept=".pdf" onchange="uploadDoc(this,'goodcar')">
+        <div class="doc-slot-label">GoodCar</div><div class="doc-slot-icon">✓</div><div class="doc-slot-status">Click or drop PDF</div>
+      </div>
+      <div class="doc-slot" id="slot-iseecars" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'iseecars')">
+        <input type="file" accept=".pdf" onchange="uploadDoc(this,'iseecars')">
+        <div class="doc-slot-label">iSeeCars</div><div class="doc-slot-icon">📊</div><div class="doc-slot-status">Click or drop PDF</div>
+      </div>
+      <div class="doc-slot" id="slot-ppi" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'ppi')">
+        <input type="file" accept=".pdf" onchange="uploadDoc(this,'ppi')">
+        <div class="doc-slot-label">PPI Report</div><div class="doc-slot-icon">🔧</div><div class="doc-slot-status">Click or drop PDF</div>
+      </div>
+    </div>
+
+    <div class="section-head">External Links</div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)" id="fd-links"></div>
+
+    <div class="section-head">Identity & Color</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">Exterior</div><div class="drawer-field-value" id="fd-ext">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Upholstery</div><div class="drawer-field-value" id="fd-uph">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">State</div><div class="drawer-field-value" id="fd-state">—</div></div>
+    </div>
+
+    <div class="section-head">Vehicle Data</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">Owners</div><div class="drawer-field-value" id="fd-own">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Accidents</div><div class="drawer-field-value" id="fd-acc">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Svc/Yr</div><div class="drawer-field-value" id="fd-svc">—</div></div>
+    </div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">Trans</div><div class="drawer-field-value" id="fd-trans">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Ignition</div><div class="drawer-field-value" id="fd-ign">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Suspension</div><div class="drawer-field-value" id="fd-susp">—</div></div>
+    </div>
+
+    <div class="section-head">Scoring</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">QS</div><div class="drawer-field-value" id="fd-qs">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">PA · PB · MOD</div><div class="drawer-field-value" id="fd-sub-scores">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Composite Score</div><div class="drawer-field-value accent" id="fd-score">—</div></div>
+    </div>
+
+    <div class="section-head">Mileage</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">Last Known Odo</div><div class="drawer-field-value accent" id="fd-odo">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Last Sale Mi</div><div class="drawer-field-value" id="fd-last-sale-mi">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">iSC Est Mi</div><div class="drawer-field-value" id="fd-isc-mi">—</div></div>
+    </div>
+    <div class="drawer-grid-2">
+      <div class="drawer-field"><div class="drawer-field-label">Proj Mi @ Jan 2028</div><div class="drawer-field-value gold" id="fd-proj-mi">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Last Sale Year</div><div class="drawer-field-value" id="fd-sale">—</div></div>
+    </div>
+
+    <div class="section-head">Sale History</div>
+    <div id="fd-timeline" style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)"></div>
+
+    <div class="section-head">Service Records</div>
+    <div id="fd-service" class="svc-timeline"><div class="svc-empty">Loading…</div></div>
+
+    <div class="section-head">Observed Pricing</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">S-Class Est</div><div class="drawer-field-value" id="fd-sclass">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label"># Listings</div><div class="drawer-field-value" id="fd-listings">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Last Sale $</div><div class="drawer-field-value" id="fd-last-price">—</div></div>
+    </div>
+
+    <div class="section-head">Depreciation</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">Depr 5yr</div><div class="drawer-field-value" id="fd-depr">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Val @ 1yr</div><div class="drawer-field-value" id="fd-val1">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Val @ 3yr</div><div class="drawer-field-value" id="fd-val3">—</div></div>
+    </div>
+
+    <div class="section-head">Jan 2028 Scenarios</div>
+    <div class="scenario-row" id="fd-scenarios">
+      <div class="scenario-box s-low"><div class="s-label">LOW</div><div class="s-val" id="sc-low">—</div></div>
+      <div class="scenario-box s-mid"><div class="s-label">MID</div><div class="s-val" id="sc-mid">—</div></div>
+      <div class="scenario-box s-offer"><div class="s-label">Offer</div><div class="s-val" id="sc-offer">—</div></div>
+      <div class="scenario-box s-walk"><div class="s-label">Walk-Away</div><div class="s-val" id="sc-walk">—</div></div>
+      <div class="scenario-box s-ultra"><div class="s-label">ULTRA</div><div class="s-val" id="sc-ultra">—</div></div>
+    </div>
+
+    <div class="section-head">Research Notes</div>
+    <textarea class="notes-area" id="fd-notes" placeholder="PPI findings, owner contact, service docs confirmed…"></textarea>
+    <button class="btn" style="margin-top:6px" onclick="saveNotes()">Save Notes</button>
+  </div>
+</div>
+
+<!-- ══ CRM DRAWER ══ -->
+<div class="drawer-overlay" id="crm-overlay" onclick="closeCRMDrawer()"></div>
+<div class="drawer" id="crm-drawer">
+  <div class="drawer-header">
+    <div>
+      <div class="drawer-eyebrow" id="cd-eyebrow">BROKER CONTACT</div>
+      <div class="drawer-title" id="cd-company">—</div>
+      <div class="drawer-subtitle" id="cd-location">—</div>
+    </div>
+    <button class="drawer-close" onclick="closeCRMDrawer()">×</button>
+  </div>
+  <div class="drawer-body">
+    <div class="section-head">Status</div>
+    <select class="status-select" id="cd-status-select" onchange="updateContactStatus(this.value)">
+      <option value="pending">⏳ Pending — outreach sent, no reply</option>
+      <option value="active">✅ Active — engaged, watching for alerts</option>
+      <option value="scheduled">📅 Call Scheduled</option>
+      <option value="declined">❌ Declined — not a fit</option>
+      <option value="inbound">⭐ Inbound — they contacted us</option>
+      <option value="hold">⏸ On Hold</option>
+    </select>
+
+    <div class="section-head">Contact Info
+      <span style="font-size:10px;color:var(--muted);text-transform:none;letter-spacing:0;margin-left:8px;font-weight:normal">— edit any field and click Save</span>
+    </div>
+    <div class="drawer-grid-2" style="margin-bottom:8px">
+      <div class="drawer-field">
+        <div class="drawer-field-label">Contact Name</div>
+        <input class="cd-edit-input" id="cd-contact-name" placeholder="e.g. Mike Johnson">
+      </div>
+      <div class="drawer-field">
+        <div class="drawer-field-label">Title</div>
+        <input class="cd-edit-input" id="cd-contact-title" placeholder="e.g. Used Car Manager">
+      </div>
+      <div class="drawer-field">
+        <div class="drawer-field-label">Phone</div>
+        <input class="cd-edit-input" id="cd-phone-input" placeholder="e.g. (214) 555-1234">
+      </div>
+      <div class="drawer-field">
+        <div class="drawer-field-label">Email</div>
+        <input class="cd-edit-input" id="cd-email-input" placeholder="e.g. mike@dealer.com">
+      </div>
+      <div class="drawer-field">
+        <div class="drawer-field-label">City / State</div>
+        <input class="cd-edit-input" id="cd-location-input" placeholder="e.g. Dallas, TX">
+      </div>
+      <div class="drawer-field">
+        <div class="drawer-field-label">Website</div>
+        <input class="cd-edit-input" id="cd-web-input" placeholder="e.g. tacticalfleet.com">
+      </div>
+    </div>
+    <button class="btn btn-accent" style="width:100%;margin-bottom:16px" onclick="saveContactInfo()">Save Contact Info</button>
+
+    <div class="section-head">VINs This Contact is Watching</div>
+    <div id="cd-alerts"></div>
+    <div class="add-alert-row">
+      <input id="add-vin-input" placeholder="Full VIN…">
+      <input id="add-ceiling-input" placeholder="Ceiling $" style="width:85px">
+      <button class="btn" onclick="addVINAlert()">+ Add</button>
+    </div>
+
+    <div class="section-head" style="margin-top:18px">Log Entry
+      <span style="font-size:10px;color:var(--muted);text-transform:none;letter-spacing:0;margin-left:8px;font-weight:normal">— every call, reply, note goes here</span>
+    </div>
+    <div class="info-box"><strong>How to update:</strong> After every interaction pick a type, write what happened, hit Log Entry. Change status dropdown when the relationship progresses.</div>
+    <select class="log-type-select" id="log-type-sel">
+      <option value="note">📝 Note</option>
+      <option value="sent">📤 Email Sent</option>
+      <option value="reply">📥 Reply Received</option>
+      <option value="call">📞 Call</option>
+      <option value="declined">❌ Declined</option>
+    </select>
+    <textarea class="log-input-field" id="log-text-input" placeholder="e.g. Spoke with Mike — has Manheim access, will watch for S65s."></textarea>
+    <button class="btn btn-accent" style="width:100%;margin-bottom:18px" onclick="addLogEntry()">+ Log Entry</button>
+
+    <div class="section-head">Activity History</div>
+    <div id="cd-log"></div>
+  </div>
+</div>
+
+<script>
+const { createClient } = supabase;
+const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+let allVehicles=[], allContacts=[], allAlerts=[], allLogs=[], allServiceRecs=[];
+let activeFD=null, activeCRM=null;
+const PAGE_SIZE=25;
+let fleetPage=0;
+
+function toast(msg,isError=false){const t=document.getElementById('toast');t.textContent=msg;t.className='show'+(isError?' error':'');setTimeout(()=>t.className='',3000);}
+function setSyncStatus(s){const d=document.getElementById('sync-dot'),l=document.getElementById('sync-label');if(s==='ok'){d.className='sync-dot';l.textContent='Live';}if(s==='loading'){d.className='sync-dot loading';l.textContent='Syncing…';}if(s==='error'){d.className='sync-dot error';l.textContent='Connection error';}}
+function switchTab(t){document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',(i===0&&t==='fleet')||(i===1&&t==='crm')));document.getElementById('page-fleet').classList.toggle('active',t==='fleet');document.getElementById('page-crm').classList.toggle('active',t==='crm');}
+function $m(n){return n!=null&&n!==''?'$'+Number(n).toLocaleString():'—';}
+function oFmt(n){return n?Number(n).toLocaleString()+' mi':'—';}
+function boolCell(v){return(v===true||v==='TRUE'||v==='true'||v==='Yes')?'<span class="bool-yes">✓</span>':'<span class="bool-no">—</span>';}
+function boolVal(v){return(v===true||v==='TRUE'||v==='true'||v==='Yes');}
+
+async function loadAll(){
+  setSyncStatus('loading');
+  try{
+    const[vR,cR,aR,lR,sR]=await Promise.all([
+      db.from('vehicles').select('*').order('composite_score',{ascending:false}),
+      db.from('contacts').select('*').order('last_activity',{ascending:false}),
+      db.from('contact_alerts').select('*').eq('active',true),
+      db.from('contact_log').select('*').order('logged_at',{ascending:false}),
+      db.from('service_records').select('*').order('record_date',{ascending:true}),
+    ]);
+    if(vR.error)throw vR.error;
+    allVehicles=vR.data||[];allContacts=cR.data||[];allAlerts=aR.data||[];allLogs=lR.data||[];allServiceRecs=sR.data||[];
+    updateFleetStats();applyFilters();updateCRMStats();renderCRM();
+    document.getElementById('fleet-tab-count').textContent=allVehicles.length;
+    document.getElementById('crm-tab-count').textContent=allContacts.length;
+    document.getElementById('header-counts').textContent=`${allVehicles.length} vehicles · ${allContacts.length} contacts`;
+    setSyncStatus('ok');document.getElementById('loading-banner').classList.add('done');
+  }catch(err){setSyncStatus('error');document.getElementById('loading-banner').textContent='⚠ Could not connect. Check credentials at top of file.';console.error(err);}
+}
+async function refreshAll(){await loadAll();toast('Refreshed');}
+
+function updateFleetStats(){
+  const isGold=v=>(v.in_gold_master==='TRUE'||v.in_gold_master===true||v.in_gold_master==='true');
+  const s65=allVehicles.filter(v=>v.trim==='S65 AMG'||v.trim==='S65').length;
+  const s600=allVehicles.filter(v=>v.trim==='S600').length;
+  const gold=allVehicles.filter(isGold).length;
+  document.getElementById('stat-total').textContent=allVehicles.length;
+  document.getElementById('stat-gold').textContent=gold;
+  document.getElementById('stat-s65').textContent=s65;
+  document.getElementById('stat-s600').textContent=s600;
+  const stNorm=s=>(s||'').toLowerCase();
+  document.getElementById('cnt-active').textContent=allVehicles.filter(v=>['active','target'].includes(stNorm(v.status))).length;
+  document.getElementById('cnt-watch').textContent=allVehicles.filter(v=>stNorm(v.status)==='watch').length;
+  document.getElementById('cnt-universe').textContent=allVehicles.filter(v=>stNorm(v.status)==='universe'||(!v.status&&!isGold(v))).length;
+  document.getElementById('cnt-dq').textContent=allVehicles.filter(v=>stNorm(v.status)==='dq').length;
+  document.getElementById('cnt-acc0').textContent=allVehicles.filter(v=>!(v.accidents===true||v.accidents==='TRUE'||v.accidents==='true'||Number(v.accidents)>0)).length;
+  document.getElementById('cnt-acc1').textContent=allVehicles.filter(v=>v.accidents===true||v.accidents==='TRUE'||v.accidents==='true'||Number(v.accidents)>0).length;
+  document.getElementById('cnt-yr2017').textContent=allVehicles.filter(v=>(v.year||2017)==2017).length;
+  document.getElementById('cnt-yr2016').textContent=allVehicles.filter(v=>v.year==2016).length;
+  document.getElementById('cnt-yr2015').textContent=allVehicles.filter(v=>v.year==2015).length;
+}
+
+let trimFilter=new Set(['S65 AMG','S65','S600']);
+function toggleTrimFilter(trim,el){
+  const key=trim==='S65 AMG'?'S65 AMG':'S600';
+  if(trimFilter.has(key)){trimFilter.delete(key);if(trim==='S65 AMG')trimFilter.delete('S65');el.classList.remove('on-s65','on-s600');}
+  else{trimFilter.add(key);if(trim==='S65 AMG')trimFilter.add('S65');el.classList.add(trim==='S65 AMG'?'on-s65':'on-s600');}
+  fleetPage=0;applyFilters();
+}
+
+function applyFilters(){
+  const q=(document.getElementById('fleet-search').value||'').toLowerCase();
+  const odoMin=parseInt(document.getElementById('odo-min').value)||0;
+  const odoMax=parseInt(document.getElementById('odo-max').value)||999999;
+  const acc0=document.getElementById('acc-0').checked;
+  const acc1=document.getElementById('acc-1').checked;
+  const stTarget=document.getElementById('st-active').checked;
+  const stWatch=document.getElementById('st-watch').checked;
+  const stUniverse=document.getElementById('st-universe').checked;
+  const stDq=document.getElementById('st-dq').checked;
+  const yr2017=document.getElementById('yr-2017').checked;
+  const yr2016=document.getElementById('yr-2016').checked;
+  const yr2015=document.getElementById('yr-2015').checked;
+  const goldOnly=document.getElementById('gold-only').checked;
+  const swTrans=document.getElementById('sw-trans').checked;
+  const swIgn=document.getElementById('sw-ign').checked;
+  const swSusp=document.getElementById('sw-susp').checked;
+  const sortVal=document.getElementById('fleet-sort').value;
+  const[sortCol,sortDir]=sortVal.split('.');
+  const isGold=v=>(v.in_gold_master==='TRUE'||v.in_gold_master===true||v.in_gold_master==='true');
+  const hasAcc=v=>(v.accidents===true||v.accidents==='TRUE'||v.accidents==='true'||Number(v.accidents)>0);
+  const stNorm=s=>(s||'').toLowerCase();
+
+  let data=allVehicles.filter(v=>{
+    const t=v.trim||'';
+    if(!trimFilter.has(t))return false;
+    if((v.curr_odo||0)<odoMin||(v.curr_odo||0)>odoMax)return false;
+    if(!hasAcc(v)&&!acc0)return false;
+    if(hasAcc(v)&&!acc1)return false;
+    const st=stNorm(v.status);
+    const isTarget=['active','target'].includes(st)||(!v.status&&isGold(v));
+    const isUniverse=st==='universe'||(!v.status&&!isGold(v));
+    if(isTarget&&!stTarget)return false;
+    if(st==='watch'&&!stWatch)return false;
+    if(isUniverse&&!stUniverse)return false;
+    if(st==='dq'&&!stDq)return false;
+    const yr=v.year||2017;
+    if(yr===2017&&!yr2017)return false;
+    if(yr===2016&&!yr2016)return false;
+    if(yr===2015&&!yr2015)return false;
+    if(goldOnly&&!isGold(v))return false;
+    if(swTrans&&!boolVal(v.trans_confirmed))return false;
+    if(swIgn&&!boolVal(v.ign_confirmed))return false;
+    if(swSusp&&!boolVal(v.susp_confirmed))return false;
+    if(q&&![(v.vin||''),(v.trim||''),(v.title_state||''),(v.exterior||''),(v.owner_contact||''),(v.sale_history||'')].some(f=>f.toLowerCase().includes(q)))return false;
+    return true;
+  });
+
+  data.sort((a,b)=>{const av=a[sortCol]??0,bv=b[sortCol]??0;return sortDir==='desc'?bv-av:av-bv;});
+  const total=data.length;
+  const page=data.slice(fleetPage*PAGE_SIZE,(fleetPage+1)*PAGE_SIZE);
+  renderFleet(page);renderPagination(total);
+  document.getElementById('fleet-count').textContent=`Showing ${page.length} of ${total}`;
+}
+
+function saleChainHTML(h,short){
+  if(!h)return '<span style="color:#bbb;font-family:var(--mono);font-size:10px">—</span>';
+  const parts=h.split('→').map(s=>s.trim()).filter(Boolean);
+  if(short)return parts.map((p,i)=>`<span class="sale-item${i===parts.length-1?' latest':''}">${p}</span>`).join('<span class="arrow">→</span>');
+  return parts.map((p,i)=>{const[price,odo]=p.split('/');return`<div class="timeline-item"><span class="timeline-price" style="${i===parts.length-1?'color:var(--accent)':''}">${price}</span><span class="timeline-odo">@ ${odo||'—'}</span></div>`;}).join('');
+}
+
+function vinLinksHTML(vin){return`<div class="link-cluster"><a class="ext-link lnk-bat" href="https://bringatrailer.com/listing/mercedes-benz-s65-amg/?q=${vin}" target="_blank" onclick="event.stopPropagation()">BaT</a><a class="ext-link lnk-cb" href="https://carsandbids.com/search#q=${vin}" target="_blank" onclick="event.stopPropagation()">C&B</a><a class="ext-link lnk-cfx" href="https://www.carfax.com/VehicleHistory/p/Report.cfm?vin=${vin}" target="_blank" onclick="event.stopPropagation()">CFX</a><a class="ext-link lnk-more" href="#" onclick="event.stopPropagation();openFleetDrawer('${vin}')">⋯</a></div>`;}
+
+function flagChip(s,dqReason){
+  const st=(s||'').toLowerCase();
+  if(st==='active'||st==='target')return`<span class="status-chip chip-target">Target</span>`;
+  if(st==='watch')return`<span class="status-chip chip-watch">Watch</span>`;
+  if(st==='dq'){const r=(dqReason||'DQ').replace('DQ — ','');return`<span class="status-chip chip-dq" title="${r}">DQ</span>`;}
+  if(st==='universe')return`<span class="status-chip chip-universe">Universe</span>`;
+  return`<span class="status-chip chip-universe">${s||'—'}</span>`;
+}
+function statusChip(s){return flagChip(s,'');}
+
+function renderFleet(data){
+  const tbody=document.getElementById('fleet-tbody');
+  if(!data.length){tbody.innerHTML=`<tr class="empty-row"><td colspan="44">No vehicles match current filters.</td></tr>`;return;}
+  const hasAcc=v=>(v.accidents===true||v.accidents==='TRUE'||v.accidents==='true'||Number(v.accidents)>0);
+  tbody.innerHTML=data.map(v=>{
+    const gi=(v.curr_odo>=70000&&v.curr_odo<=100000);
+    const st=(v.status||'').toLowerCase();
+    const rowClass=st==='dq'?'row-dq':st==='watch'?'row-watch':'';
+    return`<tr onclick="openFleetDrawer('${v.vin}')" class="${rowClass}${activeFD?.vin===v.vin?' selected':''}">
+      <td class="mono" style="color:var(--muted);text-align:center">${v.rank||'—'}</td>
+      <td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${v.vin}</td>
+      <td><span class="trim-badge ${(v.trim||'').includes('65')?'s65':'s600'}">${v.trim||'—'}</span></td>
+      <td>${flagChip(v.status,v.dq_reason)}</td>
+      <td style="font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis">${v.exterior||'—'}</td>
+      <td style="font-size:11px;max-width:100px;overflow:hidden;text-overflow:ellipsis">${v.upholstery||'—'}</td>
+      <td><span class="state-tag">${v.title_state||'—'}</span></td>
+      <td class="num">${v.year||2017}</td>
+      <td class="num">${v.owners??'—'}</td>
+      <td>${hasAcc(v)?'<span class="bool-yes" style="color:var(--gold)">✓</span>':'<span class="bool-no">—</span>'}</td>
+      <td>${boolCell(v.trans_confirmed)}</td>
+      <td>${boolCell(v.ign_confirmed)}</td>
+      <td>${boolCell(v.susp_confirmed)}</td>
+      <td>${boolCell(v.brake_confirmed)}</td>
+      <td class="num">${v.svc_per_yr!=null?Number(v.svc_per_yr).toFixed(1):'—'}</td>
+      <td class="num">${v.quality_score??'—'}</td>
+      <td class="num" style="font-size:10px">${v.score_pa??'—'}·${v.score_pb??'—'}·${v.score_mod??'—'}</td>
+      <td class="num" style="font-weight:600;color:var(--accent)">${v.composite_score??'—'}</td>
+      <td>${boolCell(v.has_iseecars)}</td>
+      <td>${boolCell(v.has_carfax)}</td>
+      <td>${boolCell(v.has_autocheck)}</td>
+      <td>${boolCell(v.has_window_sticker)}</td>
+      <td style="font-size:10px;max-width:100px;overflow:hidden;text-overflow:ellipsis">${v.owner_contact||'—'}</td>
+      <td style="font-size:10px">${v.owner_city_state||'—'}</td>
+      <td style="font-size:10px;color:var(--accent)">${v.owner_email?`<a href="mailto:${v.owner_email}" onclick="event.stopPropagation()" style="color:var(--accent)">${v.owner_email}</a>`:'—'}</td>
+      <td class="num ${gi?'gi-hi':''}">${oFmt(v.curr_odo)}</td>
+      <td class="num">${oFmt(v.last_sale_mi)}</td>
+      <td class="num">${oFmt(v.iseecars_est_mi)}</td>
+      <td class="num" style="color:var(--gold);font-weight:600">${oFmt(v.proj_mi_jan28)}</td>
+      <td><div class="sale-chain">${saleChainHTML(v.sale_history,true)}</div></td>
+      <td class="num">${$m(v.sclass_est_value)}</td>
+      <td class="num">${v.num_listings??'—'}</td>
+      <td style="font-size:10px">${v.relist_freq||'—'}</td>
+      <td class="num">${$m(v.last_sale_price)}</td>
+      <td class="num">${v.last_sale_year??'—'}</td>
+      <td class="num">${v.depr_5yr!=null?Number(v.depr_5yr).toFixed(1)+'%':'—'}</td>
+      <td class="num">${$m(v.val_at_1yr)}</td>
+      <td class="num">${$m(v.val_at_3yr)}</td>
+      <td class="num">${$m(v.price_low_jan28)}</td>
+      <td class="num">${$m(v.price_mid_jan28)}</td>
+      <td class="num price-offer">${$m(v.offer_target)}</td>
+      <td class="num price-walk">${$m(v.walk_away)}</td>
+      <td class="num" style="color:var(--s65)">${$m(v.price_ultra_jan28)}</td>
+      <td>${vinLinksHTML(v.vin)}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderPagination(total){
+  const pages=Math.ceil(total/PAGE_SIZE);
+  const el=document.getElementById('fleet-pagination');
+  if(pages<=1){el.innerHTML='';return;}
+  let html=`<button class="page-btn" ${fleetPage===0?'disabled':''} onclick="goPage(${fleetPage-1})">‹</button>`;
+  for(let i=0;i<Math.min(pages,8);i++)html+=`<button class="page-btn${i===fleetPage?' active':''}" onclick="goPage(${i})">${i+1}</button>`;
+  if(pages>8)html+=`<span style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:0 5px">… ${pages}</span>`;
+  html+=`<button class="page-btn" ${fleetPage>=pages-1?'disabled':''} onclick="goPage(${fleetPage+1})">›</button>`;
+  el.innerHTML=html;
+}
+function goPage(p){fleetPage=p;applyFilters();}
+
+async function openFleetDrawer(vin){
+  const v=allVehicles.find(x=>x.vin===vin);if(!v)return;
+  activeFD=v;
+  document.getElementById('fd-vin').textContent=vin;
+  document.getElementById('fd-title').textContent=`${v.year||2017} ${v.trim}`;
+  document.getElementById('fd-sub').textContent=`Rank #${v.rank||'—'} · Score ${v.composite_score||'—'}/175 · ${statusChip(v.status).replace(/<[^>]*>/g,'')}`;
+  document.getElementById('fd-ext').textContent=v.exterior||'—';
+  document.getElementById('fd-uph').textContent=v.upholstery||'—';
+  document.getElementById('fd-state').textContent=v.title_state||'—';
+  document.getElementById('fd-own').textContent=v.owners??'—';
+  document.getElementById('fd-acc').textContent=(v.accidents||0)===0?'0 — Clean':(v.accidents||0)===1?'1 — Watch':`${v.accidents} — DQ`;
+  document.getElementById('fd-svc').textContent=v.svc_per_yr!=null?Number(v.svc_per_yr).toFixed(1)+'/yr':'—';
+  const bStr=x=>boolVal(x)?'✓ Confirmed':'—';
+  document.getElementById('fd-trans').textContent=bStr(v.trans_confirmed);
+  document.getElementById('fd-trans').className='drawer-field-value '+(boolVal(v.trans_confirmed)?'green':'');
+  document.getElementById('fd-ign').textContent=bStr(v.ign_confirmed);
+  document.getElementById('fd-ign').className='drawer-field-value '+(boolVal(v.ign_confirmed)?'green':'');
+  document.getElementById('fd-susp').textContent=bStr(v.susp_confirmed);
+  document.getElementById('fd-susp').className='drawer-field-value '+(boolVal(v.susp_confirmed)?'green':'');
+  document.getElementById('fd-qs').textContent=v.quality_score??'—';
+  document.getElementById('fd-sub-scores').textContent=`${v.score_pa??'—'} · ${v.score_pb??'—'} · ${v.score_mod??'—'}`;
+  document.getElementById('fd-score').textContent=v.composite_score?`${v.composite_score} / 175`:'—';
+  document.getElementById('fd-odo').textContent=oFmt(v.curr_odo);
+  document.getElementById('fd-last-sale-mi').textContent=oFmt(v.last_sale_mi);
+  document.getElementById('fd-isc-mi').textContent=oFmt(v.iseecars_est_mi);
+  document.getElementById('fd-proj-mi').textContent=oFmt(v.proj_mi_jan28);
+  document.getElementById('fd-sale').textContent=v.last_sale_year??'—';
+  document.getElementById('fd-timeline').innerHTML=saleChainHTML(v.sale_history,false);
+  document.getElementById('fd-sclass').textContent=$m(v.sclass_est_value);
+  document.getElementById('fd-listings').textContent=v.num_listings??'—';
+  document.getElementById('fd-last-price').textContent=$m(v.last_sale_price);
+  document.getElementById('fd-depr').textContent=v.depr_5yr!=null?Number(v.depr_5yr).toFixed(1)+'%':'—';
+  document.getElementById('fd-val1').textContent=$m(v.val_at_1yr);
+  document.getElementById('fd-val3').textContent=$m(v.val_at_3yr);
+  document.getElementById('sc-low').textContent=$m(v.price_low_jan28);
+  document.getElementById('sc-mid').textContent=$m(v.price_mid_jan28);
+  document.getElementById('sc-offer').textContent=$m(v.offer_target);
+  document.getElementById('sc-walk').textContent=$m(v.walk_away);
+  document.getElementById('sc-ultra').textContent=$m(v.price_ultra_jan28);
+  document.getElementById('fd-notes').value=v.research_notes||'';
+
+  // Service records
+  const svcs=allServiceRecs.filter(s=>s.vin===vin);
+  document.getElementById('fd-service').innerHTML=svcs.length
+    ?svcs.map(s=>`<div class="svc-row"><span class="svc-date">${s.record_date||'—'}</span><span class="svc-odo">${s.odometer?Number(s.odometer).toLocaleString()+' mi':'—'}</span><span class="svc-loc">${s.location||'—'}</span></div>`).join('')
+    :'<div class="svc-empty">No service records</div>';
+
+  // External links
+  const links=[['BaT',`https://bringatrailer.com/listing/mercedes-benz-s65-amg/?q=${vin}`,'#1a1a2e','#e8c870'],['C&B',`https://carsandbids.com/search#q=${vin}`,'#2d5016','#9ecf65'],['Carfax',`https://www.carfax.com/VehicleHistory/p/Report.cfm?vin=${vin}`,'#cc0000','#fff'],['GoodCar',`https://www.goodcar.com/wp-content/${vin}`,'#5b2d8e','#fff'],['NHTSA',`https://vpic.nhtsa.dot.gov/decoder/Decoder/DecodeVinValues/${vin}`,'#1565c0','#fff'],['eBay',`https://www.ebay.com/sch/i.html?_nkw=${vin}`,'#e53238','#fff'],['Classic.com',`https://www.classic.com/search/?q=${vin}`,'#2c2c2c','#d4af37']];
+  document.getElementById('fd-links').innerHTML=links.map(([l,u,bg,c])=>`<a href="${u}" target="_blank" style="background:${bg};color:${c};display:inline-flex;align-items:center;padding:5px 12px;border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:500;text-decoration:none;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">${l}</a>`).join('');
+
+  // Image
+  const iz=document.getElementById('img-zone');iz.classList.remove('has-img');iz.querySelector('img')?.remove();
+  if(v.image_url){const{data:su}=await db.storage.from('documents').createSignedUrl(v.image_url,3600);if(su){iz.classList.add('has-img');const im=document.createElement('img');im.src=su.signedUrl;iz.prepend(im);}}
+
+  await loadDocSlots(v.id,vin);
+  document.getElementById('fleet-overlay').classList.add('open');
+  document.getElementById('fleet-drawer').classList.add('open');
+}
+
+async function loadDocSlots(vehicleId,vin){
+  const{data:docs}=await db.from('documents').select('*').eq('vehicle_id',vehicleId);
+  ['carfax','goodcar','iseecars','ppi'].forEach(type=>{
+    const slot=document.getElementById(`slot-${type}`);
+    const status=slot.querySelector('.doc-slot-status');
+    const fileInput=slot.querySelector('input[type=file]');
+    const ex=(docs||[]).find(d=>d.doc_type===type);
+    if(ex){
+      slot.classList.add('has-file');
+      // Disable file input so clicking slot doesn't open upload dialog
+      fileInput.style.pointerEvents='none';
+      status.innerHTML=`✓ ${ex.filename}<br>
+        <a class="doc-open-link" href="#" onclick="openDoc('${ex.storage_path}',event)">Open PDF</a><br>
+        <a class="doc-replace-link" href="#" onclick="replaceDoc(event,'${type}')">Replace</a>`;
+    } else {
+      slot.classList.remove('has-file');
+      fileInput.style.pointerEvents='auto';
+      status.textContent='Click or drop PDF';
+    }
+  });
+}
+function replaceDoc(e,docType){
+  e.preventDefault();e.stopPropagation();
+  // Re-enable the file input and trigger it
+  const slot=document.getElementById(`slot-${docType}`);
+  const fileInput=slot.querySelector('input[type=file]');
+  fileInput.style.pointerEvents='auto';
+  fileInput.click();
+}
+async function openDoc(path,e){e.preventDefault();const{data}=await db.storage.from('documents').createSignedUrl(path,3600);if(data?.signedUrl)window.open(data.signedUrl,'_blank');}
+function closeFleetDrawer(){document.getElementById('fleet-overlay').classList.remove('open');document.getElementById('fleet-drawer').classList.remove('open');activeFD=null;}
+
+async function uploadVehicleImage(input){if(!input.files[0]||!activeFD)return;const file=input.files[0];const path=`${activeFD.vin}/photo_${Date.now()}.${file.name.split('.').pop()}`;toast('Uploading…');const{error}=await db.storage.from('documents').upload(path,file,{upsert:true});if(error){toast('Upload failed',true);return;}await db.from('vehicles').update({image_url:path}).eq('id',activeFD.id);activeFD.image_url=path;await openFleetDrawer(activeFD.vin);toast('Photo saved ✓');}
+function dragOver(e,el){e.preventDefault();el.classList.add('dragover');}
+function dragLeave(el){el.classList.remove('dragover');}
+async function dropFile(e,docType){e.preventDefault();document.getElementById(`slot-${docType}`).classList.remove('dragover');const file=e.dataTransfer.files[0];if(file)await doUploadDoc(file,docType);}
+async function uploadDoc(input,docType){if(input.files[0])await doUploadDoc(input.files[0],docType);}
+async function doUploadDoc(file,docType){if(!activeFD)return;const path=`${activeFD.vin}/${docType}_${Date.now()}.pdf`;toast(`Uploading ${docType}…`);const{error:uE}=await db.storage.from('documents').upload(path,file,{upsert:true});if(uE){toast('Upload failed',true);return;}await db.from('documents').delete().eq('vehicle_id',activeFD.id).eq('doc_type',docType);const{error:iE}=await db.from('documents').insert({vehicle_id:activeFD.id,vin:activeFD.vin,doc_type:docType,filename:file.name,storage_path:path});if(iE){toast('Save failed',true);return;}await loadDocSlots(activeFD.id,activeFD.vin);toast(`${docType} saved ✓`);}
+
+async function saveNotes(){if(!activeFD)return;const notes=document.getElementById('fd-notes').value;const{error}=await db.from('vehicles').update({research_notes:notes}).eq('id',activeFD.id);if(error){toast('Save failed',true);return;}activeFD.research_notes=notes;const v=allVehicles.find(x=>x.id===activeFD.id);if(v)v.research_notes=notes;toast('Notes saved ✓');}
+
+// CRM
+const STATUS_CLASS={pending:'st-pending',active:'st-active',declined:'st-declined',scheduled:'st-scheduled',inbound:'st-inbound',hold:'st-hold'};
+const STATUS_LABEL={pending:'Pending',active:'Active',declined:'Declined',scheduled:'Call Scheduled',inbound:'Inbound',hold:'On Hold'};
+function updateCRMStats(){document.getElementById('crm-stat-total').textContent=allContacts.length;document.getElementById('crm-stat-active').textContent=allContacts.filter(c=>c.status==='active').length;document.getElementById('crm-stat-pending').textContent=allContacts.filter(c=>c.status==='pending').length;document.getElementById('crm-stat-declined').textContent=allContacts.filter(c=>c.status==='declined').length;}
+
+function renderCRM(){
+  const sf=document.getElementById('crm-status-filter').value;
+  const rf=document.getElementById('crm-region-filter').value;
+  const tf=document.getElementById('crm-type-filter').value;
+  const q=(document.getElementById('crm-search').value||'').toLowerCase();
+  const sort=document.getElementById('crm-sort').value;
+  let data=allContacts.filter(c=>{
+    if(sf&&c.status!==sf)return false;
+    if(rf&&c.region!==rf)return false;
+    if(tf&&c.contact_type!==tf)return false;
+    if(q&&![(c.company||''),(c.location||''),(c.notes||'')].some(f=>f.toLowerCase().includes(q)))return false;
+    return true;
+  });
+  if(sort==='company')data.sort((a,b)=>(a.company||'').localeCompare(b.company||''));
+  if(sort==='status')data.sort((a,b)=>(a.status||'').localeCompare(b.status||''));
+  document.getElementById('crm-count').textContent=`${data.length} contacts`;
+  if(!data.length){document.getElementById('crm-grid').innerHTML='<div style="font-family:var(--mono);font-size:12px;color:var(--muted);padding:28px">No contacts match filters.</div>';return;}
+  document.getElementById('crm-grid').innerHTML=data.map(c=>{
+    const cLogs=allLogs.filter(l=>l.contact_id===c.id);
+    const lastLog=cLogs[0];
+    const cAlerts=allAlerts.filter(a=>a.contact_id===c.id);
+    return`<div class="crm-card${activeCRM===c.id?' selected':''}" onclick="openCRMDrawer('${c.id}')">
+      <div class="crm-card-header">
+        <div><div class="crm-company">${c.priority==='TRUE'||c.priority===true?'⭐ ':''}${c.company}</div>
+        <div class="crm-location">${c.contact_name?`<span style="color:var(--ink);font-weight:500">${c.contact_name}</span>${c.contact_title?' · <span style="color:var(--muted)">'+c.contact_title+'</span>':''} · `:''}${c.location||'—'}</div></div>
+        <span class="status-badge ${STATUS_CLASS[c.status]||'st-hold'}">${STATUS_LABEL[c.status]||c.status}</span>
+      </div>
+      <div class="crm-card-body">
+        <div class="crm-meta-row">
+          ${c.phone?`<span class="crm-meta-item">📞 ${c.phone}</span>`:''}
+          ${c.email?`<span class="crm-meta-item">✉ <a href="mailto:${c.email}" onclick="event.stopPropagation()" style="color:var(--muted)">${c.email}</a></span>`:''}
+          ${c.website?`<span class="crm-meta-item">🌐 <a href="https://${c.website}" target="_blank" onclick="event.stopPropagation()">${c.website}</a></span>`:''}
+        </div>
+        ${lastLog?`<div class="crm-note">${(lastLog.body||'').substring(0,85)}${(lastLog.body||'').length>85?'…':''}</div>`:''}
+        ${cAlerts.length?`<div class="crm-vins">${cAlerts.map(a=>`<span class="crm-vin-tag">${(a.vin||'').slice(-8)} ≤$${Math.round((a.ceiling_usd||0)/1000)}K</span>`).join('')}</div>`:''}
+      </div>
+      <div class="crm-card-footer">
+        <span class="crm-date">${c.first_contact||'—'} · ${lastLog?new Date(lastLog.logged_at).toLocaleDateString():'—'}</span>
+        <button class="crm-btn primary" onclick="event.stopPropagation();openCRMDrawer('${c.id}')">Update</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openCRMDrawer(id){
+  const c=allContacts.find(x=>x.id===id);if(!c)return;
+  activeCRM=id;renderCRM();
+  document.getElementById('cd-eyebrow').textContent=(c.contact_type||'broker').toUpperCase()+' CONTACT';
+  document.getElementById('cd-company').textContent=c.company;
+  document.getElementById('cd-location').textContent=`${c.location||'—'} · ${c.region||'—'}`;
+  document.getElementById('cd-status-select').value=c.status||'pending';
+  // Populate editable fields
+  document.getElementById('cd-contact-name').value=c.contact_name||'';
+  document.getElementById('cd-contact-title').value=c.contact_title||'';
+  document.getElementById('cd-phone-input').value=c.phone||'';
+  document.getElementById('cd-email-input').value=c.email||'';
+  document.getElementById('cd-location-input').value=c.location||'';
+  document.getElementById('cd-web-input').value=c.website||'';
+  const cAlerts=allAlerts.filter(a=>a.contact_id===id);
+  document.getElementById('cd-alerts').innerHTML=cAlerts.length?cAlerts.map(a=>`<div class="alert-row"><span class="trim-badge s65" style="font-size:9px">${(a.vin||'').slice(-8)}</span><span class="alert-vin">${a.vin}</span><span class="alert-ceiling">≤$${Math.round((a.ceiling_usd||0)/1000)}K</span><button class="alert-remove" onclick="removeVINAlert('${a.id}')">×</button></div>`).join(''):'<div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:8px 0">No VINs assigned yet</div>';
+  const cLogs=allLogs.filter(l=>l.contact_id===id);
+  document.getElementById('cd-log').innerHTML=cLogs.length?cLogs.map(l=>`<div class="log-entry"><div class="log-date">${new Date(l.logged_at).toLocaleString()}</div><div class="log-text"><span class="log-type-tag lt-${l.entry_type}">${l.entry_type}</span>${l.body||''}</div></div>`).join(''):'<div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:8px 0">No activity logged yet</div>';
+  document.getElementById('crm-overlay').classList.add('open');
+  document.getElementById('crm-drawer').classList.add('open');
+}
+function closeCRMDrawer(){document.getElementById('crm-overlay').classList.remove('open');document.getElementById('crm-drawer').classList.remove('open');activeCRM=null;renderCRM();}
+
+async function saveContactInfo(){
+  if(!activeCRM)return;
+  const updates={
+    contact_name:  document.getElementById('cd-contact-name').value.trim()||null,
+    contact_title: document.getElementById('cd-contact-title').value.trim()||null,
+    phone:         document.getElementById('cd-phone-input').value.trim()||null,
+    email:         document.getElementById('cd-email-input').value.trim()||null,
+    location:      document.getElementById('cd-location-input').value.trim()||null,
+    website:       document.getElementById('cd-web-input').value.trim()||null,
+    last_activity: new Date().toISOString(),
+  };
+  const{error}=await db.from('contacts').update(updates).eq('id',activeCRM);
+  if(error){toast('Save failed: '+error.message,true);return;}
+  // Update local cache
+  const c=allContacts.find(x=>x.id===activeCRM);
+  if(c)Object.assign(c,updates);
+  // Refresh drawer header subtitle
+  document.getElementById('cd-location').textContent=`${updates.location||'—'} · ${(c&&c.region)||'—'}`;
+  renderCRM();
+  toast('Contact info saved ✓');
+}
+
+async function updateContactStatus(val){if(!activeCRM)return;const{error}=await db.from('contacts').update({status:val,last_activity:new Date().toISOString()}).eq('id',activeCRM);if(error){toast('Status update failed',true);return;}const c=allContacts.find(x=>x.id===activeCRM);if(c){c.status=val;c.last_activity=new Date().toISOString();}updateCRMStats();renderCRM();toast('Status updated ✓');}
+
+async function addLogEntry(){if(!activeCRM)return;const type=document.getElementById('log-type-sel').value;const body=document.getElementById('log-text-input').value.trim();if(!body){toast('Write something first',true);return;}const{data:newLog,error}=await db.from('contact_log').insert({contact_id:activeCRM,entry_type:type,body}).select().single();if(error){toast('Log save failed',true);return;}allLogs.unshift(newLog);document.getElementById('log-text-input').value='';const c=allContacts.find(x=>x.id===activeCRM);if(c){const ns=type==='declined'?'declined':(type==='reply'||type==='call')&&c.status==='pending'?'active':c.status;if(ns!==c.status)await updateContactStatus(ns);c.last_activity=new Date().toISOString();}await db.from('contacts').update({last_activity:new Date().toISOString()}).eq('id',activeCRM);openCRMDrawer(activeCRM);toast('Logged ✓');}
+
+async function addVINAlert(){if(!activeCRM)return;const vin=document.getElementById('add-vin-input').value.trim().toUpperCase();const ceiling=parseInt(document.getElementById('add-ceiling-input').value.replace(/\D/g,''));if(!vin||!ceiling){toast('Enter a VIN and ceiling price',true);return;}const vehicle=allVehicles.find(v=>v.vin===vin);const{data:newAlert,error}=await db.from('contact_alerts').insert({contact_id:activeCRM,vehicle_id:vehicle?.id||null,vin,ceiling_usd:ceiling,active:true}).select().single();if(error){toast('Alert save failed',true);return;}allAlerts.push(newAlert);document.getElementById('add-vin-input').value='';document.getElementById('add-ceiling-input').value='';openCRMDrawer(activeCRM);toast(`Alert added ✓`);}
+
+async function removeVINAlert(alertId){const{error}=await db.from('contact_alerts').delete().eq('id',alertId);if(error){toast('Remove failed',true);return;}allAlerts=allAlerts.filter(a=>a.id!==alertId);openCRMDrawer(activeCRM);toast('Alert removed ✓');}
+
+async function openAddContact(){const company=prompt('Company name:');if(!company)return;const location=prompt('Location (e.g. Dallas, TX):')||'';const region=prompt('Region (DFW/CA/FL/AZ/National):')||'DFW';const ctype=prompt('Type (broker/franchise):')||'broker';const website=prompt('Website (without https://):')||'';const phone=prompt('Phone (or leave blank):')||'';const email=prompt('Email (or leave blank):')||'';const{data:nc,error}=await db.from('contacts').insert({company,location,region,contact_type:ctype,website,phone:phone||null,email:email||null,status:'pending',outreach_type:'outbound',first_contact:new Date().toISOString().split('T')[0],last_activity:new Date().toISOString()}).select().single();if(error){toast('Add failed: '+error.message,true);return;}allContacts.unshift(nc);updateCRMStats();renderCRM();switchTab('crm');toast(`${company} added ✓`);openCRMDrawer(nc.id);}
+
+loadAll();
+</script>
+</body>
+</html>
