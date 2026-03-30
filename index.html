@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -7,10 +8,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
 <!-- ─── STEP 1: Paste your Supabase credentials here ─── -->
+
 <script>
   const SUPABASE_URL = 'https://kevwkxuloxxrevodsukg.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtldndreHVsb3h4cmV2b2RzdWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NjkwNTUsImV4cCI6MjA5MDQ0NTA1NX0.xU3Ii35aYSozwtznzD9ixHtO0swgYAGVS4FBaM3pN0M';
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -280,7 +283,58 @@ td.num{font-family:var(--mono);text-align:right;}
 .cd-edit-input{width:100%;border:none;background:transparent;font-family:var(--mono);font-size:12px;color:var(--ink);outline:none;padding:2px 0;border-bottom:1px solid var(--rule);transition:border-color .15s;}
 .cd-edit-input:focus{border-bottom-color:var(--ink);}
 .cd-edit-input::placeholder{color:#ccc;}
+
+/* ── Mobile (≤768px) ── */
+@media(max-width:768px){
+  header{padding:0 16px;height:48px;}
+  .logo{font-size:16px;}
+  .header-meta{display:none;}
+  .sync-btn{font-size:10px;padding:4px 8px;}
+  .tab-bar{padding:0 8px;top:48px;}
+  .tab{padding:10px 12px;font-size:10px;letter-spacing:.06em;}
+  .tab-actions{display:none;}
+  .page.active{display:block;}
+  .shell{display:block;}
+  aside{display:none;}
+  main{padding:12px;}
+  .table-outer{display:none;}
+  .toolbar{display:none;}
+  .pagination{display:none;}
+  .crm-grid{display:none;}
+  #mobile-search-panel{display:block !important;}
+  .drawer{width:100%;left:0;}
+  .scenario-row{grid-template-columns:repeat(3,1fr);}
+  .drawer-grid{grid-template-columns:1fr 1fr;}
+}
+@media(min-width:769px){
+  #mobile-search-panel{display:none !important;}
+}
+#mobile-search-panel{display:none;padding:12px;}
+.mob-search-wrap{position:relative;margin-bottom:8px;}
+.mob-search-input{width:100%;border:2px solid var(--rule);border-radius:8px;padding:13px 16px 13px 42px;font-family:var(--mono);font-size:15px;background:#fff;color:var(--ink);outline:none;-webkit-appearance:none;}
+.mob-search-input:focus{border-color:var(--ink);}
+.mob-search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:18px;}
+.mob-hint{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px;line-height:1.5;}
+.mob-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px;}
+.mob-stat{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:10px 6px;text-align:center;}
+.mob-stat-num{font-family:var(--serif);font-size:18px;display:block;}
+.mob-stat-lbl{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:block;margin-top:2px;}
+.mob-result{background:#fff;border:1px solid var(--rule);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+.mob-result-header{background:var(--ink);padding:12px 16px;display:flex;justify-content:space-between;align-items:flex-start;}
+.mob-result-vin{font-family:var(--mono);font-size:10px;color:#aaa;margin-bottom:2px;}
+.mob-result-title{font-family:var(--serif);font-size:16px;color:#fff;}
+.mob-result-body{padding:12px 14px;}
+.mob-field-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;}
+.mob-field{background:var(--paper);border-radius:4px;padding:8px 10px;}
+.mob-field-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:2px;}
+.mob-field-value{font-family:var(--mono);font-size:13px;font-weight:500;}
+.mob-field-value.accent{color:var(--accent);}
+.mob-field-value.green{color:#1a6b3a;}
+.mob-field-value.gold{color:var(--gold);}
+.mob-open-btn{display:block;width:100%;padding:11px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;margin-top:4px;}
+.mob-no-result{text-align:center;padding:32px 16px;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.8;}
 </style>
+
 </head>
 <body>
 
@@ -306,6 +360,7 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 
 <!-- ══ FLEET PAGE ══ -->
+
 <div class="page active" id="page-fleet">
 <div class="shell">
   <aside>
@@ -364,6 +419,24 @@ td.num{font-family:var(--mono);text-align:right;}
     </div>
   </aside>
   <main>
+    <!-- ── MOBILE SEARCH PANEL (hidden on desktop) ── -->
+    <div id="mobile-search-panel">
+      <div class="mob-stats">
+        <div class="mob-stat"><span class="mob-stat-num" id="m-stat-total">—</span><span class="mob-stat-lbl">VINs</span></div>
+        <div class="mob-stat"><span class="mob-stat-num" style="color:var(--accent)" id="m-stat-target">—</span><span class="mob-stat-lbl">Target</span></div>
+        <div class="mob-stat"><span class="mob-stat-num" style="color:var(--s65)" id="m-stat-s65">—</span><span class="mob-stat-lbl">S65</span></div>
+        <div class="mob-stat"><span class="mob-stat-num" style="color:var(--s600)" id="m-stat-s600">—</span><span class="mob-stat-lbl">S600</span></div>
+      </div>
+      <div class="mob-search-wrap">
+        <span class="mob-search-icon">⌕</span>
+        <input class="mob-search-input" id="mob-input" type="text"
+          placeholder="VIN or company name…"
+          oninput="mobileSearch(this.value)"
+          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      </div>
+      <div class="mob-hint">Type a VIN to look up a vehicle · Type a company to find a broker</div>
+      <div id="mob-results"></div>
+    </div>
     <div class="toolbar">
       <div class="search-wrap">
         <span class="search-icon">⌕</span>
@@ -462,6 +535,7 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 
 <!-- ══ CRM PAGE ══ -->
+
 <div class="page" id="page-crm">
 <div class="shell">
   <aside>
@@ -528,6 +602,7 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 
 <!-- ══ FLEET DRAWER ══ -->
+
 <div class="drawer-overlay" id="fleet-overlay" onclick="closeFleetDrawer()"></div>
 <div class="drawer" id="fleet-drawer">
   <div class="drawer-header">
@@ -540,110 +615,114 @@ td.num{font-family:var(--mono);text-align:right;}
   </div>
   <div class="drawer-body">
 
-    <div class="section-head">Vehicle Photo</div>
-    <div class="img-upload-zone" id="img-zone">
-      <input type="file" accept="image/*" onchange="uploadVehicleImage(this)">
-      <div style="font-size:24px">📷</div>
-      <div style="font-family:var(--mono);font-size:11px;color:var(--muted)">Drop or click to upload photo</div>
-      <div class="img-overlay">Change photo</div>
-    </div>
+```
+<div class="section-head">Vehicle Photo</div>
+<div class="img-upload-zone" id="img-zone">
+  <input type="file" accept="image/*" onchange="uploadVehicleImage(this)">
+  <div style="font-size:24px">📷</div>
+  <div style="font-family:var(--mono);font-size:11px;color:var(--muted)">Drop or click to upload photo</div>
+  <div class="img-overlay">Change photo</div>
+</div>
 
-    <div class="section-head">Documents</div>
-    <div class="doc-slots" id="fd-docs">
-      <div class="doc-slot" id="slot-carfax" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'carfax')">
-        <input type="file" accept=".pdf" onchange="uploadDoc(this,'carfax')">
-        <div class="doc-slot-label">Carfax</div><div class="doc-slot-icon">📋</div><div class="doc-slot-status">Click or drop PDF</div>
-      </div>
-      <div class="doc-slot" id="slot-goodcar" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'goodcar')">
-        <input type="file" accept=".pdf" onchange="uploadDoc(this,'goodcar')">
-        <div class="doc-slot-label">GoodCar</div><div class="doc-slot-icon">✓</div><div class="doc-slot-status">Click or drop PDF</div>
-      </div>
-      <div class="doc-slot" id="slot-iseecars" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'iseecars')">
-        <input type="file" accept=".pdf" onchange="uploadDoc(this,'iseecars')">
-        <div class="doc-slot-label">iSeeCars</div><div class="doc-slot-icon">📊</div><div class="doc-slot-status">Click or drop PDF</div>
-      </div>
-      <div class="doc-slot" id="slot-ppi" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'ppi')">
-        <input type="file" accept=".pdf" onchange="uploadDoc(this,'ppi')">
-        <div class="doc-slot-label">PPI Report</div><div class="doc-slot-icon">🔧</div><div class="doc-slot-status">Click or drop PDF</div>
-      </div>
-    </div>
+<div class="section-head">Documents</div>
+<div class="doc-slots" id="fd-docs">
+  <div class="doc-slot" id="slot-carfax" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'carfax')">
+    <input type="file" accept=".pdf" onchange="uploadDoc(this,'carfax')">
+    <div class="doc-slot-label">Carfax</div><div class="doc-slot-icon">📋</div><div class="doc-slot-status">Click or drop PDF</div>
+  </div>
+  <div class="doc-slot" id="slot-goodcar" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'goodcar')">
+    <input type="file" accept=".pdf" onchange="uploadDoc(this,'goodcar')">
+    <div class="doc-slot-label">GoodCar</div><div class="doc-slot-icon">✓</div><div class="doc-slot-status">Click or drop PDF</div>
+  </div>
+  <div class="doc-slot" id="slot-iseecars" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'iseecars')">
+    <input type="file" accept=".pdf" onchange="uploadDoc(this,'iseecars')">
+    <div class="doc-slot-label">iSeeCars</div><div class="doc-slot-icon">📊</div><div class="doc-slot-status">Click or drop PDF</div>
+  </div>
+  <div class="doc-slot" id="slot-ppi" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'ppi')">
+    <input type="file" accept=".pdf" onchange="uploadDoc(this,'ppi')">
+    <div class="doc-slot-label">PPI Report</div><div class="doc-slot-icon">🔧</div><div class="doc-slot-status">Click or drop PDF</div>
+  </div>
+</div>
 
-    <div class="section-head">External Links</div>
-    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)" id="fd-links"></div>
+<div class="section-head">External Links</div>
+<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)" id="fd-links"></div>
 
-    <div class="section-head">Identity & Color</div>
-    <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">Exterior</div><div class="drawer-field-value" id="fd-ext">—</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Upholstery</div><div class="drawer-field-value" id="fd-uph">—</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">State</div><div class="drawer-field-value" id="fd-state">—</div></div>
-    </div>
+<div class="section-head">Identity & Color</div>
+<div class="drawer-grid">
+  <div class="drawer-field"><div class="drawer-field-label">Exterior</div><div class="drawer-field-value" id="fd-ext">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label">Upholstery</div><div class="drawer-field-value" id="fd-uph">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label">State</div><div class="drawer-field-value" id="fd-state">—</div></div>
+</div>
 
-    <div class="section-head">Vehicle Data</div>
-    <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">Owners</div><div class="drawer-field-value" id="fd-own">—</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Accidents</div><div class="drawer-field-value" id="fd-acc">—</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Svc/Yr</div><div class="drawer-field-value" id="fd-svc">—</div></div>
-    </div>
-    <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">Trans</div><div class="drawer-field-value" id="fd-trans">—</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Ignition</div><div class="drawer-field-value" id="fd-ign">—</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Suspension</div><div class="drawer-field-value" id="fd-susp">—</div></div>
-    </div>
+<div class="section-head">Vehicle Data</div>
+<div class="drawer-grid">
+  <div class="drawer-field"><div class="drawer-field-label">Owners</div><div class="drawer-field-value" id="fd-own">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label">Accidents</div><div class="drawer-field-value" id="fd-acc">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label">Svc/Yr</div><div class="drawer-field-value" id="fd-svc">—</div></div>
+</div>
+<div class="drawer-grid">
+  <div class="drawer-field"><div class="drawer-field-label">Trans</div><div class="drawer-field-value" id="fd-trans">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label">Ignition</div><div class="drawer-field-value" id="fd-ign">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label">Suspension</div><div class="drawer-field-value" id="fd-susp">—</div></div>
+</div>
 
-    <div class="section-head">Scoring</div>
-    <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">QS</div><div class="drawer-field-value" id="fd-qs">—</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">PA · PB · MOD</div><div class="drawer-field-value" id="fd-sub-scores">—</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Composite Score</div><div class="drawer-field-value accent" id="fd-score">—</div></div>
-    </div>
+<div class="section-head">Scoring</div>
+<div class="drawer-grid">
+  <div class="drawer-field"><div class="drawer-field-label">QS</div><div class="drawer-field-value" id="fd-qs">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label">PA · PB · MOD</div><div class="drawer-field-value" id="fd-sub-scores">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label">Composite Score</div><div class="drawer-field-value accent" id="fd-score">—</div></div>
+</div>
 
-    <div class="section-head">Mileage</div>
-    <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">Last Known Odo</div><div class="drawer-field-value accent" id="fd-odo">—</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Last Sale Mi</div><div class="drawer-field-value" id="fd-last-sale-mi">—</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">iSC Est Mi</div><div class="drawer-field-value" id="fd-isc-mi">—</div></div>
-    </div>
-    <div class="drawer-grid-2">
-      <div class="drawer-field"><div class="drawer-field-label">Proj Mi @ Jan 2028</div><div class="drawer-field-value gold" id="fd-proj-mi">—</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Last Sale Year</div><div class="drawer-field-value" id="fd-sale">—</div></div>
-    </div>
+<div class="section-head">Mileage</div>
+<div class="drawer-grid">
+  <div class="drawer-field"><div class="drawer-field-label">Last Known Odo</div><div class="drawer-field-value accent" id="fd-odo">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label">Last Sale Mi</div><div class="drawer-field-value" id="fd-last-sale-mi">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label">iSC Est Mi</div><div class="drawer-field-value" id="fd-isc-mi">—</div></div>
+</div>
+<div class="drawer-grid-2">
+  <div class="drawer-field"><div class="drawer-field-label">Proj Mi @ Jan 2028</div><div class="drawer-field-value gold" id="fd-proj-mi">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label">Last Sale Year</div><div class="drawer-field-value" id="fd-sale">—</div></div>
+</div>
 
-    <div class="section-head">Sale History</div>
-    <div id="fd-timeline" style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)"></div>
+<div class="section-head">Sale History</div>
+<div id="fd-timeline" style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)"></div>
 
-    <div class="section-head">Service Records</div>
-    <div id="fd-service" class="svc-timeline"><div class="svc-empty">Loading…</div></div>
+<div class="section-head">Service Records</div>
+<div id="fd-service" class="svc-timeline"><div class="svc-empty">Loading…</div></div>
 
-    <div class="section-head">Observed Pricing</div>
-    <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">S-Class Est</div><div class="drawer-field-value" id="fd-sclass">—</div></div>
-      <div class="drawer-field"><div class="drawer-field-label"># Listings</div><div class="drawer-field-value" id="fd-listings">—</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Last Sale $</div><div class="drawer-field-value" id="fd-last-price">—</div></div>
-    </div>
+<div class="section-head">Observed Pricing</div>
+<div class="drawer-grid">
+  <div class="drawer-field"><div class="drawer-field-label">S-Class Est</div><div class="drawer-field-value" id="fd-sclass">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label"># Listings</div><div class="drawer-field-value" id="fd-listings">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label">Last Sale $</div><div class="drawer-field-value" id="fd-last-price">—</div></div>
+</div>
 
-    <div class="section-head">Depreciation</div>
-    <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">Depr 5yr</div><div class="drawer-field-value" id="fd-depr">—</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Val @ 1yr</div><div class="drawer-field-value" id="fd-val1">—</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Val @ 3yr</div><div class="drawer-field-value" id="fd-val3">—</div></div>
-    </div>
+<div class="section-head">Depreciation</div>
+<div class="drawer-grid">
+  <div class="drawer-field"><div class="drawer-field-label">Depr 5yr</div><div class="drawer-field-value" id="fd-depr">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label">Val @ 1yr</div><div class="drawer-field-value" id="fd-val1">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label">Val @ 3yr</div><div class="drawer-field-value" id="fd-val3">—</div></div>
+</div>
 
-    <div class="section-head">Jan 2028 Scenarios</div>
-    <div class="scenario-row" id="fd-scenarios">
-      <div class="scenario-box s-low"><div class="s-label">LOW</div><div class="s-val" id="sc-low">—</div></div>
-      <div class="scenario-box s-mid"><div class="s-label">MID</div><div class="s-val" id="sc-mid">—</div></div>
-      <div class="scenario-box s-offer"><div class="s-label">Offer</div><div class="s-val" id="sc-offer">—</div></div>
-      <div class="scenario-box s-walk"><div class="s-label">Walk-Away</div><div class="s-val" id="sc-walk">—</div></div>
-      <div class="scenario-box s-ultra"><div class="s-label">ULTRA</div><div class="s-val" id="sc-ultra">—</div></div>
-    </div>
+<div class="section-head">Jan 2028 Scenarios</div>
+<div class="scenario-row" id="fd-scenarios">
+  <div class="scenario-box s-low"><div class="s-label">LOW</div><div class="s-val" id="sc-low">—</div></div>
+  <div class="scenario-box s-mid"><div class="s-label">MID</div><div class="s-val" id="sc-mid">—</div></div>
+  <div class="scenario-box s-offer"><div class="s-label">Offer</div><div class="s-val" id="sc-offer">—</div></div>
+  <div class="scenario-box s-walk"><div class="s-label">Walk-Away</div><div class="s-val" id="sc-walk">—</div></div>
+  <div class="scenario-box s-ultra"><div class="s-label">ULTRA</div><div class="s-val" id="sc-ultra">—</div></div>
+</div>
 
-    <div class="section-head">Research Notes</div>
-    <textarea class="notes-area" id="fd-notes" placeholder="PPI findings, owner contact, service docs confirmed…"></textarea>
-    <button class="btn" style="margin-top:6px" onclick="saveNotes()">Save Notes</button>
+<div class="section-head">Research Notes</div>
+<textarea class="notes-area" id="fd-notes" placeholder="PPI findings, owner contact, service docs confirmed…"></textarea>
+<button class="btn" style="margin-top:6px" onclick="saveNotes()">Save Notes</button>
+```
+
   </div>
 </div>
 
 <!-- ══ CRM DRAWER ══ -->
+
 <div class="drawer-overlay" id="crm-overlay" onclick="closeCRMDrawer()"></div>
 <div class="drawer" id="crm-drawer">
   <div class="drawer-header">
@@ -665,61 +744,40 @@ td.num{font-family:var(--mono);text-align:right;}
       <option value="hold">⏸ On Hold</option>
     </select>
 
-    <div class="section-head">Contact Info
-      <span style="font-size:10px;color:var(--muted);text-transform:none;letter-spacing:0;margin-left:8px;font-weight:normal">— edit any field and click Save</span>
-    </div>
-    <div class="drawer-grid-2" style="margin-bottom:8px">
-      <div class="drawer-field">
-        <div class="drawer-field-label">Contact Name</div>
-        <input class="cd-edit-input" id="cd-contact-name" placeholder="e.g. Mike Johnson">
-      </div>
-      <div class="drawer-field">
-        <div class="drawer-field-label">Title</div>
-        <input class="cd-edit-input" id="cd-contact-title" placeholder="e.g. Used Car Manager">
-      </div>
-      <div class="drawer-field">
-        <div class="drawer-field-label">Phone</div>
-        <input class="cd-edit-input" id="cd-phone-input" placeholder="e.g. (214) 555-1234">
-      </div>
-      <div class="drawer-field">
-        <div class="drawer-field-label">Email</div>
-        <input class="cd-edit-input" id="cd-email-input" placeholder="e.g. mike@dealer.com">
-      </div>
-      <div class="drawer-field">
-        <div class="drawer-field-label">City / State</div>
-        <input class="cd-edit-input" id="cd-location-input" placeholder="e.g. Dallas, TX">
-      </div>
-      <div class="drawer-field">
-        <div class="drawer-field-label">Website</div>
-        <input class="cd-edit-input" id="cd-web-input" placeholder="e.g. tacticalfleet.com">
-      </div>
-    </div>
-    <button class="btn btn-accent" style="width:100%;margin-bottom:16px" onclick="saveContactInfo()">Save Contact Info</button>
+```
+<div class="section-head">Contact Info</div>
+<div class="drawer-grid-2" style="margin-bottom:14px">
+  <div class="drawer-field"><div class="drawer-field-label">Phone</div><div class="drawer-field-value" id="cd-phone" style="font-size:12px">—</div></div>
+  <div class="drawer-field"><div class="drawer-field-label">Email</div><div class="drawer-field-value" id="cd-email" style="font-size:11px">—</div></div>
+  <div class="drawer-field" style="grid-column:span 2"><div class="drawer-field-label">Website</div><div class="drawer-field-value" id="cd-web" style="font-size:11px">—</div></div>
+</div>
 
-    <div class="section-head">VINs This Contact is Watching</div>
-    <div id="cd-alerts"></div>
-    <div class="add-alert-row">
-      <input id="add-vin-input" placeholder="Full VIN…">
-      <input id="add-ceiling-input" placeholder="Ceiling $" style="width:85px">
-      <button class="btn" onclick="addVINAlert()">+ Add</button>
-    </div>
+<div class="section-head">VINs This Contact is Watching</div>
+<div id="cd-alerts"></div>
+<div class="add-alert-row">
+  <input id="add-vin-input" placeholder="Full VIN…">
+  <input id="add-ceiling-input" placeholder="Ceiling $" style="width:85px">
+  <button class="btn" onclick="addVINAlert()">+ Add</button>
+</div>
 
-    <div class="section-head" style="margin-top:18px">Log Entry
-      <span style="font-size:10px;color:var(--muted);text-transform:none;letter-spacing:0;margin-left:8px;font-weight:normal">— every call, reply, note goes here</span>
-    </div>
-    <div class="info-box"><strong>How to update:</strong> After every interaction pick a type, write what happened, hit Log Entry. Change status dropdown when the relationship progresses.</div>
-    <select class="log-type-select" id="log-type-sel">
-      <option value="note">📝 Note</option>
-      <option value="sent">📤 Email Sent</option>
-      <option value="reply">📥 Reply Received</option>
-      <option value="call">📞 Call</option>
-      <option value="declined">❌ Declined</option>
-    </select>
-    <textarea class="log-input-field" id="log-text-input" placeholder="e.g. Spoke with Mike — has Manheim access, will watch for S65s."></textarea>
-    <button class="btn btn-accent" style="width:100%;margin-bottom:18px" onclick="addLogEntry()">+ Log Entry</button>
+<div class="section-head" style="margin-top:18px">Log Entry
+  <span style="font-size:10px;color:var(--muted);text-transform:none;letter-spacing:0;margin-left:8px;font-weight:normal">— every call, reply, note goes here</span>
+</div>
+<div class="info-box"><strong>How to update:</strong> After every interaction pick a type, write what happened, hit Log Entry. Change status dropdown when the relationship progresses.</div>
+<select class="log-type-select" id="log-type-sel">
+  <option value="note">📝 Note</option>
+  <option value="sent">📤 Email Sent</option>
+  <option value="reply">📥 Reply Received</option>
+  <option value="call">📞 Call</option>
+  <option value="declined">❌ Declined</option>
+</select>
+<textarea class="log-input-field" id="log-text-input" placeholder="e.g. Spoke with Mike — has Manheim access, will watch for S65s."></textarea>
+<button class="btn btn-accent" style="width:100%;margin-bottom:18px" onclick="addLogEntry()">+ Log Entry</button>
 
-    <div class="section-head">Activity History</div>
-    <div id="cd-log"></div>
+<div class="section-head">Activity History</div>
+<div id="cd-log"></div>
+```
+
   </div>
 </div>
 
@@ -780,6 +838,11 @@ function updateFleetStats(){
   document.getElementById('cnt-yr2017').textContent=allVehicles.filter(v=>(v.year||2017)==2017).length;
   document.getElementById('cnt-yr2016').textContent=allVehicles.filter(v=>v.year==2016).length;
   document.getElementById('cnt-yr2015').textContent=allVehicles.filter(v=>v.year==2015).length;
+  // Mobile stats
+  document.getElementById('m-stat-total').textContent=allVehicles.length;
+  document.getElementById('m-stat-target').textContent=allVehicles.filter(v=>['active','target'].includes((v.status||'').toLowerCase())).length;
+  document.getElementById('m-stat-s65').textContent=allVehicles.filter(v=>v.trim==='S65 AMG'||v.trim==='S65').length;
+  document.getElementById('m-stat-s600').textContent=allVehicles.filter(v=>v.trim==='S600').length;
 }
 
 let trimFilter=new Set(['S65 AMG','S65','S600']);
@@ -1062,14 +1125,12 @@ function renderCRM(){
     const cAlerts=allAlerts.filter(a=>a.contact_id===c.id);
     return`<div class="crm-card${activeCRM===c.id?' selected':''}" onclick="openCRMDrawer('${c.id}')">
       <div class="crm-card-header">
-        <div><div class="crm-company">${c.priority==='TRUE'||c.priority===true?'⭐ ':''}${c.company}</div>
-        <div class="crm-location">${c.contact_name?`<span style="color:var(--ink);font-weight:500">${c.contact_name}</span>${c.contact_title?' · <span style="color:var(--muted)">'+c.contact_title+'</span>':''} · `:''}${c.location||'—'}</div></div>
+        <div><div class="crm-company">${c.priority==='TRUE'||c.priority===true?'⭐ ':''}${c.company}</div><div class="crm-location">${c.location||'—'} · ${c.contact_type||''}</div></div>
         <span class="status-badge ${STATUS_CLASS[c.status]||'st-hold'}">${STATUS_LABEL[c.status]||c.status}</span>
       </div>
       <div class="crm-card-body">
         <div class="crm-meta-row">
           ${c.phone?`<span class="crm-meta-item">📞 ${c.phone}</span>`:''}
-          ${c.email?`<span class="crm-meta-item">✉ <a href="mailto:${c.email}" onclick="event.stopPropagation()" style="color:var(--muted)">${c.email}</a></span>`:''}
           ${c.website?`<span class="crm-meta-item">🌐 <a href="https://${c.website}" target="_blank" onclick="event.stopPropagation()">${c.website}</a></span>`:''}
         </div>
         ${lastLog?`<div class="crm-note">${(lastLog.body||'').substring(0,85)}${(lastLog.body||'').length>85?'…':''}</div>`:''}
@@ -1089,14 +1150,10 @@ function openCRMDrawer(id){
   document.getElementById('cd-eyebrow').textContent=(c.contact_type||'broker').toUpperCase()+' CONTACT';
   document.getElementById('cd-company').textContent=c.company;
   document.getElementById('cd-location').textContent=`${c.location||'—'} · ${c.region||'—'}`;
+  document.getElementById('cd-phone').textContent=c.phone||'—';
+  document.getElementById('cd-email').textContent=c.email||'—';
+  document.getElementById('cd-web').innerHTML=c.website?`<a href="https://${c.website}" target="_blank" style="color:var(--accent)">${c.website}</a>`:'—';
   document.getElementById('cd-status-select').value=c.status||'pending';
-  // Populate editable fields
-  document.getElementById('cd-contact-name').value=c.contact_name||'';
-  document.getElementById('cd-contact-title').value=c.contact_title||'';
-  document.getElementById('cd-phone-input').value=c.phone||'';
-  document.getElementById('cd-email-input').value=c.email||'';
-  document.getElementById('cd-location-input').value=c.location||'';
-  document.getElementById('cd-web-input').value=c.website||'';
   const cAlerts=allAlerts.filter(a=>a.contact_id===id);
   document.getElementById('cd-alerts').innerHTML=cAlerts.length?cAlerts.map(a=>`<div class="alert-row"><span class="trim-badge s65" style="font-size:9px">${(a.vin||'').slice(-8)}</span><span class="alert-vin">${a.vin}</span><span class="alert-ceiling">≤$${Math.round((a.ceiling_usd||0)/1000)}K</span><button class="alert-remove" onclick="removeVINAlert('${a.id}')">×</button></div>`).join(''):'<div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:8px 0">No VINs assigned yet</div>';
   const cLogs=allLogs.filter(l=>l.contact_id===id);
@@ -1105,28 +1162,6 @@ function openCRMDrawer(id){
   document.getElementById('crm-drawer').classList.add('open');
 }
 function closeCRMDrawer(){document.getElementById('crm-overlay').classList.remove('open');document.getElementById('crm-drawer').classList.remove('open');activeCRM=null;renderCRM();}
-
-async function saveContactInfo(){
-  if(!activeCRM)return;
-  const updates={
-    contact_name:  document.getElementById('cd-contact-name').value.trim()||null,
-    contact_title: document.getElementById('cd-contact-title').value.trim()||null,
-    phone:         document.getElementById('cd-phone-input').value.trim()||null,
-    email:         document.getElementById('cd-email-input').value.trim()||null,
-    location:      document.getElementById('cd-location-input').value.trim()||null,
-    website:       document.getElementById('cd-web-input').value.trim()||null,
-    last_activity: new Date().toISOString(),
-  };
-  const{error}=await db.from('contacts').update(updates).eq('id',activeCRM);
-  if(error){toast('Save failed: '+error.message,true);return;}
-  // Update local cache
-  const c=allContacts.find(x=>x.id===activeCRM);
-  if(c)Object.assign(c,updates);
-  // Refresh drawer header subtitle
-  document.getElementById('cd-location').textContent=`${updates.location||'—'} · ${(c&&c.region)||'—'}`;
-  renderCRM();
-  toast('Contact info saved ✓');
-}
 
 async function updateContactStatus(val){if(!activeCRM)return;const{error}=await db.from('contacts').update({status:val,last_activity:new Date().toISOString()}).eq('id',activeCRM);if(error){toast('Status update failed',true);return;}const c=allContacts.find(x=>x.id===activeCRM);if(c){c.status=val;c.last_activity=new Date().toISOString();}updateCRMStats();renderCRM();toast('Status updated ✓');}
 
@@ -1138,7 +1173,82 @@ async function removeVINAlert(alertId){const{error}=await db.from('contact_alert
 
 async function openAddContact(){const company=prompt('Company name:');if(!company)return;const location=prompt('Location (e.g. Dallas, TX):')||'';const region=prompt('Region (DFW/CA/FL/AZ/National):')||'DFW';const ctype=prompt('Type (broker/franchise):')||'broker';const website=prompt('Website (without https://):')||'';const phone=prompt('Phone (or leave blank):')||'';const email=prompt('Email (or leave blank):')||'';const{data:nc,error}=await db.from('contacts').insert({company,location,region,contact_type:ctype,website,phone:phone||null,email:email||null,status:'pending',outreach_type:'outbound',first_contact:new Date().toISOString().split('T')[0],last_activity:new Date().toISOString()}).select().single();if(error){toast('Add failed: '+error.message,true);return;}allContacts.unshift(nc);updateCRMStats();renderCRM();switchTab('crm');toast(`${company} added ✓`);openCRMDrawer(nc.id);}
 
+// ── Mobile search ──
+function mobileSearch(q){
+  const el=document.getElementById('mob-results');
+  q=q.trim();
+  if(q.length<2){el.innerHTML='';return;}
+  const ql=q.toLowerCase();
+
+  // Search vehicles by VIN
+  const vehicles=allVehicles.filter(v=>(v.vin||'').toLowerCase().includes(ql)).slice(0,3);
+  // Search contacts by company or contact name
+  const contacts=allContacts.filter(c=>
+    (c.company||'').toLowerCase().includes(ql)||
+    (c.contact_name||'').toLowerCase().includes(ql)
+  ).slice(0,3);
+
+  if(!vehicles.length&&!contacts.length){
+    el.innerHTML=`<div class="mob-no-result">No vehicles or contacts found<br>for "<strong>${q}</strong>"</div>`;
+    return;
+  }
+
+  let html='';
+
+  vehicles.forEach(v=>{
+    const st=(v.status||'').toLowerCase();
+    const chipColor=st==='active'||st==='target'?'var(--accent)':st==='watch'?'var(--gold)':'#999';
+    html+=`<div class="mob-result">
+      <div class="mob-result-header">
+        <div>
+          <div class="mob-result-vin">${v.vin}</div>
+          <div class="mob-result-title">${v.year||2017} ${v.trim||'—'}</div>
+        </div>
+        <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:${chipColor};text-transform:uppercase;background:rgba(255,255,255,.12);padding:3px 8px;border-radius:3px">${v.status||'—'}</span>
+      </div>
+      <div class="mob-result-body">
+        <div class="mob-field-grid">
+          <div class="mob-field"><div class="mob-field-label">Rank</div><div class="mob-field-value accent">#${v.rank||'—'}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Score</div><div class="mob-field-value accent">${v.composite_score||'—'}/175</div></div>
+          <div class="mob-field"><div class="mob-field-label">Odometer</div><div class="mob-field-value ${(v.curr_odo>=70000&&v.curr_odo<=100000)?'gold':''}">${oFmt(v.curr_odo)}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Proj @ Jan 28</div><div class="mob-field-value gold">${oFmt(v.proj_mi_jan28)}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Offer Target</div><div class="mob-field-value green">${$m(v.offer_target)}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Walk-Away</div><div class="mob-field-value accent">${$m(v.walk_away)}</div></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px">${v.exterior||''}${v.exterior&&v.upholstery?' · ':''}${v.upholstery||''} ${v.title_state?'· '+v.title_state:''}</div>
+        <button class="mob-open-btn" onclick="openFleetDrawer('${v.vin}')">Full Detail →</button>
+      </div>
+    </div>`;
+  });
+
+  contacts.forEach(c=>{
+    const sc=STATUS_CLASS[c.status]||'st-hold';
+    const sl=STATUS_LABEL[c.status]||c.status;
+    html+=`<div class="mob-result">
+      <div class="mob-result-header">
+        <div>
+          <div class="mob-result-vin">${c.contact_type||'broker'} · ${c.region||''}</div>
+          <div class="mob-result-title">${c.company}</div>
+        </div>
+        <span class="status-badge ${sc}" style="margin-left:8px;flex-shrink:0">${sl}</span>
+      </div>
+      <div class="mob-result-body">
+        <div class="mob-field-grid">
+          ${c.contact_name?`<div class="mob-field" style="grid-column:span 2"><div class="mob-field-label">Contact</div><div class="mob-field-value">${c.contact_name}${c.contact_title?' · <span style="color:var(--muted);font-size:11px">'+c.contact_title+'</span>':''}</div></div>`:''}
+          ${c.phone?`<div class="mob-field"><div class="mob-field-label">Phone</div><div class="mob-field-value"><a href="tel:${c.phone}" style="color:var(--s65);text-decoration:none">${c.phone}</a></div></div>`:''}
+          ${c.email?`<div class="mob-field"><div class="mob-field-label">Email</div><div class="mob-field-value" style="font-size:11px"><a href="mailto:${c.email}" style="color:var(--accent);text-decoration:none">${c.email}</a></div></div>`:''}
+          <div class="mob-field"><div class="mob-field-label">Location</div><div class="mob-field-value">${c.location||'—'}</div></div>
+        </div>
+        <button class="mob-open-btn" onclick="switchTab('crm');openCRMDrawer('${c.id}')">Open CRM →</button>
+      </div>
+    </div>`;
+  });
+
+  el.innerHTML=html;
+}
+
 loadAll();
 </script>
+
 </body>
 </html>
