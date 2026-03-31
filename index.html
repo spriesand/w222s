@@ -800,12 +800,12 @@ async function loadAll(){
   setSyncStatus('loading');
   try{
     const[vR,mR,cR,aR,lR,sR]=await Promise.all([
-      db.from('vehicles').select('*').order('composite_score',{ascending:false,nullsFirst:false}),
-      db.from('vehicle_market').select('*'),
+      db.from('vehicles').select('*').order('composite_score',{ascending:false,nullsFirst:false}).limit(10000),
+      db.from('vehicle_market').select('*').limit(10000),
       db.from('broker_contacts').select('*').order('last_activity',{ascending:false,nullsFirst:false}),
       db.from('contact_alerts').select('*').eq('active',true),
       db.from('contact_log').select('*').order('logged_at',{ascending:false}),
-      db.from('vehicle_service').select('*').order('record_date',{ascending:true}),
+      db.from('vehicle_service').select('*').order('record_date',{ascending:true}).limit(10000),
     ]);
     if(vR.error)throw vR.error;
     const marketByVin={};
