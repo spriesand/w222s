@@ -804,15 +804,19 @@ function boolVal(v){return(v===true||v==='TRUE'||v==='true'||v==='Yes');}
 async function loadAll(){
   setSyncStatus('loading');
   try{
-    const[vR,cR,aR,lR,sR]=await Promise.all([
+    const[vR,mR,cR,aR,lR,sR]=await Promise.all([
       db.from('vehicles').select('*').order('composite_score',{ascending:false,nullsFirst:false}),
+      db.from('vehicle_market').select('*'),
       db.from('broker_contacts').select('*').order('last_activity',{ascending:false,nullsFirst:false}),
       db.from('contact_alerts').select('*').eq('active',true),
       db.from('contact_log').select('*').order('logged_at',{ascending:false}),
       db.from('vehicle_service').select('*').order('record_date',{ascending:true}),
     ]);
     if(vR.error)throw vR.error;
-    allVehicles=vR.data||[];
+    // Merge vehicle_market fields into each vehicle object
+    const marketByVin={};
+    (mR.data||[]).forEach(m=>marketByVin[m.vin]=m);
+    allVehicles=(vR.data||[]).map(v=>({...v,...(marketByVin[v.vin]||{})}));
     allContacts=cR.data||[];
     allAlerts=aR.data||[];
     allLogs=lR.data||[];
