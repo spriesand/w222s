@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -8,12 +7,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
 <!-- ─── STEP 1: Paste your Supabase credentials here ─── -->
-
 <script>
   const SUPABASE_URL = 'https://kevwkxuloxxrevodsukg.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtldndreHVsb3h4cmV2b2RzdWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NjkwNTUsImV4cCI6MjA5MDQ0NTA1NX0.xU3Ii35aYSozwtznzD9ixHtO0swgYAGVS4FBaM3pN0M';
 </script>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -341,7 +338,6 @@ td.num{font-family:var(--mono);text-align:right;}
 .mob-log-area{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 12px;font-family:var(--sans);font-size:13px;background:#fff;color:var(--ink);outline:none;resize:none;min-height:72px;-webkit-appearance:none;}
 .mob-log-area:focus,.mob-status-sel:focus{border-color:var(--ink);}
 </style>
-
 </head>
 <body>
 
@@ -367,7 +363,6 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 
 <!-- ══ FLEET PAGE ══ -->
-
 <div class="page active" id="page-fleet">
 <div class="shell">
   <aside>
@@ -542,7 +537,6 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 
 <!-- ══ CRM PAGE ══ -->
-
 <div class="page" id="page-crm">
 <div class="shell">
   <aside>
@@ -609,7 +603,6 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 
 <!-- ══ FLEET DRAWER ══ -->
-
 <div class="drawer-overlay" id="fleet-overlay" onclick="closeFleetDrawer()"></div>
 <div class="drawer" id="fleet-drawer">
   <div class="drawer-header">
@@ -622,127 +615,123 @@ td.num{font-family:var(--mono);text-align:right;}
   </div>
   <div class="drawer-body">
 
-```
-<div class="section-head">Vehicle Photo</div>
-<div class="img-upload-zone" id="img-zone">
-  <input type="file" accept="image/*" id="img-file-input" onchange="uploadVehicleImage(this)" style="display:none">
-  <div style="font-size:24px">📷</div>
-  <div style="font-family:var(--mono);font-size:11px;color:var(--muted)">Drop or click to upload photo</div>
-  <div class="img-overlay">Change photo</div>
-</div>
-<button class="btn" style="width:100%;margin-bottom:14px" onclick="document.getElementById('img-file-input').click()">📷 Upload / Change Photo</button>
+    <div class="section-head">Vehicle Photo</div>
+    <div class="img-upload-zone" id="img-zone">
+      <input type="file" accept="image/*" id="img-file-input" onchange="uploadVehicleImage(this)" style="display:none">
+      <div style="font-size:24px">📷</div>
+      <div style="font-family:var(--mono);font-size:11px;color:var(--muted)">Drop or click to upload photo</div>
+      <div class="img-overlay">Change photo</div>
+    </div>
+    <button class="btn" style="width:100%;margin-bottom:14px" onclick="document.getElementById('img-file-input').click()">📷 Upload / Change Photo</button>
 
-<div class="section-head">Documents</div>
-<div class="doc-slots" id="fd-docs">
-  <div class="doc-slot" id="slot-carfax" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'carfax')">
-    <input type="file" accept=".pdf" onchange="uploadDoc(this,'carfax')">
-    <div class="doc-slot-label">Carfax</div><div class="doc-slot-icon">📋</div><div class="doc-slot-status">Click or drop PDF</div>
-  </div>
-  <div class="doc-slot" id="slot-goodcar" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'goodcar')">
-    <input type="file" accept=".pdf" onchange="uploadDoc(this,'goodcar')">
-    <div class="doc-slot-label">GoodCar</div><div class="doc-slot-icon">✓</div><div class="doc-slot-status">Click or drop PDF</div>
-  </div>
-  <div class="doc-slot" id="slot-iseecars" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'iseecars')">
-    <input type="file" accept=".pdf" onchange="uploadDoc(this,'iseecars')">
-    <div class="doc-slot-label">iSeeCars</div><div class="doc-slot-icon">📊</div><div class="doc-slot-status">Click or drop PDF</div>
-  </div>
-  <div class="doc-slot" id="slot-autocheck" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'autocheck')">
-    <input type="file" accept=".pdf" onchange="uploadDoc(this,'autocheck')">
-    <div class="doc-slot-label">AutoCheck</div><div class="doc-slot-icon">🔍</div><div class="doc-slot-status">Click or drop PDF</div>
-  </div>
-  <div class="doc-slot" id="slot-windowsticker" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'windowsticker')">
-    <input type="file" accept=".pdf" onchange="uploadDoc(this,'windowsticker')">
-    <div class="doc-slot-label">Window Sticker</div><div class="doc-slot-icon">🪟</div><div class="doc-slot-status">Click or drop PDF</div>
-  </div>
-  <div class="doc-slot" id="slot-publicrecords" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'publicrecords')">
-    <input type="file" accept=".pdf" onchange="uploadDoc(this,'publicrecords')">
-    <div class="doc-slot-label">Public Records</div><div class="doc-slot-icon">📁</div><div class="doc-slot-status">Click or drop PDF</div>
-  </div>
-  <div class="doc-slot" id="slot-ppi" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'ppi')">
-    <input type="file" accept=".pdf" onchange="uploadDoc(this,'ppi')">
-    <div class="doc-slot-label">PPI Report</div><div class="doc-slot-icon">🔧</div><div class="doc-slot-status">Click or drop PDF</div>
-  </div>
-</div>
+    <div class="section-head">Documents</div>
+    <div class="doc-slots" id="fd-docs">
+      <div class="doc-slot" id="slot-carfax" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'carfax')">
+        <input type="file" accept=".pdf" onchange="uploadDoc(this,'carfax')">
+        <div class="doc-slot-label">Carfax</div><div class="doc-slot-icon">📋</div><div class="doc-slot-status">Click or drop PDF</div>
+      </div>
+      <div class="doc-slot" id="slot-goodcar" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'goodcar')">
+        <input type="file" accept=".pdf" onchange="uploadDoc(this,'goodcar')">
+        <div class="doc-slot-label">GoodCar</div><div class="doc-slot-icon">✓</div><div class="doc-slot-status">Click or drop PDF</div>
+      </div>
+      <div class="doc-slot" id="slot-iseecars" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'iseecars')">
+        <input type="file" accept=".pdf" onchange="uploadDoc(this,'iseecars')">
+        <div class="doc-slot-label">iSeeCars</div><div class="doc-slot-icon">📊</div><div class="doc-slot-status">Click or drop PDF</div>
+      </div>
+      <div class="doc-slot" id="slot-autocheck" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'autocheck')">
+        <input type="file" accept=".pdf" onchange="uploadDoc(this,'autocheck')">
+        <div class="doc-slot-label">AutoCheck</div><div class="doc-slot-icon">🔍</div><div class="doc-slot-status">Click or drop PDF</div>
+      </div>
+      <div class="doc-slot" id="slot-windowsticker" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'windowsticker')">
+        <input type="file" accept=".pdf" onchange="uploadDoc(this,'windowsticker')">
+        <div class="doc-slot-label">Window Sticker</div><div class="doc-slot-icon">🪟</div><div class="doc-slot-status">Click or drop PDF</div>
+      </div>
+      <div class="doc-slot" id="slot-publicrecords" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'publicrecords')">
+        <input type="file" accept=".pdf" onchange="uploadDoc(this,'publicrecords')">
+        <div class="doc-slot-label">Public Records</div><div class="doc-slot-icon">📁</div><div class="doc-slot-status">Click or drop PDF</div>
+      </div>
+      <div class="doc-slot" id="slot-ppi" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'ppi')">
+        <input type="file" accept=".pdf" onchange="uploadDoc(this,'ppi')">
+        <div class="doc-slot-label">PPI Report</div><div class="doc-slot-icon">🔧</div><div class="doc-slot-status">Click or drop PDF</div>
+      </div>
+    </div>
 
-<div class="section-head">External Links</div>
-<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)" id="fd-links"></div>
+    <div class="section-head">External Links</div>
+    <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)" id="fd-links"></div>
 
-<div class="section-head">Identity & Color</div>
-<div class="drawer-grid">
-  <div class="drawer-field"><div class="drawer-field-label">Exterior</div><div class="drawer-field-value" id="fd-ext">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Upholstery</div><div class="drawer-field-value" id="fd-uph">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">State</div><div class="drawer-field-value" id="fd-state">—</div></div>
-</div>
+    <div class="section-head">Identity & Color</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">Exterior</div><div class="drawer-field-value" id="fd-ext">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Upholstery</div><div class="drawer-field-value" id="fd-uph">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">State</div><div class="drawer-field-value" id="fd-state">—</div></div>
+    </div>
 
-<div class="section-head">Vehicle Data</div>
-<div class="drawer-grid">
-  <div class="drawer-field"><div class="drawer-field-label">Owners</div><div class="drawer-field-value" id="fd-own">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Accidents</div><div class="drawer-field-value" id="fd-acc">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Svc/Yr</div><div class="drawer-field-value" id="fd-svc">—</div></div>
-</div>
-<div class="drawer-grid">
-  <div class="drawer-field"><div class="drawer-field-label">Trans</div><div class="drawer-field-value" id="fd-trans">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Ignition</div><div class="drawer-field-value" id="fd-ign">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Suspension</div><div class="drawer-field-value" id="fd-susp">—</div></div>
-</div>
+    <div class="section-head">Vehicle Data</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">Owners</div><div class="drawer-field-value" id="fd-own">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Accidents</div><div class="drawer-field-value" id="fd-acc">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Svc/Yr</div><div class="drawer-field-value" id="fd-svc">—</div></div>
+    </div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">Trans</div><div class="drawer-field-value" id="fd-trans">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Ignition</div><div class="drawer-field-value" id="fd-ign">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Suspension</div><div class="drawer-field-value" id="fd-susp">—</div></div>
+    </div>
 
-<div class="section-head">Scoring</div>
-<div class="drawer-grid">
-  <div class="drawer-field"><div class="drawer-field-label">QS</div><div class="drawer-field-value" id="fd-qs">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">PA · PB · MOD</div><div class="drawer-field-value" id="fd-sub-scores">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Composite Score</div><div class="drawer-field-value accent" id="fd-score">—</div></div>
-</div>
+    <div class="section-head">Scoring</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">QS</div><div class="drawer-field-value" id="fd-qs">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">PA · PB · MOD</div><div class="drawer-field-value" id="fd-sub-scores">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Composite Score</div><div class="drawer-field-value accent" id="fd-score">—</div></div>
+    </div>
 
-<div class="section-head">Mileage</div>
-<div class="drawer-grid">
-  <div class="drawer-field"><div class="drawer-field-label">Last Known Odo</div><div class="drawer-field-value accent" id="fd-odo">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Last Sale Mi</div><div class="drawer-field-value" id="fd-last-sale-mi">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">iSC Est Mi</div><div class="drawer-field-value" id="fd-isc-mi">—</div></div>
-</div>
-<div class="drawer-grid-2">
-  <div class="drawer-field"><div class="drawer-field-label">Proj Mi @ Jan 2028</div><div class="drawer-field-value gold" id="fd-proj-mi">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Last Sale Year</div><div class="drawer-field-value" id="fd-sale">—</div></div>
-</div>
+    <div class="section-head">Mileage</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">Last Known Odo</div><div class="drawer-field-value accent" id="fd-odo">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Last Sale Mi</div><div class="drawer-field-value" id="fd-last-sale-mi">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">iSC Est Mi</div><div class="drawer-field-value" id="fd-isc-mi">—</div></div>
+    </div>
+    <div class="drawer-grid-2">
+      <div class="drawer-field"><div class="drawer-field-label">Proj Mi @ Jan 2028</div><div class="drawer-field-value gold" id="fd-proj-mi">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Last Sale Year</div><div class="drawer-field-value" id="fd-sale">—</div></div>
+    </div>
 
-<div class="section-head">Sale History</div>
-<div id="fd-timeline" style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)"></div>
+    <div class="section-head">Sale History</div>
+    <div id="fd-timeline" style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)"></div>
 
-<div class="section-head">Service Records</div>
-<div id="fd-service" class="svc-timeline"><div class="svc-empty">Loading…</div></div>
+    <div class="section-head">Service Records</div>
+    <div id="fd-service" class="svc-timeline"><div class="svc-empty">Loading…</div></div>
 
-<div class="section-head">Observed Pricing</div>
-<div class="drawer-grid">
-  <div class="drawer-field"><div class="drawer-field-label">S-Class Est</div><div class="drawer-field-value" id="fd-sclass">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label"># Listings</div><div class="drawer-field-value" id="fd-listings">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Last Sale $</div><div class="drawer-field-value" id="fd-last-price">—</div></div>
-</div>
+    <div class="section-head">Observed Pricing</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">S-Class Est</div><div class="drawer-field-value" id="fd-sclass">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label"># Listings</div><div class="drawer-field-value" id="fd-listings">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Last Sale $</div><div class="drawer-field-value" id="fd-last-price">—</div></div>
+    </div>
 
-<div class="section-head">Depreciation</div>
-<div class="drawer-grid">
-  <div class="drawer-field"><div class="drawer-field-label">Depr 5yr</div><div class="drawer-field-value" id="fd-depr">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Val @ 1yr</div><div class="drawer-field-value" id="fd-val1">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Val @ 3yr</div><div class="drawer-field-value" id="fd-val3">—</div></div>
-</div>
+    <div class="section-head">Depreciation</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">Depr 5yr</div><div class="drawer-field-value" id="fd-depr">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Val @ 1yr</div><div class="drawer-field-value" id="fd-val1">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Val @ 3yr</div><div class="drawer-field-value" id="fd-val3">—</div></div>
+    </div>
 
-<div class="section-head">Jan 2028 Scenarios</div>
-<div class="scenario-row" id="fd-scenarios">
-  <div class="scenario-box s-low"><div class="s-label">LOW</div><div class="s-val" id="sc-low">—</div></div>
-  <div class="scenario-box s-mid"><div class="s-label">MID</div><div class="s-val" id="sc-mid">—</div></div>
-  <div class="scenario-box s-offer"><div class="s-label">Offer</div><div class="s-val" id="sc-offer">—</div></div>
-  <div class="scenario-box s-walk"><div class="s-label">Walk-Away</div><div class="s-val" id="sc-walk">—</div></div>
-  <div class="scenario-box s-ultra"><div class="s-label">ULTRA</div><div class="s-val" id="sc-ultra">—</div></div>
-</div>
+    <div class="section-head">Jan 2028 Scenarios</div>
+    <div class="scenario-row" id="fd-scenarios">
+      <div class="scenario-box s-low"><div class="s-label">LOW</div><div class="s-val" id="sc-low">—</div></div>
+      <div class="scenario-box s-mid"><div class="s-label">MID</div><div class="s-val" id="sc-mid">—</div></div>
+      <div class="scenario-box s-offer"><div class="s-label">Offer</div><div class="s-val" id="sc-offer">—</div></div>
+      <div class="scenario-box s-walk"><div class="s-label">Walk-Away</div><div class="s-val" id="sc-walk">—</div></div>
+      <div class="scenario-box s-ultra"><div class="s-label">ULTRA</div><div class="s-val" id="sc-ultra">—</div></div>
+    </div>
 
-<div class="section-head">Research Notes</div>
-<textarea class="notes-area" id="fd-notes" placeholder="PPI findings, owner contact, service docs confirmed…"></textarea>
-<button class="btn" style="margin-top:6px" onclick="saveNotes()">Save Notes</button>
-```
-
+    <div class="section-head">Research Notes</div>
+    <textarea class="notes-area" id="fd-notes" placeholder="PPI findings, owner contact, service docs confirmed…"></textarea>
+    <button class="btn" style="margin-top:6px" onclick="saveNotes()">Save Notes</button>
   </div>
 </div>
 
 <!-- ══ CRM DRAWER ══ -->
-
 <div class="drawer-overlay" id="crm-overlay" onclick="closeCRMDrawer()"></div>
 <div class="drawer" id="crm-drawer">
   <div class="drawer-header">
@@ -764,40 +753,37 @@ td.num{font-family:var(--mono);text-align:right;}
       <option value="hold">⏸ On Hold</option>
     </select>
 
-```
-<div class="section-head">Contact Info</div>
-<div class="drawer-grid-2" style="margin-bottom:14px">
-  <div class="drawer-field"><div class="drawer-field-label">Phone</div><div class="drawer-field-value" id="cd-phone" style="font-size:12px">—</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Email</div><div class="drawer-field-value" id="cd-email" style="font-size:11px">—</div></div>
-  <div class="drawer-field" style="grid-column:span 2"><div class="drawer-field-label">Website</div><div class="drawer-field-value" id="cd-web" style="font-size:11px">—</div></div>
-</div>
+    <div class="section-head">Contact Info</div>
+    <div class="drawer-grid-2" style="margin-bottom:14px">
+      <div class="drawer-field"><div class="drawer-field-label">Phone</div><div class="drawer-field-value" id="cd-phone" style="font-size:12px">—</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Email</div><div class="drawer-field-value" id="cd-email" style="font-size:11px">—</div></div>
+      <div class="drawer-field" style="grid-column:span 2"><div class="drawer-field-label">Website</div><div class="drawer-field-value" id="cd-web" style="font-size:11px">—</div></div>
+    </div>
 
-<div class="section-head">VINs This Contact is Watching</div>
-<div id="cd-alerts"></div>
-<div class="add-alert-row">
-  <input id="add-vin-input" placeholder="Full VIN…">
-  <input id="add-ceiling-input" placeholder="Ceiling $" style="width:85px">
-  <button class="btn" onclick="addVINAlert()">+ Add</button>
-</div>
+    <div class="section-head">VINs This Contact is Watching</div>
+    <div id="cd-alerts"></div>
+    <div class="add-alert-row">
+      <input id="add-vin-input" placeholder="Full VIN…">
+      <input id="add-ceiling-input" placeholder="Ceiling $" style="width:85px">
+      <button class="btn" onclick="addVINAlert()">+ Add</button>
+    </div>
 
-<div class="section-head" style="margin-top:18px">Log Entry
-  <span style="font-size:10px;color:var(--muted);text-transform:none;letter-spacing:0;margin-left:8px;font-weight:normal">— every call, reply, note goes here</span>
-</div>
-<div class="info-box"><strong>How to update:</strong> After every interaction pick a type, write what happened, hit Log Entry. Change status dropdown when the relationship progresses.</div>
-<select class="log-type-select" id="log-type-sel">
-  <option value="note">📝 Note</option>
-  <option value="sent">📤 Email Sent</option>
-  <option value="reply">📥 Reply Received</option>
-  <option value="call">📞 Call</option>
-  <option value="declined">❌ Declined</option>
-</select>
-<textarea class="log-input-field" id="log-text-input" placeholder="e.g. Spoke with Mike — has Manheim access, will watch for S65s."></textarea>
-<button class="btn btn-accent" style="width:100%;margin-bottom:18px" onclick="addLogEntry()">+ Log Entry</button>
+    <div class="section-head" style="margin-top:18px">Log Entry
+      <span style="font-size:10px;color:var(--muted);text-transform:none;letter-spacing:0;margin-left:8px;font-weight:normal">— every call, reply, note goes here</span>
+    </div>
+    <div class="info-box"><strong>How to update:</strong> After every interaction pick a type, write what happened, hit Log Entry. Change status dropdown when the relationship progresses.</div>
+    <select class="log-type-select" id="log-type-sel">
+      <option value="note">📝 Note</option>
+      <option value="sent">📤 Email Sent</option>
+      <option value="reply">📥 Reply Received</option>
+      <option value="call">📞 Call</option>
+      <option value="declined">❌ Declined</option>
+    </select>
+    <textarea class="log-input-field" id="log-text-input" placeholder="e.g. Spoke with Mike — has Manheim access, will watch for S65s."></textarea>
+    <button class="btn btn-accent" style="width:100%;margin-bottom:18px" onclick="addLogEntry()">+ Log Entry</button>
 
-<div class="section-head">Activity History</div>
-<div id="cd-log"></div>
-```
-
+    <div class="section-head">Activity History</div>
+    <div id="cd-log"></div>
   </div>
 </div>
 
@@ -1333,71 +1319,67 @@ function mobileSearch(q){
           </select>
           <textarea class="mob-log-area" id="mob-logtext-${cid}" placeholder="What happened? (optional — leave blank to skip)"></textarea>
 
-```
-      <div style="display:flex;gap:8px;margin-top:10px">
-        <button class="mob-open-btn" onclick="mobSaveContact('${cid}')">Save</button>
-        <button class="mob-open-btn" style="background:#666" onclick="mobShowRead('${cid}')">Cancel</button>
+          <div style="display:flex;gap:8px;margin-top:10px">
+            <button class="mob-open-btn" onclick="mobSaveContact('${cid}')">Save</button>
+            <button class="mob-open-btn" style="background:#666" onclick="mobShowRead('${cid}')">Cancel</button>
+          </div>
+        </div>
+
       </div>
-    </div>
+    </div>`;
+  });
 
-  </div>
-</div>`;
-```
-
-});
-
-el.innerHTML=html;
+  el.innerHTML=html;
 }
 
 function mobShowEdit(cid){
-document.getElementById(‘mob-cread-’+cid).style.display=‘none’;
-document.getElementById(‘mob-cedit-’+cid).style.display=‘block’;
-// Focus first empty field
-const nameEl=document.getElementById(‘mob-name-’+cid);
-if(nameEl&&!nameEl.value) nameEl.focus();
-else document.getElementById(‘mob-phone-’+cid)?.focus();
+  document.getElementById('mob-cread-'+cid).style.display='none';
+  document.getElementById('mob-cedit-'+cid).style.display='block';
+  // Focus first empty field
+  const nameEl=document.getElementById('mob-name-'+cid);
+  if(nameEl&&!nameEl.value) nameEl.focus();
+  else document.getElementById('mob-phone-'+cid)?.focus();
 }
 function mobShowRead(cid){
-document.getElementById(‘mob-cread-’+cid).style.display=‘block’;
-document.getElementById(‘mob-cedit-’+cid).style.display=‘none’;
+  document.getElementById('mob-cread-'+cid).style.display='block';
+  document.getElementById('mob-cedit-'+cid).style.display='none';
 }
 
 async function mobSaveContact(cid){
-const btn=document.querySelector(`#mob-cedit-${cid} .mob-open-btn`);
-if(btn){btn.textContent=‘Saving…’;btn.disabled=true;}
+  const btn=document.querySelector(`#mob-cedit-${cid} .mob-open-btn`);
+  if(btn){btn.textContent='Saving…';btn.disabled=true;}
 
-const updates={
-contact_name: document.getElementById(‘mob-name-’+cid).value.trim()||null,
-contact_title:document.getElementById(‘mob-title-’+cid).value.trim()||null,
-phone:        document.getElementById(‘mob-phone-’+cid).value.trim()||null,
-email:        document.getElementById(‘mob-email-’+cid).value.trim()||null,
-location:     document.getElementById(‘mob-loc-’+cid).value.trim()||null,
-status:       document.getElementById(‘mob-status-’+cid).value,
-last_activity:new Date().toISOString(),
-};
+  const updates={
+    contact_name: document.getElementById('mob-name-'+cid).value.trim()||null,
+    contact_title:document.getElementById('mob-title-'+cid).value.trim()||null,
+    phone:        document.getElementById('mob-phone-'+cid).value.trim()||null,
+    email:        document.getElementById('mob-email-'+cid).value.trim()||null,
+    location:     document.getElementById('mob-loc-'+cid).value.trim()||null,
+    status:       document.getElementById('mob-status-'+cid).value,
+    last_activity:new Date().toISOString(),
+  };
 
-const{error}=await db.from(‘contacts’).update(updates).eq(‘id’,cid);
-if(error){toast(’Save failed: ’+error.message,true);if(btn){btn.textContent=‘Save’;btn.disabled=false;}return;}
+  const{error}=await db.from('contacts').update(updates).eq('id',cid);
+  if(error){toast('Save failed: '+error.message,true);if(btn){btn.textContent='Save';btn.disabled=false;}return;}
 
-// Update local cache
-const c=allContacts.find(x=>x.id===cid);
-if(c)Object.assign(c,updates);
+  // Update local cache
+  const c=allContacts.find(x=>x.id===cid);
+  if(c)Object.assign(c,updates);
 
-// Optional log entry
-const logText=document.getElementById(‘mob-logtext-’+cid).value.trim();
-if(logText){
-const logType=document.getElementById(‘mob-logtype-’+cid).value;
-await db.from(‘contact_log’).insert({contact_id:cid,entry_type:logType,body:logText});
-}
+  // Optional log entry
+  const logText=document.getElementById('mob-logtext-'+cid).value.trim();
+  if(logText){
+    const logType=document.getElementById('mob-logtype-'+cid).value;
+    await db.from('contact_log').insert({contact_id:cid,entry_type:logType,body:logText});
+  }
 
-toast(‘Saved ✓’);
-// Re-run search to refresh the read view with new data
-const q=document.getElementById(‘mob-input’).value;
-mobileSearch(q);
+  toast('Saved ✓');
+  // Re-run search to refresh the read view with new data
+  const q=document.getElementById('mob-input').value;
+  mobileSearch(q);
 }
 
 loadAll();
 </script>
-
 </body>
 </html>
