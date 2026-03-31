@@ -806,7 +806,7 @@ async function loadAll(){
   try{
     const[vR,cR,aR,lR,sR]=await Promise.all([
       db.from('vehicles').select('*').order('composite_score',{ascending:false,nullsFirst:false}),
-      db.from('contacts').select('*').order('last_activity',{ascending:false,nullsFirst:false}),
+      db.from('broker_contacts').select('*').order('last_activity',{ascending:false,nullsFirst:false}),
       db.from('contact_alerts').select('*').eq('active',true),
       db.from('contact_log').select('*').order('logged_at',{ascending:false}),
       db.from('vehicle_service').select('*').order('record_date',{ascending:true}),
@@ -1290,7 +1290,7 @@ function closeCRMDrawer(){
 
 async function updateContactStatus(val){
   if(!activeCRM)return;
-  const{error}=await db.from('contacts').update({status:val,last_activity:new Date().toISOString()}).eq('id',activeCRM);
+  const{error}=await db.from('broker_contacts').update({status:val,last_activity:new Date().toISOString()}).eq('id',activeCRM);
   if(error){toast('Status update failed',true);return;}
   const c=allContacts.find(x=>x.id===activeCRM);
   if(c){c.status=val;c.last_activity=new Date().toISOString();}
@@ -1312,7 +1312,7 @@ async function addLogEntry(){
     if(ns!==c.status)await updateContactStatus(ns);
     c.last_activity=new Date().toISOString();
   }
-  await db.from('contacts').update({last_activity:new Date().toISOString()}).eq('id',activeCRM);
+  await db.from('broker_contacts').update({last_activity:new Date().toISOString()}).eq('id',activeCRM);
   openCRMDrawer(activeCRM);
   toast('Logged ✓');
 }
@@ -1348,7 +1348,7 @@ async function openAddContact(){
   const website=prompt('Website (without https://):')||'';
   const phone=prompt('Phone (or leave blank):')||'';
   const email=prompt('Email (or leave blank):')||'';
-  const{data:nc,error}=await db.from('contacts').insert({
+  const{data:nc,error}=await db.from('broker_contacts').insert({
     company,location,region,contact_type:ctype,website,
     phone:phone||null,email:email||null,status:'pending',
     outreach_type:'outbound',
