@@ -6,10 +6,10 @@
 <title>W222s — Live Database</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
-<!-- ─── STEP 1: Paste your Supabase credentials here ─── -->
 <script>
   const SUPABASE_URL = 'https://kevwkxuloxxrevodsukg.supabase.co';
   const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtldndreHVsb3h4cmV2b2RzdWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NjkwNTUsImV4cCI6MjA5MDQ0NTA1NX0.xU3Ii35aYSozwtznzD9ixHtO0swgYAGVS4FBaM3pN0M';
+  const BUCKET = 'v12-apex-documents';
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -86,15 +86,12 @@ main{padding:16px 20px;flex:1;overflow:hidden;}
 .btn-accent{background:var(--accent);color:#fff;border-color:var(--accent);}
 .btn-accent:hover{background:#6b1212;border-color:#6b1212;}
 
-/* ── Wide table ── */
 .table-outer{overflow-x:auto;background:#fff;border:1px solid var(--rule);border-radius:6px;}
 table{width:100%;border-collapse:collapse;font-size:11px;white-space:nowrap;}
-/* Column group headers */
 thead tr.group-row th{background:#1c1c1c;color:#999;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;padding:4px 8px;text-align:center;border-right:1px solid #333;}
 thead tr.group-row th:first-child{border-left:none;}
 thead tr.col-row th{background:var(--ink);color:var(--paper);padding:8px 8px;text-align:left;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.08em;font-weight:500;cursor:pointer;user-select:none;border-right:1px solid #2a2a2a;}
 thead tr.col-row th:hover{color:var(--gold);}
-/* Group borders */
 .grp-identity{border-left:3px solid #444;}
 .grp-vehicle{border-left:3px solid var(--s65);}
 .grp-scoring{border-left:3px solid var(--gold);}
@@ -120,9 +117,6 @@ td.num{font-family:var(--mono);text-align:right;}
 .s65{background:var(--s65);color:#fff;}
 .s600{background:var(--s600);color:#fff;}
 .state-tag{display:inline-block;padding:1px 5px;border:1px solid var(--rule);border-radius:3px;font-family:var(--mono);font-size:10px;color:var(--muted);background:var(--paper);}
-.acc-dot{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:11px;}
-.acc-dot::before{content:'';width:7px;height:7px;border-radius:50%;display:inline-block;}
-.acc-0::before{background:#2e7d4f;} .acc-1::before{background:var(--gold);} .acc-2::before{background:var(--accent);}
 .bool-yes{color:#1a6b3a;font-family:var(--mono);font-size:10px;font-weight:500;}
 .bool-no{color:#ccc;font-family:var(--mono);font-size:10px;}
 .sale-chain{font-family:var(--mono);font-size:10px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;}
@@ -148,7 +142,6 @@ td.num{font-family:var(--mono);text-align:right;}
 .page-btn:hover{border-color:var(--ink);color:var(--ink);}
 .page-btn.active{background:var(--ink);color:#fff;border-color:var(--ink);}
 
-/* CRM */
 .crm-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;}
 .crm-card{background:#fff;border:1px solid var(--rule);border-radius:6px;overflow:hidden;cursor:pointer;transition:all .15s;}
 .crm-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-1px);}
@@ -176,7 +169,6 @@ td.num{font-family:var(--mono);text-align:right;}
 .crm-btn{padding:3px 9px;border-radius:3px;font-family:var(--mono);font-size:10px;cursor:pointer;border:1px solid var(--rule);background:#fff;color:var(--muted);transition:all .1s;text-transform:uppercase;}
 .crm-btn.primary{background:var(--ink);color:#fff;border-color:var(--ink);}
 
-/* Drawer */
 .drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;opacity:0;pointer-events:none;transition:opacity .2s;}
 .drawer-overlay.open{opacity:1;pointer-events:all;}
 .drawer{position:fixed;top:0;right:0;width:600px;height:100vh;background:#fff;z-index:201;box-shadow:-4px 0 30px rgba(0,0,0,.2);transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column;}
@@ -199,7 +191,6 @@ td.num{font-family:var(--mono);text-align:right;}
 .drawer-field-value.green{color:#1a6b3a;}
 .drawer-field-value.gold{color:var(--gold);}
 
-/* Jan 2028 scenario row */
 .scenario-row{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:4px;}
 .scenario-box{border-radius:4px;padding:8px;text-align:center;border:1px solid var(--rule);}
 .scenario-box .s-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px;}
@@ -210,7 +201,6 @@ td.num{font-family:var(--mono);text-align:right;}
 .scenario-box.s-walk{background:#fffdf7;border-color:#f0d89a;} .scenario-box.s-walk .s-val{color:var(--gold);}
 .scenario-box.s-ultra{background:#edf3fd;border-color:#b8cef0;} .scenario-box.s-ultra .s-val{color:var(--s65);}
 
-/* Service timeline */
 .svc-timeline{max-height:260px;overflow-y:auto;border:1px solid var(--rule);border-radius:4px;}
 .svc-row{display:grid;grid-template-columns:100px 90px 1fr;gap:8px;align-items:center;padding:6px 10px;border-bottom:1px solid #f0ede8;font-size:11px;}
 .svc-row:last-child{border-bottom:none;}
@@ -220,13 +210,11 @@ td.num{font-family:var(--mono);text-align:right;}
 .svc-loc{font-size:11px;color:#555;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .svc-empty{padding:16px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--muted);}
 
-/* Sale timeline */
 .timeline-item{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px dashed var(--rule);}
 .timeline-item:last-child{border-bottom:none;}
 .timeline-price{font-family:var(--serif);font-size:15px;min-width:80px;}
 .timeline-odo{font-family:var(--mono);font-size:11px;color:var(--muted);flex:1;}
 
-/* Docs */
 .doc-slots{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:14px;}
 .doc-slot{border:2px dashed var(--rule);border-radius:5px;padding:10px;text-align:center;cursor:pointer;transition:all .15s;position:relative;}
 .doc-slot:hover{border-color:var(--ink);}
@@ -251,7 +239,6 @@ td.num{font-family:var(--mono);text-align:right;}
 .img-upload-zone:hover .img-overlay{opacity:1;}
 .img-upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
 
-/* CRM drawer */
 .status-select,.log-input-field{width:100%;border:1px solid var(--rule);border-radius:4px;padding:7px 10px;font-family:var(--mono);font-size:12px;background:#fff;color:var(--ink);outline:none;margin-bottom:10px;cursor:pointer;}
 .log-input-field{font-family:var(--sans);resize:vertical;min-height:64px;background:var(--paper);}
 .log-input-field:focus,.status-select:focus{border-color:var(--ink);}
@@ -281,7 +268,6 @@ td.num{font-family:var(--mono);text-align:right;}
 .cd-edit-input:focus{border-bottom-color:var(--ink);}
 .cd-edit-input::placeholder{color:#ccc;}
 
-/* ── Mobile (≤768px) ── */
 @media(max-width:768px){
   header{padding:0 16px;height:48px;}
   .logo{font-size:16px;}
@@ -362,7 +348,7 @@ td.num{font-family:var(--mono);text-align:right;}
   </div>
 </div>
 
-<!-- ══ FLEET PAGE ══ -->
+<!-- FLEET PAGE -->
 <div class="page active" id="page-fleet">
 <div class="shell">
   <aside>
@@ -370,7 +356,7 @@ td.num{font-family:var(--mono);text-align:right;}
       <div class="sidebar-label">Fleet Overview</div>
       <div class="stats-grid">
         <div class="stat-box"><span class="stat-num" id="stat-total">—</span><span class="stat-lbl">Total VINs</span></div>
-        <div class="stat-box"><span class="stat-num" id="stat-gold">—</span><span class="stat-lbl">Gold Master</span></div>
+        <div class="stat-box"><span class="stat-num" id="stat-gold">—</span><span class="stat-lbl">2017 Ranked</span></div>
         <div class="stat-box"><span class="stat-num" style="color:var(--s65)" id="stat-s65">—</span><span class="stat-lbl">S65 AMG</span></div>
         <div class="stat-box"><span class="stat-num" style="color:var(--s600)" id="stat-s600">—</span><span class="stat-lbl">S600</span></div>
       </div>
@@ -411,7 +397,7 @@ td.num{font-family:var(--mono);text-align:right;}
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Dataset</div>
-      <label class="filter-row"><input type="checkbox" id="gold-only" onchange="applyFilters()">Gold Master only (55)</label>
+      <label class="filter-row"><input type="checkbox" id="gold-only" onchange="applyFilters()">2017 Ranked only (55)</label>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Service Wall</div>
@@ -421,7 +407,6 @@ td.num{font-family:var(--mono);text-align:right;}
     </div>
   </aside>
   <main>
-    <!-- ── MOBILE SEARCH PANEL (hidden on desktop) ── -->
     <div id="mobile-search-panel">
       <div class="mob-stats">
         <div class="mob-stat"><span class="mob-stat-num" id="m-stat-total">—</span><span class="mob-stat-lbl">VINs</span></div>
@@ -431,10 +416,7 @@ td.num{font-family:var(--mono);text-align:right;}
       </div>
       <div class="mob-search-wrap">
         <span class="mob-search-icon">⌕</span>
-        <input class="mob-search-input" id="mob-input" type="text"
-          placeholder="VIN or company name…"
-          oninput="mobileSearch(this.value)"
-          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <input class="mob-search-input" id="mob-input" type="text" placeholder="VIN or company name…" oninput="mobileSearch(this.value)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       </div>
       <div class="mob-hint">Type a VIN to look up a vehicle · Type a company to find a broker</div>
       <div id="mob-results"></div>
@@ -446,7 +428,7 @@ td.num{font-family:var(--mono);text-align:right;}
       </div>
       <select class="sort-select" id="fleet-sort" onchange="applyFilters()">
         <option value="composite_score.desc">Score ↓</option>
-        <option value="rank.asc">Rank ↑</option>
+        <option value="apex_rank.asc">Rank ↑</option>
         <option value="curr_odo.asc">Odo ↑</option>
         <option value="proj_mi_jan28.asc">Proj Mi ↑</option>
         <option value="offer_target.asc">Offer ↑</option>
@@ -471,12 +453,10 @@ td.num{font-family:var(--mono);text-align:right;}
             <th colspan="1"></th>
           </tr>
           <tr class="col-row">
-            <!-- Identity -->
             <th class="grp-identity">Rank</th>
             <th class="grp-identity">VIN</th>
             <th class="grp-identity">Model</th>
             <th class="grp-identity">Flag</th>
-            <!-- Vehicle -->
             <th class="grp-vehicle">Exterior</th>
             <th class="grp-vehicle">Upholstery</th>
             <th class="grp-vehicle">State</th>
@@ -486,49 +466,40 @@ td.num{font-family:var(--mono);text-align:right;}
             <th class="grp-vehicle">Trans</th>
             <th class="grp-vehicle">Ign</th>
             <th class="grp-vehicle">Susp</th>
-            <!-- Scoring -->
             <th class="grp-scoring">Brakes</th>
             <th class="grp-scoring">Svc/Yr</th>
             <th class="grp-scoring">QS</th>
             <th class="grp-scoring">PA·PB·MOD</th>
             <th class="grp-scoring">Score</th>
-            <!-- Data Sources -->
             <th class="grp-sources">iSC</th>
             <th class="grp-sources">CFX</th>
             <th class="grp-sources">ACK</th>
             <th class="grp-sources">WS</th>
-            <!-- Contacts -->
             <th class="grp-contacts">Contact</th>
             <th class="grp-contacts">City/State</th>
             <th class="grp-contacts">Email</th>
-            <!-- Mileage -->
             <th class="grp-mileage">Last Odo</th>
             <th class="grp-mileage">Last Sale Mi</th>
             <th class="grp-mileage">iSC Est Mi</th>
             <th class="grp-mileage">Proj @Jan28</th>
-            <!-- Sale History -->
             <th class="grp-history">Sale History</th>
-            <!-- Observed Pricing -->
             <th class="grp-observed">S-Class Est</th>
             <th class="grp-observed"># List</th>
             <th class="grp-observed">Relist Freq</th>
             <th class="grp-observed">Last Sale $</th>
             <th class="grp-observed">Last Sale Yr</th>
-            <!-- Depreciation -->
             <th class="grp-depr">Depr 5yr</th>
             <th class="grp-depr">Val @1yr</th>
             <th class="grp-depr">Val @3yr</th>
-            <!-- Jan 2028 -->
             <th class="grp-jan28">LOW</th>
             <th class="grp-jan28">MID</th>
             <th class="grp-jan28">Offer</th>
             <th class="grp-jan28">Walk-Away</th>
             <th class="grp-jan28">ULTRA</th>
-            <!-- Links -->
             <th>Links</th>
           </tr>
         </thead>
-        <tbody id="fleet-tbody"><tr class="empty-row"><td colspan="43">Loading fleet data…</td></tr></tbody>
+        <tbody id="fleet-tbody"><tr class="empty-row"><td colspan="44">Loading fleet data…</td></tr></tbody>
       </table>
     </div>
     <div class="pagination" id="fleet-pagination"></div>
@@ -536,7 +507,7 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 </div>
 
-<!-- ══ CRM PAGE ══ -->
+<!-- CRM PAGE -->
 <div class="page" id="page-crm">
 <div class="shell">
   <aside>
@@ -602,7 +573,7 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 </div>
 
-<!-- ══ FLEET DRAWER ══ -->
+<!-- FLEET DRAWER -->
 <div class="drawer-overlay" id="fleet-overlay" onclick="closeFleetDrawer()"></div>
 <div class="drawer" id="fleet-drawer">
   <div class="drawer-header">
@@ -614,7 +585,6 @@ td.num{font-family:var(--mono);text-align:right;}
     <button class="drawer-close" onclick="closeFleetDrawer()">×</button>
   </div>
   <div class="drawer-body">
-
     <div class="section-head">Vehicle Photo</div>
     <div class="img-upload-zone" id="img-zone">
       <input type="file" accept="image/*" id="img-file-input" onchange="uploadVehicleImage(this)" style="display:none">
@@ -717,7 +687,7 @@ td.num{font-family:var(--mono);text-align:right;}
     </div>
 
     <div class="section-head">Jan 2028 Scenarios</div>
-    <div class="scenario-row" id="fd-scenarios">
+    <div class="scenario-row">
       <div class="scenario-box s-low"><div class="s-label">LOW</div><div class="s-val" id="sc-low">—</div></div>
       <div class="scenario-box s-mid"><div class="s-label">MID</div><div class="s-val" id="sc-mid">—</div></div>
       <div class="scenario-box s-offer"><div class="s-label">Offer</div><div class="s-val" id="sc-offer">—</div></div>
@@ -731,7 +701,7 @@ td.num{font-family:var(--mono);text-align:right;}
   </div>
 </div>
 
-<!-- ══ CRM DRAWER ══ -->
+<!-- CRM DRAWER -->
 <div class="drawer-overlay" id="crm-overlay" onclick="closeCRMDrawer()"></div>
 <div class="drawer" id="crm-drawer">
   <div class="drawer-header">
@@ -791,14 +761,41 @@ td.num{font-family:var(--mono);text-align:right;}
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// ── doc_type mapping: slot ID -> DB value ──────────────────────────────────
+const DOC_TYPE_MAP = {
+  carfax:        'carfax',
+  goodcar:       'goodcar',
+  iseecars:      'iseecars',
+  autocheck:     'autocheck',
+  windowsticker: 'window_sticker',
+  publicrecords: 'public_record',
+  ppi:           'ppi',
+};
+// Reverse: DB value -> slot ID
+const DOC_SLOT_MAP = Object.fromEntries(Object.entries(DOC_TYPE_MAP).map(([k,v])=>[v,k]));
+
 let allVehicles=[], allContacts=[], allAlerts=[], allLogs=[], allServiceRecs=[];
 let activeFD=null, activeCRM=null;
 const PAGE_SIZE=25;
 let fleetPage=0;
 
-function toast(msg,isError=false){const t=document.getElementById('toast');t.textContent=msg;t.className='show'+(isError?' error':'');setTimeout(()=>t.className='',3000);}
-function setSyncStatus(s){const d=document.getElementById('sync-dot'),l=document.getElementById('sync-label');if(s==='ok'){d.className='sync-dot';l.textContent='Live';}if(s==='loading'){d.className='sync-dot loading';l.textContent='Syncing…';}if(s==='error'){d.className='sync-dot error';l.textContent='Connection error';}}
-function switchTab(t){document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',(i===0&&t==='fleet')||(i===1&&t==='crm')));document.getElementById('page-fleet').classList.toggle('active',t==='fleet');document.getElementById('page-crm').classList.toggle('active',t==='crm');}
+function toast(msg,isError=false){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='show'+(isError?' error':'');
+  setTimeout(()=>t.className='',3000);
+}
+function setSyncStatus(s){
+  const d=document.getElementById('sync-dot'),l=document.getElementById('sync-label');
+  if(s==='ok'){d.className='sync-dot';l.textContent='Live';}
+  if(s==='loading'){d.className='sync-dot loading';l.textContent='Syncing…';}
+  if(s==='error'){d.className='sync-dot error';l.textContent='Connection error';}
+}
+function switchTab(t){
+  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',(i===0&&t==='fleet')||(i===1&&t==='crm')));
+  document.getElementById('page-fleet').classList.toggle('active',t==='fleet');
+  document.getElementById('page-crm').classList.toggle('active',t==='crm');
+}
 function $m(n){return n!=null&&n!==''?'$'+Number(n).toLocaleString():'—';}
 function oFmt(n){return n?Number(n).toLocaleString()+' mi':'—';}
 function boolCell(v){return(v===true||v==='TRUE'||v==='true'||v==='Yes')?'<span class="bool-yes">✓</span>':'<span class="bool-no">—</span>';}
@@ -808,47 +805,56 @@ async function loadAll(){
   setSyncStatus('loading');
   try{
     const[vR,cR,aR,lR,sR]=await Promise.all([
-      db.from('vehicles').select('*').order('composite_score',{ascending:false}),
-      db.from('contacts').select('*').order('last_activity',{ascending:false}),
+      db.from('vehicles').select('*').order('composite_score',{ascending:false,nullsFirst:false}),
+      db.from('contacts').select('*').order('last_activity',{ascending:false,nullsFirst:false}),
       db.from('contact_alerts').select('*').eq('active',true),
       db.from('contact_log').select('*').order('logged_at',{ascending:false}),
-      db.from('service_records').select('*').order('record_date',{ascending:true}),
+      db.from('vehicle_service').select('*').order('record_date',{ascending:true}),
     ]);
     if(vR.error)throw vR.error;
-    allVehicles=vR.data||[];allContacts=cR.data||[];allAlerts=aR.data||[];allLogs=lR.data||[];allServiceRecs=sR.data||[];
+    allVehicles=vR.data||[];
+    allContacts=cR.data||[];
+    allAlerts=aR.data||[];
+    allLogs=lR.data||[];
+    allServiceRecs=sR.data||[];
     updateFleetStats();applyFilters();updateCRMStats();renderCRM();
     document.getElementById('fleet-tab-count').textContent=allVehicles.length;
     document.getElementById('crm-tab-count').textContent=allContacts.length;
     document.getElementById('header-counts').textContent=`${allVehicles.length} vehicles · ${allContacts.length} contacts`;
-    setSyncStatus('ok');document.getElementById('loading-banner').classList.add('done');
-  }catch(err){setSyncStatus('error');document.getElementById('loading-banner').textContent='⚠ Could not connect. Check credentials at top of file.';console.error(err);}
+    setSyncStatus('ok');
+    document.getElementById('loading-banner').classList.add('done');
+  }catch(err){
+    setSyncStatus('error');
+    document.getElementById('loading-banner').textContent='⚠ Could not connect. Check credentials at top of file.';
+    console.error(err);
+  }
 }
 async function refreshAll(){await loadAll();toast('Refreshed');}
 
 function updateFleetStats(){
-  const isGold=v=>(v.in_gold_master==='TRUE'||v.in_gold_master===true||v.in_gold_master==='true');
+  const ranked=v=>v.apex_rank!=null&&v.apex_rank!=='';
   const s65=allVehicles.filter(v=>v.trim==='S65 AMG'||v.trim==='S65').length;
   const s600=allVehicles.filter(v=>v.trim==='S600').length;
-  const gold=allVehicles.filter(isGold).length;
+  const gold=allVehicles.filter(ranked).length;
   document.getElementById('stat-total').textContent=allVehicles.length;
   document.getElementById('stat-gold').textContent=gold;
   document.getElementById('stat-s65').textContent=s65;
   document.getElementById('stat-s600').textContent=s600;
   const stNorm=s=>(s||'').toLowerCase();
-  document.getElementById('cnt-active').textContent=allVehicles.filter(v=>['active','target'].includes(stNorm(v.status))).length;
-  document.getElementById('cnt-watch').textContent=allVehicles.filter(v=>stNorm(v.status)==='watch').length;
-  document.getElementById('cnt-universe').textContent=allVehicles.filter(v=>stNorm(v.status)==='universe'||(!v.status&&!isGold(v))).length;
-  document.getElementById('cnt-dq').textContent=allVehicles.filter(v=>stNorm(v.status)==='dq').length;
-  document.getElementById('cnt-acc0').textContent=allVehicles.filter(v=>!(v.accidents===true||v.accidents==='TRUE'||v.accidents==='true'||Number(v.accidents)>0)).length;
-  document.getElementById('cnt-acc1').textContent=allVehicles.filter(v=>v.accidents===true||v.accidents==='TRUE'||v.accidents==='true'||Number(v.accidents)>0).length;
-  document.getElementById('cnt-yr2017').textContent=allVehicles.filter(v=>(v.year||2017)==2017).length;
-  document.getElementById('cnt-yr2016').textContent=allVehicles.filter(v=>v.year==2016).length;
-  document.getElementById('cnt-yr2015').textContent=allVehicles.filter(v=>v.year==2015).length;
-  // Mobile stats
+  document.getElementById('cnt-active').textContent=allVehicles.filter(v=>['active','target'].includes(stNorm(v.acq_status))).length;
+  document.getElementById('cnt-watch').textContent=allVehicles.filter(v=>stNorm(v.acq_status).includes('watch')).length;
+  document.getElementById('cnt-universe').textContent=allVehicles.filter(v=>!v.acq_status||stNorm(v.acq_status)==='universe').length;
+  document.getElementById('cnt-dq').textContent=allVehicles.filter(v=>stNorm(v.acq_status).includes('dq')).length;
+  const hasAcc=v=>v.accident_count&&v.accident_count!=='None'&&v.accident_count!=='0'&&v.accident_count!=='0 - Clean';
+  document.getElementById('cnt-acc0').textContent=allVehicles.filter(v=>!hasAcc(v)).length;
+  document.getElementById('cnt-acc1').textContent=allVehicles.filter(v=>hasAcc(v)).length;
+  document.getElementById('cnt-yr2017').textContent=allVehicles.filter(v=>Number(v.year)===2017).length;
+  document.getElementById('cnt-yr2016').textContent=allVehicles.filter(v=>Number(v.year)===2016).length;
+  document.getElementById('cnt-yr2015').textContent=allVehicles.filter(v=>Number(v.year)===2015).length;
   document.getElementById('m-stat-total').textContent=allVehicles.length;
-  document.getElementById('m-stat-target').textContent=allVehicles.filter(v=>['active','target'].includes((v.status||'').toLowerCase())).length;
-  document.getElementById('m-stat-s65').textContent=allVehicles.filter(v=>v.trim==='S65 AMG'||v.trim==='S65').length;
-  document.getElementById('m-stat-s600').textContent=allVehicles.filter(v=>v.trim==='S600').length;
+  document.getElementById('m-stat-target').textContent=allVehicles.filter(v=>['active','target'].includes((v.acq_status||'').toLowerCase())).length;
+  document.getElementById('m-stat-s65').textContent=s65;
+  document.getElementById('m-stat-s600').textContent=s600;
 }
 
 let trimFilter=new Set(['S65 AMG','S65','S600']);
@@ -878,36 +884,49 @@ function applyFilters(){
   const swSusp=document.getElementById('sw-susp').checked;
   const sortVal=document.getElementById('fleet-sort').value;
   const[sortCol,sortDir]=sortVal.split('.');
-  const isGold=v=>(v.in_gold_master==='TRUE'||v.in_gold_master===true||v.in_gold_master==='true');
-  const hasAcc=v=>(v.accidents===true||v.accidents==='TRUE'||v.accidents==='true'||Number(v.accidents)>0);
+  const hasAcc=v=>v.accident_count&&v.accident_count!=='None'&&v.accident_count!=='0'&&v.accident_count!=='0 - Clean';
   const stNorm=s=>(s||'').toLowerCase();
+  const ranked=v=>v.apex_rank!=null&&v.apex_rank!=='';
 
   let data=allVehicles.filter(v=>{
     const t=v.trim||'';
     if(!trimFilter.has(t))return false;
-    if((v.curr_odo||0)<odoMin||(v.curr_odo||0)>odoMax)return false;
+    const odo=Number(v.curr_odo)||0;
+    if(odo<odoMin||odo>odoMax)return false;
     if(!hasAcc(v)&&!acc0)return false;
     if(hasAcc(v)&&!acc1)return false;
-    const st=stNorm(v.status);
-    const isTarget=['active','target'].includes(st)||(!v.status&&isGold(v));
-    const isUniverse=st==='universe'||(!v.status&&!isGold(v));
+    const st=stNorm(v.acq_status);
+    const isTarget=['active','target'].includes(st);
+    const isWatch=st.includes('watch');
+    const isDq=st.includes('dq');
+    const isUniverse=!v.acq_status||st==='universe';
     if(isTarget&&!stTarget)return false;
-    if(st==='watch'&&!stWatch)return false;
+    if(isWatch&&!stWatch)return false;
     if(isUniverse&&!stUniverse)return false;
-    if(st==='dq'&&!stDq)return false;
-    const yr=v.year||2017;
+    if(isDq&&!stDq)return false;
+    const yr=Number(v.year)||2017;
     if(yr===2017&&!yr2017)return false;
     if(yr===2016&&!yr2016)return false;
     if(yr===2015&&!yr2015)return false;
-    if(goldOnly&&!isGold(v))return false;
+    if(goldOnly&&!ranked(v))return false;
     if(swTrans&&!boolVal(v.trans_confirmed))return false;
     if(swIgn&&!boolVal(v.ign_confirmed))return false;
     if(swSusp&&!boolVal(v.susp_confirmed))return false;
-    if(q&&![(v.vin||''),(v.trim||''),(v.title_state||''),(v.exterior||''),(v.owner_contact||''),(v.sale_history||'')].some(f=>f.toLowerCase().includes(q)))return false;
+    if(q&&![(v.vin||''),(v.trim||''),(v.last_title_state||''),(v.exterior||''),(v.sale_history||'')].some(f=>f.toLowerCase().includes(q)))return false;
     return true;
   });
 
-  data.sort((a,b)=>{const av=a[sortCol]??0,bv=b[sortCol]??0;return sortDir==='desc'?bv-av:av-bv;});
+  data.sort((a,b)=>{
+    let av=a[sortCol],bv=b[sortCol];
+    // Nulls last
+    if(av==null&&bv==null)return 0;
+    if(av==null)return 1;
+    if(bv==null)return -1;
+    av=isNaN(Number(av))?av:Number(av);
+    bv=isNaN(Number(bv))?bv:Number(bv);
+    return sortDir==='desc'?bv-av:av-bv;
+  });
+
   const total=data.length;
   const page=data.slice(fleetPage*PAGE_SIZE,(fleetPage+1)*PAGE_SIZE);
   renderFleet(page);renderPagination(total);
@@ -916,41 +935,48 @@ function applyFilters(){
 
 function saleChainHTML(h,short){
   if(!h)return '<span style="color:#bbb;font-family:var(--mono);font-size:10px">—</span>';
-  const parts=h.split('→').map(s=>s.trim()).filter(Boolean);
+  const parts=h.split('->').map(s=>s.trim()).filter(Boolean);
   if(short)return parts.map((p,i)=>`<span class="sale-item${i===parts.length-1?' latest':''}">${p}</span>`).join('<span class="arrow">→</span>');
   return parts.map((p,i)=>{const[price,odo]=p.split('/');return`<div class="timeline-item"><span class="timeline-price" style="${i===parts.length-1?'color:var(--accent)':''}">${price}</span><span class="timeline-odo">@ ${odo||'—'}</span></div>`;}).join('');
 }
 
-function vinLinksHTML(vin){return`<div class="link-cluster"><a class="ext-link lnk-bat" href="https://bringatrailer.com/listing/mercedes-benz-s65-amg/?q=${vin}" target="_blank" onclick="event.stopPropagation()">BaT</a><a class="ext-link lnk-cb" href="https://carsandbids.com/search#q=${vin}" target="_blank" onclick="event.stopPropagation()">C&B</a><a class="ext-link lnk-cfx" href="https://www.carfax.com/VehicleHistory/p/Report.cfm?vin=${vin}" target="_blank" onclick="event.stopPropagation()">CFX</a><a class="ext-link lnk-more" href="#" onclick="event.stopPropagation();openFleetDrawer('${vin}')">⋯</a></div>`;}
+function vinLinksHTML(vin){
+  return`<div class="link-cluster">
+    <a class="ext-link lnk-bat" href="https://bringatrailer.com/listing/mercedes-benz-s65-amg/?q=${vin}" target="_blank" onclick="event.stopPropagation()">BaT</a>
+    <a class="ext-link lnk-cb" href="https://carsandbids.com/search#q=${vin}" target="_blank" onclick="event.stopPropagation()">C&B</a>
+    <a class="ext-link lnk-cfx" href="https://www.carfax.com/VehicleHistory/p/Report.cfm?vin=${vin}" target="_blank" onclick="event.stopPropagation()">CFX</a>
+    <a class="ext-link lnk-more" href="#" onclick="event.stopPropagation();openFleetDrawer('${vin}')">⋯</a>
+  </div>`;
+}
 
 function flagChip(s,dqReason){
   const st=(s||'').toLowerCase();
   if(st==='active'||st==='target')return`<span class="status-chip chip-target">Target</span>`;
-  if(st==='watch')return`<span class="status-chip chip-watch">Watch</span>`;
-  if(st==='dq'){const r=(dqReason||'DQ').replace('DQ — ','');return`<span class="status-chip chip-dq" title="${r}">DQ</span>`;}
-  if(st==='universe')return`<span class="status-chip chip-universe">Universe</span>`;
+  if(st.includes('watch'))return`<span class="status-chip chip-watch">Watch</span>`;
+  if(st.includes('dq')){const r=(dqReason||'DQ').replace(/DQ\s*-+\s*/,'');return`<span class="status-chip chip-dq" title="${r}">DQ</span>`;}
+  if(st==='universe'||!s)return`<span class="status-chip chip-universe">Universe</span>`;
   return`<span class="status-chip chip-universe">${s||'—'}</span>`;
 }
-function statusChip(s){return flagChip(s,'');}
 
 function renderFleet(data){
   const tbody=document.getElementById('fleet-tbody');
   if(!data.length){tbody.innerHTML=`<tr class="empty-row"><td colspan="44">No vehicles match current filters.</td></tr>`;return;}
-  const hasAcc=v=>(v.accidents===true||v.accidents==='TRUE'||v.accidents==='true'||Number(v.accidents)>0);
+  const hasAcc=v=>v.accident_count&&v.accident_count!=='None'&&v.accident_count!=='0'&&v.accident_count!=='0 - Clean';
   tbody.innerHTML=data.map(v=>{
-    const gi=(v.curr_odo>=70000&&v.curr_odo<=100000);
-    const st=(v.status||'').toLowerCase();
-    const rowClass=st==='dq'?'row-dq':st==='watch'?'row-watch':'';
+    const gi=(Number(v.curr_odo)>=70000&&Number(v.curr_odo)<=100000);
+    const st=(v.acq_status||'').toLowerCase();
+    const rowClass=st.includes('dq')?'row-dq':st.includes('watch')?'row-watch':'';
+    const rankDisplay=v.apex_rank!=null&&v.apex_rank!==''?v.apex_rank:'—';
     return`<tr onclick="openFleetDrawer('${v.vin}')" class="${rowClass}${activeFD?.vin===v.vin?' selected':''}">
-      <td class="mono" style="color:var(--muted);text-align:center">${v.rank||'—'}</td>
+      <td class="mono" style="color:var(--muted);text-align:center">${rankDisplay}</td>
       <td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${v.vin}</td>
       <td><span class="trim-badge ${(v.trim==='S65 AMG'||v.trim==='S65')?'s65':'s600'}">${v.trim||'—'}</span></td>
-      <td>${flagChip(v.status,v.dq_reason)}</td>
+      <td>${flagChip(v.acq_status,v.dq_reason)}</td>
       <td style="font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis">${v.exterior||'—'}</td>
       <td style="font-size:11px;max-width:100px;overflow:hidden;text-overflow:ellipsis">${v.upholstery||'—'}</td>
-      <td><span class="state-tag">${v.title_state||'—'}</span></td>
+      <td><span class="state-tag">${v.last_title_state||'—'}</span></td>
       <td class="num">${v.year||2017}</td>
-      <td class="num">${v.owners??'—'}</td>
+      <td class="num">${v.total_owners??'—'}</td>
       <td>${hasAcc(v)?'<span class="bool-yes" style="color:var(--gold)">✓</span>':'<span class="bool-no">—</span>'}</td>
       <td>${boolCell(v.trans_confirmed)}</td>
       <td>${boolCell(v.ign_confirmed)}</td>
@@ -964,20 +990,20 @@ function renderFleet(data){
       <td>${boolCell(v.has_carfax)}</td>
       <td>${boolCell(v.has_autocheck)}</td>
       <td>${boolCell(v.has_window_sticker)}</td>
-      <td style="font-size:10px;max-width:100px;overflow:hidden;text-overflow:ellipsis">${v.owner_contact||'—'}</td>
-      <td style="font-size:10px">${v.owner_city_state||'—'}</td>
-      <td style="font-size:10px;color:var(--accent)">${v.owner_email?`<a href="mailto:${v.owner_email}" onclick="event.stopPropagation()" style="color:var(--accent)">${v.owner_email}</a>`:'—'}</td>
+      <td style="font-size:10px;max-width:100px;overflow:hidden;text-overflow:ellipsis">—</td>
+      <td style="font-size:10px">—</td>
+      <td style="font-size:10px;color:var(--accent)">—</td>
       <td class="num ${gi?'gi-hi':''}">${oFmt(v.curr_odo)}</td>
       <td class="num">${oFmt(v.last_sale_mi)}</td>
       <td class="num">${oFmt(v.iseecars_est_mi)}</td>
       <td class="num" style="color:var(--gold);font-weight:600">${oFmt(v.proj_mi_jan28)}</td>
       <td><div class="sale-chain">${saleChainHTML(v.sale_history,true)}</div></td>
-      <td class="num">${$m(v.sclass_est_value)}</td>
+      <td class="num">${$m(v.curr_mkt_price)}</td>
       <td class="num">${v.num_listings??'—'}</td>
       <td style="font-size:10px">${v.relist_freq||'—'}</td>
       <td class="num">${$m(v.last_sale_price)}</td>
       <td class="num">${v.last_sale_year??'—'}</td>
-      <td class="num">${v.depr_5yr!=null?Number(v.depr_5yr).toFixed(1)+'%':'—'}</td>
+      <td class="num">${v.depr_5yr!=null?'$'+Number(v.depr_5yr).toLocaleString():'—'}</td>
       <td class="num">${$m(v.val_at_1yr)}</td>
       <td class="num">${$m(v.val_at_3yr)}</td>
       <td class="num">${$m(v.price_low_jan28)}</td>
@@ -1007,12 +1033,14 @@ async function openFleetDrawer(vin){
   activeFD=v;
   document.getElementById('fd-vin').textContent=vin;
   document.getElementById('fd-title').textContent=`${v.year||2017} ${v.trim}`;
-  document.getElementById('fd-sub').textContent=`Rank #${v.rank||'—'} · Score ${v.composite_score||'—'}/175 · ${statusChip(v.status).replace(/<[^>]*>/g,'')}`;
+  const rankStr=v.apex_rank!=null&&v.apex_rank!==''?`Rank #${v.apex_rank} · `:'';
+  const scoreStr=v.composite_score?`Score ${v.composite_score}/175 · `:'';
+  document.getElementById('fd-sub').textContent=`${rankStr}${scoreStr}${(v.acq_status||'Universe')}`;
   document.getElementById('fd-ext').textContent=v.exterior||'—';
   document.getElementById('fd-uph').textContent=v.upholstery||'—';
-  document.getElementById('fd-state').textContent=v.title_state||'—';
-  document.getElementById('fd-own').textContent=v.owners??'—';
-  document.getElementById('fd-acc').textContent=(v.accidents||0)===0?'0 — Clean':(v.accidents||0)===1?'1 — Watch':`${v.accidents} — DQ`;
+  document.getElementById('fd-state').textContent=v.last_title_state||'—';
+  document.getElementById('fd-own').textContent=v.total_owners??'—';
+  document.getElementById('fd-acc').textContent=v.accident_count||'0 - Clean';
   document.getElementById('fd-svc').textContent=v.svc_per_yr!=null?Number(v.svc_per_yr).toFixed(1)+'/yr':'—';
   const bStr=x=>boolVal(x)?'✓ Confirmed':'—';
   document.getElementById('fd-trans').textContent=bStr(v.trans_confirmed);
@@ -1030,10 +1058,10 @@ async function openFleetDrawer(vin){
   document.getElementById('fd-proj-mi').textContent=oFmt(v.proj_mi_jan28);
   document.getElementById('fd-sale').textContent=v.last_sale_year??'—';
   document.getElementById('fd-timeline').innerHTML=saleChainHTML(v.sale_history,false);
-  document.getElementById('fd-sclass').textContent=$m(v.sclass_est_value);
+  document.getElementById('fd-sclass').textContent=$m(v.curr_mkt_price);
   document.getElementById('fd-listings').textContent=v.num_listings??'—';
   document.getElementById('fd-last-price').textContent=$m(v.last_sale_price);
-  document.getElementById('fd-depr').textContent=v.depr_5yr!=null?Number(v.depr_5yr).toFixed(1)+'%':'—';
+  document.getElementById('fd-depr').textContent=v.depr_5yr!=null?'$'+Number(v.depr_5yr).toLocaleString():'—';
   document.getElementById('fd-val1').textContent=$m(v.val_at_1yr);
   document.getElementById('fd-val3').textContent=$m(v.val_at_3yr);
   document.getElementById('sc-low').textContent=$m(v.price_low_jan28);
@@ -1043,87 +1071,153 @@ async function openFleetDrawer(vin){
   document.getElementById('sc-ultra').textContent=$m(v.price_ultra_jan28);
   document.getElementById('fd-notes').value=v.research_notes||'';
 
-  // Service records
+  // Service records from vehicle_service table
   const svcs=allServiceRecs.filter(s=>s.vin===vin);
   document.getElementById('fd-service').innerHTML=svcs.length
-    ?svcs.map(s=>`<div class="svc-row"><span class="svc-date">${s.record_date||'—'}</span><span class="svc-odo">${s.odometer?Number(s.odometer).toLocaleString()+' mi':'—'}</span><span class="svc-loc">${s.location||'—'}</span></div>`).join('')
+    ?svcs.map(s=>`<div class="svc-row">
+        <span class="svc-date">${s.record_date||'—'}</span>
+        <span class="svc-odo">${s.odometer?Number(s.odometer).toLocaleString()+' mi':'—'}</span>
+        <span class="svc-loc">${s.location||s.details||'—'}</span>
+      </div>`).join('')
     :'<div class="svc-empty">No service records</div>';
 
   // External links
-  const links=[['BaT',`https://bringatrailer.com/listing/mercedes-benz-s65-amg/?q=${vin}`,'#1a1a2e','#e8c870'],['C&B',`https://carsandbids.com/search#q=${vin}`,'#2d5016','#9ecf65'],['Carfax',`https://www.carfax.com/VehicleHistory/p/Report.cfm?vin=${vin}`,'#cc0000','#fff'],['GoodCar',`https://www.goodcar.com/wp-content/${vin}`,'#5b2d8e','#fff'],['NHTSA',`https://vpic.nhtsa.dot.gov/decoder/Decoder/DecodeVinValues/${vin}`,'#1565c0','#fff'],['eBay',`https://www.ebay.com/sch/i.html?_nkw=${vin}`,'#e53238','#fff'],['Classic.com',`https://www.classic.com/search/?q=${vin}`,'#2c2c2c','#d4af37']];
-  document.getElementById('fd-links').innerHTML=links.map(([l,u,bg,c])=>`<a href="${u}" target="_blank" style="background:${bg};color:${c};display:inline-flex;align-items:center;padding:5px 12px;border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:500;text-decoration:none;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">${l}</a>`).join('');
+  const links=[
+    ['BaT',`https://bringatrailer.com/listing/mercedes-benz-s65-amg/?q=${vin}`,'#1a1a2e','#e8c870'],
+    ['C&B',`https://carsandbids.com/search#q=${vin}`,'#2d5016','#9ecf65'],
+    ['Carfax',`https://www.carfax.com/VehicleHistory/p/Report.cfm?vin=${vin}`,'#cc0000','#fff'],
+    ['NHTSA',`https://vpic.nhtsa.dot.gov/decoder/Decoder/DecodeVinValues/${vin}`,'#1565c0','#fff'],
+    ['eBay',`https://www.ebay.com/sch/i.html?_nkw=${vin}`,'#e53238','#fff'],
+    ['Classic.com',`https://www.classic.com/search/?q=${vin}`,'#2c2c2c','#d4af37'],
+  ];
+  document.getElementById('fd-links').innerHTML=links.map(([l,u,bg,c])=>
+    `<a href="${u}" target="_blank" style="background:${bg};color:${c};display:inline-flex;align-items:center;padding:5px 12px;border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:500;text-decoration:none;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">${l}</a>`
+  ).join('');
 
-  // Image
+  // Vehicle photo
   const iz=document.getElementById('img-zone');iz.classList.remove('has-img');iz.querySelector('img')?.remove();
-  if(v.image_url){const{data:su}=await db.storage.from('documents').createSignedUrl(v.image_url,3600);if(su){iz.classList.add('has-img');const im=document.createElement('img');im.src=su.signedUrl;iz.prepend(im);}}
+  if(v.image_url){
+    const{data:su}=await db.storage.from(BUCKET).createSignedUrl(v.image_url,3600);
+    if(su){iz.classList.add('has-img');const im=document.createElement('img');im.src=su.signedUrl;iz.prepend(im);}
+  }
 
-  await loadDocSlots(v.id,vin);
+  // Load documents from documents table by VIN
+  await loadDocSlots(vin);
+
   document.getElementById('fleet-overlay').classList.add('open');
   document.getElementById('fleet-drawer').classList.add('open');
 }
 
-async function loadDocSlots(vehicleId,vin){
-  const{data:docs}=await db.from('documents').select('*').eq('vehicle_id',vehicleId);
-  ['carfax','goodcar','iseecars','autocheck','windowsticker','publicrecords','ppi'].forEach(type=>{
-    const slot=document.getElementById(`slot-${type}`);
-    const status=slot.querySelector('.doc-slot-status');
-    const fileInput=slot.querySelector('input[type=file]');
-    const ex=(docs||[]).find(d=>d.doc_type===type);
-    if(ex){
-      slot.classList.add('has-file');
-      // Disable file input so clicking slot doesn't open upload dialog
-      fileInput.style.pointerEvents='none';
-      status.innerHTML=`✓ ${ex.filename}<br>
-        <a class="doc-open-link" href="#" onclick="openDoc('${ex.storage_path}',event)">Open PDF</a><br>
-        <a class="doc-replace-link" href="#" onclick="replaceDoc(event,'${type}')">Replace</a>`;
-    } else {
-      slot.classList.remove('has-file');
-      fileInput.style.pointerEvents='auto';
-      status.textContent='Click or drop PDF';
-    }
+// ── Documents: load slots from DB by VIN ──────────────────────────────────
+async function loadDocSlots(vin){
+  const{data:docs,error}=await db.from('documents').select('*').eq('vin',vin);
+  if(error)console.error('doc load error',error);
+
+  // Reset all slots first
+  Object.keys(DOC_TYPE_MAP).forEach(slotId=>{
+    const slot=document.getElementById(`slot-${slotId}`);
+    if(!slot)return;
+    slot.classList.remove('has-file');
+    const fi=slot.querySelector('input[type=file]');
+    if(fi)fi.style.pointerEvents='auto';
+    const st=slot.querySelector('.doc-slot-status');
+    if(st)st.textContent='Click or drop PDF';
+  });
+
+  // Populate slots that have files
+  (docs||[]).forEach(doc=>{
+    const slotId=DOC_SLOT_MAP[doc.doc_type];
+    if(!slotId)return;
+    const slot=document.getElementById(`slot-${slotId}`);
+    if(!slot)return;
+    slot.classList.add('has-file');
+    const fi=slot.querySelector('input[type=file]');
+    if(fi)fi.style.pointerEvents='none';
+    const st=slot.querySelector('.doc-slot-status');
+    if(st)st.innerHTML=`✓ On file<br>
+      <a class="doc-open-link" href="${doc.storage_url}" target="_blank">Open PDF</a><br>
+      <a class="doc-replace-link" href="#" onclick="replaceDoc(event,'${slotId}')">Replace</a>`;
   });
 }
-function replaceDoc(e,docType){
+
+function replaceDoc(e,slotId){
   e.preventDefault();e.stopPropagation();
-  // Re-enable the file input and trigger it
-  const slot=document.getElementById(`slot-${docType}`);
-  const fileInput=slot.querySelector('input[type=file]');
-  fileInput.style.pointerEvents='auto';
-  fileInput.click();
+  const slot=document.getElementById(`slot-${slotId}`);
+  const fi=slot.querySelector('input[type=file]');
+  if(fi){fi.style.pointerEvents='auto';fi.click();}
 }
-async function openDoc(path,e){e.preventDefault();const{data}=await db.storage.from('documents').createSignedUrl(path,3600);if(data?.signedUrl)window.open(data.signedUrl,'_blank');}
-function closeFleetDrawer(){document.getElementById('fleet-overlay').classList.remove('open');document.getElementById('fleet-drawer').classList.remove('open');activeFD=null;}
+
+function closeFleetDrawer(){
+  document.getElementById('fleet-overlay').classList.remove('open');
+  document.getElementById('fleet-drawer').classList.remove('open');
+  activeFD=null;
+}
 
 async function uploadVehicleImage(input){
   if(!input.files[0]||!activeFD)return;
   const file=input.files[0];
-  const path=`${activeFD.vin}/photo_${Date.now()}.${file.name.split('.').pop()}`;
+  const path=`photos/${activeFD.vin}_${Date.now()}.${file.name.split('.').pop()}`;
   toast('Uploading…');
-  const{error}=await db.storage.from('documents').upload(path,file,{upsert:true});
+  const{error}=await db.storage.from(BUCKET).upload(path,file,{upsert:true});
   if(error){toast('Upload failed',true);return;}
-  await db.from('vehicles').update({image_url:path}).eq('id',activeFD.id);
+  await db.from('vehicles').update({image_url:path}).eq('vin',activeFD.vin);
   activeFD.image_url=path;
-  // Update img zone display
   const iz=document.getElementById('img-zone');
   iz.classList.add('has-img');
   let im=iz.querySelector('img');
   if(!im){im=document.createElement('img');iz.prepend(im);}
-  const{data:su}=await db.storage.from('documents').createSignedUrl(path,3600);
+  const{data:su}=await db.storage.from(BUCKET).createSignedUrl(path,3600);
   if(su)im.src=su.signedUrl;
   toast('Photo saved ✓');
 }
+
 function dragOver(e,el){e.preventDefault();el.classList.add('dragover');}
 function dragLeave(el){el.classList.remove('dragover');}
-async function dropFile(e,docType){e.preventDefault();document.getElementById(`slot-${docType}`).classList.remove('dragover');const file=e.dataTransfer.files[0];if(file)await doUploadDoc(file,docType);}
-async function uploadDoc(input,docType){if(input.files[0])await doUploadDoc(input.files[0],docType);}
-async function doUploadDoc(file,docType){if(!activeFD)return;const path=`${activeFD.vin}/${docType}_${Date.now()}.pdf`;toast(`Uploading ${docType}…`);const{error:uE}=await db.storage.from('documents').upload(path,file,{upsert:true});if(uE){toast('Upload failed',true);return;}await db.from('documents').delete().eq('vehicle_id',activeFD.id).eq('doc_type',docType);const{error:iE}=await db.from('documents').insert({vehicle_id:activeFD.id,vin:activeFD.vin,doc_type:docType,filename:file.name,storage_path:path});if(iE){toast('Save failed',true);return;}await loadDocSlots(activeFD.id,activeFD.vin);toast(`${docType} saved ✓`);}
+async function dropFile(e,slotId){e.preventDefault();document.getElementById(`slot-${slotId}`).classList.remove('dragover');const file=e.dataTransfer.files[0];if(file)await doUploadDoc(file,slotId);}
+async function uploadDoc(input,slotId){if(input.files[0])await doUploadDoc(input.files[0],slotId);}
 
-async function saveNotes(){if(!activeFD)return;const notes=document.getElementById('fd-notes').value;const{error}=await db.from('vehicles').update({research_notes:notes}).eq('id',activeFD.id);if(error){toast('Save failed',true);return;}activeFD.research_notes=notes;const v=allVehicles.find(x=>x.id===activeFD.id);if(v)v.research_notes=notes;toast('Notes saved ✓');}
+async function doUploadDoc(file,slotId){
+  if(!activeFD)return;
+  const docType=DOC_TYPE_MAP[slotId]||slotId;
+  const storagePath=`${docType}/${activeFD.vin}.pdf`;
+  toast(`Uploading ${slotId}…`);
+  const{error:uE}=await db.storage.from(BUCKET).upload(storagePath,file,{upsert:true});
+  if(uE){toast('Upload failed: '+uE.message,true);return;}
+  const publicUrl=`${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${storagePath}`;
+  // Upsert: delete existing then insert fresh
+  await db.from('documents').delete().eq('vin',activeFD.vin).eq('doc_type',docType);
+  const{error:iE}=await db.from('documents').insert({
+    vin:activeFD.vin,
+    doc_type:docType,
+    storage_url:publicUrl,
+    uploaded_at:new Date().toISOString()
+  });
+  if(iE){toast('DB save failed: '+iE.message,true);return;}
+  await loadDocSlots(activeFD.vin);
+  toast(`${slotId} saved ✓`);
+}
 
-// CRM
+async function saveNotes(){
+  if(!activeFD)return;
+  const notes=document.getElementById('fd-notes').value;
+  const{error}=await db.from('vehicles').update({research_notes:notes}).eq('vin',activeFD.vin);
+  if(error){toast('Save failed',true);return;}
+  activeFD.research_notes=notes;
+  const v=allVehicles.find(x=>x.vin===activeFD.vin);
+  if(v)v.research_notes=notes;
+  toast('Notes saved ✓');
+}
+
+// ── CRM ───────────────────────────────────────────────────────────────────
 const STATUS_CLASS={pending:'st-pending',active:'st-active',declined:'st-declined',scheduled:'st-scheduled',inbound:'st-inbound',hold:'st-hold'};
 const STATUS_LABEL={pending:'Pending',active:'Active',declined:'Declined',scheduled:'Call Scheduled',inbound:'Inbound',hold:'On Hold'};
-function updateCRMStats(){document.getElementById('crm-stat-total').textContent=allContacts.length;document.getElementById('crm-stat-active').textContent=allContacts.filter(c=>c.status==='active').length;document.getElementById('crm-stat-pending').textContent=allContacts.filter(c=>c.status==='pending').length;document.getElementById('crm-stat-declined').textContent=allContacts.filter(c=>c.status==='declined').length;}
+
+function updateCRMStats(){
+  document.getElementById('crm-stat-total').textContent=allContacts.length;
+  document.getElementById('crm-stat-active').textContent=allContacts.filter(c=>c.status==='active').length;
+  document.getElementById('crm-stat-pending').textContent=allContacts.filter(c=>c.status==='pending').length;
+  document.getElementById('crm-stat-declined').textContent=allContacts.filter(c=>c.status==='declined').length;
+}
 
 function renderCRM(){
   const sf=document.getElementById('crm-status-filter').value;
@@ -1178,205 +1272,148 @@ function openCRMDrawer(id){
   document.getElementById('cd-web').innerHTML=c.website?`<a href="https://${c.website}" target="_blank" style="color:var(--accent)">${c.website}</a>`:'—';
   document.getElementById('cd-status-select').value=c.status||'pending';
   const cAlerts=allAlerts.filter(a=>a.contact_id===id);
-  document.getElementById('cd-alerts').innerHTML=cAlerts.length?cAlerts.map(a=>`<div class="alert-row"><span class="trim-badge s65" style="font-size:9px">${(a.vin||'').slice(-8)}</span><span class="alert-vin">${a.vin}</span><span class="alert-ceiling">≤$${Math.round((a.ceiling_usd||0)/1000)}K</span><button class="alert-remove" onclick="removeVINAlert('${a.id}')">×</button></div>`).join(''):'<div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:8px 0">No VINs assigned yet</div>';
+  document.getElementById('cd-alerts').innerHTML=cAlerts.length
+    ?cAlerts.map(a=>`<div class="alert-row"><span class="trim-badge s65" style="font-size:9px">${(a.vin||'').slice(-8)}</span><span class="alert-vin">${a.vin}</span><span class="alert-ceiling">≤$${Math.round((a.ceiling_usd||0)/1000)}K</span><button class="alert-remove" onclick="removeVINAlert('${a.id}')">×</button></div>`).join('')
+    :'<div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:8px 0">No VINs assigned yet</div>';
   const cLogs=allLogs.filter(l=>l.contact_id===id);
-  document.getElementById('cd-log').innerHTML=cLogs.length?cLogs.map(l=>`<div class="log-entry"><div class="log-date">${new Date(l.logged_at).toLocaleString()}</div><div class="log-text"><span class="log-type-tag lt-${l.entry_type}">${l.entry_type}</span>${l.body||''}</div></div>`).join(''):'<div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:8px 0">No activity logged yet</div>';
+  document.getElementById('cd-log').innerHTML=cLogs.length
+    ?cLogs.map(l=>`<div class="log-entry"><div class="log-date">${new Date(l.logged_at).toLocaleString()}</div><div class="log-text"><span class="log-type-tag lt-${l.entry_type}">${l.entry_type}</span>${l.body||''}</div></div>`).join('')
+    :'<div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:8px 0">No activity logged yet</div>';
   document.getElementById('crm-overlay').classList.add('open');
   document.getElementById('crm-drawer').classList.add('open');
 }
-function closeCRMDrawer(){document.getElementById('crm-overlay').classList.remove('open');document.getElementById('crm-drawer').classList.remove('open');activeCRM=null;renderCRM();}
+function closeCRMDrawer(){
+  document.getElementById('crm-overlay').classList.remove('open');
+  document.getElementById('crm-drawer').classList.remove('open');
+  activeCRM=null;renderCRM();
+}
 
-async function updateContactStatus(val){if(!activeCRM)return;const{error}=await db.from('contacts').update({status:val,last_activity:new Date().toISOString()}).eq('id',activeCRM);if(error){toast('Status update failed',true);return;}const c=allContacts.find(x=>x.id===activeCRM);if(c){c.status=val;c.last_activity=new Date().toISOString();}updateCRMStats();renderCRM();toast('Status updated ✓');}
+async function updateContactStatus(val){
+  if(!activeCRM)return;
+  const{error}=await db.from('contacts').update({status:val,last_activity:new Date().toISOString()}).eq('id',activeCRM);
+  if(error){toast('Status update failed',true);return;}
+  const c=allContacts.find(x=>x.id===activeCRM);
+  if(c){c.status=val;c.last_activity=new Date().toISOString();}
+  updateCRMStats();renderCRM();toast('Status updated ✓');
+}
 
-async function addLogEntry(){if(!activeCRM)return;const type=document.getElementById('log-type-sel').value;const body=document.getElementById('log-text-input').value.trim();if(!body){toast('Write something first',true);return;}const{data:newLog,error}=await db.from('contact_log').insert({contact_id:activeCRM,entry_type:type,body}).select().single();if(error){toast('Log save failed',true);return;}allLogs.unshift(newLog);document.getElementById('log-text-input').value='';const c=allContacts.find(x=>x.id===activeCRM);if(c){const ns=type==='declined'?'declined':(type==='reply'||type==='call')&&c.status==='pending'?'active':c.status;if(ns!==c.status)await updateContactStatus(ns);c.last_activity=new Date().toISOString();}await db.from('contacts').update({last_activity:new Date().toISOString()}).eq('id',activeCRM);openCRMDrawer(activeCRM);toast('Logged ✓');}
+async function addLogEntry(){
+  if(!activeCRM)return;
+  const type=document.getElementById('log-type-sel').value;
+  const body=document.getElementById('log-text-input').value.trim();
+  if(!body){toast('Write something first',true);return;}
+  const{data:newLog,error}=await db.from('contact_log').insert({contact_id:activeCRM,entry_type:type,body}).select().single();
+  if(error){toast('Log save failed',true);return;}
+  allLogs.unshift(newLog);
+  document.getElementById('log-text-input').value='';
+  const c=allContacts.find(x=>x.id===activeCRM);
+  if(c){
+    const ns=type==='declined'?'declined':(type==='reply'||type==='call')&&c.status==='pending'?'active':c.status;
+    if(ns!==c.status)await updateContactStatus(ns);
+    c.last_activity=new Date().toISOString();
+  }
+  await db.from('contacts').update({last_activity:new Date().toISOString()}).eq('id',activeCRM);
+  openCRMDrawer(activeCRM);
+  toast('Logged ✓');
+}
 
-async function addVINAlert(){if(!activeCRM)return;const vin=document.getElementById('add-vin-input').value.trim().toUpperCase();const ceiling=parseInt(document.getElementById('add-ceiling-input').value.replace(/\D/g,''));if(!vin||!ceiling){toast('Enter a VIN and ceiling price',true);return;}const vehicle=allVehicles.find(v=>v.vin===vin);const{data:newAlert,error}=await db.from('contact_alerts').insert({contact_id:activeCRM,vehicle_id:vehicle?.id||null,vin,ceiling_usd:ceiling,active:true}).select().single();if(error){toast('Alert save failed',true);return;}allAlerts.push(newAlert);document.getElementById('add-vin-input').value='';document.getElementById('add-ceiling-input').value='';openCRMDrawer(activeCRM);toast(`Alert added ✓`);}
+async function addVINAlert(){
+  if(!activeCRM)return;
+  const vin=document.getElementById('add-vin-input').value.trim().toUpperCase();
+  const ceiling=parseInt(document.getElementById('add-ceiling-input').value.replace(/\D/g,''));
+  if(!vin||!ceiling){toast('Enter a VIN and ceiling price',true);return;}
+  const vehicle=allVehicles.find(v=>v.vin===vin);
+  const{data:newAlert,error}=await db.from('contact_alerts').insert({contact_id:activeCRM,vehicle_id:vehicle?.id||null,vin,ceiling_usd:ceiling,active:true}).select().single();
+  if(error){toast('Alert save failed',true);return;}
+  allAlerts.push(newAlert);
+  document.getElementById('add-vin-input').value='';
+  document.getElementById('add-ceiling-input').value='';
+  openCRMDrawer(activeCRM);
+  toast('Alert added ✓');
+}
 
-async function removeVINAlert(alertId){const{error}=await db.from('contact_alerts').delete().eq('id',alertId);if(error){toast('Remove failed',true);return;}allAlerts=allAlerts.filter(a=>a.id!==alertId);openCRMDrawer(activeCRM);toast('Alert removed ✓');}
+async function removeVINAlert(alertId){
+  const{error}=await db.from('contact_alerts').delete().eq('id',alertId);
+  if(error){toast('Remove failed',true);return;}
+  allAlerts=allAlerts.filter(a=>a.id!==alertId);
+  openCRMDrawer(activeCRM);
+  toast('Alert removed ✓');
+}
 
-async function openAddContact(){const company=prompt('Company name:');if(!company)return;const location=prompt('Location (e.g. Dallas, TX):')||'';const region=prompt('Region (DFW/CA/FL/AZ/National):')||'DFW';const ctype=prompt('Type (broker/franchise):')||'broker';const website=prompt('Website (without https://):')||'';const phone=prompt('Phone (or leave blank):')||'';const email=prompt('Email (or leave blank):')||'';const{data:nc,error}=await db.from('contacts').insert({company,location,region,contact_type:ctype,website,phone:phone||null,email:email||null,status:'pending',outreach_type:'outbound',first_contact:new Date().toISOString().split('T')[0],last_activity:new Date().toISOString()}).select().single();if(error){toast('Add failed: '+error.message,true);return;}allContacts.unshift(nc);updateCRMStats();renderCRM();switchTab('crm');toast(`${company} added ✓`);openCRMDrawer(nc.id);}
+async function openAddContact(){
+  const company=prompt('Company name:');if(!company)return;
+  const location=prompt('Location (e.g. Dallas, TX):')||'';
+  const region=prompt('Region (DFW/CA/FL/AZ/National):')||'DFW';
+  const ctype=prompt('Type (broker/franchise):')||'broker';
+  const website=prompt('Website (without https://):')||'';
+  const phone=prompt('Phone (or leave blank):')||'';
+  const email=prompt('Email (or leave blank):')||'';
+  const{data:nc,error}=await db.from('contacts').insert({
+    company,location,region,contact_type:ctype,website,
+    phone:phone||null,email:email||null,status:'pending',
+    outreach_type:'outbound',
+    first_contact:new Date().toISOString().split('T')[0],
+    last_activity:new Date().toISOString()
+  }).select().single();
+  if(error){toast('Add failed: '+error.message,true);return;}
+  allContacts.unshift(nc);
+  updateCRMStats();renderCRM();switchTab('crm');
+  toast(`${company} added ✓`);
+  openCRMDrawer(nc.id);
+}
 
-// ── Mobile search ──
+// ── Mobile search ──────────────────────────────────────────────────────────
 function mobileSearch(q){
   const el=document.getElementById('mob-results');
   q=q.trim();
   if(q.length<2){el.innerHTML='';return;}
   const ql=q.toLowerCase();
-
-  // Search vehicles by VIN
   const vehicles=allVehicles.filter(v=>(v.vin||'').toLowerCase().includes(ql)).slice(0,3);
-  // Search contacts by company or contact name
-  const contacts=allContacts.filter(c=>
-    (c.company||'').toLowerCase().includes(ql)||
-    (c.contact_name||'').toLowerCase().includes(ql)
-  ).slice(0,3);
-
-  if(!vehicles.length&&!contacts.length){
-    el.innerHTML=`<div class="mob-no-result">No vehicles or contacts found<br>for "<strong>${q}</strong>"</div>`;
-    return;
-  }
-
+  const contacts=allContacts.filter(c=>(c.company||'').toLowerCase().includes(ql)||(c.contact_name||'').toLowerCase().includes(ql)).slice(0,3);
+  if(!vehicles.length&&!contacts.length){el.innerHTML=`<div class="mob-no-result">No vehicles or contacts found for "<strong>${q}</strong>"</div>`;return;}
   let html='';
-
   vehicles.forEach(v=>{
-    const st=(v.status||'').toLowerCase();
-    const chipColor=st==='active'||st==='target'?'var(--accent)':st==='watch'?'var(--gold)':'#999';
+    const st=(v.acq_status||'').toLowerCase();
+    const chipColor=st==='active'||st==='target'?'var(--accent)':st.includes('watch')?'var(--gold)':'#999';
+    const rankStr=v.apex_rank!=null&&v.apex_rank!==''?v.apex_rank:'—';
     html+=`<div class="mob-result">
       <div class="mob-result-header">
-        <div>
-          <div class="mob-result-vin">${v.vin}</div>
-          <div class="mob-result-title">${v.year||2017} ${v.trim||'—'}</div>
-        </div>
-        <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:${chipColor};text-transform:uppercase;background:rgba(255,255,255,.12);padding:3px 8px;border-radius:3px">${v.status||'—'}</span>
+        <div><div class="mob-result-vin">${v.vin}</div><div class="mob-result-title">${v.year||2017} ${v.trim||'—'}</div></div>
+        <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:${chipColor};text-transform:uppercase;background:rgba(255,255,255,.12);padding:3px 8px;border-radius:3px">${v.acq_status||'Universe'}</span>
       </div>
       <div class="mob-result-body">
         <div class="mob-field-grid">
-          <div class="mob-field"><div class="mob-field-label">Rank</div><div class="mob-field-value accent">#${v.rank||'—'}</div></div>
-          <div class="mob-field"><div class="mob-field-label">Score</div><div class="mob-field-value accent">${v.composite_score||'—'}/175</div></div>
-          <div class="mob-field"><div class="mob-field-label">Odometer</div><div class="mob-field-value ${(v.curr_odo>=70000&&v.curr_odo<=100000)?'gold':''}">${oFmt(v.curr_odo)}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Rank</div><div class="mob-field-value accent">#${rankStr}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Score</div><div class="mob-field-value accent">${v.composite_score||'—'}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Odometer</div><div class="mob-field-value ${(Number(v.curr_odo)>=70000&&Number(v.curr_odo)<=100000)?'gold':''}">${oFmt(v.curr_odo)}</div></div>
           <div class="mob-field"><div class="mob-field-label">Proj @ Jan 28</div><div class="mob-field-value gold">${oFmt(v.proj_mi_jan28)}</div></div>
           <div class="mob-field"><div class="mob-field-label">Offer Target</div><div class="mob-field-value green">${$m(v.offer_target)}</div></div>
           <div class="mob-field"><div class="mob-field-label">Walk-Away</div><div class="mob-field-value accent">${$m(v.walk_away)}</div></div>
         </div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px">${v.exterior||''}${v.exterior&&v.upholstery?' · ':''}${v.upholstery||''} ${v.title_state?'· '+v.title_state:''}</div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px">${v.exterior||''}${v.exterior&&v.upholstery?' · ':''}${v.upholstery||''} ${v.last_title_state?'· '+v.last_title_state:''}</div>
         <button class="mob-open-btn" onclick="openFleetDrawer('${v.vin}')">Full Detail →</button>
       </div>
     </div>`;
   });
-
   contacts.forEach(c=>{
     const sc=STATUS_CLASS[c.status]||'st-hold';
     const sl=STATUS_LABEL[c.status]||c.status;
-    const cid=c.id;
-    html+=`<div class="mob-result" id="mob-contact-${cid}">
+    html+=`<div class="mob-result">
       <div class="mob-result-header">
-        <div>
-          <div class="mob-result-vin">${c.contact_type||'broker'} · ${c.region||''}</div>
-          <div class="mob-result-title">${c.company}</div>
-        </div>
-        <span class="status-badge ${sc}" style="margin-left:8px;flex-shrink:0">${sl}</span>
+        <div><div class="mob-result-vin">${c.contact_type||'broker'} · ${c.region||''}</div><div class="mob-result-title">${c.company}</div></div>
+        <span class="status-badge ${sc}">${sl}</span>
       </div>
       <div class="mob-result-body">
-
-        <!-- Read view -->
-        <div id="mob-cread-${cid}">
-          <div class="mob-field-grid">
-            ${c.contact_name?`<div class="mob-field" style="grid-column:span 2"><div class="mob-field-label">Contact</div><div class="mob-field-value">${c.contact_name}${c.contact_title?' · <span style="color:var(--muted);font-size:11px">'+c.contact_title+'</span>':''}</div></div>`:''}
-            ${c.phone?`<div class="mob-field"><div class="mob-field-label">Phone</div><div class="mob-field-value"><a href="tel:${c.phone}" style="color:var(--s65);text-decoration:none">${c.phone}</a></div></div>`:''}
-            ${c.email?`<div class="mob-field" style="grid-column:span 2"><div class="mob-field-label">Email</div><div class="mob-field-value" style="font-size:11px"><a href="mailto:${c.email}" style="color:var(--accent);text-decoration:none">${c.email}</a></div></div>`:''}
-            <div class="mob-field"><div class="mob-field-label">Location</div><div class="mob-field-value">${c.location||'—'}</div></div>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:4px">
-            <button class="mob-open-btn" style="background:var(--s65)" onclick="mobShowEdit('${cid}')">Edit Contact Info</button>
-            <button class="mob-open-btn" onclick="switchTab('crm');openCRMDrawer('${cid}')">Full CRM →</button>
-          </div>
+        <div class="mob-field-grid">
+          ${c.phone?`<div class="mob-field"><div class="mob-field-label">Phone</div><div class="mob-field-value"><a href="tel:${c.phone}" style="color:var(--s65);text-decoration:none">${c.phone}</a></div></div>`:''}
+          ${c.email?`<div class="mob-field" style="grid-column:span 2"><div class="mob-field-label">Email</div><div class="mob-field-value" style="font-size:11px"><a href="mailto:${c.email}" style="color:var(--accent);text-decoration:none">${c.email}</a></div></div>`:''}
+          <div class="mob-field"><div class="mob-field-label">Location</div><div class="mob-field-value">${c.location||'—'}</div></div>
         </div>
-
-        <!-- Edit view (hidden by default) -->
-        <div id="mob-cedit-${cid}" style="display:none">
-          <div class="mob-edit-grid">
-            <div class="mob-edit-field">
-              <div class="mob-field-label">Contact Name</div>
-              <input class="mob-edit-input" id="mob-name-${cid}" value="${(c.contact_name||'').replace(/"/g,'&quot;')}" placeholder="e.g. Mike Johnson">
-            </div>
-            <div class="mob-edit-field">
-              <div class="mob-field-label">Title</div>
-              <input class="mob-edit-input" id="mob-title-${cid}" value="${(c.contact_title||'').replace(/"/g,'&quot;')}" placeholder="e.g. Used Car Mgr">
-            </div>
-            <div class="mob-edit-field">
-              <div class="mob-field-label">Phone</div>
-              <input class="mob-edit-input" id="mob-phone-${cid}" type="tel" value="${(c.phone||'').replace(/"/g,'&quot;')}" placeholder="(214) 555-1234">
-            </div>
-            <div class="mob-edit-field">
-              <div class="mob-field-label">Email</div>
-              <input class="mob-edit-input" id="mob-email-${cid}" type="email" value="${(c.email||'').replace(/"/g,'&quot;')}" placeholder="name@dealer.com">
-            </div>
-            <div class="mob-edit-field" style="grid-column:span 2">
-              <div class="mob-field-label">Location</div>
-              <input class="mob-edit-input" id="mob-loc-${cid}" value="${(c.location||'').replace(/"/g,'&quot;')}" placeholder="Dallas, TX">
-            </div>
-          </div>
-
-          <!-- Status selector -->
-          <div class="mob-field-label" style="margin:10px 0 5px">Status</div>
-          <select class="mob-status-sel" id="mob-status-${cid}">
-            <option value="pending" ${c.status==='pending'?'selected':''}>⏳ Pending</option>
-            <option value="active" ${c.status==='active'?'selected':''}>✅ Active</option>
-            <option value="scheduled" ${c.status==='scheduled'?'selected':''}>📅 Call Scheduled</option>
-            <option value="declined" ${c.status==='declined'?'selected':''}>❌ Declined</option>
-            <option value="inbound" ${c.status==='inbound'?'selected':''}>⭐ Inbound</option>
-            <option value="hold" ${c.status==='hold'?'selected':''}>⏸ On Hold</option>
-          </select>
-
-          <!-- Quick log entry -->
-          <div class="mob-field-label" style="margin:10px 0 5px">Quick Log Entry</div>
-          <select class="mob-status-sel" id="mob-logtype-${cid}" style="margin-bottom:6px">
-            <option value="note">📝 Note</option>
-            <option value="call">📞 Call</option>
-            <option value="sent">📤 Email Sent</option>
-            <option value="reply">📥 Reply Received</option>
-            <option value="declined">❌ Declined</option>
-          </select>
-          <textarea class="mob-log-area" id="mob-logtext-${cid}" placeholder="What happened? (optional — leave blank to skip)"></textarea>
-
-          <div style="display:flex;gap:8px;margin-top:10px">
-            <button class="mob-open-btn" onclick="mobSaveContact('${cid}')">Save</button>
-            <button class="mob-open-btn" style="background:#666" onclick="mobShowRead('${cid}')">Cancel</button>
-          </div>
-        </div>
-
+        <button class="mob-open-btn" onclick="switchTab('crm');openCRMDrawer('${c.id}')">Full CRM →</button>
       </div>
     </div>`;
   });
-
   el.innerHTML=html;
-}
-
-function mobShowEdit(cid){
-  document.getElementById('mob-cread-'+cid).style.display='none';
-  document.getElementById('mob-cedit-'+cid).style.display='block';
-  // Focus first empty field
-  const nameEl=document.getElementById('mob-name-'+cid);
-  if(nameEl&&!nameEl.value) nameEl.focus();
-  else document.getElementById('mob-phone-'+cid)?.focus();
-}
-function mobShowRead(cid){
-  document.getElementById('mob-cread-'+cid).style.display='block';
-  document.getElementById('mob-cedit-'+cid).style.display='none';
-}
-
-async function mobSaveContact(cid){
-  const btn=document.querySelector(`#mob-cedit-${cid} .mob-open-btn`);
-  if(btn){btn.textContent='Saving…';btn.disabled=true;}
-
-  const updates={
-    contact_name: document.getElementById('mob-name-'+cid).value.trim()||null,
-    contact_title:document.getElementById('mob-title-'+cid).value.trim()||null,
-    phone:        document.getElementById('mob-phone-'+cid).value.trim()||null,
-    email:        document.getElementById('mob-email-'+cid).value.trim()||null,
-    location:     document.getElementById('mob-loc-'+cid).value.trim()||null,
-    status:       document.getElementById('mob-status-'+cid).value,
-    last_activity:new Date().toISOString(),
-  };
-
-  const{error}=await db.from('contacts').update(updates).eq('id',cid);
-  if(error){toast('Save failed: '+error.message,true);if(btn){btn.textContent='Save';btn.disabled=false;}return;}
-
-  // Update local cache
-  const c=allContacts.find(x=>x.id===cid);
-  if(c)Object.assign(c,updates);
-
-  // Optional log entry
-  const logText=document.getElementById('mob-logtext-'+cid).value.trim();
-  if(logText){
-    const logType=document.getElementById('mob-logtype-'+cid).value;
-    await db.from('contact_log').insert({contact_id:cid,entry_type:logType,body:logText});
-  }
-
-  toast('Saved ✓');
-  // Re-run search to refresh the read view with new data
-  const q=document.getElementById('mob-input').value;
-  mobileSearch(q);
 }
 
 loadAll();
