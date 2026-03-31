@@ -231,11 +231,13 @@ td.num{font-family:var(--mono);text-align:right;}
 .doc-open-link:hover{background:var(--accent);}
 .doc-replace-link{display:inline-block;margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--muted);text-decoration:none;cursor:pointer;}
 .doc-replace-link:hover{color:var(--accent);}
-.img-upload-zone img{width:100%;height:100%;object-fit:cover;};border:2px dashed var(--rule);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:all .15s;margin-bottom:14px;position:relative;overflow:hidden;}
+
+/* ── Vehicle photo zone — fixed and clean ── */
+.img-upload-zone{width:100%;height:200px;border:2px dashed var(--rule);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:all .15s;margin-bottom:14px;position:relative;overflow:hidden;}
 .img-upload-zone:hover{border-color:var(--ink);}
 .img-upload-zone.has-img{border-style:solid;border-color:var(--s65);padding:0;}
-.img-upload-zone img{width:100%;height:100%;object-fit:cover;}
-.img-upload-zone .img-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--mono);font-size:11px;opacity:0;transition:opacity .15s;}
+.img-upload-zone img{width:100%;height:100%;object-fit:contain;background:#f0f4f9;}
+.img-upload-zone .img-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--mono);font-size:11px;opacity:0;transition:opacity .15s;pointer-events:none;}
 .img-upload-zone:hover .img-overlay{opacity:1;}
 .img-upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
 
@@ -761,17 +763,10 @@ td.num{font-family:var(--mono);text-align:right;}
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ── doc_type mapping: slot ID -> DB value ──────────────────────────────────
 const DOC_TYPE_MAP = {
-  carfax:        'carfax',
-  goodcar:       'goodcar',
-  iseecars:      'iseecars',
-  autocheck:     'autocheck',
-  windowsticker: 'window_sticker',
-  publicrecords: 'public_record',
-  ppi:           'ppi',
+  carfax:'carfax',goodcar:'goodcar',iseecars:'iseecars',autocheck:'autocheck',
+  windowsticker:'window_sticker',publicrecords:'public_record',ppi:'ppi',
 };
-// Reverse: DB value -> slot ID
 const DOC_SLOT_MAP = Object.fromEntries(Object.entries(DOC_TYPE_MAP).map(([k,v])=>[v,k]));
 
 let allVehicles=[], allContacts=[], allAlerts=[], allLogs=[], allServiceRecs=[];
@@ -781,8 +776,7 @@ let fleetPage=0;
 
 function toast(msg,isError=false){
   const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.className='show'+(isError?' error':'');
+  t.textContent=msg;t.className='show'+(isError?' error':'');
   setTimeout(()=>t.className='',3000);
 }
 function setSyncStatus(s){
@@ -813,14 +807,10 @@ async function loadAll(){
       db.from('vehicle_service').select('*').order('record_date',{ascending:true}),
     ]);
     if(vR.error)throw vR.error;
-    // Merge vehicle_market fields into each vehicle object
     const marketByVin={};
     (mR.data||[]).forEach(m=>marketByVin[m.vin]=m);
     allVehicles=(vR.data||[]).map(v=>({...v,...(marketByVin[v.vin]||{})}));
-    allContacts=cR.data||[];
-    allAlerts=aR.data||[];
-    allLogs=lR.data||[];
-    allServiceRecs=sR.data||[];
+    allContacts=cR.data||[];allAlerts=aR.data||[];allLogs=lR.data||[];allServiceRecs=sR.data||[];
     updateFleetStats();applyFilters();updateCRMStats();renderCRM();
     document.getElementById('fleet-tab-count').textContent=allVehicles.length;
     document.getElementById('crm-tab-count').textContent=allContacts.length;
@@ -891,27 +881,17 @@ function applyFilters(){
   const hasAcc=v=>{const a=v.accident_count;if(!a||a==='None'||a==='0'||a==='0 - Clean'||a==='Clean')return false;const n=parseInt(a);if(!isNaN(n))return n>0;return true;};
   const stNorm=s=>(s||'').toLowerCase();
   const ranked=v=>v.apex_rank!=null&&v.apex_rank!=='';
-
   let data=allVehicles.filter(v=>{
-    const t=v.trim||'';
-    if(!trimFilter.has(t))return false;
-    const odo=Number(v.curr_odo)||0;
-    if(odo<odoMin||odo>odoMax)return false;
-    if(!hasAcc(v)&&!acc0)return false;
-    if(hasAcc(v)&&!acc1)return false;
+    const t=v.trim||'';if(!trimFilter.has(t))return false;
+    const odo=Number(v.curr_odo)||0;if(odo<odoMin||odo>odoMax)return false;
+    if(!hasAcc(v)&&!acc0)return false;if(hasAcc(v)&&!acc1)return false;
     const st=stNorm(v.acq_status);
-    const isTarget=['active','target'].includes(st);
-    const isWatch=st.includes('watch');
-    const isDq=st.includes('dq');
-    const isUniverse=!v.acq_status||st==='universe';
-    if(isTarget&&!stTarget)return false;
-    if(isWatch&&!stWatch)return false;
-    if(isUniverse&&!stUniverse)return false;
-    if(isDq&&!stDq)return false;
+    const isTarget=['active','target'].includes(st);const isWatch=st.includes('watch');
+    const isDq=st.includes('dq');const isUniverse=!v.acq_status||st==='universe';
+    if(isTarget&&!stTarget)return false;if(isWatch&&!stWatch)return false;
+    if(isUniverse&&!stUniverse)return false;if(isDq&&!stDq)return false;
     const yr=Number(v.year)||2017;
-    if(yr===2017&&!yr2017)return false;
-    if(yr===2016&&!yr2016)return false;
-    if(yr===2015&&!yr2015)return false;
+    if(yr===2017&&!yr2017)return false;if(yr===2016&&!yr2016)return false;if(yr===2015&&!yr2015)return false;
     if(goldOnly&&!ranked(v))return false;
     if(swTrans&&!boolVal(v.trans_confirmed))return false;
     if(swIgn&&!boolVal(v.ign_confirmed))return false;
@@ -919,18 +899,12 @@ function applyFilters(){
     if(q&&![(v.vin||''),(v.trim||''),(v.last_title_state||''),(v.exterior||''),(v.sale_history||'')].some(f=>f.toLowerCase().includes(q)))return false;
     return true;
   });
-
   data.sort((a,b)=>{
     let av=a[sortCol],bv=b[sortCol];
-    // Nulls last
-    if(av==null&&bv==null)return 0;
-    if(av==null)return 1;
-    if(bv==null)return -1;
-    av=isNaN(Number(av))?av:Number(av);
-    bv=isNaN(Number(bv))?bv:Number(bv);
+    if(av==null&&bv==null)return 0;if(av==null)return 1;if(bv==null)return -1;
+    av=isNaN(Number(av))?av:Number(av);bv=isNaN(Number(bv))?bv:Number(bv);
     return sortDir==='desc'?bv-av:av-bv;
   });
-
   const total=data.length;
   const page=data.slice(fleetPage*PAGE_SIZE,(fleetPage+1)*PAGE_SIZE);
   renderFleet(page);renderPagination(total);
@@ -1075,17 +1049,11 @@ async function openFleetDrawer(vin){
   document.getElementById('sc-ultra').textContent=$m(v.price_ultra_jan28);
   document.getElementById('fd-notes').value=v.research_notes||'';
 
-  // Service records from vehicle_service table
   const svcs=allServiceRecs.filter(s=>s.vin===vin);
   document.getElementById('fd-service').innerHTML=svcs.length
-    ?svcs.map(s=>`<div class="svc-row">
-        <span class="svc-date">${s.record_date||'—'}</span>
-        <span class="svc-odo">${s.odometer?Number(s.odometer).toLocaleString()+' mi':'—'}</span>
-        <span class="svc-loc">${s.location||s.details||'—'}</span>
-      </div>`).join('')
+    ?svcs.map(s=>`<div class="svc-row"><span class="svc-date">${s.record_date||'—'}</span><span class="svc-odo">${s.odometer?Number(s.odometer).toLocaleString()+' mi':'—'}</span><span class="svc-loc">${s.location||s.details||'—'}</span></div>`).join('')
     :'<div class="svc-empty">No service records</div>';
 
-  // External links
   const links=[
     ['BaT',`https://bringatrailer.com/listing/mercedes-benz-s65-amg/?q=${vin}`,'#1a1a2e','#e8c870'],
     ['C&B',`https://carsandbids.com/search#q=${vin}`,'#2d5016','#9ecf65'],
@@ -1098,49 +1066,33 @@ async function openFleetDrawer(vin){
     `<a href="${u}" target="_blank" style="background:${bg};color:${c};display:inline-flex;align-items:center;padding:5px 12px;border-radius:4px;font-family:var(--mono);font-size:10px;font-weight:500;text-decoration:none;text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">${l}</a>`
   ).join('');
 
-  // Vehicle photo
   const iz=document.getElementById('img-zone');iz.classList.remove('has-img');iz.querySelector('img')?.remove();
   if(v.image_url){
     const{data:su}=await db.storage.from(BUCKET).createSignedUrl(v.image_url,3600);
     if(su){iz.classList.add('has-img');const im=document.createElement('img');im.src=su.signedUrl;iz.prepend(im);}
   }
 
-  // Load documents from documents table by VIN
   await loadDocSlots(vin);
-
   document.getElementById('fleet-overlay').classList.add('open');
   document.getElementById('fleet-drawer').classList.add('open');
 }
 
-// ── Documents: load slots from DB by VIN ──────────────────────────────────
 async function loadDocSlots(vin){
   const{data:docs,error}=await db.from('documents').select('*').eq('vin',vin);
   if(error)console.error('doc load error',error);
-
-  // Reset all slots first
   Object.keys(DOC_TYPE_MAP).forEach(slotId=>{
-    const slot=document.getElementById(`slot-${slotId}`);
-    if(!slot)return;
+    const slot=document.getElementById(`slot-${slotId}`);if(!slot)return;
     slot.classList.remove('has-file');
-    const fi=slot.querySelector('input[type=file]');
-    if(fi)fi.style.pointerEvents='auto';
-    const st=slot.querySelector('.doc-slot-status');
-    if(st)st.textContent='Click or drop PDF';
+    const fi=slot.querySelector('input[type=file]');if(fi)fi.style.pointerEvents='auto';
+    const st=slot.querySelector('.doc-slot-status');if(st)st.textContent='Click or drop PDF';
   });
-
-  // Populate slots that have files
   (docs||[]).forEach(doc=>{
-    const slotId=DOC_SLOT_MAP[doc.doc_type];
-    if(!slotId)return;
-    const slot=document.getElementById(`slot-${slotId}`);
-    if(!slot)return;
+    const slotId=DOC_SLOT_MAP[doc.doc_type];if(!slotId)return;
+    const slot=document.getElementById(`slot-${slotId}`);if(!slot)return;
     slot.classList.add('has-file');
-    const fi=slot.querySelector('input[type=file]');
-    if(fi)fi.style.pointerEvents='none';
+    const fi=slot.querySelector('input[type=file]');if(fi)fi.style.pointerEvents='none';
     const st=slot.querySelector('.doc-slot-status');
-    if(st)st.innerHTML=`✓ On file<br>
-      <a class="doc-open-link" href="${doc.storage_url}" target="_blank">Open PDF</a><br>
-      <a class="doc-replace-link" href="#" onclick="replaceDoc(event,'${slotId}')">Replace</a>`;
+    if(st)st.innerHTML=`✓ On file<br><a class="doc-open-link" href="${doc.storage_url}" target="_blank">Open PDF</a><br><a class="doc-replace-link" href="#" onclick="replaceDoc(event,'${slotId}')">Replace</a>`;
   });
 }
 
@@ -1188,14 +1140,8 @@ async function doUploadDoc(file,slotId){
   const{error:uE}=await db.storage.from(BUCKET).upload(storagePath,file,{upsert:true});
   if(uE){toast('Upload failed: '+uE.message,true);return;}
   const publicUrl=`${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${storagePath}`;
-  // Upsert: delete existing then insert fresh
   await db.from('documents').delete().eq('vin',activeFD.vin).eq('doc_type',docType);
-  const{error:iE}=await db.from('documents').insert({
-    vin:activeFD.vin,
-    doc_type:docType,
-    storage_url:publicUrl,
-    uploaded_at:new Date().toISOString()
-  });
+  const{error:iE}=await db.from('documents').insert({vin:activeFD.vin,doc_type:docType,storage_url:publicUrl,uploaded_at:new Date().toISOString()});
   if(iE){toast('DB save failed: '+iE.message,true);return;}
   await loadDocSlots(activeFD.vin);
   toast(`${slotId} saved ✓`);
@@ -1212,7 +1158,6 @@ async function saveNotes(){
   toast('Notes saved ✓');
 }
 
-// ── CRM ───────────────────────────────────────────────────────────────────
 const STATUS_CLASS={pending:'st-pending',active:'st-active',declined:'st-declined',scheduled:'st-scheduled',inbound:'st-inbound',hold:'st-hold'};
 const STATUS_LABEL={pending:'Pending',active:'Active',declined:'Declined',scheduled:'Call Scheduled',inbound:'Inbound',hold:'On Hold'};
 
@@ -1230,8 +1175,7 @@ function renderCRM(){
   const q=(document.getElementById('crm-search').value||'').toLowerCase();
   const sort=document.getElementById('crm-sort').value;
   let data=allContacts.filter(c=>{
-    if(sf&&c.status!==sf)return false;
-    if(rf&&c.region!==rf)return false;
+    if(sf&&c.status!==sf)return false;if(rf&&c.region!==rf)return false;
     if(tf&&c.contact_type!==tf)return false;
     if(q&&![(c.company||''),(c.location||''),(c.notes||'')].some(f=>f.toLowerCase().includes(q)))return false;
     return true;
@@ -1317,8 +1261,7 @@ async function addLogEntry(){
     c.last_activity=new Date().toISOString();
   }
   await db.from('broker_contacts').update({last_activity:new Date().toISOString()}).eq('id',activeCRM);
-  openCRMDrawer(activeCRM);
-  toast('Logged ✓');
+  openCRMDrawer(activeCRM);toast('Logged ✓');
 }
 
 async function addVINAlert(){
@@ -1330,18 +1273,15 @@ async function addVINAlert(){
   const{data:newAlert,error}=await db.from('contact_alerts').insert({contact_id:activeCRM,vehicle_id:vehicle?.id||null,vin,ceiling_usd:ceiling,active:true}).select().single();
   if(error){toast('Alert save failed',true);return;}
   allAlerts.push(newAlert);
-  document.getElementById('add-vin-input').value='';
-  document.getElementById('add-ceiling-input').value='';
-  openCRMDrawer(activeCRM);
-  toast('Alert added ✓');
+  document.getElementById('add-vin-input').value='';document.getElementById('add-ceiling-input').value='';
+  openCRMDrawer(activeCRM);toast('Alert added ✓');
 }
 
 async function removeVINAlert(alertId){
   const{error}=await db.from('contact_alerts').delete().eq('id',alertId);
   if(error){toast('Remove failed',true);return;}
   allAlerts=allAlerts.filter(a=>a.id!==alertId);
-  openCRMDrawer(activeCRM);
-  toast('Alert removed ✓');
+  openCRMDrawer(activeCRM);toast('Alert removed ✓');
 }
 
 async function openAddContact(){
@@ -1360,17 +1300,13 @@ async function openAddContact(){
     last_activity:new Date().toISOString()
   }).select().single();
   if(error){toast('Add failed: '+error.message,true);return;}
-  allContacts.unshift(nc);
-  updateCRMStats();renderCRM();switchTab('crm');
-  toast(`${company} added ✓`);
-  openCRMDrawer(nc.id);
+  allContacts.unshift(nc);updateCRMStats();renderCRM();switchTab('crm');
+  toast(`${company} added ✓`);openCRMDrawer(nc.id);
 }
 
-// ── Mobile search ──────────────────────────────────────────────────────────
 function mobileSearch(q){
   const el=document.getElementById('mob-results');
-  q=q.trim();
-  if(q.length<2){el.innerHTML='';return;}
+  q=q.trim();if(q.length<2){el.innerHTML='';return;}
   const ql=q.toLowerCase();
   const vehicles=allVehicles.filter(v=>(v.vin||'').toLowerCase().includes(ql)).slice(0,3);
   const contacts=allContacts.filter(c=>(c.company||'').toLowerCase().includes(ql)||(c.contact_name||'').toLowerCase().includes(ql)).slice(0,3);
@@ -1400,8 +1336,7 @@ function mobileSearch(q){
     </div>`;
   });
   contacts.forEach(c=>{
-    const sc=STATUS_CLASS[c.status]||'st-hold';
-    const sl=STATUS_LABEL[c.status]||c.status;
+    const sc=STATUS_CLASS[c.status]||'st-hold';const sl=STATUS_LABEL[c.status]||c.status;
     html+=`<div class="mob-result">
       <div class="mob-result-header">
         <div><div class="mob-result-vin">${c.contact_type||'broker'} · ${c.region||''}</div><div class="mob-result-title">${c.company}</div></div>
