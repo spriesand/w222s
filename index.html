@@ -233,12 +233,13 @@ td.num{font-family:var(--mono);text-align:right;}
 .doc-replace-link:hover{color:var(--accent);}
 
 /* ── Vehicle photo zone — fixed and clean ── */
-.img-upload-zone{width:100%;height:200px;border:2px dashed var(--rule);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:all .15s;margin-bottom:14px;position:relative;overflow:hidden;}
+.img-upload-zone{width:100%;height:160px;border:2px dashed var(--rule);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:all .15s;margin-bottom:14px;position:relative;overflow:hidden;}
 .img-upload-zone:hover{border-color:var(--ink);}
 .img-upload-zone.has-img{border-style:solid;border-color:var(--s65);padding:0;}
 .img-upload-zone img{width:100%;height:100%;object-fit:contain;background:#f0f4f9;}
 .img-upload-zone .img-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--mono);font-size:11px;opacity:0;transition:opacity .15s;pointer-events:none;}
 .img-upload-zone:hover .img-overlay{opacity:1;}
+.img-upload-zone.has-img .img-placeholder{display:none;}
 .img-upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;}
 
 .status-select,.log-input-field{width:100%;border:1px solid var(--rule);border-radius:4px;padding:7px 10px;font-family:var(--mono);font-size:12px;background:#fff;color:var(--ink);outline:none;margin-bottom:10px;cursor:pointer;}
@@ -590,8 +591,8 @@ td.num{font-family:var(--mono);text-align:right;}
     <div class="section-head">Vehicle Photo</div>
     <div class="img-upload-zone" id="img-zone">
       <input type="file" accept="image/*" id="img-file-input" onchange="uploadVehicleImage(this)" style="display:none">
-      <div style="font-size:24px">📷</div>
-      <div style="font-family:var(--mono);font-size:11px;color:var(--muted)">Drop or click to upload photo</div>
+      <div class="img-placeholder" style="font-size:24px">📷</div>
+      <div class="img-placeholder" style="font-family:var(--mono);font-size:11px;color:var(--muted)">Drop or click to upload photo</div>
       <div class="img-overlay">Change photo</div>
     </div>
     <button class="btn" style="width:100%;margin-bottom:14px" onclick="document.getElementById('img-file-input').click()">📷 Upload / Change Photo</button>
