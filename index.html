@@ -849,7 +849,7 @@ function updateFleetStats(){
   document.getElementById('cnt-watch').textContent=allVehicles.filter(v=>stNorm(v.acq_status).includes('watch')).length;
   document.getElementById('cnt-universe').textContent=allVehicles.filter(v=>!v.acq_status||stNorm(v.acq_status)==='universe').length;
   document.getElementById('cnt-dq').textContent=allVehicles.filter(v=>stNorm(v.acq_status).includes('dq')).length;
-  const hasAcc=v=>v.accident_count&&v.accident_count!=='None'&&v.accident_count!=='0'&&v.accident_count!=='0 - Clean';
+  const hasAcc=v=>{const a=v.accident_count;if(!a||a==='None'||a==='0'||a==='0 - Clean'||a==='Clean')return false;const n=parseInt(a);if(!isNaN(n))return n>0;return true;};
   document.getElementById('cnt-acc0').textContent=allVehicles.filter(v=>!hasAcc(v)).length;
   document.getElementById('cnt-acc1').textContent=allVehicles.filter(v=>hasAcc(v)).length;
   document.getElementById('cnt-yr2017').textContent=allVehicles.filter(v=>Number(v.year)===2017).length;
@@ -888,7 +888,7 @@ function applyFilters(){
   const swSusp=document.getElementById('sw-susp').checked;
   const sortVal=document.getElementById('fleet-sort').value;
   const[sortCol,sortDir]=sortVal.split('.');
-  const hasAcc=v=>v.accident_count&&v.accident_count!=='None'&&v.accident_count!=='0'&&v.accident_count!=='0 - Clean';
+  const hasAcc=v=>{const a=v.accident_count;if(!a||a==='None'||a==='0'||a==='0 - Clean'||a==='Clean')return false;const n=parseInt(a);if(!isNaN(n))return n>0;return true;};
   const stNorm=s=>(s||'').toLowerCase();
   const ranked=v=>v.apex_rank!=null&&v.apex_rank!=='';
 
@@ -965,7 +965,7 @@ function flagChip(s,dqReason){
 function renderFleet(data){
   const tbody=document.getElementById('fleet-tbody');
   if(!data.length){tbody.innerHTML=`<tr class="empty-row"><td colspan="44">No vehicles match current filters.</td></tr>`;return;}
-  const hasAcc=v=>v.accident_count&&v.accident_count!=='None'&&v.accident_count!=='0'&&v.accident_count!=='0 - Clean';
+  const hasAcc=v=>{const a=v.accident_count;if(!a||a==='None'||a==='0'||a==='0 - Clean'||a==='Clean')return false;const n=parseInt(a);if(!isNaN(n))return n>0;return true;};
   tbody.innerHTML=data.map(v=>{
     const gi=(Number(v.curr_odo)>=70000&&Number(v.curr_odo)<=100000);
     const st=(v.acq_status||'').toLowerCase();
