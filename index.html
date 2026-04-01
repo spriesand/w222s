@@ -326,6 +326,70 @@ td.num{font-family:var(--mono);text-align:right;}
 .mob-status-sel{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 12px;font-family:var(--mono);font-size:13px;background:#fff;color:var(--ink);outline:none;-webkit-appearance:none;}
 .mob-log-area{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 12px;font-family:var(--sans);font-size:13px;background:#fff;color:var(--ink);outline:none;resize:none;min-height:72px;-webkit-appearance:none;}
 .mob-log-area:focus,.mob-status-sel:focus{border-color:var(--ink);}
+
+/* ── Market Intelligence Tab ───────────────────────────── */
+:root{--bat-orange:#e06a2c;--active-green:#2d6a3f;--dead-red:#8b2a2a;}
+.mi-header{background:linear-gradient(135deg,#1a0f05 0%,#2d1a08 100%);padding:20px 28px;border-bottom:2px solid var(--bat-orange);}
+.mi-header h2{font-family:var(--serif);font-size:18px;color:#f0e8d8;margin-bottom:4px;}
+.mi-header p{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:.08em;}
+.mi-stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--rule);}
+.mi-stat{background:#fff;padding:16px 20px;border-right:1px solid var(--rule);}
+.mi-stat:last-child{border-right:none;}
+.mi-stat-val{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.mi-stat-val.orange{color:var(--bat-orange);}
+.mi-stat-val.gold{color:var(--gold);}
+.mi-stat-val.red{color:var(--accent);}
+.mi-stat-label{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
+.mi-section-head{display:flex;align-items:center;justify-content:space-between;padding:14px 28px 10px;border-bottom:1px solid var(--rule);background:#faf8f4;}
+.mi-section-head h3{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink);}
+.mi-filter-row{display:flex;gap:6px;align-items:center;}
+.mi-filter-btn{font-family:var(--mono);font-size:9px;padding:3px 10px;border:1px solid var(--rule);border-radius:2px;background:#fff;cursor:pointer;color:var(--muted);letter-spacing:.06em;}
+.mi-filter-btn:hover{border-color:var(--gold);color:var(--ink);}
+.mi-filter-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.bat-table-wrap{margin:0 28px 20px;border:1px solid var(--bat-orange);background:#fff;overflow:hidden;border-radius:4px;}
+.bat-table-header{background:var(--bat-orange);padding:10px 14px;display:flex;align-items:center;gap:10px;}
+.bat-logo{font-family:var(--mono);font-size:10px;font-weight:700;color:#fff;background:rgba(0,0,0,0.25);padding:2px 8px;border-radius:2px;letter-spacing:.1em;}
+.bat-table-header h4{font-family:var(--mono);font-size:11px;color:#fff;letter-spacing:.06em;}
+.bat-table-meta{margin-left:auto;font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.7);}
+.bat-table{width:100%;border-collapse:collapse;font-size:11px;}
+.bat-table th{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.1em;padding:7px 10px;background:#fff8f5;border-bottom:1px solid #f0d4c0;color:var(--muted);white-space:nowrap;}
+.bat-table td{font-family:var(--mono);font-size:10px;padding:8px 10px;border-bottom:1px solid #faeee6;vertical-align:middle;}
+.bat-table tr:last-child td{border-bottom:none;}
+.bat-table tr:hover td{background:#fff8f5;}
+.bat-row-2017 td{border-left:3px solid var(--gold);}
+.bat-sold{color:var(--active-green);font-weight:600;}
+.bat-rnm{color:var(--accent);}
+.year-tag{font-family:var(--mono);font-size:8px;padding:1px 6px;border-radius:2px;font-weight:600;}
+.year-2017{background:#fff8e8;color:var(--gold);border:1px solid var(--gold);}
+.year-2016{background:#e8f0ff;color:var(--s65);border:1px solid var(--s65);}
+.year-2015{background:#f0f0f0;color:#555;border:1px solid #bbb;}
+.gold-tag{font-family:var(--mono);font-size:8px;padding:1px 5px;border-radius:2px;background:#fff8e8;color:var(--gold);border:1px solid var(--gold);}
+.link-status{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9px;}
+.link-dot{width:6px;height:6px;border-radius:50%;display:inline-block;}
+.status-active .link-dot{background:var(--active-green);}
+.status-active{color:var(--active-green);}
+.status-dead .link-dot{background:var(--accent);}
+.status-dead{color:var(--accent);}
+.status-unverified .link-dot{background:var(--muted);}
+.status-unverified{color:var(--muted);}
+.bat-url-link{font-family:var(--mono);font-size:9px;color:var(--bat-orange);text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;display:inline-block;}
+.bat-url-link:hover{text-decoration:underline;}
+.scan-table-wrap{margin:0 28px 20px;border:1px solid var(--rule);background:#fff;overflow:hidden;border-radius:4px;}
+.scan-table{width:100%;border-collapse:collapse;font-size:11px;}
+.scan-table th{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.1em;padding:7px 10px;background:#f5f5f4;border-bottom:1px solid var(--rule);color:var(--muted);white-space:nowrap;}
+.scan-table td{font-family:var(--mono);font-size:10px;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:middle;}
+.scan-table tr:last-child td{border-bottom:none;}
+.scan-table tr:hover td{background:#fafaf8;}
+.scan-tp{color:var(--active-green);font-weight:600;}
+.scan-flag{background:#fff8e8;}
+.mi-empty{font-family:var(--mono);font-size:11px;color:var(--muted);padding:24px 28px;text-align:center;}
+#tab-market{display:none;}
+#tab-market.tab-panel-active{display:block;}
+@media(max-width:768px){
+  .mi-stats{grid-template-columns:repeat(2,1fr);}
+  .bat-table-wrap,.scan-table-wrap{margin:0 0 16px;overflow-x:auto;}
+  .mi-section-head{padding:12px 12px 8px;}
+}
 </style>
 </head>
 <body>
@@ -346,6 +410,7 @@ td.num{font-family:var(--mono);text-align:right;}
 <div class="tab-bar">
   <div class="tab active" onclick="switchTab('fleet')">Fleet Database <span class="tab-badge" id="fleet-tab-count">—</span></div>
   <div class="tab" onclick="switchTab('crm')">Broker CRM <span class="tab-badge" id="crm-tab-count">—</span></div>
+  <div class="tab" onclick="switchTab('market')">Market Intelligence <span class="tab-badge" id="market-tab-count" style="background:var(--bat-orange);color:#fff;">BaT</span></div>
   <div class="tab-actions">
     <button class="btn btn-accent" onclick="openAddContact()">+ Add Contact</button>
   </div>
@@ -576,6 +641,140 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 </div>
 
+<!-- MARKET INTELLIGENCE TAB -->
+<div id="tab-market">
+  <div style="max-width:1200px;margin:0 auto;padding-bottom:40px;">
+
+    <div class="mi-header">
+      <h2>Market Intelligence — BaT Comparables &amp; Listing History</h2>
+      <p id="mi-header-meta">Loading from Supabase…</p>
+    </div>
+
+    <!-- SUMMARY STATS -->
+    <div class="mi-stats">
+      <div class="mi-stat">
+        <div class="mi-stat-val orange" id="mi-stat-bat-count">—</div>
+        <div class="mi-stat-label">BaT Events Tracked</div>
+      </div>
+      <div class="mi-stat">
+        <div class="mi-stat-val gold" id="mi-stat-s65-ceiling">—</div>
+        <div class="mi-stat-label">2017 S65 Ceiling</div>
+      </div>
+      <div class="mi-stat">
+        <div class="mi-stat-val" id="mi-stat-s600-ceiling">—</div>
+        <div class="mi-stat-label">2017 S600 Ceiling</div>
+      </div>
+      <div class="mi-stat">
+        <div class="mi-stat-val" id="mi-stat-listing-count">—</div>
+        <div class="mi-stat-label">Listing History Episodes</div>
+      </div>
+    </div>
+
+    <!-- BAT COMPARABLES TABLE -->
+    <div class="mi-section-head">
+      <h3>BaT Sales — All Cohorts</h3>
+      <div class="mi-filter-row">
+        <button class="mi-filter-btn active" onclick="filterBat('all',this)">All</button>
+        <button class="mi-filter-btn" onclick="filterBat('S65',this)">S65</button>
+        <button class="mi-filter-btn" onclick="filterBat('S600',this)">S600</button>
+        <button class="mi-filter-btn" onclick="filterBat('2017',this)">2017 Only</button>
+        <button class="mi-filter-btn" onclick="filterBat('gold',this)">GOLD Only</button>
+      </div>
+    </div>
+    <div class="bat-table-wrap">
+      <div class="bat-table-header">
+        <span class="bat-logo">BaT</span>
+        <h4>Bring a Trailer — Confirmed Sales &amp; RNM Events</h4>
+        <div class="bat-table-meta" id="bat-table-meta">Loading…</div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="bat-table" id="bat-table">
+          <thead>
+            <tr>
+              <th>VIN (last 8)</th>
+              <th>Year</th>
+              <th>Trim</th>
+              <th>Miles</th>
+              <th>Result</th>
+              <th>Price</th>
+              <th>Date</th>
+              <th>Bids</th>
+              <th>GOLD</th>
+              <th>Notes</th>
+              <th>BaT Link</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="bat-tbody">
+            <tr><td colspan="12" class="mi-empty">Loading BaT comparables…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- LISTING HISTORY SUMMARY -->
+    <div class="mi-section-head" style="margin-top:12px;">
+      <h3>Listing History — VIN Summary</h3>
+      <div class="mi-filter-row">
+        <button class="mi-filter-btn active" onclick="filterListings('all',this)">All</button>
+        <button class="mi-filter-btn" onclick="filterListings('2017',this)">2017</button>
+        <button class="mi-filter-btn" onclick="filterListings('S65',this)">S65</button>
+        <button class="mi-filter-btn" onclick="filterListings('S600',this)">S600</button>
+      </div>
+    </div>
+    <div class="scan-table-wrap">
+      <div style="overflow-x:auto;">
+        <table class="scan-table" id="listing-summary-table">
+          <thead>
+            <tr>
+              <th>VIN</th>
+              <th>Year</th>
+              <th>Trim</th>
+              <th>Episodes</th>
+              <th>Low Price</th>
+              <th>High Price</th>
+              <th>Max Miles</th>
+              <th>First Seen</th>
+              <th>Last Seen</th>
+            </tr>
+          </thead>
+          <tbody id="listing-summary-tbody">
+            <tr><td colspan="9" class="mi-empty">Loading listing history…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SCAN RESULTS — TRUE POSITIVES -->
+    <div class="mi-section-head" style="margin-top:12px;">
+      <h3>Brave Scan — Active Listing Detections</h3>
+      <div class="mi-filter-row">
+        <span style="font-family:var(--mono);font-size:9px;color:var(--muted);" id="scan-meta">Last scan: —</span>
+      </div>
+    </div>
+    <div class="scan-table-wrap">
+      <div style="overflow-x:auto;">
+        <table class="scan-table" id="scan-table">
+          <thead>
+            <tr>
+              <th>Scan Date</th>
+              <th>Rank</th>
+              <th>VIN</th>
+              <th>Cohort</th>
+              <th>URL</th>
+              <th>Title</th>
+            </tr>
+          </thead>
+          <tbody id="scan-tbody">
+            <tr><td colspan="6" class="mi-empty">Loading scan results…</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <!-- FLEET DRAWER -->
 <div class="drawer-overlay" id="fleet-overlay" onclick="closeFleetDrawer()"></div>
 <div class="drawer" id="fleet-drawer">
@@ -786,10 +985,21 @@ function setSyncStatus(s){
   if(s==='loading'){d.className='sync-dot loading';l.textContent='Syncing…';}
   if(s==='error'){d.className='sync-dot error';l.textContent='Connection error';}
 }
+// ── Market Intelligence globals ───────────────────────────
+let allBatComparables=[], allListingSummary=[], allScanResults=[];
+let batFilter='all', listingFilter='all';
+
 function switchTab(t){
-  document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('active',(i===0&&t==='fleet')||(i===1&&t==='crm')));
+  const tabs=document.querySelectorAll('.tab');
+  tabs.forEach(el=>el.classList.remove('active'));
+  const idx={fleet:0,crm:1,market:2};
+  if(tabs[idx[t]])tabs[idx[t]].classList.add('active');
   document.getElementById('page-fleet').classList.toggle('active',t==='fleet');
   document.getElementById('page-crm').classList.toggle('active',t==='crm');
+  const mkt=document.getElementById('tab-market');
+  if(t==='market'){mkt.classList.add('tab-panel-active');}
+  else{mkt.classList.remove('tab-panel-active');}
+  if(t==='market'&&allBatComparables.length===0)loadMarketData();
 }
 function $m(n){return n!=null&&n!==''?'$'+Number(n).toLocaleString():'—';}
 function oFmt(n){return n?Number(n).toLocaleString()+' mi':'—';}
@@ -823,6 +1033,129 @@ async function loadAll(){
     document.getElementById('loading-banner').textContent='⚠ Could not connect. Check credentials at top of file.';
     console.error(err);
   }
+}
+
+// ── Market Intelligence data load & render ────────────────
+async function loadMarketData(){
+  try{
+    const[bR,lR,sR]=await Promise.all([
+      db.from('bat_comparables').select('*').order('model_year',{ascending:false}).order('hammer_price',{ascending:false}),
+      db.from('vin_listing_summary').select('*').order('model_year',{ascending:false}).order('episode_count',{ascending:false}),
+      db.from('scan_results').select('*').eq('true_positive',true).order('scan_date',{ascending:false}).limit(200),
+    ]);
+    allBatComparables=bR.data||[];
+    allListingSummary=lR.data||[];
+    allScanResults=sR.data||[];
+    renderMarketStats();
+    renderBatTable();
+    renderListingSummary();
+    renderScanResults();
+  }catch(err){
+    console.error('Market data load error:',err);
+    document.getElementById('bat-tbody').innerHTML='<tr><td colspan="12" class="mi-empty">Error loading data — check console</td></tr>';
+  }
+}
+
+function renderMarketStats(){
+  const total=allBatComparables.length;
+  const sold=allBatComparables.filter(r=>r.result==='Sold');
+  const s65_2017=sold.filter(r=>r.model_year===2017&&r.trim==='S65');
+  const s600_2017=sold.filter(r=>r.model_year===2017&&r.trim==='S600');
+  const s65ceil=s65_2017.length?Math.max(...s65_2017.map(r=>r.hammer_price||0)):null;
+  const s600ceil=s600_2017.length?Math.max(...s600_2017.map(r=>r.hammer_price||0)):null;
+  document.getElementById('mi-stat-bat-count').textContent=total;
+  document.getElementById('mi-stat-s65-ceiling').textContent=s65ceil?'$'+s65ceil.toLocaleString():'—';
+  document.getElementById('mi-stat-s600-ceiling').textContent=s600ceil?'$'+s600ceil.toLocaleString():'—';
+  document.getElementById('mi-stat-listing-count').textContent=allListingSummary.reduce((a,r)=>a+(r.episode_count||0),0).toLocaleString();
+  const sold_count=sold.length, rnm_count=allBatComparables.filter(r=>r.rnm).length;
+  document.getElementById('bat-table-meta').textContent=`${total} records · ${sold_count} sold · ${rnm_count} RNM`;
+  const lastScan=allScanResults.length?allScanResults[0].scan_date:'—';
+  document.getElementById('scan-meta').textContent=`Last scan: ${lastScan}`;
+  document.getElementById('mi-header-meta').textContent=`${total} BaT events · ${allListingSummary.length} VINs tracked · Last scan ${lastScan}`;
+  document.getElementById('market-tab-count').textContent=total;
+}
+
+function filterBat(f,btn){
+  batFilter=f;
+  document.querySelectorAll('#bat-section .mi-filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderBatTable();
+}
+
+function renderBatTable(){
+  let rows=allBatComparables;
+  if(batFilter==='S65')rows=rows.filter(r=>r.trim==='S65');
+  else if(batFilter==='S600')rows=rows.filter(r=>r.trim==='S600');
+  else if(batFilter==='2017')rows=rows.filter(r=>r.model_year===2017);
+  else if(batFilter==='gold')rows=rows.filter(r=>r.gold_record);
+  if(!rows.length){document.getElementById('bat-tbody').innerHTML='<tr><td colspan="12" class="mi-empty">No records match filter</td></tr>';return;}
+  document.getElementById('bat-tbody').innerHTML=rows.map(r=>{
+    const is2017=r.model_year===2017;
+    const rowClass=is2017?'bat-row-2017':'';
+    const yearTag=`<span class="year-tag year-${r.model_year}">${r.model_year}</span>`;
+    const resultCell=r.result==='Sold'
+      ?`<span class="bat-sold">🔨 SOLD</span>`
+      :`<span class="bat-rnm">RNM</span>`;
+    const price=r.hammer_price?`<strong>$${Number(r.hammer_price).toLocaleString()}</strong>`:'—';
+    const miles=r.miles?Number(r.miles).toLocaleString()+'k':'—';
+    const goldTag=r.gold_record?'<span class="gold-tag">GOLD</span>':'';
+    const linkStatus=r.link_status||'Unverified';
+    const statusClass=linkStatus==='Active'?'status-active':linkStatus==='Dead'?'status-dead':'status-unverified';
+    const url=r.bat_url_primary?`<a class="bat-url-link" href="${r.bat_url_primary}" target="_blank">${r.bat_url_primary.replace('https://bringatrailer.com/listing/','…/')}</a>`:'—';
+    return `<tr class="${rowClass}">
+      <td>${(r.vin||'').slice(-8)}</td>
+      <td>${yearTag}</td>
+      <td>${r.trim||'—'}</td>
+      <td>${miles}</td>
+      <td>${resultCell}</td>
+      <td>${price}</td>
+      <td>${r.sale_date||'—'}</td>
+      <td>${r.bids||'—'}</td>
+      <td>${goldTag}</td>
+      <td style="max-width:200px;white-space:normal;font-size:9px;">${r.notes||'—'}</td>
+      <td>${url}</td>
+      <td><span class="link-status ${statusClass}"><span class="link-dot"></span>${linkStatus}</span></td>
+    </tr>`;
+  }).join('');
+}
+
+function filterListings(f,btn){
+  listingFilter=f;
+  document.querySelectorAll('#listing-section .mi-filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderListingSummary();
+}
+
+function renderListingSummary(){
+  let rows=allListingSummary;
+  if(listingFilter==='2017')rows=rows.filter(r=>r.model_year===2017);
+  else if(listingFilter==='S65')rows=rows.filter(r=>r.trim==='S65');
+  else if(listingFilter==='S600')rows=rows.filter(r=>r.trim==='S600');
+  if(!rows.length){document.getElementById('listing-summary-tbody').innerHTML='<tr><td colspan="9" class="mi-empty">No records match filter</td></tr>';return;}
+  document.getElementById('listing-summary-tbody').innerHTML=rows.map(r=>`<tr>
+    <td>${r.vin||'—'}</td>
+    <td>${r.model_year||'—'}</td>
+    <td>${r.trim||'—'}</td>
+    <td>${r.episode_count||0}</td>
+    <td>${r.lowest_list_price?'$'+Number(r.lowest_list_price).toLocaleString():'—'}</td>
+    <td>${r.highest_list_price?'$'+Number(r.highest_list_price).toLocaleString():'—'}</td>
+    <td>${r.max_observed_miles?Number(r.max_observed_miles).toLocaleString()+' mi':'—'}</td>
+    <td>${r.first_market_date||'—'}</td>
+    <td>${r.last_market_date||'—'}</td>
+  </tr>`).join('');
+}
+
+function renderScanResults(){
+  const rows=allScanResults;
+  if(!rows.length){document.getElementById('scan-tbody').innerHTML='<tr><td colspan="6" class="mi-empty">No confirmed listing detections yet</td></tr>';return;}
+  document.getElementById('scan-tbody').innerHTML=rows.map(r=>`<tr class="scan-flag">
+    <td>${r.scan_date||'—'}</td>
+    <td>${r.rank||'—'}</td>
+    <td style="font-weight:600;">${r.query_id||'—'}</td>
+    <td>${r.cohort||'—'}</td>
+    <td><a href="${r.url||'#'}" target="_blank" style="font-family:var(--mono);font-size:9px;color:var(--accent);word-break:break-all;">${(r.url||'—').substring(0,80)}${(r.url||'').length>80?'…':''}</a></td>
+    <td style="font-size:9px;max-width:200px;white-space:normal;">${r.title||'—'}</td>
+  </tr>`).join('');
 }
 async function refreshAll(){await loadAll();toast('Refreshed');}
 
