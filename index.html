@@ -327,6 +327,25 @@ td.num{font-family:var(--mono);text-align:right;}
 .mob-log-area{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 12px;font-family:var(--sans);font-size:13px;background:#fff;color:var(--ink);outline:none;resize:none;min-height:72px;-webkit-appearance:none;}
 .mob-log-area:focus,.mob-status-sel:focus{border-color:var(--ink);}
 
+/* ── Listing History in Drawer ─────────────────────────── */
+.lh-table{width:100%;border-collapse:collapse;font-size:10px;margin-bottom:4px;}
+.lh-table th{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.1em;padding:5px 6px;background:#f5f5f4;border-bottom:1px solid var(--rule);color:var(--muted);white-space:nowrap;text-align:left;}
+.lh-table td{font-family:var(--mono);font-size:10px;padding:6px 6px;border-bottom:1px solid var(--rule);vertical-align:middle;}
+.lh-table tr:last-child td{border-bottom:none;}
+.lh-table tr:hover td{background:#fafaf8;}
+.lh-status-active{display:inline-flex;align-items:center;gap:3px;color:#1a6b3a;font-size:9px;}
+.lh-status-active::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:#1a6b3a;}
+.lh-status-dead{display:inline-flex;align-items:center;gap:3px;color:var(--accent);font-size:9px;}
+.lh-status-dead::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);}
+.lh-status-unverified{display:inline-flex;align-items:center;gap:3px;color:var(--muted);font-size:9px;}
+.lh-status-unverified::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--muted);}
+.lh-url-link{color:var(--s65);font-size:9px;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px;display:inline-block;vertical-align:bottom;}
+.lh-url-link:hover{text-decoration:underline;}
+.lh-empty{font-family:var(--mono);font-size:11px;color:var(--muted);padding:12px 0;text-align:center;}
+.lh-summary{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+.lh-sum-pill{font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:10px;border:1px solid var(--rule);color:var(--muted);background:#fafaf8;}
+.lh-sum-pill.active{border-color:#1a6b3a;color:#1a6b3a;background:#f0faf0;}
+.lh-sum-pill.dead{border-color:var(--accent);color:var(--accent);background:#fdf0f0;}
 /* ── Market Intelligence Tab ───────────────────────────── */
 :root{--bat-orange:#e06a2c;--active-green:#2d6a3f;--dead-red:#8b2a2a;}
 .mi-header{background:linear-gradient(135deg,#1a0f05 0%,#2d1a08 100%);padding:20px 28px;border-bottom:2px solid var(--bat-orange);}
@@ -897,6 +916,28 @@ td.num{font-family:var(--mono);text-align:right;}
       <div class="scenario-box s-ultra"><div class="s-label">ULTRA</div><div class="s-val" id="sc-ultra">—</div></div>
     </div>
 
+    <div class="section-head">Listing History</div>
+    <div class="lh-summary" id="fd-lh-summary"></div>
+    <div style="overflow-x:auto;border:1px solid var(--rule);border-radius:4px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)" id="fd-lh-wrap">
+      <table class="lh-table" id="fd-lh-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Price</th>
+            <th>Miles</th>
+            <th>Platform</th>
+            <th>Seller</th>
+            <th>State</th>
+            <th>Status</th>
+            <th>Link</th>
+          </tr>
+        </thead>
+        <tbody id="fd-lh-tbody">
+          <tr><td colspan="8" class="lh-empty">Loading…</td></tr>
+        </tbody>
+      </table>
+    </div>
+
     <div class="section-head">Research Notes</div>
     <textarea class="notes-area" id="fd-notes" placeholder="PPI findings, owner contact, service docs confirmed…"></textarea>
     <button class="btn" style="margin-top:6px" onclick="saveNotes()">Save Notes</button>
@@ -1407,6 +1448,7 @@ async function openFleetDrawer(vin){
   }
 
   await loadDocSlots(vin);
+  await loadListingHistory(vin);
   document.getElementById('fleet-overlay').classList.add('open');
   document.getElementById('fleet-drawer').classList.add('open');
 }
@@ -1430,7 +1472,65 @@ async function loadDocSlots(vin){
   });
 }
 
-function replaceDoc(e,slotId){
+async function loadListingHistory(vin){
+  const tbody = document.getElementById('fd-lh-tbody');
+  const summary = document.getElementById('fd-lh-summary');
+  tbody.innerHTML = '<tr><td colspan="8" class="lh-empty">Loading…</td></tr>';
+  summary.innerHTML = '';
+  try{
+    const {data, error} = await db.from('listing_history')
+      .select('price,miles,first_seen,platform,seller_name,state,link_status,vdp_url')
+      .eq('vin', vin)
+      .order('first_seen', {ascending: false})
+      .limit(100);
+    if(error) throw error;
+    if(!data || data.length === 0){
+      tbody.innerHTML = '<tr><td colspan="8" class="lh-empty">No listing history found</td></tr>';
+      return;
+    }
+    // Summary pills
+    const active = data.filter(r=>r.link_status==='Active').length;
+    const dead   = data.filter(r=>r.link_status==='Dead').length;
+    const unver  = data.filter(r=>r.link_status==='Unverified').length;
+    const minP   = Math.min(...data.filter(r=>r.price).map(r=>r.price));
+    const maxP   = Math.max(...data.filter(r=>r.price).map(r=>r.price));
+    summary.innerHTML = [
+      `<span class="lh-sum-pill">${data.length} episodes</span>`,
+      active ? `<span class="lh-sum-pill active">${active} active</span>` : '',
+      dead   ? `<span class="lh-sum-pill dead">${dead} dead</span>` : '',
+      unver  ? `<span class="lh-sum-pill">${unver} unverified</span>` : '',
+      isFinite(minP) ? `<span class="lh-sum-pill">Low $${minP.toLocaleString()}</span>` : '',
+      isFinite(maxP) ? `<span class="lh-sum-pill">High $${maxP.toLocaleString()}</span>` : '',
+    ].join('');
+    // Table rows
+    tbody.innerHTML = data.map(r => {
+      const statusClass = r.link_status==='Active' ? 'lh-status-active'
+                        : r.link_status==='Dead'   ? 'lh-status-dead'
+                        : 'lh-status-unverified';
+      const urlCell = r.vdp_url
+        ? `<a class="lh-url-link" href="${r.vdp_url}" target="_blank">${(r.platform||r.vdp_url).substring(0,25)}…</a>`
+        : '—';
+      const price = r.price ? '$'+Number(r.price).toLocaleString() : '—';
+      const miles = r.miles ? Number(r.miles).toLocaleString()+' mi' : '—';
+      const date  = r.first_seen ? r.first_seen.substring(0,10) : '—';
+      const plat  = (r.platform||'—').substring(0,18);
+      const seller= (r.seller_name||'—').substring(0,16);
+      return `<tr>
+        <td>${date}</td>
+        <td style="font-weight:500">${price}</td>
+        <td>${miles}</td>
+        <td>${plat}</td>
+        <td>${seller}</td>
+        <td>${r.state||'—'}</td>
+        <td><span class="${statusClass}">${r.link_status||'—'}</span></td>
+        <td>${urlCell}</td>
+      </tr>`;
+    }).join('');
+  } catch(err){
+    tbody.innerHTML = '<tr><td colspan="8" class="lh-empty">Error loading listing history</td></tr>';
+    console.error('listing history error', err);
+  }
+}
   e.preventDefault();e.stopPropagation();
   const slot=document.getElementById(`slot-${slotId}`);
   const fi=slot.querySelector('input[type=file]');
