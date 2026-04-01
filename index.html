@@ -1546,11 +1546,6 @@ async function loadListingHistory(vin){
     console.error('listing history error', err);
   }
 }
-  e.preventDefault();e.stopPropagation();
-  const slot=document.getElementById(`slot-${slotId}`);
-  const fi=slot.querySelector('input[type=file]');
-  if(fi){fi.style.pointerEvents='auto';fi.click();}
-}
 
 function closeFleetDrawer(){
   document.getElementById('fleet-overlay').classList.remove('open');
