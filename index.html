@@ -1478,6 +1478,13 @@ async function loadDocSlots(vin){
   });
 }
 
+function replaceDoc(e,slotId){
+  e.preventDefault();e.stopPropagation();
+  const slot=document.getElementById(`slot-${slotId}`);
+  const fi=slot.querySelector('input[type=file]');
+  if(fi){fi.style.pointerEvents='auto';fi.click();}
+}
+
 async function loadListingHistory(vin){
   const tbody = document.getElementById('fd-lh-tbody');
   const summary = document.getElementById('fd-lh-summary');
