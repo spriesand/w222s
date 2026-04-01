@@ -1425,6 +1425,12 @@ async function openFleetDrawer(vin){
   document.getElementById('fd-notes').value=v.research_notes||'';
 
   const svcs=allServiceRecs.filter(s=>s.vin===vin);
+  // Sort chronologically — record_date stored as text so parse before sorting
+  svcs.sort((a,b)=>{
+    const da=a.record_date?new Date(a.record_date):new Date(0);
+    const db2=b.record_date?new Date(b.record_date):new Date(0);
+    return da-db2;
+  });
   document.getElementById('fd-service').innerHTML=svcs.length
     ?svcs.map(s=>`<div class="svc-row"><span class="svc-date">${s.record_date||'—'}</span><span class="svc-odo">${s.odometer?Number(s.odometer).toLocaleString()+' mi':'—'}</span><span class="svc-loc">${s.location||s.details||'—'}</span></div>`).join('')
     :'<div class="svc-empty">No service records</div>';
@@ -1448,9 +1454,9 @@ async function openFleetDrawer(vin){
   }
 
   await loadDocSlots(vin);
-  await loadListingHistory(vin);
   document.getElementById('fleet-overlay').classList.add('open');
   document.getElementById('fleet-drawer').classList.add('open');
+  loadListingHistory(vin); // non-blocking — loads after drawer opens
 }
 
 async function loadDocSlots(vin){
@@ -1481,8 +1487,9 @@ async function loadListingHistory(vin){
     const {data, error} = await db.from('listing_history')
       .select('price,miles,first_seen,platform,seller_name,state,link_status,vdp_url')
       .eq('vin', vin)
+      .not('first_seen','is',null)
       .order('first_seen', {ascending: false})
-      .limit(100);
+      .limit(50);
     if(error) throw error;
     if(!data || data.length === 0){
       tbody.innerHTML = '<tr><td colspan="8" class="lh-empty">No listing history found</td></tr>';
@@ -1492,15 +1499,16 @@ async function loadListingHistory(vin){
     const active = data.filter(r=>r.link_status==='Active').length;
     const dead   = data.filter(r=>r.link_status==='Dead').length;
     const unver  = data.filter(r=>r.link_status==='Unverified').length;
-    const minP   = Math.min(...data.filter(r=>r.price).map(r=>r.price));
-    const maxP   = Math.max(...data.filter(r=>r.price).map(r=>r.price));
+    const prices = data.filter(r=>r.price).map(r=>r.price);
+    const minP   = prices.length ? Math.min(...prices) : null;
+    const maxP   = prices.length ? Math.max(...prices) : null;
     summary.innerHTML = [
       `<span class="lh-sum-pill">${data.length} episodes</span>`,
       active ? `<span class="lh-sum-pill active">${active} active</span>` : '',
       dead   ? `<span class="lh-sum-pill dead">${dead} dead</span>` : '',
       unver  ? `<span class="lh-sum-pill">${unver} unverified</span>` : '',
-      isFinite(minP) ? `<span class="lh-sum-pill">Low $${minP.toLocaleString()}</span>` : '',
-      isFinite(maxP) ? `<span class="lh-sum-pill">High $${maxP.toLocaleString()}</span>` : '',
+      minP   ? `<span class="lh-sum-pill">Low $${Number(minP).toLocaleString()}</span>` : '',
+      maxP   ? `<span class="lh-sum-pill">High $${Number(maxP).toLocaleString()}</span>` : '',
     ].join('');
     // Table rows
     tbody.innerHTML = data.map(r => {
@@ -1508,7 +1516,7 @@ async function loadListingHistory(vin){
                         : r.link_status==='Dead'   ? 'lh-status-dead'
                         : 'lh-status-unverified';
       const urlCell = r.vdp_url
-        ? `<a class="lh-url-link" href="${r.vdp_url}" target="_blank">${(r.platform||r.vdp_url).substring(0,25)}…</a>`
+        ? `<a class="lh-url-link" href="${r.vdp_url}" target="_blank" title="${r.vdp_url}">${(r.platform||r.vdp_url).substring(0,22)}</a>`
         : '—';
       const price = r.price ? '$'+Number(r.price).toLocaleString() : '—';
       const miles = r.miles ? Number(r.miles).toLocaleString()+' mi' : '—';
@@ -1527,7 +1535,7 @@ async function loadListingHistory(vin){
       </tr>`;
     }).join('');
   } catch(err){
-    tbody.innerHTML = '<tr><td colspan="8" class="lh-empty">Error loading listing history</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" class="lh-empty">Could not load — check console</td></tr>';
     console.error('listing history error', err);
   }
 }
