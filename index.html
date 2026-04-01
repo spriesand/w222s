@@ -1431,8 +1431,22 @@ async function openFleetDrawer(vin){
     const db2=b.record_date?new Date(b.record_date):new Date(0);
     return da-db2;
   });
-  document.getElementById('fd-service').innerHTML=svcs.length
-    ?svcs.map(s=>`<div class="svc-row"><span class="svc-date">${s.record_date||'—'}</span><span class="svc-odo">${s.odometer?Number(s.odometer).toLocaleString()+' mi':'—'}</span><span class="svc-loc">${s.location||s.details||'—'}</span></div>`).join('')
+  // Deduplicate rows with same odometer — merge location + details into one row
+  const svcMap=new Map();
+  svcs.forEach(s=>{
+    const key=`${s.odometer||''}`;
+    if(svcMap.has(key)){
+      const existing=svcMap.get(key);
+      if(!existing.location&&s.location)existing.location=s.location;
+      if(!existing.details&&s.details)existing.details=s.details;
+      if(!existing.record_date&&s.record_date)existing.record_date=s.record_date;
+    } else {
+      svcMap.set(key,{...s});
+    }
+  });
+  const dedupedSvcs=Array.from(svcMap.values());
+  document.getElementById('fd-service').innerHTML=dedupedSvcs.length
+    ?dedupedSvcs.map(s=>`<div class="svc-row"><span class="svc-date">${s.record_date||'—'}</span><span class="svc-odo">${s.odometer?Number(s.odometer).toLocaleString()+' mi':'—'}</span><span class="svc-loc">${s.location||s.details||'—'}</span></div>`).join('')
     :'<div class="svc-empty">No service records</div>';
 
   const links=[
