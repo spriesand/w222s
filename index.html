@@ -45,6 +45,10 @@ header{background:var(--ink);color:var(--paper);padding:0 32px;display:flex;alig
 .sync-dot.loading{background:var(--gold);animation:pulse 1s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
+/* Playbook link in header */
+.playbook-link{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border:1px solid var(--gold);border-radius:3px;background:none;color:var(--gold);font-family:var(--mono);font-size:11px;text-decoration:none;letter-spacing:.04em;transition:all .15s;white-space:nowrap;}
+.playbook-link:hover{background:var(--gold);color:var(--ink);}
+
 .tab-bar{background:#fff;border-bottom:1px solid var(--rule);display:flex;padding:0 32px;position:sticky;top:56px;z-index:99;}
 .tab{padding:14px 24px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);transition:all .15s;user-select:none;}
 .tab:hover{color:var(--ink);}
@@ -272,10 +276,11 @@ td.num{font-family:var(--mono);text-align:right;}
 .cd-edit-input::placeholder{color:#ccc;}
 
 @media(max-width:768px){
-  header{padding:0 16px;height:48px;}
+  header{padding:0 12px;height:48px;}
   .logo{font-size:16px;}
   .header-meta{display:none;}
   .sync-btn{font-size:10px;padding:4px 8px;}
+  .playbook-link{font-size:10px;padding:4px 8px;}
   .tab-bar{padding:0 8px;top:48px;}
   .tab{padding:10px 12px;font-size:10px;letter-spacing:.06em;}
   .tab-actions{display:none;}
@@ -299,12 +304,17 @@ td.num{font-family:var(--mono);text-align:right;}
 .mob-search-wrap{position:relative;margin-bottom:8px;}
 .mob-search-input{width:100%;border:2px solid var(--rule);border-radius:8px;padding:13px 16px 13px 42px;font-family:var(--mono);font-size:15px;background:#fff;color:var(--ink);outline:none;-webkit-appearance:none;}
 .mob-search-input:focus{border-color:var(--ink);}
-.mob-search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:18px;}
 .mob-hint{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px;line-height:1.5;}
 .mob-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px;}
 .mob-stat{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:10px 6px;text-align:center;}
 .mob-stat-num{font-family:var(--serif);font-size:18px;display:block;}
 .mob-stat-lbl{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:block;margin-top:2px;}
+
+/* Mobile top-40 list */
+.mob-top40-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.mob-top40-title{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
+.mob-top40-count{font-family:var(--mono);font-size:10px;color:var(--accent);font-weight:600;}
+
 .mob-result{background:#fff;border:1px solid var(--rule);border-radius:8px;overflow:hidden;margin-bottom:10px;}
 .mob-result-header{background:var(--ink);padding:12px 16px;display:flex;justify-content:space-between;align-items:flex-start;}
 .mob-result-vin{font-family:var(--mono);font-size:10px;color:#aaa;margin-bottom:2px;}
@@ -422,6 +432,7 @@ td.num{font-family:var(--mono);text-align:right;}
     <span class="sync-dot" id="sync-dot"></span>
     <span style="font-family:var(--mono);font-size:11px;color:#aaa" id="sync-label">Connecting…</span>
     <button class="sync-btn" onclick="refreshAll()">↻ Refresh</button>
+    <a class="playbook-link" href="https://spriesand.github.io/w222playbook/" target="_blank" rel="noopener noreferrer">📖 Playbook</a>
   </div>
   <div class="header-meta" id="header-counts">— vehicles · — contacts</div>
 </header>
@@ -505,8 +516,16 @@ td.num{font-family:var(--mono);text-align:right;}
         <span class="mob-search-icon">⌕</span>
         <input class="mob-search-input" id="mob-input" type="text" placeholder="VIN or company name…" oninput="mobileSearch(this.value)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       </div>
-      <div class="mob-hint">Type a VIN to look up a vehicle · Type a company to find a broker</div>
+      <div class="mob-hint">Search to look up a VIN or broker · or browse Top 40 below</div>
       <div id="mob-results"></div>
+      <!-- Top 40 default list — shown when search is empty -->
+      <div id="mob-top40">
+        <div class="mob-top40-header">
+          <span class="mob-top40-title">Top 40 Ranked</span>
+          <span class="mob-top40-count" id="mob-top40-count">Loading…</span>
+        </div>
+        <div id="mob-top40-list"></div>
+      </div>
     </div>
     <div class="toolbar">
       <div class="search-wrap">
@@ -1069,11 +1088,113 @@ async function loadAll(){
     document.getElementById('header-counts').textContent=`${allVehicles.length} vehicles · ${allContacts.length} contacts`;
     setSyncStatus('ok');
     document.getElementById('loading-banner').classList.add('done');
+    renderMobileTop40(); // populate top-40 after data loads
   }catch(err){
     setSyncStatus('error');
     document.getElementById('loading-banner').textContent='⚠ Could not connect. Check credentials at top of file.';
     console.error(err);
   }
+}
+
+// ── Mobile Top-40 default list ────────────────────────────
+function renderMobileTop40(){
+  const ranked = allVehicles
+    .filter(v => v.apex_rank != null && v.apex_rank !== '')
+    .sort((a,b) => Number(a.apex_rank) - Number(b.apex_rank))
+    .slice(0, 40);
+
+  document.getElementById('mob-top40-count').textContent = `${ranked.length} vehicles`;
+
+  if(!ranked.length){
+    document.getElementById('mob-top40-list').innerHTML =
+      '<div class="mob-no-result">No ranked vehicles found.</div>';
+    return;
+  }
+
+  document.getElementById('mob-top40-list').innerHTML = ranked.map(v => {
+    const st = (v.acq_status||'').toLowerCase();
+    const chipColor = st==='active'||st==='target' ? 'var(--accent)'
+                    : st.includes('watch') ? 'var(--gold)' : '#999';
+    const gi = Number(v.curr_odo)>=70000 && Number(v.curr_odo)<=100000;
+    return `<div class="mob-result">
+      <div class="mob-result-header">
+        <div>
+          <div class="mob-result-vin">#${v.apex_rank} · ${v.vin}</div>
+          <div class="mob-result-title">${v.year||2017} ${v.trim||'—'}</div>
+        </div>
+        <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:${chipColor};text-transform:uppercase;background:rgba(255,255,255,.12);padding:3px 8px;border-radius:3px">${v.acq_status||'Universe'}</span>
+      </div>
+      <div class="mob-result-body">
+        <div class="mob-field-grid">
+          <div class="mob-field"><div class="mob-field-label">Score</div><div class="mob-field-value accent">${v.composite_score||'—'}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Odometer</div><div class="mob-field-value ${gi?'gold':''}">${oFmt(v.curr_odo)}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Proj @ Jan 28</div><div class="mob-field-value gold">${oFmt(v.proj_mi_jan28)}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Offer Target</div><div class="mob-field-value green">${$m(v.offer_target)}</div></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px">${v.exterior||''}${v.exterior&&v.upholstery?' · ':''}${v.upholstery||''} ${v.last_title_state?'· '+v.last_title_state:''}</div>
+        <button class="mob-open-btn" onclick="openFleetDrawer('${v.vin}')">Full Detail →</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// Hide top-40 when user is actively searching, restore when cleared
+function mobileSearch(q){
+  const el=document.getElementById('mob-results');
+  const top40=document.getElementById('mob-top40');
+  q=q.trim();
+  if(q.length<2){
+    el.innerHTML='';
+    top40.style.display='block';
+    return;
+  }
+  top40.style.display='none';
+  const ql=q.toLowerCase();
+  const vehicles=allVehicles.filter(v=>(v.vin||'').toLowerCase().includes(ql)).slice(0,3);
+  const contacts=allContacts.filter(c=>(c.company||'').toLowerCase().includes(ql)||(c.contact_name||'').toLowerCase().includes(ql)).slice(0,3);
+  if(!vehicles.length&&!contacts.length){el.innerHTML=`<div class="mob-no-result">No vehicles or contacts found for "<strong>${q}</strong>"</div>`;return;}
+  let html='';
+  vehicles.forEach(v=>{
+    const st=(v.acq_status||'').toLowerCase();
+    const chipColor=st==='active'||st==='target'?'var(--accent)':st.includes('watch')?'var(--gold)':'#999';
+    const rankStr=v.apex_rank!=null&&v.apex_rank!==''?v.apex_rank:'—';
+    html+=`<div class="mob-result">
+      <div class="mob-result-header">
+        <div><div class="mob-result-vin">${v.vin}</div><div class="mob-result-title">${v.year||2017} ${v.trim||'—'}</div></div>
+        <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:${chipColor};text-transform:uppercase;background:rgba(255,255,255,.12);padding:3px 8px;border-radius:3px">${v.acq_status||'Universe'}</span>
+      </div>
+      <div class="mob-result-body">
+        <div class="mob-field-grid">
+          <div class="mob-field"><div class="mob-field-label">Rank</div><div class="mob-field-value accent">#${rankStr}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Score</div><div class="mob-field-value accent">${v.composite_score||'—'}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Odometer</div><div class="mob-field-value ${(Number(v.curr_odo)>=70000&&Number(v.curr_odo)<=100000)?'gold':''}">${oFmt(v.curr_odo)}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Proj @ Jan 28</div><div class="mob-field-value gold">${oFmt(v.proj_mi_jan28)}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Offer Target</div><div class="mob-field-value green">${$m(v.offer_target)}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Walk-Away</div><div class="mob-field-value accent">${$m(v.walk_away)}</div></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px">${v.exterior||''}${v.exterior&&v.upholstery?' · ':''}${v.upholstery||''} ${v.last_title_state?'· '+v.last_title_state:''}</div>
+        <button class="mob-open-btn" onclick="openFleetDrawer('${v.vin}')">Full Detail →</button>
+      </div>
+    </div>`;
+  });
+  contacts.forEach(c=>{
+    const sc=STATUS_CLASS[c.status]||'st-hold';const sl=STATUS_LABEL[c.status]||c.status;
+    html+=`<div class="mob-result">
+      <div class="mob-result-header">
+        <div><div class="mob-result-vin">${c.contact_type||'broker'} · ${c.region||''}</div><div class="mob-result-title">${c.company}</div></div>
+        <span class="status-badge ${sc}">${sl}</span>
+      </div>
+      <div class="mob-result-body">
+        <div class="mob-field-grid">
+          ${c.phone?`<div class="mob-field"><div class="mob-field-label">Phone</div><div class="mob-field-value"><a href="tel:${c.phone}" style="color:var(--s65);text-decoration:none">${c.phone}</a></div></div>`:''}
+          ${c.email?`<div class="mob-field" style="grid-column:span 2"><div class="mob-field-label">Email</div><div class="mob-field-value" style="font-size:11px"><a href="mailto:${c.email}" style="color:var(--accent);text-decoration:none">${c.email}</a></div></div>`:''}
+          <div class="mob-field"><div class="mob-field-label">Location</div><div class="mob-field-value">${c.location||'—'}</div></div>
+        </div>
+        <button class="mob-open-btn" onclick="switchTab('crm');openCRMDrawer('${c.id}')">Full CRM →</button>
+      </div>
+    </div>`;
+  });
+  el.innerHTML=html;
 }
 
 // ── Market Intelligence data load & render ────────────────
@@ -1425,13 +1546,11 @@ async function openFleetDrawer(vin){
   document.getElementById('fd-notes').value=v.research_notes||'';
 
   const svcs=allServiceRecs.filter(s=>s.vin===vin);
-  // Sort chronologically — record_date stored as text so parse before sorting
   svcs.sort((a,b)=>{
     const da=a.record_date?new Date(a.record_date):new Date(0);
     const db2=b.record_date?new Date(b.record_date):new Date(0);
     return da-db2;
   });
-  // Deduplicate rows with same odometer — merge location + details into one row
   const svcMap=new Map();
   svcs.forEach(s=>{
     const key=`${s.odometer||''}`;
@@ -1470,7 +1589,7 @@ async function openFleetDrawer(vin){
   await loadDocSlots(vin);
   document.getElementById('fleet-overlay').classList.add('open');
   document.getElementById('fleet-drawer').classList.add('open');
-  loadListingHistory(vin); // non-blocking — loads after drawer opens
+  loadListingHistory(vin);
 }
 
 async function loadDocSlots(vin){
@@ -1516,7 +1635,6 @@ async function loadListingHistory(vin){
       tbody.innerHTML = '<tr><td colspan="8" class="lh-empty">No listing history found</td></tr>';
       return;
     }
-    // Summary pills
     const active = data.filter(r=>r.link_status==='Active').length;
     const dead   = data.filter(r=>r.link_status==='Dead').length;
     const unver  = data.filter(r=>r.link_status==='Unverified').length;
@@ -1531,7 +1649,6 @@ async function loadListingHistory(vin){
       minP   ? `<span class="lh-sum-pill">Low $${Number(minP).toLocaleString()}</span>` : '',
       maxP   ? `<span class="lh-sum-pill">High $${Number(maxP).toLocaleString()}</span>` : '',
     ].join('');
-    // Table rows
     tbody.innerHTML = data.map(r => {
       const statusClass = r.link_status==='Active' ? 'lh-status-active'
                         : r.link_status==='Dead'   ? 'lh-status-dead'
@@ -1760,57 +1877,6 @@ async function openAddContact(){
   if(error){toast('Add failed: '+error.message,true);return;}
   allContacts.unshift(nc);updateCRMStats();renderCRM();switchTab('crm');
   toast(`${company} added ✓`);openCRMDrawer(nc.id);
-}
-
-function mobileSearch(q){
-  const el=document.getElementById('mob-results');
-  q=q.trim();if(q.length<2){el.innerHTML='';return;}
-  const ql=q.toLowerCase();
-  const vehicles=allVehicles.filter(v=>(v.vin||'').toLowerCase().includes(ql)).slice(0,3);
-  const contacts=allContacts.filter(c=>(c.company||'').toLowerCase().includes(ql)||(c.contact_name||'').toLowerCase().includes(ql)).slice(0,3);
-  if(!vehicles.length&&!contacts.length){el.innerHTML=`<div class="mob-no-result">No vehicles or contacts found for "<strong>${q}</strong>"</div>`;return;}
-  let html='';
-  vehicles.forEach(v=>{
-    const st=(v.acq_status||'').toLowerCase();
-    const chipColor=st==='active'||st==='target'?'var(--accent)':st.includes('watch')?'var(--gold)':'#999';
-    const rankStr=v.apex_rank!=null&&v.apex_rank!==''?v.apex_rank:'—';
-    html+=`<div class="mob-result">
-      <div class="mob-result-header">
-        <div><div class="mob-result-vin">${v.vin}</div><div class="mob-result-title">${v.year||2017} ${v.trim||'—'}</div></div>
-        <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:${chipColor};text-transform:uppercase;background:rgba(255,255,255,.12);padding:3px 8px;border-radius:3px">${v.acq_status||'Universe'}</span>
-      </div>
-      <div class="mob-result-body">
-        <div class="mob-field-grid">
-          <div class="mob-field"><div class="mob-field-label">Rank</div><div class="mob-field-value accent">#${rankStr}</div></div>
-          <div class="mob-field"><div class="mob-field-label">Score</div><div class="mob-field-value accent">${v.composite_score||'—'}</div></div>
-          <div class="mob-field"><div class="mob-field-label">Odometer</div><div class="mob-field-value ${(Number(v.curr_odo)>=70000&&Number(v.curr_odo)<=100000)?'gold':''}">${oFmt(v.curr_odo)}</div></div>
-          <div class="mob-field"><div class="mob-field-label">Proj @ Jan 28</div><div class="mob-field-value gold">${oFmt(v.proj_mi_jan28)}</div></div>
-          <div class="mob-field"><div class="mob-field-label">Offer Target</div><div class="mob-field-value green">${$m(v.offer_target)}</div></div>
-          <div class="mob-field"><div class="mob-field-label">Walk-Away</div><div class="mob-field-value accent">${$m(v.walk_away)}</div></div>
-        </div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px">${v.exterior||''}${v.exterior&&v.upholstery?' · ':''}${v.upholstery||''} ${v.last_title_state?'· '+v.last_title_state:''}</div>
-        <button class="mob-open-btn" onclick="openFleetDrawer('${v.vin}')">Full Detail →</button>
-      </div>
-    </div>`;
-  });
-  contacts.forEach(c=>{
-    const sc=STATUS_CLASS[c.status]||'st-hold';const sl=STATUS_LABEL[c.status]||c.status;
-    html+=`<div class="mob-result">
-      <div class="mob-result-header">
-        <div><div class="mob-result-vin">${c.contact_type||'broker'} · ${c.region||''}</div><div class="mob-result-title">${c.company}</div></div>
-        <span class="status-badge ${sc}">${sl}</span>
-      </div>
-      <div class="mob-result-body">
-        <div class="mob-field-grid">
-          ${c.phone?`<div class="mob-field"><div class="mob-field-label">Phone</div><div class="mob-field-value"><a href="tel:${c.phone}" style="color:var(--s65);text-decoration:none">${c.phone}</a></div></div>`:''}
-          ${c.email?`<div class="mob-field" style="grid-column:span 2"><div class="mob-field-label">Email</div><div class="mob-field-value" style="font-size:11px"><a href="mailto:${c.email}" style="color:var(--accent);text-decoration:none">${c.email}</a></div></div>`:''}
-          <div class="mob-field"><div class="mob-field-label">Location</div><div class="mob-field-value">${c.location||'—'}</div></div>
-        </div>
-        <button class="mob-open-btn" onclick="switchTab('crm');openCRMDrawer('${c.id}')">Full CRM →</button>
-      </div>
-    </div>`;
-  });
-  el.innerHTML=html;
 }
 
 loadAll();
