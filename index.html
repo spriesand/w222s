@@ -556,7 +556,7 @@ td.num{font-family:var(--mono);text-align:right;}
 
 <div class="tab-bar">
   <div class="tab active" onclick="switchTab('fleet')">Fleet Database <span class="tab-badge" id="fleet-tab-count">&mdash;</span></div>
-  <div class="tab" onclick="switchTab('crm')">Broker CRM <span class="tab-badge" id="crm-tab-count">&mdash;</span></div>
+  <div class="tab" onclick="switchTab('crm')">Contacts <span class="tab-badge" id="crm-tab-count">&mdash;</span></div>
   <div class="tab" onclick="switchTab('market')">Market Intelligence <span class="tab-badge" id="market-tab-count" style="background:var(--bat-orange);color:#fff;">BaT</span></div>
   <div class="tab-actions">
     <button class="btn-add-vehicle" onclick="openAddVehicle()">+ Add Vehicle</button>
@@ -591,7 +591,7 @@ td.num{font-family:var(--mono);text-align:right;}
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Flag</div>
-      <label class="filter-row"><input type="checkbox" id="st-active" checked onchange="applyFilters()"><span style="color:var(--accent);font-weight:500">Target / Tracking</span><span class="filter-count" id="cnt-active">&mdash;</span></label>
+      <label class="filter-row"><input type="checkbox" id="st-active" checked onchange="applyFilters()"><span style="color:var(--accent);font-weight:500">Tracking</span><span class="filter-count" id="cnt-active">&mdash;</span></label>
       <label class="filter-row"><input type="checkbox" id="st-watch" checked onchange="applyFilters()"><span style="color:var(--gold)">Watching</span><span class="filter-count" id="cnt-watch">&mdash;</span></label>
       <label class="filter-row"><input type="checkbox" id="st-universe" onchange="applyFilters()"><span style="color:var(--muted)">All Data</span><span class="filter-count" id="cnt-universe">&mdash;</span></label>
       <label class="filter-row"><input type="checkbox" id="st-dq" onchange="applyFilters()"><span style="color:#bbb">DQ</span><span class="filter-count" id="cnt-dq">&mdash;</span></label>
@@ -617,10 +617,7 @@ td.num{font-family:var(--mono);text-align:right;}
     <div class="sidebar-section">
       <div class="sidebar-label">Tracking</div>
       <div class="tracking-pill" id="tracking-pill" onclick="toggleTrackingFilter(this)">&#128065; Show Tracking Only</div>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-label">Dataset</div>
-      <label class="filter-row"><input type="checkbox" id="gold-only" onchange="applyFilters()">2017 Ranked only (56)</label>
+      <label class="filter-row" style="margin-top:8px;padding-left:4px"><input type="checkbox" id="gold-only" onchange="applyFilters()"><span style="color:var(--muted);font-size:12px">2017 Ranked only</span></label>
     </div>
   </aside>
   <main>
@@ -896,7 +893,7 @@ td.num{font-family:var(--mono);text-align:right;}
       <div class="drawer-title" id="fd-title">Vehicle Detail</div>
       <div class="drawer-subtitle" id="fd-sub">—</div>
       <div class="fd-actions">
-        <button class="fd-action-btn track" onclick="fdSetStatus('Target')">✓ Track</button>
+        <button class="fd-action-btn track" onclick="fdSetStatus('Target')">&#9679; Track</button>
         <button class="fd-action-btn watch-btn" onclick="fdSetStatus('Watch - 1 accident')">○ Watch</button>
         <button class="fd-action-btn dq-btn" onclick="fdSetStatus('DQ - Multiple Accidents')">&#215; DQ</button>
         <button class="fd-action-btn unset" onclick="fdSetStatus('Universe')">&#8635; Unset</button>
@@ -2642,9 +2639,11 @@ function quickFilter(preset){
   }
   fleetPage=0;
   applyFilters();
-  toast('Filter: '+preset.toUpperCase());
+  toast('View: '+({'tracked':'Tracking Only','ranked':'2017 Ranked','s65':'All S65','gi':'Golden Intersection'}[preset]||preset));
 }
 
+
+loadAll();
 </script>
 
 <!-- BULK ENTRY OVERLAY + MODAL -->
