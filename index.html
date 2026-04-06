@@ -2067,6 +2067,8 @@ async function avSaveVehicle(){
   var score=avComputeScore(avData);
   var acc=parseInt(avData.accident_count)||0;
   var acqStatus=acc>=2?'DQ - Multiple Accidents':acc===1?'Watch - 1 accident':'Sighting';
+  // Insert payload — only columns confirmed in vehicles schema
+  // Mileage/owner/service wall cols live in vehicle_market, not vehicles
   var vehicleRow={
     vin:avData.vin,
     year:parseInt(avData.year)||2017,
@@ -2074,42 +2076,64 @@ async function avSaveVehicle(){
     exterior:avData.exterior||null,
     upholstery:avData.upholstery||null,
     last_title_state:avData.last_title_state||null,
-    curr_odo:avData.curr_odo?parseInt(avData.curr_odo):null,
-    total_owners:avData.total_owners?parseInt(avData.total_owners):null,
     svc_per_yr:avData.svc_per_yr?parseFloat(avData.svc_per_yr):null,
-    proj_mi_jan28:avData.proj_mi_jan28?parseInt(avData.proj_mi_jan28):null,
-    lease_history:avData.lease_history||false,
-    trans_confirmed:avData.trans_confirmed||false,
-    ign_confirmed:avData.ign_confirmed||false,
-    susp_confirmed:avData.susp_confirmed||false,
-    brake_confirmed:avData.brake_confirmed||false,
     composite_score:score.composite,
+    quality_score:score.qs,
+    score_pa:score.qs,
+    score_pb:score.pb,
+    score_mod:score.mod,
     acq_status:acqStatus,
+    cohort:avData.trim==='S65 AMG'?'S65 AMG':(avData.trim==='S600'?'S600':null),
+    source:'App - Sighting',
     research_notes:avData.research_notes||null
   };
-  // Self-healing insert: drops columns not in schema and retries automatically
-  function badCol(msg){var m=(msg||'').match(/find the '([^']+)' column/);return m?m[1]:null;}
-
   try{
     if(allVehicles.find(function(x){return x.vin===avData.vin;})){
       if(!confirm('VIN already exists. View existing record?')){saveBtn.textContent='Save Vehicle';saveBtn.disabled=false;return;}
       closeAddVehicle();openFleetDrawer(avData.vin);return;
     }
-    // Retry loop: drop unknown columns until insert succeeds (max 12 attempts)
-    var row=Object.assign({},vehicleRow);
-    var dropped=[];
-    var vR=null;
-    for(var attempt=0;attempt<12;attempt++){
-      vR=await db.from('vehicles').insert(row).select('vin').single();
-      if(!vR.error)break;
-      var col=badCol(vR.error.message);
-      if(col&&row.hasOwnProperty(col)){delete row[col];dropped.push(col);}
-      else{throw vR.error;}
-    }
+
+    // 1. INSERT into vehicles (identity + scoring columns only)
+    var vR=await db.from('vehicles').insert(vehicleRow).select('vin').single();
     if(vR.error)throw vR.error;
-    if(dropped.length)console.warn('V12 Apex: dropped unknown columns on insert:',dropped.join(', '));
+
+    // 2. INSERT into vehicle_market (mileage, ownership, service wall)
+    var marketRow={
+      vin:avData.vin,
+      curr_odo:avData.curr_odo?parseInt(avData.curr_odo):null,
+      proj_mi_jan28:avData.proj_mi_jan28?parseInt(avData.proj_mi_jan28):null,
+      total_owners:avData.total_owners||null,
+      accident_count:avData.accident_count||'0',
+      trans_confirmed:avData.trans_confirmed||false,
+      ign_confirmed:avData.ign_confirmed||false,
+      susp_confirmed:avData.susp_confirmed||false,
+      brake_confirmed:avData.brake_confirmed||false
+    };
+    var mR=await db.from('vehicle_market').insert(marketRow);
+    if(mR.error)console.warn('vehicle_market insert (non-fatal):',mR.error.message);
+
+    // 3. INSERT into vehicle_service if odometer or service wall data present
+    var hasSvcData=avData.trans_confirmed||avData.ign_confirmed||avData.susp_confirmed||avData.brake_confirmed||avData.curr_odo;
+    if(hasSvcData){
+      var svcRow={
+        vin:avData.vin,
+        record_date:new Date().toISOString().split('T')[0],
+        odometer:avData.curr_odo?parseInt(avData.curr_odo):null,
+        source:'App - Sighting',
+        details:'Added via Add Vehicle'+(avData.total_owners?' | Owners: '+avData.total_owners:''),
+        has_transmission:avData.trans_confirmed||false,
+        has_ignition:avData.ign_confirmed||false,
+        has_plugs:avData.ign_confirmed||false,
+        has_brakes:avData.brake_confirmed||false,
+        has_suspension:avData.susp_confirmed||false
+      };
+      var sR=await db.from('vehicle_service').insert(svcRow);
+      if(sR.error)console.warn('vehicle_service insert (non-fatal):',sR.error.message);
+    }
+
+    // 4. INSERT into listing_history if URL or price entered
     if(avData.vdp_url||avData.asking_price){
-      await db.from('listing_history').insert({
+      var lR=await db.from('listing_history').insert({
         vin:avData.vin,
         price:avData.asking_price?parseInt(avData.asking_price):null,
         miles:avData.curr_odo?parseInt(avData.curr_odo):null,
@@ -2119,15 +2143,16 @@ async function avSaveVehicle(){
         first_seen:new Date().toISOString().split('T')[0],
         link_status:'Unverified'
       });
+      if(lR.error)console.warn('listing_history insert (non-fatal):',lR.error.message);
     }
-    allVehicles.unshift(Object.assign({},vehicleRow,{id:vR.data&&vR.data.vin}));
+
+    allVehicles.unshift(Object.assign({},vehicleRow,marketRow));
     updateFleetStats();applyFilters();
     document.getElementById('fleet-tab-count').textContent=allVehicles.length;
     document.getElementById('header-counts').textContent=allVehicles.length+' vehicles · '+allContacts.length+' contacts';
     renderMobileTop40();
     closeAddVehicle();
-    var dropNote=dropped.length?' ('+dropped.length+' cols skipped — check console)':'';
-    toast(avData.vin+' saved ✓ — '+acqStatus+dropNote);
+    toast(avData.vin+' saved ✓ — '+acqStatus);
     setTimeout(function(){openFleetDrawer(avData.vin);},350);
   }catch(err){
     console.error('avSaveVehicle error:',err);
