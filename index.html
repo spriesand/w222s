@@ -1333,6 +1333,15 @@ function applyFilters(){
   document.getElementById('fleet-count').textContent=`Showing ${page.length} of ${total}`;
 }
 
+function flagChip(s,dqReason){
+  const st=(s||'').toLowerCase();
+  if(st==='active'||st==='target')return`<span class="status-chip chip-target">Tracking</span>`;
+  if(st.includes('watch'))return`<span class="status-chip chip-watch">Watching</span>`;
+  if(st.includes('dq')){const r=(dqReason||'DQ').replace(/DQ\s*-+\s*/,'');return`<span class="status-chip chip-dq" title="${r}">DQ</span>`;}
+  if(st==='sighting')return`<span class="status-chip chip-pending">Sighting</span>`;
+  return`<span class="status-chip chip-universe">${s||'Universe'}</span>`;
+}
+
 function renderFleet(data){
   const tbody=document.getElementById('fleet-tbody');
   if(!data.length){tbody.innerHTML=`<tr class="empty-row"><td colspan="44">No vehicles match current filters.</td></tr>`;return;}
