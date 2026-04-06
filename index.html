@@ -1889,6 +1889,22 @@ function avStage3HTML(){
   h+='<div class="drawer-field"><div class="drawer-field-label">Proj @ Jan 2028</div><div class="drawer-field-value" style="color:var(--gold)">'+(avData.proj_mi_jan28?Number(avData.proj_mi_jan28).toLocaleString()+' mi':'&mdash;')+'</div></div></div>';
   h+='<div class="av-error-msg" id="av-save-error"></div>';
   h+='<div class="av-hint" style="margin-top:4px">Saved with status <strong>Sighting</strong> &mdash; swept into monthly MarketCheck enrichment automatically.</div>';
+  // vPIC decoded details block
+  if(avData._vpic){
+    var vp=avData._vpic;
+    var vpParts=[];
+    if(vp.eng&&vp.cyl)vpParts.push(vp.eng+' V'+vp.cyl);
+    if(vp.hp&&vp.hp!=='0')vpParts.push(vp.hp+' hp');
+    if(vp.trans&&vp.trans!=='Not Applicable')vpParts.push(vp.trans);
+    if(vp.plant)vpParts.push('Built: '+vp.plant);
+    if(vp.series)vpParts.push('Series: '+vp.series);
+    if(vpParts.length){
+      h+='<div style="background:#edf3fd;border:1px solid #b8cef0;border-radius:4px;padding:9px 12px;margin-top:10px;">';
+      h+='<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--s65);margin-bottom:5px;">&#9881; NHTSA vPIC &mdash; Decoded</div>';
+      h+='<div style="font-family:var(--mono);font-size:11px;color:#1a3a5c;line-height:1.8">'+vpParts.join('<br>')+'</div>';
+      h+='</div>';
+    }
+  }
   return h;
 }
 
@@ -1930,14 +1946,72 @@ function avVINInput(input){
   var existing=allVehicles.find(function(x){return x.vin===v;});
   if(warn)warn.classList.toggle('show',!!existing);
 }
-function avDecodeVIN(){
+async function avDecodeVIN(){
   var vin=((document.getElementById('av-vin')||{}).value||'').toUpperCase();
   if(vin.length!==17){toast('Enter a complete 17-char VIN first',true);return;}
-  var decoded=avDetectFromVIN(vin);
-  if(decoded.year)document.getElementById('av-year').value=decoded.year;
-  if(decoded.trim)document.getElementById('av-trim').value=decoded.trim;
+  // Step 1: local decode from VIN positions (instant)
+  var local=avDetectFromVIN(vin);
+  if(local.year){var ye=document.getElementById('av-year');if(ye&&!ye.value)ye.value=local.year;}
+  if(local.trim){var te=document.getElementById('av-trim');if(te&&!te.value)te.value=local.trim;}
+  // Step 2: vPIC API decode (async, free, no key)
+  var btn=document.querySelector('.av-decode-btn');
   var hint=document.getElementById('av-vin-hint');
-  if(hint){hint.textContent='Decoded: '+(decoded.year||'?')+' '+(decoded.trim||'unknown trim');hint.className='av-hint success';}
+  if(btn){btn.textContent='Decoding…';btn.disabled=true;}
+  if(hint){hint.textContent='Querying NHTSA vPIC…';hint.className='av-hint';}
+  try{
+    var r=await fetch('https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/'+vin+'?format=json',{signal:AbortSignal.timeout(8000)});
+    var d=await r.json();
+    var v=d.Results&&d.Results[0];
+    if(!v)throw new Error('No results');
+    var filled=[];
+    // Year
+    var yr=v.ModelYear;
+    if(yr&&yr!=='0'){
+      var ye2=document.getElementById('av-year');
+      if(ye2){ye2.value=yr;filled.push(yr);}
+    }
+    // Trim / Series -> map to S65 AMG or S600
+    var series=(v.Series||'').trim();
+    var bodyClass=(v.BodyClass||'').trim();
+    var trim2=null;
+    if(series.toLowerCase().includes('s 65')||series.toLowerCase().includes('s65'))trim2='S65 AMG';
+    else if(series.toLowerCase().includes('s 600')||series.toLowerCase().includes('s600'))trim2='S600';
+    else if(local.trim)trim2=local.trim; // fall back to position-7 decode
+    if(trim2){var te2=document.getElementById('av-trim');if(te2){te2.value=trim2;filled.push(trim2);}}
+    // State (plant is Germany but title state comes from listing — skip)
+    // Engine info -> store in avData for reference
+    var eng=v.DisplacementL?parseFloat(v.DisplacementL).toFixed(1)+'L':'';
+    var cyl=v.EngineCylinders||'';
+    var hp=v.EngineHP||'';
+    var plant=v.PlantCity?v.PlantCity+', '+v.PlantCountry:'';
+    var mfg=v.Manufacturer||'';
+    var model=v.Model||'';
+    var bodyStr=v.BodyClass||'';
+    var trans=v.TransmissionStyle||'';
+    var drive=v.DriveType||'';
+    // Store decoded metadata in avData
+    avData._vpic={eng:eng,cyl:cyl,hp:hp,plant:plant,mfg:mfg,model:model,body:bodyStr,trans:trans,drive:drive,series:series};
+    // Build hint string from useful decoded fields
+    var details=[];
+    if(eng&&cyl)details.push(eng+' V'+cyl);else if(eng)details.push(eng);
+    if(hp&&hp!=='0')details.push(hp+' hp');
+    if(plant)details.push(plant);
+    if(trans&&trans!=='Not Applicable')details.push(trans);
+    var yearStr=yr&&yr!=='0'?yr:(local.year||'?');
+    var trimStr=trim2||'unknown trim';
+    var hintText=yearStr+' '+trimStr+(details.length?' · '+details.join(' · '):'');
+    if(hint){hint.textContent='vPIC: '+hintText;hint.className='av-hint success';}
+    if(filled.length)toast('VIN decoded: '+filled.join(' '));
+    else toast('vPIC returned — year/trim populated from VIN positions');
+  }catch(err){
+    // Fallback: local decode only
+    var yearStr2=local.year||'?';
+    var trimStr2=local.trim||'unknown trim';
+    if(hint){hint.textContent='Local decode: '+yearStr2+' '+trimStr2+' (vPIC unavailable)';hint.className='av-hint success';}
+    toast('vPIC timeout — used local VIN decode');
+  }finally{
+    if(btn){btn.textContent='Decode';btn.disabled=false;}
+  }
 }
 function avOpenExisting(e){
   e.preventDefault();
