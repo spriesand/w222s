@@ -2529,9 +2529,17 @@ function quickFilter(preset){
   applyFilters();
 }
 
-
-
-loadAll();
+// Auto-initialize on page load
+(async function initApp(){
+  try {
+    await loadAll();
+  } catch(e) {
+    console.error('initApp failed:', e);
+    var b = document.getElementById('loading-banner');
+    if(b) b.textContent = '⚠ Load error: ' + e.message;
+    setSyncStatus('error');
+  }
+})();
 </script>
 
 <!-- BULK ENTRY OVERLAY + MODAL -->
