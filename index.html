@@ -614,9 +614,7 @@ td.num{font-family:var(--mono);text-align:right;}
       <label class="filter-row"><input type="checkbox" id="mi-110" checked onchange="applyFilters()">&gt; 111K<span class="filter-count" id="cnt-mi-110">&mdash;</span></label>
       <label class="filter-row" style="margin-top:4px"><input type="checkbox" id="mi-any" onchange="miAnyToggle(this)"><span style="color:var(--muted)">No mileage data</span></label>
     </div>
-    <div class="sidebar-section">
-      <label class="filter-row"><input type="checkbox" id="gold-only" onchange="applyFilters()"><span style="color:var(--muted);font-size:12px">2017 Ranked only</span></label>
-    </div>
+
   </aside>
   <main>
     <div id="mobile-search-panel">
@@ -1353,7 +1351,7 @@ function applyFilters(){
   const yr2017=document.getElementById('yr-2017').checked;
   const yr2016=document.getElementById('yr-2016').checked;
   const yr2015=document.getElementById('yr-2015').checked;
-  const goldOnly=document.getElementById('gold-only').checked;
+  const goldEl=document.getElementById('gold-only'); const goldOnly=goldEl&&goldEl.checked;
   const sortVal=document.getElementById('fleet-sort').value;
   const[sortCol,sortDir]=sortVal.split('.');
   const hasAcc=v=>{const a=v.accident_count;if(!a||a==='None'||a==='0'||a==='0 - Clean'||a==='Clean')return false;const n=parseInt(a);if(!isNaN(n))return n>0;return true;};
@@ -2603,13 +2601,13 @@ function quickFilter(preset){
   document.getElementById('pill-s600').className='pill on-s600';
 
   if(preset==='tracked'){
-    // Target + Tracking S65s only
+    // Total VINs — show ALL data, all flags, all years, all mileage
     document.getElementById('st-active').checked=true;
-    trimFilter=new Set(['S65 AMG','S65']);
-    document.getElementById('pill-s65').className='pill on-s65';
-    document.getElementById('pill-s600').className='pill';
-    document.getElementById('mi-any').checked=true;
+    document.getElementById('st-watch').checked=true;
+    document.getElementById('st-universe').checked=true;
+    document.getElementById('st-dq').checked=true;
     ['mi-u30','mi-30','mi-50','mi-80','mi-110'].forEach(function(id){document.getElementById(id).checked=true;});
+    document.getElementById('mi-any').checked=true;
   } else if(preset==='ranked'){
     // 2017 ranked universe
     document.getElementById('st-active').checked=true;
