@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>W222s â Live Database</title>
+<title>W222s &mdash; Live Database</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
 <script>
@@ -45,7 +45,6 @@ header{background:var(--ink);color:var(--paper);padding:0 32px;display:flex;alig
 .sync-dot.loading{background:var(--gold);animation:pulse 1s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-/* Playbook link in header */
 .playbook-link{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border:1px solid var(--gold);border-radius:3px;background:none;color:var(--gold);font-family:var(--mono);font-size:11px;text-decoration:none;letter-spacing:.04em;transition:all .15s;white-space:nowrap;}
 .playbook-link:hover{background:var(--gold);color:var(--ink);}
 
@@ -236,7 +235,7 @@ td.num{font-family:var(--mono);text-align:right;}
 .doc-replace-link{display:inline-block;margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--muted);text-decoration:none;cursor:pointer;}
 .doc-replace-link:hover{color:var(--accent);}
 
-/* ââ Vehicle photo zone â fixed and clean ââ */
+/* -- Vehicle photo zone -- */
 .img-upload-zone{width:100%;height:160px;border:2px dashed var(--rule);border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;cursor:pointer;transition:all .15s;margin-bottom:14px;position:relative;overflow:hidden;}
 .img-upload-zone:hover{border-color:var(--ink);}
 .img-upload-zone.has-img{border-style:solid;border-color:var(--s65);padding:0;}
@@ -275,69 +274,7 @@ td.num{font-family:var(--mono);text-align:right;}
 .cd-edit-input:focus{border-bottom-color:var(--ink);}
 .cd-edit-input::placeholder{color:#ccc;}
 
-@media(max-width:768px){
-  header{padding:0 12px;height:48px;}
-  .logo{font-size:16px;}
-  .header-meta{display:none;}
-  .sync-btn{font-size:10px;padding:4px 8px;}
-  .playbook-link{font-size:10px;padding:4px 8px;}
-  .tab-bar{padding:0 8px;top:48px;}
-  .tab{padding:10px 12px;font-size:10px;letter-spacing:.06em;}
-  .tab-actions{display:none;}
-  .page.active{display:block;}
-  .shell{display:block;}
-  aside{display:none;}
-  main{padding:12px;}
-  .table-outer{display:none;}
-  .toolbar{display:none;}
-  .pagination{display:none;}
-  .crm-grid{display:none;}
-  #mobile-search-panel{display:block !important;}
-  .drawer{width:100%;left:0;}
-  .scenario-row{grid-template-columns:repeat(3,1fr);}
-  .drawer-grid{grid-template-columns:1fr 1fr;}
-}
-@media(min-width:769px){
-  #mobile-search-panel{display:none !important;}
-}
-#mobile-search-panel{display:none;padding:12px;}
-.mob-search-wrap{position:relative;margin-bottom:8px;}
-.mob-search-input{width:100%;border:2px solid var(--rule);border-radius:8px;padding:13px 16px 13px 42px;font-family:var(--mono);font-size:15px;background:#fff;color:var(--ink);outline:none;-webkit-appearance:none;}
-.mob-search-input:focus{border-color:var(--ink);}
-.mob-hint{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px;line-height:1.5;}
-.mob-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px;}
-.mob-stat{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:10px 6px;text-align:center;}
-.mob-stat-num{font-family:var(--serif);font-size:18px;display:block;}
-.mob-stat-lbl{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:block;margin-top:2px;}
-
-/* Mobile top-40 list */
-.mob-top40-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.mob-top40-title{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
-.mob-top40-count{font-family:var(--mono);font-size:10px;color:var(--accent);font-weight:600;}
-
-.mob-result{background:#fff;border:1px solid var(--rule);border-radius:8px;overflow:hidden;margin-bottom:10px;}
-.mob-result-header{background:var(--ink);padding:12px 16px;display:flex;justify-content:space-between;align-items:flex-start;}
-.mob-result-vin{font-family:var(--mono);font-size:10px;color:#aaa;margin-bottom:2px;}
-.mob-result-title{font-family:var(--serif);font-size:16px;color:#fff;}
-.mob-result-body{padding:12px 14px;}
-.mob-field-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;}
-.mob-field{background:var(--paper);border-radius:4px;padding:8px 10px;}
-.mob-field-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:2px;}
-.mob-field-value{font-family:var(--mono);font-size:13px;font-weight:500;}
-.mob-field-value.accent{color:var(--accent);}
-.mob-field-value.green{color:#1a6b3a;}
-.mob-field-value.gold{color:var(--gold);}
-.mob-open-btn{display:block;width:100%;padding:11px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;margin-top:4px;}
-.mob-no-result{text-align:center;padding:32px 16px;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.8;}
-.mob-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
-.mob-edit-field{display:flex;flex-direction:column;gap:3px;}
-.mob-edit-input{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 12px;font-family:var(--mono);font-size:14px;background:#fff;color:var(--ink);outline:none;-webkit-appearance:none;}
-.mob-edit-input:focus{border-color:var(--ink);border-width:2px;}
-.mob-status-sel{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 12px;font-family:var(--mono);font-size:13px;background:#fff;color:var(--ink);outline:none;-webkit-appearance:none;}
-.mob-log-area{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 12px;font-family:var(--sans);font-size:13px;background:#fff;color:var(--ink);outline:none;resize:none;min-height:72px;-webkit-appearance:none;}
-.mob-log-area:focus,.mob-status-sel:focus{border-color:var(--ink);}
-
-/* ââ Listing History in Drawer âââââââââââââââââââââââââââ */
+/* -- Listing History in Drawer -- */
 .lh-table{width:100%;border-collapse:collapse;font-size:10px;margin-bottom:4px;}
 .lh-table th{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.1em;padding:5px 6px;background:#f5f5f4;border-bottom:1px solid var(--rule);color:var(--muted);white-space:nowrap;text-align:left;}
 .lh-table td{font-family:var(--mono);font-size:10px;padding:6px 6px;border-bottom:1px solid var(--rule);vertical-align:middle;}
@@ -356,7 +293,8 @@ td.num{font-family:var(--mono);text-align:right;}
 .lh-sum-pill{font-family:var(--mono);font-size:9px;padding:2px 8px;border-radius:10px;border:1px solid var(--rule);color:var(--muted);background:#fafaf8;}
 .lh-sum-pill.active{border-color:#1a6b3a;color:#1a6b3a;background:#f0faf0;}
 .lh-sum-pill.dead{border-color:var(--accent);color:var(--accent);background:#fdf0f0;}
-/* ââ Market Intelligence Tab âââââââââââââââââââââââââââââ */
+
+/* -- Market Intelligence Tab -- */
 :root{--bat-orange:#e06a2c;--active-green:#2d6a3f;--dead-red:#8b2a2a;}
 .mi-header{background:linear-gradient(135deg,#1a0f05 0%,#2d1a08 100%);padding:20px 28px;border-bottom:2px solid var(--bat-orange);}
 .mi-header h2{font-family:var(--serif);font-size:18px;color:#f0e8d8;margin-bottom:4px;}
@@ -414,13 +352,8 @@ td.num{font-family:var(--mono);text-align:right;}
 .mi-empty{font-family:var(--mono);font-size:11px;color:var(--muted);padding:24px 28px;text-align:center;}
 #tab-market{display:none;}
 #tab-market.tab-panel-active{display:block;}
-@media(max-width:768px){
-  .mi-stats{grid-template-columns:repeat(2,1fr);}
-  .bat-table-wrap,.scan-table-wrap{margin:0 0 16px;overflow-x:auto;}
-  .mi-section-head{padding:12px 12px 8px;}
-}
 
-/* ── Add Vehicle Modal ───────────────────────────────────────── */
+/* -- Add Vehicle Modal -- */
 .av-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;opacity:0;pointer-events:none;transition:opacity .2s;}
 .av-overlay.open{opacity:1;pointer-events:all;}
 .av-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-60%);width:min(640px,96vw);max-height:90vh;background:#fff;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.35);z-index:301;display:flex;flex-direction:column;opacity:0;pointer-events:none;transition:all .25s cubic-bezier(.4,0,.2,1);}
@@ -468,37 +401,97 @@ td.num{font-family:var(--mono);text-align:right;}
 .av-error-msg.show{display:block;}
 .btn-add-vehicle{background:var(--accent);color:#fff;border:none;border-radius:4px;padding:7px 14px;font-family:var(--mono);font-size:11px;cursor:pointer;text-transform:uppercase;letter-spacing:.06em;display:inline-flex;align-items:center;gap:5px;transition:all .15s;}
 .btn-add-vehicle:hover{background:#6b1212;}
+
 @media(max-width:768px){
+  header{padding:0 12px;height:48px;}
+  .logo{font-size:16px;}
+  .header-meta{display:none;}
+  .sync-btn{font-size:10px;padding:4px 8px;}
+  .playbook-link{font-size:10px;padding:4px 8px;}
+  .tab-bar{padding:0 8px;top:48px;}
+  .tab{padding:10px 12px;font-size:10px;letter-spacing:.06em;}
+  .tab-actions{display:none;}
+  .page.active{display:block;}
+  .shell{display:block;}
+  aside{display:none;}
+  main{padding:12px;}
+  .table-outer{display:none;}
+  .toolbar{display:none;}
+  .pagination{display:none;}
+  .crm-grid{display:none;}
+  #mobile-search-panel{display:block !important;}
+  .drawer{width:100%;left:0;}
+  .scenario-row{grid-template-columns:repeat(3,1fr);}
+  .drawer-grid{grid-template-columns:1fr 1fr;}
   .av-modal{width:100%;height:100%;max-height:100%;top:0;left:0;transform:translateY(100%);border-radius:0;}
   .av-modal.open{transform:translateY(0);}
   .av-grid-2{grid-template-columns:1fr;}
   .av-score-grid{grid-template-columns:repeat(2,1fr);}
   .av-swall-grid{grid-template-columns:1fr;}
+  .mi-stats{grid-template-columns:repeat(2,1fr);}
+  .bat-table-wrap,.scan-table-wrap{margin:0 0 16px;overflow-x:auto;}
+  .mi-section-head{padding:12px 12px 8px;}
 }
+@media(min-width:769px){
+  #mobile-search-panel{display:none !important;}
+}
+#mobile-search-panel{display:none;padding:12px;}
+.mob-search-wrap{position:relative;margin-bottom:8px;}
+.mob-search-input{width:100%;border:2px solid var(--rule);border-radius:8px;padding:13px 16px 13px 42px;font-family:var(--mono);font-size:15px;background:#fff;color:var(--ink);outline:none;-webkit-appearance:none;}
+.mob-search-input:focus{border-color:var(--ink);}
+.mob-hint{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px;line-height:1.5;}
+.mob-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px;}
+.mob-stat{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:10px 6px;text-align:center;}
+.mob-stat-num{font-family:var(--serif);font-size:18px;display:block;}
+.mob-stat-lbl{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:block;margin-top:2px;}
+.mob-top40-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.mob-top40-title{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
+.mob-top40-count{font-family:var(--mono);font-size:10px;color:var(--accent);font-weight:600;}
+.mob-result{background:#fff;border:1px solid var(--rule);border-radius:8px;overflow:hidden;margin-bottom:10px;}
+.mob-result-header{background:var(--ink);padding:12px 16px;display:flex;justify-content:space-between;align-items:flex-start;}
+.mob-result-vin{font-family:var(--mono);font-size:10px;color:#aaa;margin-bottom:2px;}
+.mob-result-title{font-family:var(--serif);font-size:16px;color:#fff;}
+.mob-result-body{padding:12px 14px;}
+.mob-field-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;}
+.mob-field{background:var(--paper);border-radius:4px;padding:8px 10px;}
+.mob-field-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:2px;}
+.mob-field-value{font-family:var(--mono);font-size:13px;font-weight:500;}
+.mob-field-value.accent{color:var(--accent);}
+.mob-field-value.green{color:#1a6b3a;}
+.mob-field-value.gold{color:var(--gold);}
+.mob-open-btn{display:block;width:100%;padding:11px;background:var(--accent);color:#fff;border:none;border-radius:6px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;margin-top:4px;}
+.mob-no-result{text-align:center;padding:32px 16px;font-family:var(--mono);font-size:12px;color:var(--muted);line-height:1.8;}
+.mob-edit-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
+.mob-edit-field{display:flex;flex-direction:column;gap:3px;}
+.mob-edit-input{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 12px;font-family:var(--mono);font-size:14px;background:#fff;color:var(--ink);outline:none;-webkit-appearance:none;}
+.mob-edit-input:focus{border-color:var(--ink);border-width:2px;}
+.mob-status-sel{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 12px;font-family:var(--mono);font-size:13px;background:#fff;color:var(--ink);outline:none;-webkit-appearance:none;}
+.mob-log-area{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 12px;font-family:var(--sans);font-size:13px;background:#fff;color:var(--ink);outline:none;resize:none;min-height:72px;-webkit-appearance:none;}
+.mob-log-area:focus,.mob-status-sel:focus{border-color:var(--ink);}
 </style>
 </head>
 <body>
 
-<div id="loading-banner">â³ Connecting to Supabaseâ¦</div>
+<div id="loading-banner">&#9203; Connecting to Supabase&hellip;</div>
 <div id="toast"></div>
 
 <header>
   <div class="logo">W222<span>s</span></div>
   <div class="header-sync">
     <span class="sync-dot" id="sync-dot"></span>
-    <span style="font-family:var(--mono);font-size:11px;color:#aaa" id="sync-label">Connectingâ¦</span>
-    <button class="sync-btn" onclick="refreshAll()">â» Refresh</button>
-    <a class="playbook-link" href="https://spriesand.github.io/w222playbook/" target="_blank" rel="noopener noreferrer">ð Playbook</a>
+    <span style="font-family:var(--mono);font-size:11px;color:#aaa" id="sync-label">Connecting&hellip;</span>
+    <button class="sync-btn" onclick="refreshAll()">&#8635; Refresh</button>
+    <a class="playbook-link" href="https://spriesand.github.io/w222playbook/" target="_blank" rel="noopener noreferrer">&#128214; Playbook</a>
   </div>
-  <div class="header-meta" id="header-counts">â vehicles Â· â contacts</div>
+  <div class="header-meta" id="header-counts">&mdash; vehicles &middot; &mdash; contacts</div>
 </header>
 
 <div class="tab-bar">
-  <div class="tab active" onclick="switchTab('fleet')">Fleet Database <span class="tab-badge" id="fleet-tab-count">â</span></div>
-  <div class="tab" onclick="switchTab('crm')">Broker CRM <span class="tab-badge" id="crm-tab-count">â</span></div>
+  <div class="tab active" onclick="switchTab('fleet')">Fleet Database <span class="tab-badge" id="fleet-tab-count">&mdash;</span></div>
+  <div class="tab" onclick="switchTab('crm')">Broker CRM <span class="tab-badge" id="crm-tab-count">&mdash;</span></div>
   <div class="tab" onclick="switchTab('market')">Market Intelligence <span class="tab-badge" id="market-tab-count" style="background:var(--bat-orange);color:#fff;">BaT</span></div>
   <div class="tab-actions">
-    <button class="btn-add-vehicle" onclick="openAddVehicle()">＋ Add Vehicle</button>
+    <button class="btn-add-vehicle" onclick="openAddVehicle()">+ Add Vehicle</button>
     <button class="btn btn-accent" onclick="openAddContact()">+ Add Contact</button>
   </div>
 </div>
@@ -510,10 +503,10 @@ td.num{font-family:var(--mono);text-align:right;}
     <div class="sidebar-section">
       <div class="sidebar-label">Fleet Overview</div>
       <div class="stats-grid">
-        <div class="stat-box"><span class="stat-num" id="stat-total">â</span><span class="stat-lbl">Total VINs</span></div>
-        <div class="stat-box"><span class="stat-num" id="stat-gold">â</span><span class="stat-lbl">2017 Ranked</span></div>
-        <div class="stat-box"><span class="stat-num" style="color:var(--s65)" id="stat-s65">â</span><span class="stat-lbl">S65 AMG</span></div>
-        <div class="stat-box"><span class="stat-num" style="color:var(--s600)" id="stat-s600">â</span><span class="stat-lbl">S600</span></div>
+        <div class="stat-box"><span class="stat-num" id="stat-total">&mdash;</span><span class="stat-lbl">Total VINs</span></div>
+        <div class="stat-box"><span class="stat-num" id="stat-gold">&mdash;</span><span class="stat-lbl">2017 Ranked</span></div>
+        <div class="stat-box"><span class="stat-num" style="color:var(--s65)" id="stat-s65">&mdash;</span><span class="stat-lbl">S65 AMG</span></div>
+        <div class="stat-box"><span class="stat-num" style="color:var(--s600)" id="stat-s600">&mdash;</span><span class="stat-lbl">S600</span></div>
       </div>
     </div>
     <div class="sidebar-section">
@@ -525,30 +518,30 @@ td.num{font-family:var(--mono);text-align:right;}
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Flag</div>
-      <label class="filter-row"><input type="checkbox" id="st-active" checked onchange="applyFilters()"><span style="color:var(--accent);font-weight:500">Target</span><span class="filter-count" id="cnt-active">â</span></label>
-      <label class="filter-row"><input type="checkbox" id="st-watch" checked onchange="applyFilters()"><span style="color:var(--gold)">Watch</span><span class="filter-count" id="cnt-watch">â</span></label>
-      <label class="filter-row"><input type="checkbox" id="st-universe" checked onchange="applyFilters()"><span style="color:var(--muted)">Universe</span><span class="filter-count" id="cnt-universe">â</span></label>
-      <label class="filter-row"><input type="checkbox" id="st-dq" onchange="applyFilters()"><span style="color:#bbb">DQ</span><span class="filter-count" id="cnt-dq">â</span></label>
+      <label class="filter-row"><input type="checkbox" id="st-active" checked onchange="applyFilters()"><span style="color:var(--accent);font-weight:500">Target</span><span class="filter-count" id="cnt-active">&mdash;</span></label>
+      <label class="filter-row"><input type="checkbox" id="st-watch" checked onchange="applyFilters()"><span style="color:var(--gold)">Watch</span><span class="filter-count" id="cnt-watch">&mdash;</span></label>
+      <label class="filter-row"><input type="checkbox" id="st-universe" checked onchange="applyFilters()"><span style="color:var(--muted)">Universe</span><span class="filter-count" id="cnt-universe">&mdash;</span></label>
+      <label class="filter-row"><input type="checkbox" id="st-dq" onchange="applyFilters()"><span style="color:#bbb">DQ</span><span class="filter-count" id="cnt-dq">&mdash;</span></label>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Model Year</div>
-      <label class="filter-row"><input type="checkbox" id="yr-2017" checked onchange="applyFilters()">2017<span class="filter-count" id="cnt-yr2017">â</span></label>
-      <label class="filter-row"><input type="checkbox" id="yr-2016" checked onchange="applyFilters()">2016<span class="filter-count" id="cnt-yr2016">â</span></label>
-      <label class="filter-row"><input type="checkbox" id="yr-2015" checked onchange="applyFilters()">2015<span class="filter-count" id="cnt-yr2015">â</span></label>
+      <label class="filter-row"><input type="checkbox" id="yr-2017" checked onchange="applyFilters()">2017<span class="filter-count" id="cnt-yr2017">&mdash;</span></label>
+      <label class="filter-row"><input type="checkbox" id="yr-2016" checked onchange="applyFilters()">2016<span class="filter-count" id="cnt-yr2016">&mdash;</span></label>
+      <label class="filter-row"><input type="checkbox" id="yr-2015" checked onchange="applyFilters()">2015<span class="filter-count" id="cnt-yr2015">&mdash;</span></label>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Odometer (mi)</div>
       <div style="display:flex;gap:5px;align-items:center;margin-bottom:5px">
         <input id="odo-min" style="width:65px;border:1px solid var(--rule);border-radius:3px;padding:4px 6px;font-family:var(--mono);font-size:11px;background:var(--paper)" placeholder="0" onchange="applyFilters()">
-        <span style="color:var(--muted);font-size:11px">â</span>
+        <span style="color:var(--muted);font-size:11px">&ndash;</span>
         <input id="odo-max" style="width:75px;border:1px solid var(--rule);border-radius:3px;padding:4px 6px;font-family:var(--mono);font-size:11px;background:var(--paper)" placeholder="150000" onchange="applyFilters()">
       </div>
-      <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">GI window: 70Kâ100K highlighted</div>
+      <div style="font-size:10px;color:var(--muted);font-family:var(--mono)">GI window: 70K&ndash;100K highlighted</div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Accidents</div>
-      <label class="filter-row"><input type="checkbox" id="acc-0" checked onchange="applyFilters()"><span style="color:var(--accent)">Clean</span><span class="filter-count" id="cnt-acc0">â</span></label>
-      <label class="filter-row"><input type="checkbox" id="acc-1" checked onchange="applyFilters()">Has accident<span class="filter-count" id="cnt-acc1">â</span></label>
+      <label class="filter-row"><input type="checkbox" id="acc-0" checked onchange="applyFilters()"><span style="color:var(--accent)">Clean</span><span class="filter-count" id="cnt-acc0">&mdash;</span></label>
+      <label class="filter-row"><input type="checkbox" id="acc-1" checked onchange="applyFilters()">Has accident<span class="filter-count" id="cnt-acc1">&mdash;</span></label>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Dataset</div>
@@ -564,40 +557,41 @@ td.num{font-family:var(--mono);text-align:right;}
   <main>
     <div id="mobile-search-panel">
       <div class="mob-stats">
-        <div class="mob-stat"><span class="mob-stat-num" id="m-stat-total">â</span><span class="mob-stat-lbl">VINs</span></div>
-        <div class="mob-stat"><span class="mob-stat-num" style="color:var(--accent)" id="m-stat-target">â</span><span class="mob-stat-lbl">Target</span></div>
-        <div class="mob-stat"><span class="mob-stat-num" style="color:var(--s65)" id="m-stat-s65">â</span><span class="mob-stat-lbl">S65</span></div>
-        <div class="mob-stat"><span class="mob-stat-num" style="color:var(--s600)" id="m-stat-s600">â</span><span class="mob-stat-lbl">S600</span></div>
+        <div class="mob-stat"><span class="mob-stat-num" id="m-stat-total">&mdash;</span><span class="mob-stat-lbl">VINs</span></div>
+        <div class="mob-stat"><span class="mob-stat-num" style="color:var(--accent)" id="m-stat-target">&mdash;</span><span class="mob-stat-lbl">Target</span></div>
+        <div class="mob-stat"><span class="mob-stat-num" style="color:var(--s65)" id="m-stat-s65">&mdash;</span><span class="mob-stat-lbl">S65</span></div>
+        <div class="mob-stat"><span class="mob-stat-num" style="color:var(--s600)" id="m-stat-s600">&mdash;</span><span class="mob-stat-lbl">S600</span></div>
       </div>
       <div class="mob-search-wrap">
-        <span class="mob-search-icon">â</span>
-        <input class="mob-search-input" id="mob-input" type="text" placeholder="VIN or company nameâ¦" oninput="mobileSearch(this.value)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <span class="mob-search-icon">&#9906;</span>
+        <input class="mob-search-input" id="mob-input" type="text" placeholder="VIN or company name&hellip;" oninput="mobileSearch(this.value)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       </div>
-      <div class="mob-hint">Search to look up a VIN or broker Â· or browse Top 40 below</div>
+      <div class="mob-hint">Search to look up a VIN or broker &middot; or browse Top 40 below</div>
+      <!-- Mobile Add Vehicle button -->
+      <button class="btn-add-vehicle" onclick="openAddVehicle()" style="width:100%;justify-content:center;margin-bottom:12px;padding:12px;font-size:13px;">+ Add Vehicle Profile</button>
       <div id="mob-results"></div>
-      <!-- Top 40 default list â shown when search is empty -->
       <div id="mob-top40">
         <div class="mob-top40-header">
           <span class="mob-top40-title">Top 40 Ranked</span>
-          <span class="mob-top40-count" id="mob-top40-count">Loadingâ¦</span>
+          <span class="mob-top40-count" id="mob-top40-count">Loading&hellip;</span>
         </div>
         <div id="mob-top40-list"></div>
       </div>
     </div>
     <div class="toolbar">
       <div class="search-wrap">
-        <span class="search-icon">â</span>
-        <input type="text" id="fleet-search" placeholder="VIN, state, exteriorâ¦" oninput="applyFilters()">
+        <span class="search-icon">&#9906;</span>
+        <input type="text" id="fleet-search" placeholder="VIN, state, exterior&hellip;" oninput="applyFilters()">
       </div>
       <select class="sort-select" id="fleet-sort" onchange="applyFilters()">
-        <option value="composite_score.desc">Score â</option>
-        <option value="apex_rank.asc">Rank â</option>
-        <option value="curr_odo.asc">Odo â</option>
-        <option value="proj_mi_jan28.asc">Proj Mi â</option>
-        <option value="offer_target.asc">Offer â</option>
-        <option value="last_sale_year.desc">Last Sale â</option>
+        <option value="composite_score.desc">Score &darr;</option>
+        <option value="apex_rank.asc">Rank &uarr;</option>
+        <option value="curr_odo.asc">Odo &uarr;</option>
+        <option value="proj_mi_jan28.asc">Proj Mi &uarr;</option>
+        <option value="offer_target.asc">Offer &uarr;</option>
+        <option value="last_sale_year.desc">Last Sale &darr;</option>
       </select>
-      <span class="result-count" id="fleet-count">Loadingâ¦</span>
+      <span class="result-count" id="fleet-count">Loading&hellip;</span>
     </div>
     <div class="table-outer">
       <table id="fleet-table">
@@ -632,7 +626,7 @@ td.num{font-family:var(--mono);text-align:right;}
             <th class="grp-scoring">Brakes</th>
             <th class="grp-scoring">Svc/Yr</th>
             <th class="grp-scoring">QS</th>
-            <th class="grp-scoring">PAÂ·PBÂ·MOD</th>
+            <th class="grp-scoring">PA&middot;PB&middot;MOD</th>
             <th class="grp-scoring">Score</th>
             <th class="grp-sources">iSC</th>
             <th class="grp-sources">CFX</th>
@@ -662,7 +656,7 @@ td.num{font-family:var(--mono);text-align:right;}
             <th>Links</th>
           </tr>
         </thead>
-        <tbody id="fleet-tbody"><tr class="empty-row"><td colspan="44">Loading fleet dataâ¦</td></tr></tbody>
+        <tbody id="fleet-tbody"><tr class="empty-row"><td colspan="44">Loading fleet data&hellip;</td></tr></tbody>
       </table>
     </div>
     <div class="pagination" id="fleet-pagination"></div>
@@ -677,10 +671,10 @@ td.num{font-family:var(--mono);text-align:right;}
     <div class="sidebar-section">
       <div class="sidebar-label">Pipeline</div>
       <div class="stats-grid">
-        <div class="stat-box"><span class="stat-num" id="crm-stat-total">â</span><span class="stat-lbl">Total</span></div>
-        <div class="stat-box"><span class="stat-num" style="color:var(--st-active)" id="crm-stat-active">â</span><span class="stat-lbl">Active</span></div>
-        <div class="stat-box"><span class="stat-num" style="color:var(--st-pending)" id="crm-stat-pending">â</span><span class="stat-lbl">Pending</span></div>
-        <div class="stat-box"><span class="stat-num" style="color:var(--st-declined)" id="crm-stat-declined">â</span><span class="stat-lbl">Declined</span></div>
+        <div class="stat-box"><span class="stat-num" id="crm-stat-total">&mdash;</span><span class="stat-lbl">Total</span></div>
+        <div class="stat-box"><span class="stat-num" style="color:var(--st-active)" id="crm-stat-active">&mdash;</span><span class="stat-lbl">Active</span></div>
+        <div class="stat-box"><span class="stat-num" style="color:var(--st-pending)" id="crm-stat-pending">&mdash;</span><span class="stat-lbl">Pending</span></div>
+        <div class="stat-box"><span class="stat-num" style="color:var(--st-declined)" id="crm-stat-declined">&mdash;</span><span class="stat-lbl">Declined</span></div>
       </div>
     </div>
     <div class="sidebar-section">
@@ -717,21 +711,21 @@ td.num{font-family:var(--mono);text-align:right;}
     <div class="sidebar-section">
       <div class="sidebar-label">Search</div>
       <div class="search-wrap" style="max-width:100%">
-        <span class="search-icon">â</span>
-        <input type="text" id="crm-search" placeholder="Company, notesâ¦" oninput="renderCRM()" style="width:100%">
+        <span class="search-icon">&#9906;</span>
+        <input type="text" id="crm-search" placeholder="Company, notes&hellip;" oninput="renderCRM()" style="width:100%">
       </div>
     </div>
   </aside>
   <main>
     <div class="toolbar">
-      <span class="result-count" id="crm-count">Loadingâ¦</span>
+      <span class="result-count" id="crm-count">Loading&hellip;</span>
       <select class="sort-select" id="crm-sort" onchange="renderCRM()">
         <option value="last_activity">Most Recent Activity</option>
-        <option value="company">Company AâZ</option>
+        <option value="company">Company A&ndash;Z</option>
         <option value="status">Status</option>
       </select>
     </div>
-    <div class="crm-grid" id="crm-grid"><div style="font-family:var(--mono);font-size:12px;color:var(--muted);padding:28px">Loading contactsâ¦</div></div>
+    <div class="crm-grid" id="crm-grid"><div style="font-family:var(--mono);font-size:12px;color:var(--muted);padding:28px">Loading contacts&hellip;</div></div>
   </main>
 </div>
 </div>
@@ -739,35 +733,18 @@ td.num{font-family:var(--mono);text-align:right;}
 <!-- MARKET INTELLIGENCE TAB -->
 <div id="tab-market">
   <div style="max-width:1200px;margin:0 auto;padding-bottom:40px;">
-
     <div class="mi-header">
-      <h2>Market Intelligence â BaT Comparables &amp; Listing History</h2>
-      <p id="mi-header-meta">Loading from Supabaseâ¦</p>
+      <h2>Market Intelligence &mdash; BaT Comparables &amp; Listing History</h2>
+      <p id="mi-header-meta">Loading from Supabase&hellip;</p>
     </div>
-
-    <!-- SUMMARY STATS -->
     <div class="mi-stats">
-      <div class="mi-stat">
-        <div class="mi-stat-val orange" id="mi-stat-bat-count">â</div>
-        <div class="mi-stat-label">BaT Events Tracked</div>
-      </div>
-      <div class="mi-stat">
-        <div class="mi-stat-val gold" id="mi-stat-s65-ceiling">â</div>
-        <div class="mi-stat-label">2017 S65 Ceiling</div>
-      </div>
-      <div class="mi-stat">
-        <div class="mi-stat-val" id="mi-stat-s600-ceiling">â</div>
-        <div class="mi-stat-label">2017 S600 Ceiling</div>
-      </div>
-      <div class="mi-stat">
-        <div class="mi-stat-val" id="mi-stat-listing-count">â</div>
-        <div class="mi-stat-label">Listing History Episodes</div>
-      </div>
+      <div class="mi-stat"><div class="mi-stat-val orange" id="mi-stat-bat-count">&mdash;</div><div class="mi-stat-label">BaT Events Tracked</div></div>
+      <div class="mi-stat"><div class="mi-stat-val gold" id="mi-stat-s65-ceiling">&mdash;</div><div class="mi-stat-label">2017 S65 Ceiling</div></div>
+      <div class="mi-stat"><div class="mi-stat-val" id="mi-stat-s600-ceiling">&mdash;</div><div class="mi-stat-label">2017 S600 Ceiling</div></div>
+      <div class="mi-stat"><div class="mi-stat-val" id="mi-stat-listing-count">&mdash;</div><div class="mi-stat-label">Listing History Episodes</div></div>
     </div>
-
-    <!-- BAT COMPARABLES TABLE -->
     <div class="mi-section-head">
-      <h3>BaT Sales â All Cohorts</h3>
+      <h3>BaT Sales &mdash; All Cohorts</h3>
       <div class="mi-filter-row">
         <button class="mi-filter-btn active" onclick="filterBat('all',this)">All</button>
         <button class="mi-filter-btn" onclick="filterBat('S65',this)">S65</button>
@@ -779,37 +756,18 @@ td.num{font-family:var(--mono);text-align:right;}
     <div class="bat-table-wrap">
       <div class="bat-table-header">
         <span class="bat-logo">BaT</span>
-        <h4>Bring a Trailer â Confirmed Sales &amp; RNM Events</h4>
-        <div class="bat-table-meta" id="bat-table-meta">Loadingâ¦</div>
+        <h4>Bring a Trailer &mdash; Confirmed Sales &amp; RNM Events</h4>
+        <div class="bat-table-meta" id="bat-table-meta">Loading&hellip;</div>
       </div>
       <div style="overflow-x:auto;">
         <table class="bat-table" id="bat-table">
-          <thead>
-            <tr>
-              <th>VIN (last 8)</th>
-              <th>Year</th>
-              <th>Trim</th>
-              <th>Miles</th>
-              <th>Result</th>
-              <th>Price</th>
-              <th>Date</th>
-              <th>Bids</th>
-              <th>GOLD</th>
-              <th>Notes</th>
-              <th>BaT Link</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody id="bat-tbody">
-            <tr><td colspan="12" class="mi-empty">Loading BaT comparablesâ¦</td></tr>
-          </tbody>
+          <thead><tr><th>VIN (last 8)</th><th>Year</th><th>Trim</th><th>Miles</th><th>Result</th><th>Price</th><th>Date</th><th>Bids</th><th>GOLD</th><th>Notes</th><th>BaT Link</th><th>Status</th></tr></thead>
+          <tbody id="bat-tbody"><tr><td colspan="12" class="mi-empty">Loading BaT comparables&hellip;</td></tr></tbody>
         </table>
       </div>
     </div>
-
-    <!-- LISTING HISTORY SUMMARY -->
     <div class="mi-section-head" style="margin-top:12px;">
-      <h3>Listing History â VIN Summary</h3>
+      <h3>Listing History &mdash; VIN Summary</h3>
       <div class="mi-filter-row">
         <button class="mi-filter-btn active" onclick="filterListings('all',this)">All</button>
         <button class="mi-filter-btn" onclick="filterListings('2017',this)">2017</button>
@@ -820,53 +778,23 @@ td.num{font-family:var(--mono);text-align:right;}
     <div class="scan-table-wrap">
       <div style="overflow-x:auto;">
         <table class="scan-table" id="listing-summary-table">
-          <thead>
-            <tr>
-              <th>VIN</th>
-              <th>Year</th>
-              <th>Trim</th>
-              <th>Episodes</th>
-              <th>Low Price</th>
-              <th>High Price</th>
-              <th>Max Miles</th>
-              <th>First Seen</th>
-              <th>Last Seen</th>
-            </tr>
-          </thead>
-          <tbody id="listing-summary-tbody">
-            <tr><td colspan="9" class="mi-empty">Loading listing historyâ¦</td></tr>
-          </tbody>
+          <thead><tr><th>VIN</th><th>Year</th><th>Trim</th><th>Episodes</th><th>Low Price</th><th>High Price</th><th>Max Miles</th><th>First Seen</th><th>Last Seen</th></tr></thead>
+          <tbody id="listing-summary-tbody"><tr><td colspan="9" class="mi-empty">Loading listing history&hellip;</td></tr></tbody>
         </table>
       </div>
     </div>
-
-    <!-- SCAN RESULTS â TRUE POSITIVES -->
     <div class="mi-section-head" style="margin-top:12px;">
-      <h3>Brave Scan â Active Listing Detections</h3>
-      <div class="mi-filter-row">
-        <span style="font-family:var(--mono);font-size:9px;color:var(--muted);" id="scan-meta">Last scan: â</span>
-      </div>
+      <h3>Brave Scan &mdash; Active Listing Detections</h3>
+      <div class="mi-filter-row"><span style="font-family:var(--mono);font-size:9px;color:var(--muted);" id="scan-meta">Last scan: &mdash;</span></div>
     </div>
     <div class="scan-table-wrap">
       <div style="overflow-x:auto;">
         <table class="scan-table" id="scan-table">
-          <thead>
-            <tr>
-              <th>Scan Date</th>
-              <th>Rank</th>
-              <th>VIN</th>
-              <th>Cohort</th>
-              <th>URL</th>
-              <th>Title</th>
-            </tr>
-          </thead>
-          <tbody id="scan-tbody">
-            <tr><td colspan="6" class="mi-empty">Loading scan resultsâ¦</td></tr>
-          </tbody>
+          <thead><tr><th>Scan Date</th><th>Rank</th><th>VIN</th><th>Cohort</th><th>URL</th><th>Title</th></tr></thead>
+          <tbody id="scan-tbody"><tr><td colspan="6" class="mi-empty">Loading scan results&hellip;</td></tr></tbody>
         </table>
       </div>
     </div>
-
   </div>
 </div>
 
@@ -875,18 +803,18 @@ td.num{font-family:var(--mono);text-align:right;}
 <div class="av-modal" id="av-modal">
   <div class="av-modal-header">
     <span class="av-modal-title">+ New Vehicle Profile</span>
-    <button class="av-modal-close" onclick="closeAddVehicle()">×</button>
+    <button class="av-modal-close" onclick="closeAddVehicle()">&#215;</button>
   </div>
   <div class="av-steps">
-    <div class="av-step active" id="av-step-1">1 · Identity</div>
-    <div class="av-step" id="av-step-2">2 · Ownership</div>
-    <div class="av-step" id="av-step-3">3 · Review</div>
+    <div class="av-step active" id="av-step-1">1 &middot; Identity</div>
+    <div class="av-step" id="av-step-2">2 &middot; Ownership</div>
+    <div class="av-step" id="av-step-3">3 &middot; Review</div>
   </div>
   <div class="av-modal-body" id="av-modal-body"></div>
   <div class="av-modal-footer">
-    <button class="btn" id="av-btn-back" onclick="avBack()" style="display:none">← Back</button>
+    <button class="btn" id="av-btn-back" onclick="avBack()" style="display:none">&larr; Back</button>
     <span id="av-footer-status" style="font-family:var(--mono);font-size:11px;color:var(--muted)"></span>
-    <button class="btn btn-accent" id="av-btn-next" onclick="avNext()">Next →</button>
+    <button class="btn btn-accent" id="av-btn-next" onclick="avNext()">Next &rarr;</button>
   </div>
 </div>
 
@@ -895,147 +823,100 @@ td.num{font-family:var(--mono);text-align:right;}
 <div class="drawer" id="fleet-drawer">
   <div class="drawer-header">
     <div>
-      <div class="drawer-eyebrow" id="fd-vin">â</div>
+      <div class="drawer-eyebrow" id="fd-vin">&mdash;</div>
       <div class="drawer-title" id="fd-title">Vehicle Detail</div>
-      <div class="drawer-subtitle" id="fd-sub">â</div>
+      <div class="drawer-subtitle" id="fd-sub">&mdash;</div>
     </div>
-    <button class="drawer-close" onclick="closeFleetDrawer()">Ã</button>
+    <button class="drawer-close" onclick="closeFleetDrawer()">&#215;</button>
   </div>
   <div class="drawer-body">
     <div class="section-head">Vehicle Photo</div>
     <div class="img-upload-zone" id="img-zone">
       <input type="file" accept="image/*" id="img-file-input" onchange="uploadVehicleImage(this)" style="display:none">
-      <div class="img-placeholder" style="font-size:24px">ð·</div>
+      <div class="img-placeholder" style="font-size:24px">&#128247;</div>
       <div class="img-placeholder" style="font-family:var(--mono);font-size:11px;color:var(--muted)">Drop or click to upload photo</div>
       <div class="img-overlay">Change photo</div>
     </div>
-    <button class="btn" style="width:100%;margin-bottom:14px" onclick="document.getElementById('img-file-input').click()">ð· Upload / Change Photo</button>
-
+    <button class="btn" style="width:100%;margin-bottom:14px" onclick="document.getElementById('img-file-input').click()">&#128247; Upload / Change Photo</button>
     <div class="section-head">Documents</div>
     <div class="doc-slots" id="fd-docs">
-      <div class="doc-slot" id="slot-carfax" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'carfax')">
-        <input type="file" onchange="uploadDoc(this,'carfax')">
-        <div class="doc-slot-label">Carfax</div><div class="doc-slot-icon">ð</div><div class="doc-slot-status">Click or drop PDF</div>
-      </div>
-      <div class="doc-slot" id="slot-goodcar" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'goodcar')">
-        <input type="file" onchange="uploadDoc(this,'goodcar')">
-        <div class="doc-slot-label">GoodCar</div><div class="doc-slot-icon">â</div><div class="doc-slot-status">Click or drop PDF</div>
-      </div>
-      <div class="doc-slot" id="slot-iseecars" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'iseecars')">
-        <input type="file" onchange="uploadDoc(this,'iseecars')">
-        <div class="doc-slot-label">iSeeCars</div><div class="doc-slot-icon">ð</div><div class="doc-slot-status">Click or drop PDF</div>
-      </div>
-      <div class="doc-slot" id="slot-autocheck" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'autocheck')">
-        <input type="file" onchange="uploadDoc(this,'autocheck')">
-        <div class="doc-slot-label">AutoCheck</div><div class="doc-slot-icon">ð</div><div class="doc-slot-status">Click or drop PDF</div>
-      </div>
-      <div class="doc-slot" id="slot-windowsticker" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'windowsticker')">
-        <input type="file" onchange="uploadDoc(this,'windowsticker')">
-        <div class="doc-slot-label">Window Sticker</div><div class="doc-slot-icon">ðª</div><div class="doc-slot-status">Click or drop PDF</div>
-      </div>
-      <div class="doc-slot" id="slot-publicrecords" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'publicrecords')">
-        <input type="file" onchange="uploadDoc(this,'publicrecords')">
-        <div class="doc-slot-label">Public Records</div><div class="doc-slot-icon">ð</div><div class="doc-slot-status">Click or drop PDF</div>
-      </div>
-      <div class="doc-slot" id="slot-ppi" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'ppi')">
-        <input type="file" onchange="uploadDoc(this,'ppi')">
-        <div class="doc-slot-label">PPI Report</div><div class="doc-slot-icon">ð§</div><div class="doc-slot-status">Click or drop PDF</div>
-      </div>
+      <div class="doc-slot" id="slot-carfax" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'carfax')"><input type="file" onchange="uploadDoc(this,'carfax')"><div class="doc-slot-label">Carfax</div><div class="doc-slot-icon">&#128203;</div><div class="doc-slot-status">Click or drop PDF</div></div>
+      <div class="doc-slot" id="slot-goodcar" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'goodcar')"><input type="file" onchange="uploadDoc(this,'goodcar')"><div class="doc-slot-label">GoodCar</div><div class="doc-slot-icon">&#10003;</div><div class="doc-slot-status">Click or drop PDF</div></div>
+      <div class="doc-slot" id="slot-iseecars" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'iseecars')"><input type="file" onchange="uploadDoc(this,'iseecars')"><div class="doc-slot-label">iSeeCars</div><div class="doc-slot-icon">&#128202;</div><div class="doc-slot-status">Click or drop PDF</div></div>
+      <div class="doc-slot" id="slot-autocheck" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'autocheck')"><input type="file" onchange="uploadDoc(this,'autocheck')"><div class="doc-slot-label">AutoCheck</div><div class="doc-slot-icon">&#128269;</div><div class="doc-slot-status">Click or drop PDF</div></div>
+      <div class="doc-slot" id="slot-windowsticker" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'windowsticker')"><input type="file" onchange="uploadDoc(this,'windowsticker')"><div class="doc-slot-label">Window Sticker</div><div class="doc-slot-icon">&#129695;</div><div class="doc-slot-status">Click or drop PDF</div></div>
+      <div class="doc-slot" id="slot-publicrecords" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'publicrecords')"><input type="file" onchange="uploadDoc(this,'publicrecords')"><div class="doc-slot-label">Public Records</div><div class="doc-slot-icon">&#128193;</div><div class="doc-slot-status">Click or drop PDF</div></div>
+      <div class="doc-slot" id="slot-ppi" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'ppi')"><input type="file" onchange="uploadDoc(this,'ppi')"><div class="doc-slot-label">PPI Report</div><div class="doc-slot-icon">&#128295;</div><div class="doc-slot-status">Click or drop PDF</div></div>
     </div>
-
     <div class="section-head">External Links</div>
     <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)" id="fd-links"></div>
-
-    <div class="section-head">Identity & Color</div>
+    <div class="section-head">Identity &amp; Color</div>
     <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">Exterior</div><div class="drawer-field-value" id="fd-ext">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Upholstery</div><div class="drawer-field-value" id="fd-uph">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">State</div><div class="drawer-field-value" id="fd-state">â</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Exterior</div><div class="drawer-field-value" id="fd-ext">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Upholstery</div><div class="drawer-field-value" id="fd-uph">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">State</div><div class="drawer-field-value" id="fd-state">&mdash;</div></div>
     </div>
-
     <div class="section-head">Vehicle Data</div>
     <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">Owners</div><div class="drawer-field-value" id="fd-own">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Accidents</div><div class="drawer-field-value" id="fd-acc">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Svc/Yr</div><div class="drawer-field-value" id="fd-svc">â</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Owners</div><div class="drawer-field-value" id="fd-own">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Accidents</div><div class="drawer-field-value" id="fd-acc">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Svc/Yr</div><div class="drawer-field-value" id="fd-svc">&mdash;</div></div>
     </div>
     <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">Trans</div><div class="drawer-field-value" id="fd-trans">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Ignition</div><div class="drawer-field-value" id="fd-ign">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Suspension</div><div class="drawer-field-value" id="fd-susp">â</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Trans</div><div class="drawer-field-value" id="fd-trans">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Ignition</div><div class="drawer-field-value" id="fd-ign">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Suspension</div><div class="drawer-field-value" id="fd-susp">&mdash;</div></div>
     </div>
-
     <div class="section-head">Scoring</div>
     <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">QS</div><div class="drawer-field-value" id="fd-qs">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">PA Â· PB Â· MOD</div><div class="drawer-field-value" id="fd-sub-scores">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Composite Score</div><div class="drawer-field-value accent" id="fd-score">â</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">QS</div><div class="drawer-field-value" id="fd-qs">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">PA &middot; PB &middot; MOD</div><div class="drawer-field-value" id="fd-sub-scores">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Composite Score</div><div class="drawer-field-value accent" id="fd-score">&mdash;</div></div>
     </div>
-
     <div class="section-head">Mileage</div>
     <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">Last Known Odo</div><div class="drawer-field-value accent" id="fd-odo">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Last Sale Mi</div><div class="drawer-field-value" id="fd-last-sale-mi">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">iSC Est Mi</div><div class="drawer-field-value" id="fd-isc-mi">â</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Last Known Odo</div><div class="drawer-field-value accent" id="fd-odo">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Last Sale Mi</div><div class="drawer-field-value" id="fd-last-sale-mi">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">iSC Est Mi</div><div class="drawer-field-value" id="fd-isc-mi">&mdash;</div></div>
     </div>
     <div class="drawer-grid-2">
-      <div class="drawer-field"><div class="drawer-field-label">Proj Mi @ Jan 2028</div><div class="drawer-field-value gold" id="fd-proj-mi">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Last Sale Year</div><div class="drawer-field-value" id="fd-sale">â</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Proj Mi @ Jan 2028</div><div class="drawer-field-value gold" id="fd-proj-mi">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Last Sale Year</div><div class="drawer-field-value" id="fd-sale">&mdash;</div></div>
     </div>
-
     <div class="section-head">Sale History</div>
     <div id="fd-timeline" style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)"></div>
-
     <div class="section-head">Service Records</div>
-    <div id="fd-service" class="svc-timeline"><div class="svc-empty">Loadingâ¦</div></div>
-
+    <div id="fd-service" class="svc-timeline"><div class="svc-empty">Loading&hellip;</div></div>
     <div class="section-head">Observed Pricing</div>
     <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">S-Class Est</div><div class="drawer-field-value" id="fd-sclass">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label"># Listings</div><div class="drawer-field-value" id="fd-listings">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Last Sale $</div><div class="drawer-field-value" id="fd-last-price">â</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">S-Class Est</div><div class="drawer-field-value" id="fd-sclass">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label"># Listings</div><div class="drawer-field-value" id="fd-listings">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Last Sale $</div><div class="drawer-field-value" id="fd-last-price">&mdash;</div></div>
     </div>
-
     <div class="section-head">Depreciation</div>
     <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">Depr 5yr</div><div class="drawer-field-value" id="fd-depr">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Val @ 1yr</div><div class="drawer-field-value" id="fd-val1">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Val @ 3yr</div><div class="drawer-field-value" id="fd-val3">â</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Depr 5yr</div><div class="drawer-field-value" id="fd-depr">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Val @ 1yr</div><div class="drawer-field-value" id="fd-val1">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Val @ 3yr</div><div class="drawer-field-value" id="fd-val3">&mdash;</div></div>
     </div>
-
     <div class="section-head">Jan 2028 Scenarios</div>
     <div class="scenario-row">
-      <div class="scenario-box s-low"><div class="s-label">LOW</div><div class="s-val" id="sc-low">â</div></div>
-      <div class="scenario-box s-mid"><div class="s-label">MID</div><div class="s-val" id="sc-mid">â</div></div>
-      <div class="scenario-box s-offer"><div class="s-label">Offer</div><div class="s-val" id="sc-offer">â</div></div>
-      <div class="scenario-box s-walk"><div class="s-label">Walk-Away</div><div class="s-val" id="sc-walk">â</div></div>
-      <div class="scenario-box s-ultra"><div class="s-label">ULTRA</div><div class="s-val" id="sc-ultra">â</div></div>
+      <div class="scenario-box s-low"><div class="s-label">LOW</div><div class="s-val" id="sc-low">&mdash;</div></div>
+      <div class="scenario-box s-mid"><div class="s-label">MID</div><div class="s-val" id="sc-mid">&mdash;</div></div>
+      <div class="scenario-box s-offer"><div class="s-label">Offer</div><div class="s-val" id="sc-offer">&mdash;</div></div>
+      <div class="scenario-box s-walk"><div class="s-label">Walk-Away</div><div class="s-val" id="sc-walk">&mdash;</div></div>
+      <div class="scenario-box s-ultra"><div class="s-label">ULTRA</div><div class="s-val" id="sc-ultra">&mdash;</div></div>
     </div>
-
     <div class="section-head">Listing History</div>
     <div class="lh-summary" id="fd-lh-summary"></div>
     <div style="overflow-x:auto;border:1px solid var(--rule);border-radius:4px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)" id="fd-lh-wrap">
       <table class="lh-table" id="fd-lh-table">
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Price</th>
-            <th>Miles</th>
-            <th>Platform</th>
-            <th>Seller</th>
-            <th>State</th>
-            <th>Status</th>
-            <th>Link</th>
-          </tr>
-        </thead>
-        <tbody id="fd-lh-tbody">
-          <tr><td colspan="8" class="lh-empty">Loadingâ¦</td></tr>
-        </tbody>
+        <thead><tr><th>Date</th><th>Price</th><th>Miles</th><th>Platform</th><th>Seller</th><th>State</th><th>Status</th><th>Link</th></tr></thead>
+        <tbody id="fd-lh-tbody"><tr><td colspan="8" class="lh-empty">Loading&hellip;</td></tr></tbody>
       </table>
     </div>
-
     <div class="section-head">Research Notes</div>
-    <textarea class="notes-area" id="fd-notes" placeholder="PPI findings, owner contact, service docs confirmedâ¦"></textarea>
+    <textarea class="notes-area" id="fd-notes" placeholder="PPI findings, owner contact, service docs confirmed&hellip;"></textarea>
     <button class="btn" style="margin-top:6px" onclick="saveNotes()">Save Notes</button>
   </div>
 </div>
@@ -1046,51 +927,47 @@ td.num{font-family:var(--mono);text-align:right;}
   <div class="drawer-header">
     <div>
       <div class="drawer-eyebrow" id="cd-eyebrow">BROKER CONTACT</div>
-      <div class="drawer-title" id="cd-company">â</div>
-      <div class="drawer-subtitle" id="cd-location">â</div>
+      <div class="drawer-title" id="cd-company">&mdash;</div>
+      <div class="drawer-subtitle" id="cd-location">&mdash;</div>
     </div>
-    <button class="drawer-close" onclick="closeCRMDrawer()">Ã</button>
+    <button class="drawer-close" onclick="closeCRMDrawer()">&#215;</button>
   </div>
   <div class="drawer-body">
     <div class="section-head">Status</div>
     <select class="status-select" id="cd-status-select" onchange="updateContactStatus(this.value)">
-      <option value="pending">â³ Pending â outreach sent, no reply</option>
-      <option value="active">â Active â engaged, watching for alerts</option>
-      <option value="scheduled">ð Call Scheduled</option>
-      <option value="declined">â Declined â not a fit</option>
-      <option value="inbound">â­ Inbound â they contacted us</option>
-      <option value="hold">â¸ On Hold</option>
+      <option value="pending">&#9203; Pending &mdash; outreach sent, no reply</option>
+      <option value="active">&#9989; Active &mdash; engaged, watching for alerts</option>
+      <option value="scheduled">&#128197; Call Scheduled</option>
+      <option value="declined">&#10060; Declined &mdash; not a fit</option>
+      <option value="inbound">&#11088; Inbound &mdash; they contacted us</option>
+      <option value="hold">&#9208; On Hold</option>
     </select>
-
     <div class="section-head">Contact Info</div>
     <div class="drawer-grid-2" style="margin-bottom:14px">
-      <div class="drawer-field"><div class="drawer-field-label">Phone</div><div class="drawer-field-value" id="cd-phone" style="font-size:12px">â</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">Email</div><div class="drawer-field-value" id="cd-email" style="font-size:11px">â</div></div>
-      <div class="drawer-field" style="grid-column:span 2"><div class="drawer-field-label">Website</div><div class="drawer-field-value" id="cd-web" style="font-size:11px">â</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Phone</div><div class="drawer-field-value" id="cd-phone" style="font-size:12px">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Email</div><div class="drawer-field-value" id="cd-email" style="font-size:11px">&mdash;</div></div>
+      <div class="drawer-field" style="grid-column:span 2"><div class="drawer-field-label">Website</div><div class="drawer-field-value" id="cd-web" style="font-size:11px">&mdash;</div></div>
     </div>
-
     <div class="section-head">VINs This Contact is Watching</div>
     <div id="cd-alerts"></div>
     <div class="add-alert-row">
-      <input id="add-vin-input" placeholder="Full VINâ¦">
+      <input id="add-vin-input" placeholder="Full VIN&hellip;">
       <input id="add-ceiling-input" placeholder="Ceiling $" style="width:85px">
       <button class="btn" onclick="addVINAlert()">+ Add</button>
     </div>
-
     <div class="section-head" style="margin-top:18px">Log Entry
-      <span style="font-size:10px;color:var(--muted);text-transform:none;letter-spacing:0;margin-left:8px;font-weight:normal">â every call, reply, note goes here</span>
+      <span style="font-size:10px;color:var(--muted);text-transform:none;letter-spacing:0;margin-left:8px;font-weight:normal">&mdash; every call, reply, note goes here</span>
     </div>
     <div class="info-box"><strong>How to update:</strong> After every interaction pick a type, write what happened, hit Log Entry. Change status dropdown when the relationship progresses.</div>
     <select class="log-type-select" id="log-type-sel">
-      <option value="note">ð Note</option>
-      <option value="sent">ð¤ Email Sent</option>
-      <option value="reply">ð¥ Reply Received</option>
-      <option value="call">ð Call</option>
-      <option value="declined">â Declined</option>
+      <option value="note">&#128221; Note</option>
+      <option value="sent">&#128228; Email Sent</option>
+      <option value="reply">&#128229; Reply Received</option>
+      <option value="call">&#128222; Call</option>
+      <option value="declined">&#10060; Declined</option>
     </select>
-    <textarea class="log-input-field" id="log-text-input" placeholder="e.g. Spoke with Mike â has Manheim access, will watch for S65s."></textarea>
+    <textarea class="log-input-field" id="log-text-input" placeholder="e.g. Spoke with Mike &mdash; has Manheim access, will watch for S65s."></textarea>
     <button class="btn btn-accent" style="width:100%;margin-bottom:18px" onclick="addLogEntry()">+ Log Entry</button>
-
     <div class="section-head">Activity History</div>
     <div id="cd-log"></div>
   </div>
@@ -1119,10 +996,10 @@ function toast(msg,isError=false){
 function setSyncStatus(s){
   const d=document.getElementById('sync-dot'),l=document.getElementById('sync-label');
   if(s==='ok'){d.className='sync-dot';l.textContent='Live';}
-  if(s==='loading'){d.className='sync-dot loading';l.textContent='Syncingâ¦';}
+  if(s==='loading'){d.className='sync-dot loading';l.textContent='Syncing\u2026';}
   if(s==='error'){d.className='sync-dot error';l.textContent='Connection error';}
 }
-// ââ Market Intelligence globals âââââââââââââââââââââââââââ
+
 let allBatComparables=[], allListingSummary=[], allScanResults=[];
 let batFilter='all', listingFilter='all';
 
@@ -1138,9 +1015,9 @@ function switchTab(t){
   else{mkt.classList.remove('tab-panel-active');}
   if(t==='market'&&allBatComparables.length===0)loadMarketData();
 }
-function $m(n){return n!=null&&n!==''?'$'+Number(n).toLocaleString():'â';}
-function oFmt(n){return n?Number(n).toLocaleString()+' mi':'â';}
-function boolCell(v){return(v===true||v==='TRUE'||v==='true'||v==='Yes')?'<span class="bool-yes">â</span>':'<span class="bool-no">â</span>';}
+function $m(n){return n!=null&&n!==''?'$'+Number(n).toLocaleString():'&mdash;';}
+function oFmt(n){return n?Number(n).toLocaleString()+' mi':'&mdash;';}
+function boolCell(v){return(v===true||v==='TRUE'||v==='true'||v==='Yes')?'<span class="bool-yes">\u2713</span>':'<span class="bool-no">&mdash;</span>';}
 function boolVal(v){return(v===true||v==='TRUE'||v==='true'||v==='Yes');}
 
 async function loadAll(){
@@ -1162,69 +1039,55 @@ async function loadAll(){
     updateFleetStats();applyFilters();updateCRMStats();renderCRM();
     document.getElementById('fleet-tab-count').textContent=allVehicles.length;
     document.getElementById('crm-tab-count').textContent=allContacts.length;
-    document.getElementById('header-counts').textContent=`${allVehicles.length} vehicles Â· ${allContacts.length} contacts`;
+    document.getElementById('header-counts').textContent=`${allVehicles.length} vehicles \u00b7 ${allContacts.length} contacts`;
     setSyncStatus('ok');
     document.getElementById('loading-banner').classList.add('done');
-    renderMobileTop40(); // populate top-40 after data loads
+    renderMobileTop40();
   }catch(err){
     setSyncStatus('error');
-    document.getElementById('loading-banner').textContent='â  Could not connect. Check credentials at top of file.';
+    document.getElementById('loading-banner').textContent='\u26a0 Could not connect. Check credentials at top of file.';
     console.error(err);
   }
 }
 
-// ââ Mobile Top-40 default list ââââââââââââââââââââââââââââ
 function renderMobileTop40(){
   const ranked = allVehicles
     .filter(v => v.apex_rank != null && v.apex_rank !== '')
     .sort((a,b) => Number(a.apex_rank) - Number(b.apex_rank))
     .slice(0, 40);
-
   document.getElementById('mob-top40-count').textContent = `${ranked.length} vehicles`;
-
   if(!ranked.length){
-    document.getElementById('mob-top40-list').innerHTML =
-      '<div class="mob-no-result">No ranked vehicles found.</div>';
+    document.getElementById('mob-top40-list').innerHTML = '<div class="mob-no-result">No ranked vehicles found.</div>';
     return;
   }
-
   document.getElementById('mob-top40-list').innerHTML = ranked.map(v => {
     const st = (v.acq_status||'').toLowerCase();
-    const chipColor = st==='active'||st==='target' ? 'var(--accent)'
-                    : st.includes('watch') ? 'var(--gold)' : '#999';
+    const chipColor = st==='active'||st==='target' ? 'var(--accent)' : st.includes('watch') ? 'var(--gold)' : '#999';
     const gi = Number(v.curr_odo)>=70000 && Number(v.curr_odo)<=100000;
     return `<div class="mob-result">
       <div class="mob-result-header">
-        <div>
-          <div class="mob-result-vin">#${v.apex_rank} Â· ${v.vin}</div>
-          <div class="mob-result-title">${v.year||2017} ${v.trim||'â'}</div>
-        </div>
+        <div><div class="mob-result-vin">#${v.apex_rank} \u00b7 ${v.vin}</div><div class="mob-result-title">${v.year||2017} ${v.trim||'&mdash;'}</div></div>
         <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:${chipColor};text-transform:uppercase;background:rgba(255,255,255,.12);padding:3px 8px;border-radius:3px">${v.acq_status||'Universe'}</span>
       </div>
       <div class="mob-result-body">
         <div class="mob-field-grid">
-          <div class="mob-field"><div class="mob-field-label">Score</div><div class="mob-field-value accent">${v.composite_score||'â'}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Score</div><div class="mob-field-value accent">${v.composite_score||'&mdash;'}</div></div>
           <div class="mob-field"><div class="mob-field-label">Odometer</div><div class="mob-field-value ${gi?'gold':''}">${oFmt(v.curr_odo)}</div></div>
           <div class="mob-field"><div class="mob-field-label">Proj @ Jan 28</div><div class="mob-field-value gold">${oFmt(v.proj_mi_jan28)}</div></div>
           <div class="mob-field"><div class="mob-field-label">Offer Target</div><div class="mob-field-value green">${$m(v.offer_target)}</div></div>
         </div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px">${v.exterior||''}${v.exterior&&v.upholstery?' Â· ':''}${v.upholstery||''} ${v.last_title_state?'Â· '+v.last_title_state:''}</div>
-        <button class="mob-open-btn" onclick="openFleetDrawer('${v.vin}')">Full Detail â</button>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px">${v.exterior||''}${v.exterior&&v.upholstery?' \u00b7 ':''}${v.upholstery||''} ${v.last_title_state?'\u00b7 '+v.last_title_state:''}</div>
+        <button class="mob-open-btn" onclick="openFleetDrawer('${v.vin}')">Full Detail &rarr;</button>
       </div>
     </div>`;
   }).join('');
 }
 
-// Hide top-40 when user is actively searching, restore when cleared
 function mobileSearch(q){
   const el=document.getElementById('mob-results');
   const top40=document.getElementById('mob-top40');
   q=q.trim();
-  if(q.length<2){
-    el.innerHTML='';
-    top40.style.display='block';
-    return;
-  }
+  if(q.length<2){el.innerHTML='';top40.style.display='block';return;}
   top40.style.display='none';
   const ql=q.toLowerCase();
   const vehicles=allVehicles.filter(v=>(v.vin||'').toLowerCase().includes(ql)).slice(0,3);
@@ -1234,23 +1097,21 @@ function mobileSearch(q){
   vehicles.forEach(v=>{
     const st=(v.acq_status||'').toLowerCase();
     const chipColor=st==='active'||st==='target'?'var(--accent)':st.includes('watch')?'var(--gold)':'#999';
-    const rankStr=v.apex_rank!=null&&v.apex_rank!==''?v.apex_rank:'â';
+    const rankStr=v.apex_rank!=null&&v.apex_rank!==''?v.apex_rank:'&mdash;';
     html+=`<div class="mob-result">
       <div class="mob-result-header">
-        <div><div class="mob-result-vin">${v.vin}</div><div class="mob-result-title">${v.year||2017} ${v.trim||'â'}</div></div>
+        <div><div class="mob-result-vin">${v.vin}</div><div class="mob-result-title">${v.year||2017} ${v.trim||'&mdash;'}</div></div>
         <span style="font-family:var(--mono);font-size:10px;font-weight:600;color:${chipColor};text-transform:uppercase;background:rgba(255,255,255,.12);padding:3px 8px;border-radius:3px">${v.acq_status||'Universe'}</span>
       </div>
       <div class="mob-result-body">
         <div class="mob-field-grid">
           <div class="mob-field"><div class="mob-field-label">Rank</div><div class="mob-field-value accent">#${rankStr}</div></div>
-          <div class="mob-field"><div class="mob-field-label">Score</div><div class="mob-field-value accent">${v.composite_score||'â'}</div></div>
+          <div class="mob-field"><div class="mob-field-label">Score</div><div class="mob-field-value accent">${v.composite_score||'&mdash;'}</div></div>
           <div class="mob-field"><div class="mob-field-label">Odometer</div><div class="mob-field-value ${(Number(v.curr_odo)>=70000&&Number(v.curr_odo)<=100000)?'gold':''}">${oFmt(v.curr_odo)}</div></div>
-          <div class="mob-field"><div class="mob-field-label">Proj @ Jan 28</div><div class="mob-field-value gold">${oFmt(v.proj_mi_jan28)}</div></div>
           <div class="mob-field"><div class="mob-field-label">Offer Target</div><div class="mob-field-value green">${$m(v.offer_target)}</div></div>
-          <div class="mob-field"><div class="mob-field-label">Walk-Away</div><div class="mob-field-value accent">${$m(v.walk_away)}</div></div>
         </div>
-        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px">${v.exterior||''}${v.exterior&&v.upholstery?' Â· ':''}${v.upholstery||''} ${v.last_title_state?'Â· '+v.last_title_state:''}</div>
-        <button class="mob-open-btn" onclick="openFleetDrawer('${v.vin}')">Full Detail â</button>
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:8px">${v.exterior||''} ${v.last_title_state?'\u00b7 '+v.last_title_state:''}</div>
+        <button class="mob-open-btn" onclick="openFleetDrawer('${v.vin}')">Full Detail &rarr;</button>
       </div>
     </div>`;
   });
@@ -1258,23 +1119,21 @@ function mobileSearch(q){
     const sc=STATUS_CLASS[c.status]||'st-hold';const sl=STATUS_LABEL[c.status]||c.status;
     html+=`<div class="mob-result">
       <div class="mob-result-header">
-        <div><div class="mob-result-vin">${c.contact_type||'broker'} Â· ${c.region||''}</div><div class="mob-result-title">${c.company}</div></div>
+        <div><div class="mob-result-vin">${c.contact_type||'broker'} \u00b7 ${c.region||''}</div><div class="mob-result-title">${c.company}</div></div>
         <span class="status-badge ${sc}">${sl}</span>
       </div>
       <div class="mob-result-body">
         <div class="mob-field-grid">
           ${c.phone?`<div class="mob-field"><div class="mob-field-label">Phone</div><div class="mob-field-value"><a href="tel:${c.phone}" style="color:var(--s65);text-decoration:none">${c.phone}</a></div></div>`:''}
           ${c.email?`<div class="mob-field" style="grid-column:span 2"><div class="mob-field-label">Email</div><div class="mob-field-value" style="font-size:11px"><a href="mailto:${c.email}" style="color:var(--accent);text-decoration:none">${c.email}</a></div></div>`:''}
-          <div class="mob-field"><div class="mob-field-label">Location</div><div class="mob-field-value">${c.location||'â'}</div></div>
         </div>
-        <button class="mob-open-btn" onclick="switchTab('crm');openCRMDrawer('${c.id}')">Full CRM â</button>
+        <button class="mob-open-btn" onclick="switchTab('crm');openCRMDrawer('${c.id}')">Full CRM &rarr;</button>
       </div>
     </div>`;
   });
   el.innerHTML=html;
 }
 
-// ââ Market Intelligence data load & render ââââââââââââââââ
 async function loadMarketData(){
   try{
     const[bR,lR,sR]=await Promise.all([
@@ -1282,17 +1141,9 @@ async function loadMarketData(){
       db.from('vin_listing_summary').select('*').order('model_year',{ascending:false}).order('episode_count',{ascending:false}),
       db.from('scan_results').select('*').eq('true_positive',true).order('scan_date',{ascending:false}).limit(200),
     ]);
-    allBatComparables=bR.data||[];
-    allListingSummary=lR.data||[];
-    allScanResults=sR.data||[];
-    renderMarketStats();
-    renderBatTable();
-    renderListingSummary();
-    renderScanResults();
-  }catch(err){
-    console.error('Market data load error:',err);
-    document.getElementById('bat-tbody').innerHTML='<tr><td colspan="12" class="mi-empty">Error loading data â check console</td></tr>';
-  }
+    allBatComparables=bR.data||[];allListingSummary=lR.data||[];allScanResults=sR.data||[];
+    renderMarketStats();renderBatTable();renderListingSummary();renderScanResults();
+  }catch(err){console.error('Market data load error:',err);}
 }
 
 function renderMarketStats(){
@@ -1303,23 +1154,18 @@ function renderMarketStats(){
   const s65ceil=s65_2017.length?Math.max(...s65_2017.map(r=>r.hammer_price||0)):null;
   const s600ceil=s600_2017.length?Math.max(...s600_2017.map(r=>r.hammer_price||0)):null;
   document.getElementById('mi-stat-bat-count').textContent=total;
-  document.getElementById('mi-stat-s65-ceiling').textContent=s65ceil?'$'+s65ceil.toLocaleString():'â';
-  document.getElementById('mi-stat-s600-ceiling').textContent=s600ceil?'$'+s600ceil.toLocaleString():'â';
+  document.getElementById('mi-stat-s65-ceiling').textContent=s65ceil?'$'+s65ceil.toLocaleString():'&mdash;';
+  document.getElementById('mi-stat-s600-ceiling').textContent=s600ceil?'$'+s600ceil.toLocaleString():'&mdash;';
   document.getElementById('mi-stat-listing-count').textContent=allListingSummary.reduce((a,r)=>a+(r.episode_count||0),0).toLocaleString();
-  const sold_count=sold.length, rnm_count=allBatComparables.filter(r=>r.rnm).length;
-  document.getElementById('bat-table-meta').textContent=`${total} records Â· ${sold_count} sold Â· ${rnm_count} RNM`;
-  const lastScan=allScanResults.length?allScanResults[0].scan_date:'â';
+  const sold_count=sold.length,rnm_count=allBatComparables.filter(r=>r.rnm).length;
+  document.getElementById('bat-table-meta').textContent=`${total} records \u00b7 ${sold_count} sold \u00b7 ${rnm_count} RNM`;
+  const lastScan=allScanResults.length?allScanResults[0].scan_date:'&mdash;';
   document.getElementById('scan-meta').textContent=`Last scan: ${lastScan}`;
-  document.getElementById('mi-header-meta').textContent=`${total} BaT events Â· ${allListingSummary.length} VINs tracked Â· Last scan ${lastScan}`;
+  document.getElementById('mi-header-meta').textContent=`${total} BaT events \u00b7 ${allListingSummary.length} VINs tracked`;
   document.getElementById('market-tab-count').textContent=total;
 }
 
-function filterBat(f,btn){
-  batFilter=f;
-  document.querySelectorAll('#bat-section .mi-filter-btn').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  renderBatTable();
-}
+function filterBat(f,btn){batFilter=f;document.querySelectorAll('.mi-filter-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderBatTable();}
 
 function renderBatTable(){
   let rows=allBatComparables;
@@ -1329,41 +1175,20 @@ function renderBatTable(){
   else if(batFilter==='gold')rows=rows.filter(r=>r.gold_record);
   if(!rows.length){document.getElementById('bat-tbody').innerHTML='<tr><td colspan="12" class="mi-empty">No records match filter</td></tr>';return;}
   document.getElementById('bat-tbody').innerHTML=rows.map(r=>{
-    const is2017=r.model_year===2017;
-    const rowClass=is2017?'bat-row-2017':'';
+    const rowClass=r.model_year===2017?'bat-row-2017':'';
     const yearTag=`<span class="year-tag year-${r.model_year}">${r.model_year}</span>`;
-    const resultCell=r.result==='Sold'
-      ?`<span class="bat-sold">ð¨ SOLD</span>`
-      :`<span class="bat-rnm">RNM</span>`;
-    const price=r.hammer_price?`<strong>$${Number(r.hammer_price).toLocaleString()}</strong>`:'â';
-    const miles=r.miles?Number(r.miles).toLocaleString()+'k':'â';
+    const resultCell=r.result==='Sold'?`<span class="bat-sold">&#128296; SOLD</span>`:`<span class="bat-rnm">RNM</span>`;
+    const price=r.hammer_price?`<strong>$${Number(r.hammer_price).toLocaleString()}</strong>`:'&mdash;';
+    const miles=r.miles?Number(r.miles).toLocaleString()+'k':'&mdash;';
     const goldTag=r.gold_record?'<span class="gold-tag">GOLD</span>':'';
     const linkStatus=r.link_status||'Unverified';
     const statusClass=linkStatus==='Active'?'status-active':linkStatus==='Dead'?'status-dead':'status-unverified';
-    const url=r.bat_url_primary?`<a class="bat-url-link" href="${r.bat_url_primary}" target="_blank">${r.bat_url_primary.replace('https://bringatrailer.com/listing/','â¦/')}</a>`:'â';
-    return `<tr class="${rowClass}">
-      <td>${(r.vin||'').slice(-8)}</td>
-      <td>${yearTag}</td>
-      <td>${r.trim||'â'}</td>
-      <td>${miles}</td>
-      <td>${resultCell}</td>
-      <td>${price}</td>
-      <td>${r.sale_date||'â'}</td>
-      <td>${r.bids||'â'}</td>
-      <td>${goldTag}</td>
-      <td style="max-width:200px;white-space:normal;font-size:9px;">${r.notes||'â'}</td>
-      <td>${url}</td>
-      <td><span class="link-status ${statusClass}"><span class="link-dot"></span>${linkStatus}</span></td>
-    </tr>`;
+    const url=r.bat_url_primary?`<a class="bat-url-link" href="${r.bat_url_primary}" target="_blank">${r.bat_url_primary.replace('https://bringatrailer.com/listing/','\u2026/')}</a>`:'&mdash;';
+    return `<tr class="${rowClass}"><td>${(r.vin||'').slice(-8)}</td><td>${yearTag}</td><td>${r.trim||'&mdash;'}</td><td>${miles}</td><td>${resultCell}</td><td>${price}</td><td>${r.sale_date||'&mdash;'}</td><td>${r.bids||'&mdash;'}</td><td>${goldTag}</td><td style="max-width:200px;white-space:normal;font-size:9px;">${r.notes||'&mdash;'}</td><td>${url}</td><td><span class="link-status ${statusClass}"><span class="link-dot"></span>${linkStatus}</span></td></tr>`;
   }).join('');
 }
 
-function filterListings(f,btn){
-  listingFilter=f;
-  document.querySelectorAll('#listing-section .mi-filter-btn').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  renderListingSummary();
-}
+function filterListings(f,btn){listingFilter=f;document.querySelectorAll('.mi-filter-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderListingSummary();}
 
 function renderListingSummary(){
   let rows=allListingSummary;
@@ -1371,31 +1196,15 @@ function renderListingSummary(){
   else if(listingFilter==='S65')rows=rows.filter(r=>r.trim==='S65');
   else if(listingFilter==='S600')rows=rows.filter(r=>r.trim==='S600');
   if(!rows.length){document.getElementById('listing-summary-tbody').innerHTML='<tr><td colspan="9" class="mi-empty">No records match filter</td></tr>';return;}
-  document.getElementById('listing-summary-tbody').innerHTML=rows.map(r=>`<tr>
-    <td>${r.vin||'â'}</td>
-    <td>${r.model_year||'â'}</td>
-    <td>${r.trim||'â'}</td>
-    <td>${r.episode_count||0}</td>
-    <td>${r.lowest_list_price?'$'+Number(r.lowest_list_price).toLocaleString():'â'}</td>
-    <td>${r.highest_list_price?'$'+Number(r.highest_list_price).toLocaleString():'â'}</td>
-    <td>${r.max_observed_miles?Number(r.max_observed_miles).toLocaleString()+' mi':'â'}</td>
-    <td>${r.first_market_date||'â'}</td>
-    <td>${r.last_market_date||'â'}</td>
-  </tr>`).join('');
+  document.getElementById('listing-summary-tbody').innerHTML=rows.map(r=>`<tr><td>${r.vin||'&mdash;'}</td><td>${r.model_year||'&mdash;'}</td><td>${r.trim||'&mdash;'}</td><td>${r.episode_count||0}</td><td>${r.lowest_list_price?'$'+Number(r.lowest_list_price).toLocaleString():'&mdash;'}</td><td>${r.highest_list_price?'$'+Number(r.highest_list_price).toLocaleString():'&mdash;'}</td><td>${r.max_observed_miles?Number(r.max_observed_miles).toLocaleString()+' mi':'&mdash;'}</td><td>${r.first_market_date||'&mdash;'}</td><td>${r.last_market_date||'&mdash;'}</td></tr>`).join('');
 }
 
 function renderScanResults(){
   const rows=allScanResults;
   if(!rows.length){document.getElementById('scan-tbody').innerHTML='<tr><td colspan="6" class="mi-empty">No confirmed listing detections yet</td></tr>';return;}
-  document.getElementById('scan-tbody').innerHTML=rows.map(r=>`<tr class="scan-flag">
-    <td>${r.scan_date||'â'}</td>
-    <td>${r.rank||'â'}</td>
-    <td style="font-weight:600;">${r.query_id||'â'}</td>
-    <td>${r.cohort||'â'}</td>
-    <td><a href="${r.url||'#'}" target="_blank" style="font-family:var(--mono);font-size:9px;color:var(--accent);word-break:break-all;">${(r.url||'â').substring(0,80)}${(r.url||'').length>80?'â¦':''}</a></td>
-    <td style="font-size:9px;max-width:200px;white-space:normal;">${r.title||'â'}</td>
-  </tr>`).join('');
+  document.getElementById('scan-tbody').innerHTML=rows.map(r=>`<tr class="scan-flag"><td>${r.scan_date||'&mdash;'}</td><td>${r.rank||'&mdash;'}</td><td style="font-weight:600;">${r.query_id||'&mdash;'}</td><td>${r.cohort||'&mdash;'}</td><td><a href="${r.url||'#'}" target="_blank" style="font-family:var(--mono);font-size:9px;color:var(--accent);word-break:break-all;">${(r.url||'&mdash;').substring(0,80)}${(r.url||'').length>80?'\u2026':''}</a></td><td style="font-size:9px;max-width:200px;white-space:normal;">${r.title||'&mdash;'}</td></tr>`).join('');
 }
+
 async function refreshAll(){await loadAll();toast('Refreshed');}
 
 function updateFleetStats(){
@@ -1460,7 +1269,7 @@ function applyFilters(){
     if(!hasAcc(v)&&!acc0)return false;if(hasAcc(v)&&!acc1)return false;
     const st=stNorm(v.acq_status);
     const isTarget=['active','target'].includes(st);const isWatch=st.includes('watch');
-    const isDq=st.includes('dq');const isUniverse=!v.acq_status||st==='universe';
+    const isDq=st.includes('dq');const isUniverse=!v.acq_status||st==='universe'||st==='sighting';
     if(isTarget&&!stTarget)return false;if(isWatch&&!stWatch)return false;
     if(isUniverse&&!stUniverse)return false;if(isDq&&!stDq)return false;
     const yr=Number(v.year)||2017;
@@ -1485,18 +1294,18 @@ function applyFilters(){
 }
 
 function saleChainHTML(h,short){
-  if(!h)return '<span style="color:#bbb;font-family:var(--mono);font-size:10px">â</span>';
+  if(!h)return '<span style="color:#bbb;font-family:var(--mono);font-size:10px">&mdash;</span>';
   const parts=h.split('->').map(s=>s.trim()).filter(Boolean);
-  if(short)return parts.map((p,i)=>`<span class="sale-item${i===parts.length-1?' latest':''}">${p}</span>`).join('<span class="arrow">â</span>');
-  return parts.map((p,i)=>{const[price,odo]=p.split('/');return`<div class="timeline-item"><span class="timeline-price" style="${i===parts.length-1?'color:var(--accent)':''}">${price}</span><span class="timeline-odo">@ ${odo||'â'}</span></div>`;}).join('');
+  if(short)return parts.map((p,i)=>`<span class="sale-item${i===parts.length-1?' latest':''}">${p}</span>`).join('<span class="arrow">&rarr;</span>');
+  return parts.map((p,i)=>{const[price,odo]=p.split('/');return`<div class="timeline-item"><span class="timeline-price" style="${i===parts.length-1?'color:var(--accent)':''}">${price}</span><span class="timeline-odo">@ ${odo||'&mdash;'}</span></div>`;}).join('');
 }
 
 function vinLinksHTML(vin){
   return`<div class="link-cluster">
     <a class="ext-link lnk-bat" href="https://bringatrailer.com/listing/mercedes-benz-s65-amg/?q=${vin}" target="_blank" onclick="event.stopPropagation()">BaT</a>
-    <a class="ext-link lnk-cb" href="https://carsandbids.com/search#q=${vin}" target="_blank" onclick="event.stopPropagation()">C&B</a>
+    <a class="ext-link lnk-cb" href="https://carsandbids.com/search#q=${vin}" target="_blank" onclick="event.stopPropagation()">C&amp;B</a>
     <a class="ext-link lnk-cfx" href="https://www.carfax.com/VehicleHistory/p/Report.cfm?vin=${vin}" target="_blank" onclick="event.stopPropagation()">CFX</a>
-    <a class="ext-link lnk-more" href="#" onclick="event.stopPropagation();openFleetDrawer('${vin}')">â¯</a>
+    <a class="ext-link lnk-more" href="#" onclick="event.stopPropagation();openFleetDrawer('${vin}')">&hellip;</a>
   </div>`;
 }
 
@@ -1505,8 +1314,9 @@ function flagChip(s,dqReason){
   if(st==='active'||st==='target')return`<span class="status-chip chip-target">Target</span>`;
   if(st.includes('watch'))return`<span class="status-chip chip-watch">Watch</span>`;
   if(st.includes('dq')){const r=(dqReason||'DQ').replace(/DQ\s*-+\s*/,'');return`<span class="status-chip chip-dq" title="${r}">DQ</span>`;}
+  if(st==='sighting')return`<span class="status-chip chip-pending">Sighting</span>`;
   if(st==='universe'||!s)return`<span class="status-chip chip-universe">Universe</span>`;
-  return`<span class="status-chip chip-universe">${s||'â'}</span>`;
+  return`<span class="status-chip chip-universe">${s||'&mdash;'}</span>`;
 }
 
 function renderFleet(data){
@@ -1517,44 +1327,44 @@ function renderFleet(data){
     const gi=(Number(v.curr_odo)>=70000&&Number(v.curr_odo)<=100000);
     const st=(v.acq_status||'').toLowerCase();
     const rowClass=st.includes('dq')?'row-dq':st.includes('watch')?'row-watch':'';
-    const rankDisplay=v.apex_rank!=null&&v.apex_rank!==''?v.apex_rank:'â';
+    const rankDisplay=v.apex_rank!=null&&v.apex_rank!==''?v.apex_rank:'&mdash;';
     return`<tr onclick="openFleetDrawer('${v.vin}')" class="${rowClass}${activeFD?.vin===v.vin?' selected':''}">
       <td class="mono" style="color:var(--muted);text-align:center">${rankDisplay}</td>
       <td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${v.vin}</td>
-      <td><span class="trim-badge ${(v.trim==='S65 AMG'||v.trim==='S65')?'s65':'s600'}">${v.trim||'â'}</span></td>
+      <td><span class="trim-badge ${(v.trim==='S65 AMG'||v.trim==='S65')?'s65':'s600'}">${v.trim||'&mdash;'}</span></td>
       <td>${flagChip(v.acq_status,v.dq_reason)}</td>
-      <td style="font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis">${v.exterior||'â'}</td>
-      <td style="font-size:11px;max-width:100px;overflow:hidden;text-overflow:ellipsis">${v.upholstery||'â'}</td>
-      <td><span class="state-tag">${v.last_title_state||'â'}</span></td>
+      <td style="font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis">${v.exterior||'&mdash;'}</td>
+      <td style="font-size:11px;max-width:100px;overflow:hidden;text-overflow:ellipsis">${v.upholstery||'&mdash;'}</td>
+      <td><span class="state-tag">${v.last_title_state||'&mdash;'}</span></td>
       <td class="num">${v.year||2017}</td>
-      <td class="num">${v.total_owners??'â'}</td>
-      <td>${hasAcc(v)?'<span class="bool-yes" style="color:var(--gold)">â</span>':'<span class="bool-no">â</span>'}</td>
+      <td class="num">${v.total_owners??'&mdash;'}</td>
+      <td>${hasAcc(v)?'<span class="bool-yes" style="color:var(--gold)">\u2713</span>':'<span class="bool-no">&mdash;</span>'}</td>
       <td>${boolCell(v.trans_confirmed)}</td>
       <td>${boolCell(v.ign_confirmed)}</td>
       <td>${boolCell(v.susp_confirmed)}</td>
       <td>${boolCell(v.brake_confirmed)}</td>
-      <td class="num">${v.svc_per_yr!=null?Number(v.svc_per_yr).toFixed(1):'â'}</td>
-      <td class="num">${v.quality_score??'â'}</td>
-      <td class="num" style="font-size:10px">${v.score_pa??'â'}Â·${v.score_pb??'â'}Â·${v.score_mod??'â'}</td>
-      <td class="num" style="font-weight:600;color:var(--accent)">${v.composite_score??'â'}</td>
+      <td class="num">${v.svc_per_yr!=null?Number(v.svc_per_yr).toFixed(1):'&mdash;'}</td>
+      <td class="num">${v.quality_score??'&mdash;'}</td>
+      <td class="num" style="font-size:10px">${v.score_pa??'&mdash;'}&middot;${v.score_pb??'&mdash;'}&middot;${v.score_mod??'&mdash;'}</td>
+      <td class="num" style="font-weight:600;color:var(--accent)">${v.composite_score??'&mdash;'}</td>
       <td>${boolCell(v.has_iseecars)}</td>
       <td>${boolCell(v.has_carfax)}</td>
       <td>${boolCell(v.has_autocheck)}</td>
       <td>${boolCell(v.has_window_sticker)}</td>
-      <td style="font-size:10px;max-width:100px;overflow:hidden;text-overflow:ellipsis">â</td>
-      <td style="font-size:10px">â</td>
-      <td style="font-size:10px;color:var(--accent)">â</td>
+      <td style="font-size:10px;max-width:100px;overflow:hidden;text-overflow:ellipsis">&mdash;</td>
+      <td style="font-size:10px">&mdash;</td>
+      <td style="font-size:10px;color:var(--accent)">&mdash;</td>
       <td class="num ${gi?'gi-hi':''}">${oFmt(v.curr_odo)}</td>
       <td class="num">${oFmt(v.last_sale_mi)}</td>
       <td class="num">${oFmt(v.iseecars_est_mi)}</td>
       <td class="num" style="color:var(--gold);font-weight:600">${oFmt(v.proj_mi_jan28)}</td>
       <td><div class="sale-chain">${saleChainHTML(v.sale_history,true)}</div></td>
       <td class="num">${$m(v.curr_mkt_price)}</td>
-      <td class="num">${v.num_listings??'â'}</td>
-      <td style="font-size:10px">${v.relist_freq||'â'}</td>
+      <td class="num">${v.num_listings??'&mdash;'}</td>
+      <td style="font-size:10px">${v.relist_freq||'&mdash;'}</td>
       <td class="num">${$m(v.last_sale_price)}</td>
-      <td class="num">${v.last_sale_year??'â'}</td>
-      <td class="num">${v.depr_5yr!=null?'$'+Number(v.depr_5yr).toLocaleString():'â'}</td>
+      <td class="num">${v.last_sale_year??'&mdash;'}</td>
+      <td class="num">${v.depr_5yr!=null?'$'+Number(v.depr_5yr).toLocaleString():'&mdash;'}</td>
       <td class="num">${$m(v.val_at_1yr)}</td>
       <td class="num">${$m(v.val_at_3yr)}</td>
       <td class="num">${$m(v.price_low_jan28)}</td>
@@ -1571,10 +1381,10 @@ function renderPagination(total){
   const pages=Math.ceil(total/PAGE_SIZE);
   const el=document.getElementById('fleet-pagination');
   if(pages<=1){el.innerHTML='';return;}
-  let html=`<button class="page-btn" ${fleetPage===0?'disabled':''} onclick="goPage(${fleetPage-1})">â¹</button>`;
+  let html=`<button class="page-btn" ${fleetPage===0?'disabled':''} onclick="goPage(${fleetPage-1})">&lsaquo;</button>`;
   for(let i=0;i<Math.min(pages,8);i++)html+=`<button class="page-btn${i===fleetPage?' active':''}" onclick="goPage(${i})">${i+1}</button>`;
-  if(pages>8)html+=`<span style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:0 5px">â¦ ${pages}</span>`;
-  html+=`<button class="page-btn" ${fleetPage>=pages-1?'disabled':''} onclick="goPage(${fleetPage+1})">âº</button>`;
+  if(pages>8)html+=`<span style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:0 5px">&hellip; ${pages}</span>`;
+  html+=`<button class="page-btn" ${fleetPage>=pages-1?'disabled':''} onclick="goPage(${fleetPage+1})">&rsaquo;</button>`;
   el.innerHTML=html;
 }
 function goPage(p){fleetPage=p;applyFilters();}
@@ -1584,35 +1394,35 @@ async function openFleetDrawer(vin){
   activeFD=v;
   document.getElementById('fd-vin').textContent=vin;
   document.getElementById('fd-title').textContent=`${v.year||2017} ${v.trim}`;
-  const rankStr=v.apex_rank!=null&&v.apex_rank!==''?`Rank #${v.apex_rank} Â· `:'';
-  const scoreStr=v.composite_score?`Score ${v.composite_score}/175 Â· `:'';
+  const rankStr=v.apex_rank!=null&&v.apex_rank!==''?`Rank #${v.apex_rank} \u00b7 `:'';
+  const scoreStr=v.composite_score?`Score ${v.composite_score}/175 \u00b7 `:'';
   document.getElementById('fd-sub').textContent=`${rankStr}${scoreStr}${(v.acq_status||'Universe')}`;
-  document.getElementById('fd-ext').textContent=v.exterior||'â';
-  document.getElementById('fd-uph').textContent=v.upholstery||'â';
-  document.getElementById('fd-state').textContent=v.last_title_state||'â';
-  document.getElementById('fd-own').textContent=v.total_owners??'â';
+  document.getElementById('fd-ext').textContent=v.exterior||'&mdash;';
+  document.getElementById('fd-uph').textContent=v.upholstery||'&mdash;';
+  document.getElementById('fd-state').textContent=v.last_title_state||'&mdash;';
+  document.getElementById('fd-own').textContent=v.total_owners??'&mdash;';
   document.getElementById('fd-acc').textContent=v.accident_count||'0 - Clean';
-  document.getElementById('fd-svc').textContent=v.svc_per_yr!=null?Number(v.svc_per_yr).toFixed(1)+'/yr':'â';
-  const bStr=x=>boolVal(x)?'â Confirmed':'â';
+  document.getElementById('fd-svc').textContent=v.svc_per_yr!=null?Number(v.svc_per_yr).toFixed(1)+'/yr':'&mdash;';
+  const bStr=x=>boolVal(x)?'\u2713 Confirmed':'&mdash;';
   document.getElementById('fd-trans').textContent=bStr(v.trans_confirmed);
   document.getElementById('fd-trans').className='drawer-field-value '+(boolVal(v.trans_confirmed)?'green':'');
   document.getElementById('fd-ign').textContent=bStr(v.ign_confirmed);
   document.getElementById('fd-ign').className='drawer-field-value '+(boolVal(v.ign_confirmed)?'green':'');
   document.getElementById('fd-susp').textContent=bStr(v.susp_confirmed);
   document.getElementById('fd-susp').className='drawer-field-value '+(boolVal(v.susp_confirmed)?'green':'');
-  document.getElementById('fd-qs').textContent=v.quality_score??'â';
-  document.getElementById('fd-sub-scores').textContent=`${v.score_pa??'â'} Â· ${v.score_pb??'â'} Â· ${v.score_mod??'â'}`;
-  document.getElementById('fd-score').textContent=v.composite_score?`${v.composite_score} / 175`:'â';
+  document.getElementById('fd-qs').textContent=v.quality_score??'&mdash;';
+  document.getElementById('fd-sub-scores').textContent=`${v.score_pa??'&mdash;'} \u00b7 ${v.score_pb??'&mdash;'} \u00b7 ${v.score_mod??'&mdash;'}`;
+  document.getElementById('fd-score').textContent=v.composite_score?`${v.composite_score} / 175`:'&mdash;';
   document.getElementById('fd-odo').textContent=oFmt(v.curr_odo);
   document.getElementById('fd-last-sale-mi').textContent=oFmt(v.last_sale_mi);
   document.getElementById('fd-isc-mi').textContent=oFmt(v.iseecars_est_mi);
   document.getElementById('fd-proj-mi').textContent=oFmt(v.proj_mi_jan28);
-  document.getElementById('fd-sale').textContent=v.last_sale_year??'â';
+  document.getElementById('fd-sale').textContent=v.last_sale_year??'&mdash;';
   document.getElementById('fd-timeline').innerHTML=saleChainHTML(v.sale_history,false);
   document.getElementById('fd-sclass').textContent=$m(v.curr_mkt_price);
-  document.getElementById('fd-listings').textContent=v.num_listings??'â';
+  document.getElementById('fd-listings').textContent=v.num_listings??'&mdash;';
   document.getElementById('fd-last-price').textContent=$m(v.last_sale_price);
-  document.getElementById('fd-depr').textContent=v.depr_5yr!=null?'$'+Number(v.depr_5yr).toLocaleString():'â';
+  document.getElementById('fd-depr').textContent=v.depr_5yr!=null?'$'+Number(v.depr_5yr).toLocaleString():'&mdash;';
   document.getElementById('fd-val1').textContent=$m(v.val_at_1yr);
   document.getElementById('fd-val3').textContent=$m(v.val_at_3yr);
   document.getElementById('sc-low').textContent=$m(v.price_low_jan28);
@@ -1623,26 +1433,15 @@ async function openFleetDrawer(vin){
   document.getElementById('fd-notes').value=v.research_notes||'';
 
   const svcs=allServiceRecs.filter(s=>s.vin===vin);
-  svcs.sort((a,b)=>{
-    const da=a.record_date?new Date(a.record_date):new Date(0);
-    const db2=b.record_date?new Date(b.record_date):new Date(0);
-    return da-db2;
-  });
   const svcMap=new Map();
   svcs.forEach(s=>{
     const key=`${s.odometer||''}`;
-    if(svcMap.has(key)){
-      const existing=svcMap.get(key);
-      if(!existing.location&&s.location)existing.location=s.location;
-      if(!existing.details&&s.details)existing.details=s.details;
-      if(!existing.record_date&&s.record_date)existing.record_date=s.record_date;
-    } else {
-      svcMap.set(key,{...s});
-    }
+    if(svcMap.has(key)){const existing=svcMap.get(key);if(!existing.location&&s.location)existing.location=s.location;if(!existing.details&&s.details)existing.details=s.details;}
+    else{svcMap.set(key,{...s});}
   });
-  const dedupedSvcs=Array.from(svcMap.values());
+  const dedupedSvcs=Array.from(svcMap.values()).sort((a,b)=>{const da=a.record_date?new Date(a.record_date):new Date(0);const db2=b.record_date?new Date(b.record_date):new Date(0);return da-db2;});
   document.getElementById('fd-service').innerHTML=dedupedSvcs.length
-    ?dedupedSvcs.map(s=>`<div class="svc-row"><span class="svc-date">${s.record_date||'â'}</span><span class="svc-odo">${s.odometer?Number(s.odometer).toLocaleString()+' mi':'â'}</span><span class="svc-loc">${s.location||s.details||'â'}</span></div>`).join('')
+    ?dedupedSvcs.map(s=>`<div class="svc-row"><span class="svc-date">${s.record_date||'&mdash;'}</span><span class="svc-odo">${s.odometer?Number(s.odometer).toLocaleString()+' mi':'&mdash;'}</span><span class="svc-loc">${s.location||s.details||'&mdash;'}</span></div>`).join('')
     :'<div class="svc-empty">No service records</div>';
 
   const links=[
@@ -1662,7 +1461,6 @@ async function openFleetDrawer(vin){
     const{data:su}=await db.storage.from(BUCKET).createSignedUrl(v.image_url,3600);
     if(su){iz.classList.add('has-img');const im=document.createElement('img');im.src=su.signedUrl;iz.prepend(im);}
   }
-
   await loadDocSlots(vin);
   document.getElementById('fleet-overlay').classList.add('open');
   document.getElementById('fleet-drawer').classList.add('open');
@@ -1684,7 +1482,7 @@ async function loadDocSlots(vin){
     slot.classList.add('has-file');
     const fi=slot.querySelector('input[type=file]');if(fi)fi.style.pointerEvents='none';
     const st=slot.querySelector('.doc-slot-status');
-    if(st)st.innerHTML=`â On file<br><a class="doc-open-link" href="${doc.storage_url}" target="_blank">Open PDF</a><br><a class="doc-replace-link" href="#" onclick="replaceDoc(event,'${slotId}')">Replace</a>`;
+    if(st)st.innerHTML=`\u2713 On file<br><a class="doc-open-link" href="${doc.storage_url}" target="_blank">Open PDF</a><br><a class="doc-replace-link" href="#" onclick="replaceDoc(event,'${slotId}')">Replace</a>`;
   });
 }
 
@@ -1696,63 +1494,34 @@ function replaceDoc(e,slotId){
 }
 
 async function loadListingHistory(vin){
-  const tbody = document.getElementById('fd-lh-tbody');
-  const summary = document.getElementById('fd-lh-summary');
-  tbody.innerHTML = '<tr><td colspan="8" class="lh-empty">Loadingâ¦</td></tr>';
-  summary.innerHTML = '';
+  const tbody=document.getElementById('fd-lh-tbody');
+  const summary=document.getElementById('fd-lh-summary');
+  tbody.innerHTML='<tr><td colspan="8" class="lh-empty">Loading&hellip;</td></tr>';
+  summary.innerHTML='';
   try{
-    const {data, error} = await db.from('listing_history')
-      .select('price,miles,first_seen,platform,seller_name,state,link_status,vdp_url')
-      .eq('vin', vin)
-      .not('first_seen','is',null)
-      .order('first_seen', {ascending: false})
-      .limit(50);
-    if(error) throw error;
-    if(!data || data.length === 0){
-      tbody.innerHTML = '<tr><td colspan="8" class="lh-empty">No listing history found</td></tr>';
-      return;
-    }
-    const active = data.filter(r=>r.link_status==='Active').length;
-    const dead   = data.filter(r=>r.link_status==='Dead').length;
-    const unver  = data.filter(r=>r.link_status==='Unverified').length;
-    const prices = data.filter(r=>r.price).map(r=>r.price);
-    const minP   = prices.length ? Math.min(...prices) : null;
-    const maxP   = prices.length ? Math.max(...prices) : null;
-    summary.innerHTML = [
+    const{data,error}=await db.from('listing_history').select('price,miles,first_seen,platform,seller_name,state,link_status,vdp_url').eq('vin',vin).not('first_seen','is',null).order('first_seen',{ascending:false}).limit(50);
+    if(error)throw error;
+    if(!data||data.length===0){tbody.innerHTML='<tr><td colspan="8" class="lh-empty">No listing history found</td></tr>';return;}
+    const active=data.filter(r=>r.link_status==='Active').length;
+    const dead=data.filter(r=>r.link_status==='Dead').length;
+    const unver=data.filter(r=>r.link_status==='Unverified').length;
+    const prices=data.filter(r=>r.price).map(r=>r.price);
+    const minP=prices.length?Math.min(...prices):null;
+    const maxP=prices.length?Math.max(...prices):null;
+    summary.innerHTML=[
       `<span class="lh-sum-pill">${data.length} episodes</span>`,
-      active ? `<span class="lh-sum-pill active">${active} active</span>` : '',
-      dead   ? `<span class="lh-sum-pill dead">${dead} dead</span>` : '',
-      unver  ? `<span class="lh-sum-pill">${unver} unverified</span>` : '',
-      minP   ? `<span class="lh-sum-pill">Low $${Number(minP).toLocaleString()}</span>` : '',
-      maxP   ? `<span class="lh-sum-pill">High $${Number(maxP).toLocaleString()}</span>` : '',
+      active?`<span class="lh-sum-pill active">${active} active</span>`:'',
+      dead?`<span class="lh-sum-pill dead">${dead} dead</span>`:'',
+      unver?`<span class="lh-sum-pill">${unver} unverified</span>`:'',
+      minP?`<span class="lh-sum-pill">Low $${Number(minP).toLocaleString()}</span>`:'',
+      maxP?`<span class="lh-sum-pill">High $${Number(maxP).toLocaleString()}</span>`:'',
     ].join('');
-    tbody.innerHTML = data.map(r => {
-      const statusClass = r.link_status==='Active' ? 'lh-status-active'
-                        : r.link_status==='Dead'   ? 'lh-status-dead'
-                        : 'lh-status-unverified';
-      const urlCell = r.vdp_url
-        ? `<a class="lh-url-link" href="${r.vdp_url}" target="_blank" title="${r.vdp_url}">${(r.platform||r.vdp_url).substring(0,22)}</a>`
-        : 'â';
-      const price = r.price ? '$'+Number(r.price).toLocaleString() : 'â';
-      const miles = r.miles ? Number(r.miles).toLocaleString()+' mi' : 'â';
-      const date  = r.first_seen ? r.first_seen.substring(0,10) : 'â';
-      const plat  = (r.platform||'â').substring(0,18);
-      const seller= (r.seller_name||'â').substring(0,16);
-      return `<tr>
-        <td>${date}</td>
-        <td style="font-weight:500">${price}</td>
-        <td>${miles}</td>
-        <td>${plat}</td>
-        <td>${seller}</td>
-        <td>${r.state||'â'}</td>
-        <td><span class="${statusClass}">${r.link_status||'â'}</span></td>
-        <td>${urlCell}</td>
-      </tr>`;
+    tbody.innerHTML=data.map(r=>{
+      const statusClass=r.link_status==='Active'?'lh-status-active':r.link_status==='Dead'?'lh-status-dead':'lh-status-unverified';
+      const urlCell=r.vdp_url?`<a class="lh-url-link" href="${r.vdp_url}" target="_blank" title="${r.vdp_url}">${(r.platform||r.vdp_url).substring(0,22)}</a>`:'&mdash;';
+      return`<tr><td>${r.first_seen?r.first_seen.substring(0,10):'&mdash;'}</td><td style="font-weight:500">${r.price?'$'+Number(r.price).toLocaleString():'&mdash;'}</td><td>${r.miles?Number(r.miles).toLocaleString()+' mi':'&mdash;'}</td><td>${(r.platform||'&mdash;').substring(0,18)}</td><td>${(r.seller_name||'&mdash;').substring(0,16)}</td><td>${r.state||'&mdash;'}</td><td><span class="${statusClass}">${r.link_status||'&mdash;'}</span></td><td>${urlCell}</td></tr>`;
     }).join('');
-  } catch(err){
-    tbody.innerHTML = '<tr><td colspan="8" class="lh-empty">Could not load â check console</td></tr>';
-    console.error('listing history error', err);
-  }
+  }catch(err){tbody.innerHTML='<tr><td colspan="8" class="lh-empty">Could not load &mdash; check console</td></tr>';console.error('listing history error',err);}
 }
 
 function closeFleetDrawer(){
@@ -1765,18 +1534,17 @@ async function uploadVehicleImage(input){
   if(!input.files[0]||!activeFD)return;
   const file=input.files[0];
   const path=`photos/${activeFD.vin}_${Date.now()}.${file.name.split('.').pop()}`;
-  toast('Uploadingâ¦');
+  toast('Uploading\u2026');
   const{error}=await db.storage.from(BUCKET).upload(path,file,{upsert:true});
   if(error){toast('Upload failed',true);return;}
   await db.from('vehicles').update({image_url:path}).eq('vin',activeFD.vin);
   activeFD.image_url=path;
-  const iz=document.getElementById('img-zone');
-  iz.classList.add('has-img');
+  const iz=document.getElementById('img-zone');iz.classList.add('has-img');
   let im=iz.querySelector('img');
   if(!im){im=document.createElement('img');iz.prepend(im);}
   const{data:su}=await db.storage.from(BUCKET).createSignedUrl(path,3600);
   if(su)im.src=su.signedUrl;
-  toast('Photo saved â');
+  toast('Photo saved \u2713');
 }
 
 function dragOver(e,el){e.preventDefault();el.classList.add('dragover');}
@@ -1788,7 +1556,7 @@ async function doUploadDoc(file,slotId){
   if(!activeFD)return;
   const docType=DOC_TYPE_MAP[slotId]||slotId;
   const storagePath=`${docType}/${activeFD.vin}.pdf`;
-  toast(`Uploading ${slotId}â¦`);
+  toast(`Uploading ${slotId}\u2026`);
   const{error:uE}=await db.storage.from(BUCKET).upload(storagePath,file,{upsert:true});
   if(uE){toast('Upload failed: '+uE.message,true);return;}
   const publicUrl=`${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${storagePath}`;
@@ -1796,7 +1564,7 @@ async function doUploadDoc(file,slotId){
   const{error:iE}=await db.from('documents').insert({vin:activeFD.vin,doc_type:docType,storage_url:publicUrl,uploaded_at:new Date().toISOString()});
   if(iE){toast('DB save failed: '+iE.message,true);return;}
   await loadDocSlots(activeFD.vin);
-  toast(`${slotId} saved â`);
+  toast(`${slotId} saved \u2713`);
 }
 
 async function saveNotes(){
@@ -1807,7 +1575,7 @@ async function saveNotes(){
   activeFD.research_notes=notes;
   const v=allVehicles.find(x=>x.vin===activeFD.vin);
   if(v)v.research_notes=notes;
-  toast('Notes saved â');
+  toast('Notes saved \u2713');
 }
 
 const STATUS_CLASS={pending:'st-pending',active:'st-active',declined:'st-declined',scheduled:'st-scheduled',inbound:'st-inbound',hold:'st-hold'};
@@ -1842,19 +1610,19 @@ function renderCRM(){
     const cAlerts=allAlerts.filter(a=>a.contact_id===c.id);
     return`<div class="crm-card${activeCRM===c.id?' selected':''}" onclick="openCRMDrawer('${c.id}')">
       <div class="crm-card-header">
-        <div><div class="crm-company">${c.priority==='TRUE'||c.priority===true?'â­ ':''}${c.company}</div><div class="crm-location">${c.location||'â'} Â· ${c.contact_type||''}</div></div>
+        <div><div class="crm-company">${c.priority==='TRUE'||c.priority===true?'\u2b50 ':''}${c.company}</div><div class="crm-location">${c.location||'&mdash;'} \u00b7 ${c.contact_type||''}</div></div>
         <span class="status-badge ${STATUS_CLASS[c.status]||'st-hold'}">${STATUS_LABEL[c.status]||c.status}</span>
       </div>
       <div class="crm-card-body">
         <div class="crm-meta-row">
-          ${c.phone?`<span class="crm-meta-item">ð ${c.phone}</span>`:''}
-          ${c.website?`<span class="crm-meta-item">ð <a href="https://${c.website}" target="_blank" onclick="event.stopPropagation()">${c.website}</a></span>`:''}
+          ${c.phone?`<span class="crm-meta-item">&#128222; ${c.phone}</span>`:''}
+          ${c.website?`<span class="crm-meta-item">&#127760; <a href="https://${c.website}" target="_blank" onclick="event.stopPropagation()">${c.website}</a></span>`:''}
         </div>
-        ${lastLog?`<div class="crm-note">${(lastLog.body||'').substring(0,85)}${(lastLog.body||'').length>85?'â¦':''}</div>`:''}
-        ${cAlerts.length?`<div class="crm-vins">${cAlerts.map(a=>`<span class="crm-vin-tag">${(a.vin||'').slice(-8)} â¤$${Math.round((a.ceiling_usd||0)/1000)}K</span>`).join('')}</div>`:''}
+        ${lastLog?`<div class="crm-note">${(lastLog.body||'').substring(0,85)}${(lastLog.body||'').length>85?'\u2026':''}</div>`:''}
+        ${cAlerts.length?`<div class="crm-vins">${cAlerts.map(a=>`<span class="crm-vin-tag">${(a.vin||'').slice(-8)} &le;$${Math.round((a.ceiling_usd||0)/1000)}K</span>`).join('')}</div>`:''}
       </div>
       <div class="crm-card-footer">
-        <span class="crm-date">${c.first_contact||'â'} Â· ${lastLog?new Date(lastLog.logged_at).toLocaleDateString():'â'}</span>
+        <span class="crm-date">${c.first_contact||'&mdash;'} \u00b7 ${lastLog?new Date(lastLog.logged_at).toLocaleDateString():'&mdash;'}</span>
         <button class="crm-btn primary" onclick="event.stopPropagation();openCRMDrawer('${c.id}')">Update</button>
       </div>
     </div>`;
@@ -1866,14 +1634,14 @@ function openCRMDrawer(id){
   activeCRM=id;renderCRM();
   document.getElementById('cd-eyebrow').textContent=(c.contact_type||'broker').toUpperCase()+' CONTACT';
   document.getElementById('cd-company').textContent=c.company;
-  document.getElementById('cd-location').textContent=`${c.location||'â'} Â· ${c.region||'â'}`;
-  document.getElementById('cd-phone').textContent=c.phone||'â';
-  document.getElementById('cd-email').textContent=c.email||'â';
-  document.getElementById('cd-web').innerHTML=c.website?`<a href="https://${c.website}" target="_blank" style="color:var(--accent)">${c.website}</a>`:'â';
+  document.getElementById('cd-location').textContent=`${c.location||'&mdash;'} \u00b7 ${c.region||'&mdash;'}`;
+  document.getElementById('cd-phone').textContent=c.phone||'&mdash;';
+  document.getElementById('cd-email').textContent=c.email||'&mdash;';
+  document.getElementById('cd-web').innerHTML=c.website?`<a href="https://${c.website}" target="_blank" style="color:var(--accent)">${c.website}</a>`:'&mdash;';
   document.getElementById('cd-status-select').value=c.status||'pending';
   const cAlerts=allAlerts.filter(a=>a.contact_id===id);
   document.getElementById('cd-alerts').innerHTML=cAlerts.length
-    ?cAlerts.map(a=>`<div class="alert-row"><span class="trim-badge s65" style="font-size:9px">${(a.vin||'').slice(-8)}</span><span class="alert-vin">${a.vin}</span><span class="alert-ceiling">â¤$${Math.round((a.ceiling_usd||0)/1000)}K</span><button class="alert-remove" onclick="removeVINAlert('${a.id}')">Ã</button></div>`).join('')
+    ?cAlerts.map(a=>`<div class="alert-row"><span class="trim-badge s65" style="font-size:9px">${(a.vin||'').slice(-8)}</span><span class="alert-vin">${a.vin}</span><span class="alert-ceiling">&le;$${Math.round((a.ceiling_usd||0)/1000)}K</span><button class="alert-remove" onclick="removeVINAlert('${a.id}')">&#215;</button></div>`).join('')
     :'<div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:8px 0">No VINs assigned yet</div>';
   const cLogs=allLogs.filter(l=>l.contact_id===id);
   document.getElementById('cd-log').innerHTML=cLogs.length
@@ -1894,7 +1662,7 @@ async function updateContactStatus(val){
   if(error){toast('Status update failed',true);return;}
   const c=allContacts.find(x=>x.id===activeCRM);
   if(c){c.status=val;c.last_activity=new Date().toISOString();}
-  updateCRMStats();renderCRM();toast('Status updated â');
+  updateCRMStats();renderCRM();toast('Status updated \u2713');
 }
 
 async function addLogEntry(){
@@ -1913,7 +1681,7 @@ async function addLogEntry(){
     c.last_activity=new Date().toISOString();
   }
   await db.from('broker_contacts').update({last_activity:new Date().toISOString()}).eq('id',activeCRM);
-  openCRMDrawer(activeCRM);toast('Logged â');
+  openCRMDrawer(activeCRM);toast('Logged \u2713');
 }
 
 async function addVINAlert(){
@@ -1926,14 +1694,14 @@ async function addVINAlert(){
   if(error){toast('Alert save failed',true);return;}
   allAlerts.push(newAlert);
   document.getElementById('add-vin-input').value='';document.getElementById('add-ceiling-input').value='';
-  openCRMDrawer(activeCRM);toast('Alert added â');
+  openCRMDrawer(activeCRM);toast('Alert added \u2713');
 }
 
 async function removeVINAlert(alertId){
   const{error}=await db.from('contact_alerts').delete().eq('id',alertId);
   if(error){toast('Remove failed',true);return;}
   allAlerts=allAlerts.filter(a=>a.id!==alertId);
-  openCRMDrawer(activeCRM);toast('Alert removed â');
+  openCRMDrawer(activeCRM);toast('Alert removed \u2713');
 }
 
 async function openAddContact(){
@@ -1953,258 +1721,259 @@ async function openAddContact(){
   }).select().single();
   if(error){toast('Add failed: '+error.message,true);return;}
   allContacts.unshift(nc);updateCRMStats();renderCRM();switchTab('crm');
-  toast(`${company} added â`);openCRMDrawer(nc.id);
+  toast(`${company} added \u2713`);openCRMDrawer(nc.id);
 }
 
-
-// ════════════════════════════════════════════════════════
+// ============================================================
 // ADD VEHICLE MODAL
-// ════════════════════════════════════════════════════════
+// ============================================================
 
-let avStage = 1;
-let avData = {};
+var avStage = 1;
+var avData = {};
 
-const VIN_YEAR_MAP = {A:2010,B:2011,C:2012,D:2013,E:2014,F:2015,G:2016,H:2017,J:2018,K:2019,L:2020,M:2021,N:2022,P:2023,R:2024,S:2025};
+var VIN_YEAR_MAP = {A:2010,B:2011,C:2012,D:2013,E:2014,F:2015,G:2016,H:2017,J:2018,K:2019,L:2020,M:2021,N:2022,P:2023,R:2024,S:2025};
 
 function vinCheckDigit(vin){
-  const tr={A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,J:1,K:2,L:3,M:4,N:5,P:7,R:9,S:2,T:3,U:4,V:5,W:6,X:7,Y:8,Z:9};
-  const wt=[8,7,6,5,4,3,2,10,0,9,8,7,6,5,4,3,2];
-  const v=vin.toUpperCase();if(v.length!==17)return false;
-  let sum=0;for(let i=0;i<17;i++){const c=v[i];const val=/\d/.test(c)?parseInt(c):(tr[c]||0);sum+=val*wt[i];}
-  const rem=sum%11;const check=rem===10?"X":String(rem);return check===v[8];
+  var tr={A:1,B:2,C:3,D:4,E:5,F:6,G:7,H:8,J:1,K:2,L:3,M:4,N:5,P:7,R:9,S:2,T:3,U:4,V:5,W:6,X:7,Y:8,Z:9};
+  var wt=[8,7,6,5,4,3,2,10,0,9,8,7,6,5,4,3,2];
+  var v=vin.toUpperCase();
+  if(v.length!==17)return false;
+  var sum=0;
+  for(var i=0;i<17;i++){var c=v[i];var val=/\d/.test(c)?parseInt(c):(tr[c]||0);sum+=val*wt[i];}
+  var rem=sum%11;
+  var check=rem===10?'X':String(rem);
+  return check===v[8];
 }
 
 function avDetectFromVIN(vin){
   vin=vin.toUpperCase();
-  const year=VIN_YEAR_MAP[vin[9]]||null;
-  const trim=vin[7]==="K"?"S65 AMG":vin[7]==="B"?"S600":null;
-  return{year,trim};
+  var year=VIN_YEAR_MAP[vin[9]]||null;
+  var trim=vin[7]==='K'?'S65 AMG':vin[7]==='B'?'S600':null;
+  return{year:year,trim:trim};
 }
 
 function avComputeScore(d){
-  let qs=50;
-  const owners=parseInt(d.total_owners)||0;
+  var qs=50;
+  var owners=parseInt(d.total_owners)||0;
   if(owners>=1&&owners<=2)qs+=15;else if(owners>=3&&owners<=4)qs+=5;
-  const svc=parseFloat(d.svc_per_yr)||0;
+  var svc=parseFloat(d.svc_per_yr)||0;
   if(svc>=1.0)qs+=15;else if(svc>=0.6)qs+=5;
   if(d.lease_history)qs+=5;
-  const acc=parseInt(d.accident_count)||0;
+  var acc=parseInt(d.accident_count)||0;
   qs-=acc*15;qs=Math.max(0,Math.min(qs,50));
-  const proj=parseInt(d.proj_mi_jan28)||0;
-  let pb=0;
+  var proj=parseInt(d.proj_mi_jan28)||0;
+  var pb=0;
   if(proj>=70000&&proj<=100000)pb=50;
   else if(proj>=60000&&proj<70000)pb=35;
   else if(proj>100000&&proj<=120000)pb=30;
   else if(proj>=50000&&proj<60000)pb=20;
   else if(proj>120000&&proj<=140000)pb=15;
   else if(proj>0&&proj<50000)pb=10;
-  let mod=0;
+  var mod=0;
   if(d.trans_confirmed)mod+=5;if(d.ign_confirmed)mod+=5;
   if(d.susp_confirmed)mod+=5;if(d.brake_confirmed)mod+=5;
-  if((d.trim||"").includes("S65"))mod+=5;
-  const composite=qs+pb+mod;
-  let flag="Universe";
-  if(acc>=2)flag="DQ";
-  else if(acc===1)flag="Watch";
-  else if(composite>=70)flag="Target";
-  return{qs,pb,mod,composite,flag};
+  if((d.trim||'').indexOf('S65')!==-1)mod+=5;
+  var composite=qs+pb+mod;
+  var flag='Universe';
+  if(acc>=2)flag='DQ';
+  else if(acc===1)flag='Watch';
+  else if(composite>=70)flag='Target';
+  return{qs:qs,pb:pb,mod:mod,composite:composite,flag:flag};
 }
 
 function avProjectMiles(currOdo){
-  const odo=parseInt(currOdo)||0;return odo?odo+19004:null;
+  var odo=parseInt(currOdo)||0;
+  return odo?odo+19004:null;
 }
 
 function avStage1HTML(){
-  var h="";
-  h+='<div class="av-dup-warning" id="av-dup-warn">⚠ This VIN already exists. <a href="#" onclick="avOpenExisting(event)" style="color:var(--s65);margin-left:8px">View existing →</a></div>';
+  var h='';
+  h+='<div class="av-dup-warning" id="av-dup-warn">VIN already exists in database. <a href="#" onclick="avOpenExisting(event)" style="color:var(--s65);margin-left:8px">View existing &rarr;</a></div>';
   h+='<div class="av-field-group">';
   h+='<div class="av-field-label">VIN <span class="av-field-req">*</span></div>';
   h+='<div class="av-vin-row">';
   h+='<input class="av-input" id="av-vin" maxlength="17" placeholder="17-character VIN" ';
-  h+='value="'+( avData.vin||"")+'" oninput="avVINInput(this)" style="text-transform:uppercase;letter-spacing:.06em;font-size:14px">';
+  h+='value="'+(avData.vin||'')+'" oninput="avVINInput(this)" style="text-transform:uppercase;letter-spacing:.06em;font-size:14px">';
   h+='<button class="av-decode-btn" onclick="avDecodeVIN()">Decode</button></div>';
-  h+='<div class="av-hint" id="av-vin-hint">Enter full 17-char VIN — check digit will be validated</div></div>';
+  h+='<div class="av-hint" id="av-vin-hint">Enter full 17-char VIN &mdash; check digit will be validated</div></div>';
   h+='<div class="av-grid-2">';
   h+='<div class="av-field-group"><div class="av-field-label">Model Year <span class="av-field-req">*</span></div>';
-  h+='<select class="av-select" id="av-year"><option value="">—</option>';
-  [2015,2016,2017,2018,2019,2020].forEach(function(y){h+='<option value="'+y+'" '+(avData.year==y?"selected":"")+'>'+y+"</option>";});
-  h+="</select></div>";
+  h+='<select class="av-select" id="av-year"><option value="">&mdash;</option>';
+  [2015,2016,2017,2018,2019,2020].forEach(function(y){h+='<option value="'+y+'"'+(avData.year==y?' selected':'')+'>'+y+'</option>';});
+  h+='</select></div>';
   h+='<div class="av-field-group"><div class="av-field-label">Model <span class="av-field-req">*</span></div>';
-  h+='<select class="av-select" id="av-trim"><option value="">—</option>';
-  h+='<option value="S65 AMG" '+(avData.trim==="S65 AMG"?"selected":"")+'>S65 AMG</option>';
-  h+='<option value="S600" '+(avData.trim==="S600"?"selected":"")+'>S600</option></select></div></div>';
+  h+='<select class="av-select" id="av-trim"><option value="">&mdash;</option>';
+  h+='<option value="S65 AMG"'+(avData.trim==='S65 AMG'?' selected':'')+'>S65 AMG</option>';
+  h+='<option value="S600"'+(avData.trim==='S600'?' selected':'')+'>S600</option></select></div></div>';
   h+='<div class="av-grid-2">';
   h+='<div class="av-field-group"><div class="av-field-label">Exterior Color</div>';
-  h+='<input class="av-input" id="av-exterior" placeholder="e.g. Obsidian Black" value="'+(avData.exterior||"")+'"></div>';
+  h+='<input class="av-input" id="av-exterior" placeholder="e.g. Obsidian Black" value="'+(avData.exterior||'')+'"></div>';
   h+='<div class="av-field-group"><div class="av-field-label">Upholstery</div>';
-  h+='<input class="av-input" id="av-upholstery" placeholder="e.g. Black/Anthracite" value="'+(avData.upholstery||"")+'"></div></div>';
+  h+='<input class="av-input" id="av-upholstery" placeholder="e.g. Black/Anthracite" value="'+(avData.upholstery||'')+'"></div></div>';
   h+='<div class="av-grid-2">';
   h+='<div class="av-field-group"><div class="av-field-label">State</div>';
-  h+='<input class="av-input" id="av-state" maxlength="2" placeholder="TX" value="'+(avData.last_title_state||"")+'" style="text-transform:uppercase"></div>';
-  h+='<div class="av-field-group"><div class="av-field-label">Current Odometer</div>';
-  h+='<input class="av-input" id="av-odo" type="number" placeholder="e.g. 55000" value="'+(avData.curr_odo||"")+'"></div></div>';
+  h+='<input class="av-input" id="av-state" maxlength="2" placeholder="TX" value="'+(avData.last_title_state||'')+'" style="text-transform:uppercase"></div>';
+  h+='<div class="av-field-group"><div class="av-field-label">Odometer</div>';
+  h+='<input class="av-input" id="av-odo" type="number" placeholder="e.g. 55000" value="'+(avData.curr_odo||'')+'"></div></div>';
   h+='<div class="av-section-divider">Listing Info</div>';
   h+='<div class="av-field-group"><div class="av-field-label">Listing URL</div>';
-  h+='<input class="av-input" id="av-url" type="url" placeholder="https://..." value="'+(avData.vdp_url||"")+'"></div>';
+  h+='<input class="av-input" id="av-url" type="url" placeholder="https://..." value="'+(avData.vdp_url||'')+'"></div>';
   h+='<div class="av-grid-2">';
   h+='<div class="av-field-group"><div class="av-field-label">Asking Price ($)</div>';
-  h+='<input class="av-input" id="av-price" type="number" placeholder="e.g. 42500" value="'+(avData.asking_price||"")+'"></div>';
+  h+='<input class="av-input" id="av-price" type="number" placeholder="e.g. 42500" value="'+(avData.asking_price||'')+'"></div>';
   h+='<div class="av-field-group"><div class="av-field-label">Platform</div>';
-  h+='<select class="av-select" id="av-platform"><option value="">—</option>';
-  ["Cars.com","AutoTrader","CarGurus","Dealer","eBay","BaT","Private","Other"].forEach(function(p){h+='<option value="'+p+'" '+(avData.platform===p?"selected":"")+'>'+p+"</option>";});
-  h+="</select></div></div>";
+  h+='<select class="av-select" id="av-platform"><option value="">&mdash;</option>';
+  ['Cars.com','AutoTrader','CarGurus','Dealer','eBay','BaT','Private','Other'].forEach(function(p){h+='<option value="'+p+'"'+(avData.platform===p?' selected':'')+'>'+p+'</option>';});
+  h+='</select></div></div>';
   return h;
 }
 
 function avStage2HTML(){
   var proj=avProjectMiles(avData.curr_odo);
-  var h="";
+  var h='';
   h+='<div class="av-section-divider">Ownership History</div>';
   h+='<div class="av-grid-2">';
   h+='<div class="av-field-group"><div class="av-field-label">Prior Owners</div>';
   h+='<select class="av-select" id="av-owners"><option value="">Unknown</option>';
-  [1,2,3,4,5,6].forEach(function(n){h+='<option value="'+n+'" '+(avData.total_owners==n?"selected":"")+'>'+n+"</option>";});
-  h+="</select></div>";
+  [1,2,3,4,5,6].forEach(function(n){h+='<option value="'+n+'"'+(avData.total_owners==n?' selected':'')+'>'+n+'</option>';});
+  h+='</select></div>';
   h+='<div class="av-field-group"><div class="av-field-label">Accident Count</div>';
   h+='<select class="av-select" id="av-accidents">';
-  h+='<option value="0" '+((avData.accident_count||"0")==="0"?"selected":"")+'>0 — Clean</option>';
-  h+='<option value="1" '+(avData.accident_count==="1"?"selected":"")+'>1 → Watch (−15 pts)</option>';
-  h+='<option value="2" '+(avData.accident_count==="2"?"selected":"")+'>2 → DQ</option></select>';
-  h+='<div class="av-hint">≥2 accidents = automatic DQ</div></div></div>';
+  h+='<option value="0"'+((avData.accident_count||'0')==='0'?' selected':'')+'>0 &mdash; Clean</option>';
+  h+='<option value="1"'+(avData.accident_count==='1'?' selected':'')+'>1 &rarr; Watch (&minus;15 pts)</option>';
+  h+='<option value="2"'+(avData.accident_count==='2'?' selected':'')+'>2+ &rarr; DQ</option></select>';
+  h+='<div class="av-hint">&ge;2 accidents = automatic DQ</div></div></div>';
   h+='<div class="av-grid-2">';
   h+='<div class="av-field-group"><div class="av-field-label">Service Visits / Year</div>';
-  h+='<input class="av-input" id="av-svc" type="number" step="0.1" placeholder="e.g. 0.8" value="'+(avData.svc_per_yr||"")+'">';
-  h+='<div class="av-hint">≥1.0 = +15pts · ≥0.6 = +5pts</div></div>';
+  h+='<input class="av-input" id="av-svc" type="number" step="0.1" placeholder="e.g. 0.8" value="'+(avData.svc_per_yr||'')+'">';
+  h+='<div class="av-hint">&ge;1.0 = +15pts &middot; &ge;0.6 = +5pts</div></div>';
   h+='<div class="av-field-group"><div class="av-field-label">Proj. Miles @ Jan 2028</div>';
-  h+='<input class="av-input" id="av-proj" type="number" placeholder="'+(proj||"auto")+'" value="'+(avData.proj_mi_jan28||proj||"")+'">';
+  h+='<input class="av-input" id="av-proj" type="number" placeholder="'+(proj||'auto')+'" value="'+(avData.proj_mi_jan28||proj||'')+'">';
   h+='<div class="av-hint">Auto: current odo + ~19K mi</div></div></div>';
-  h+='<label class="av-checkbox-row"><input type="checkbox" id="av-lease" '+(avData.lease_history?"checked":"")+'> Lease history confirmed (+5 pts)</label>';
-  h+='<div class="av-section-divider">VMI Code 32 — Service Wall</div>';
+  h+='<label class="av-checkbox-row"><input type="checkbox" id="av-lease"'+(avData.lease_history?' checked':'')+'>  Lease history confirmed (+5 pts)</label>';
+  h+='<div class="av-section-divider">VMI Code 32 &mdash; Service Wall</div>';
   h+='<div class="av-hint" style="margin-bottom:8px">Check only if confirmed via service records or dealer disclosure</div>';
   h+='<div class="av-swall-grid">';
-  h+='<label class="av-checkbox-row"><input type="checkbox" id="av-trans" '+(avData.trans_confirmed?"checked":"")+'> Transmission (+5 pts)</label>';
-  h+='<label class="av-checkbox-row"><input type="checkbox" id="av-ign" '+(avData.ign_confirmed?"checked":"")+'> Ignition coils/plugs (+5 pts)</label>';
-  h+='<label class="av-checkbox-row"><input type="checkbox" id="av-susp" '+(avData.susp_confirmed?"checked":"")+'> Suspension (+5 pts)</label>';
-  h+='<label class="av-checkbox-row"><input type="checkbox" id="av-brake" '+(avData.brake_confirmed?"checked":"")+'> Brakes (+5 pts)</label></div>';
+  h+='<label class="av-checkbox-row"><input type="checkbox" id="av-trans"'+(avData.trans_confirmed?' checked':'')+'>  Transmission (+5 pts)</label>';
+  h+='<label class="av-checkbox-row"><input type="checkbox" id="av-ign"'+(avData.ign_confirmed?' checked':'')+'>  Ignition coils/plugs (+5 pts)</label>';
+  h+='<label class="av-checkbox-row"><input type="checkbox" id="av-susp"'+(avData.susp_confirmed?' checked':'')+'>  Suspension (+5 pts)</label>';
+  h+='<label class="av-checkbox-row"><input type="checkbox" id="av-brake"'+(avData.brake_confirmed?' checked':'')+'>  Brakes (+5 pts)</label></div>';
   h+='<div class="av-section-divider">Notes</div>';
-  h+='<textarea class="notes-area" id="av-notes" placeholder="Source, seller context, service docs..." style="min-height:80px">'+(avData.research_notes||"")+"</textarea>";
+  h+='<textarea class="notes-area" id="av-notes" placeholder="Source, seller context, service docs..." style="min-height:80px">'+(avData.research_notes||'')+'</textarea>';
   return h;
 }
 
 function avStage3HTML(){
   var score=avComputeScore(avData);
-  var fc=score.flag==="Target"?"var(--accent)":score.flag==="Watch"?"var(--gold)":score.flag==="DQ"?"#888":"#999";
-  var fb=score.flag==="Target"?"#fdf0f0":score.flag==="Watch"?"#fdf8ec":score.flag==="DQ"?"#3c0000":"#f5f5f5";
-  var h="";
-  h+='<div class="av-score-preview"><div class="av-score-preview-title">Computed Score Preview</div>';
+  var fc=score.flag==='Target'?'var(--accent)':score.flag==='Watch'?'var(--gold)':score.flag==='DQ'?'#888':'#999';
+  var fb=score.flag==='Target'?'#fdf0f0':score.flag==='Watch'?'#fdf8ec':score.flag==='DQ'?'#3c0000':'#f5f5f5';
+  var h='';
+  h+='<div class="av-score-preview"><div class="av-score-preview-title">Score Preview</div>';
   h+='<div class="av-score-grid">';
-  h+='<div class="av-score-cell"><span class="av-score-num gold">'+score.composite+"</span><span class="av-score-lbl">Composite</span></div>";
-  h+='<div class="av-score-cell"><span class="av-score-num">'+score.qs+"</span><span class="av-score-lbl">QS (PA)</span></div>";
-  h+='<div class="av-score-cell"><span class="av-score-num">'+score.pb+"</span><span class="av-score-lbl">Mileage (PB)</span></div>";
-  h+='<div class="av-score-cell"><span class="av-score-num">'+score.mod+"</span><span class="av-score-lbl">Svc Wall</span></div></div></div>";
+  h+='<div class="av-score-cell"><span class="av-score-num gold">'+score.composite+'</span><span class="av-score-lbl">Composite</span></div>';
+  h+='<div class="av-score-cell"><span class="av-score-num">'+score.qs+'</span><span class="av-score-lbl">QS (PA)</span></div>';
+  h+='<div class="av-score-cell"><span class="av-score-num">'+score.pb+'</span><span class="av-score-lbl">Mileage (PB)</span></div>';
+  h+='<div class="av-score-cell"><span class="av-score-num">'+score.mod+'</span><span class="av-score-lbl">Svc Wall</span></div></div></div>';
   h+='<div class="av-section-divider">Profile Summary</div>';
   h+='<div class="drawer-grid" style="margin-bottom:12px">';
-  h+='<div class="drawer-field"><div class="drawer-field-label">VIN</div><div class="drawer-field-value" style="font-size:11px">'+(avData.vin||"—")+"</div></div>";
-  h+='<div class="drawer-field"><div class="drawer-field-label">Year / Model</div><div class="drawer-field-value">'+(avData.year||"—")+" "+(avData.trim||"—")+"</div></div>";
-  h+='<div class="drawer-field"><div class="drawer-field-label">Flag</div><div class="drawer-field-value"><span style="background:'+fb+";color:"+fc+';padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600">'+(score.flag||"—")+"</span></div></div></div>";
+  h+='<div class="drawer-field"><div class="drawer-field-label">VIN</div><div class="drawer-field-value" style="font-size:11px">'+(avData.vin||'&mdash;')+'</div></div>';
+  h+='<div class="drawer-field"><div class="drawer-field-label">Year / Model</div><div class="drawer-field-value">'+(avData.year||'&mdash;')+' '+(avData.trim||'&mdash;')+'</div></div>';
+  h+='<div class="drawer-field"><div class="drawer-field-label">Flag</div><div class="drawer-field-value"><span style="background:'+fb+';color:'+fc+';padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600">'+(score.flag||'&mdash;')+'</span></div></div></div>';
   h+='<div class="drawer-grid" style="margin-bottom:12px">';
-  h+='<div class="drawer-field"><div class="drawer-field-label">Exterior</div><div class="drawer-field-value" style="font-size:12px">'+(avData.exterior||"—")+"</div></div>";
-  h+='<div class="drawer-field"><div class="drawer-field-label">State</div><div class="drawer-field-value">'+(avData.last_title_state||"—")+"</div></div>";
-  h+='<div class="drawer-field"><div class="drawer-field-label">Odometer</div><div class="drawer-field-value" style="color:var(--accent)">'+(avData.curr_odo?Number(avData.curr_odo).toLocaleString()+" mi":"—")+"</div></div></div>";
+  h+='<div class="drawer-field"><div class="drawer-field-label">Exterior</div><div class="drawer-field-value" style="font-size:12px">'+(avData.exterior||'&mdash;')+'</div></div>';
+  h+='<div class="drawer-field"><div class="drawer-field-label">State</div><div class="drawer-field-value">'+(avData.last_title_state||'&mdash;')+'</div></div>';
+  h+='<div class="drawer-field"><div class="drawer-field-label">Odometer</div><div class="drawer-field-value" style="color:var(--accent)">'+(avData.curr_odo?Number(avData.curr_odo).toLocaleString()+' mi':'&mdash;')+'</div></div></div>';
   h+='<div class="drawer-grid" style="margin-bottom:12px">';
-  h+='<div class="drawer-field"><div class="drawer-field-label">Asking Price</div><div class="drawer-field-value" style="color:#1a6b3a">'+(avData.asking_price?"$"+Number(avData.asking_price).toLocaleString():"—")+"</div></div>";
-  h+='<div class="drawer-field"><div class="drawer-field-label">Platform</div><div class="drawer-field-value">'+(avData.platform||"—")+"</div></div>";
-  h+='<div class="drawer-field"><div class="drawer-field-label">Proj @ Jan 2028</div><div class="drawer-field-value" style="color:var(--gold)">'+(avData.proj_mi_jan28?Number(avData.proj_mi_jan28).toLocaleString()+" mi":"—")+"</div></div></div>";
+  h+='<div class="drawer-field"><div class="drawer-field-label">Asking Price</div><div class="drawer-field-value" style="color:#1a6b3a">'+(avData.asking_price?'$'+Number(avData.asking_price).toLocaleString():'&mdash;')+'</div></div>';
+  h+='<div class="drawer-field"><div class="drawer-field-label">Platform</div><div class="drawer-field-value">'+(avData.platform||'&mdash;')+'</div></div>';
+  h+='<div class="drawer-field"><div class="drawer-field-label">Proj @ Jan 2028</div><div class="drawer-field-value" style="color:var(--gold)">'+(avData.proj_mi_jan28?Number(avData.proj_mi_jan28).toLocaleString()+' mi':'&mdash;')+'</div></div></div>';
   h+='<div class="av-error-msg" id="av-save-error"></div>';
-  h+='<div class="av-hint" style="margin-top:4px">Saved with status <strong>Sighting</strong> — swept into monthly MarketCheck enrichment automatically.</div>';
+  h+='<div class="av-hint" style="margin-top:4px">Saved with status <strong>Sighting</strong> &mdash; swept into monthly MarketCheck enrichment automatically.</div>';
   return h;
 }
 
 function openAddVehicle(){
   avStage=1;avData={};renderAVStage();
-  document.getElementById("av-overlay").classList.add("open");
-  document.getElementById("av-modal").classList.add("open");
-  setTimeout(function(){var el=document.getElementById("av-vin");if(el)el.focus();},300);
+  document.getElementById('av-overlay').classList.add('open');
+  document.getElementById('av-modal').classList.add('open');
+  setTimeout(function(){var el=document.getElementById('av-vin');if(el)el.focus();},300);
 }
 function closeAddVehicle(){
-  document.getElementById("av-overlay").classList.remove("open");
-  document.getElementById("av-modal").classList.remove("open");
+  document.getElementById('av-overlay').classList.remove('open');
+  document.getElementById('av-modal').classList.remove('open');
 }
 function renderAVStage(){
   [1,2,3].forEach(function(n){
-    var el=document.getElementById("av-step-"+n);
-    el.className="av-step"+(n===avStage?" active":n<avStage?" done":"");
+    var el=document.getElementById('av-step-'+n);
+    el.className='av-step'+(n===avStage?' active':n<avStage?' done':'');
   });
-  var body=document.getElementById("av-modal-body");
+  var body=document.getElementById('av-modal-body');
   if(avStage===1)body.innerHTML=avStage1HTML();
   else if(avStage===2)body.innerHTML=avStage2HTML();
   else body.innerHTML=avStage3HTML();
   body.scrollTop=0;
-  document.getElementById("av-btn-back").style.display=avStage>1?"":"none";
-  var nb=document.getElementById("av-btn-next");
-  nb.textContent=avStage===3?"💾 Save Vehicle":"Next →";
-  nb.className=avStage===3?"btn-add-vehicle":"btn btn-accent";
-  document.getElementById("av-footer-status").textContent="Step "+avStage+" of 3";
+  document.getElementById('av-btn-back').style.display=avStage>1?'':'none';
+  var nb=document.getElementById('av-btn-next');
+  nb.textContent=avStage===3?'Save Vehicle':'Next >';
+  nb.className=avStage===3?'btn-add-vehicle':'btn btn-accent';
+  document.getElementById('av-footer-status').textContent='Step '+avStage+' of 3';
 }
-
 function avVINInput(input){
-  var v=input.value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g,"");
+  var v=input.value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g,'');
   input.value=v;
-  var hint=document.getElementById("av-vin-hint");
-  var warn=document.getElementById("av-dup-warn");
-  if(v.length<17){input.className="av-input";if(hint){hint.textContent=v.length+"/17 characters";hint.className="av-hint";}if(warn)warn.classList.remove("show");return;}
+  var hint=document.getElementById('av-vin-hint');
+  var warn=document.getElementById('av-dup-warn');
+  if(v.length<17){input.className='av-input';if(hint){hint.textContent=v.length+'/17 characters';hint.className='av-hint';}if(warn)warn.classList.remove('show');return;}
   var valid=vinCheckDigit(v);
-  input.className="av-input "+(valid?"valid":"error");
-  if(hint){hint.textContent=valid?"✓ Valid VIN — check digit confirmed":"⚠ Check digit mismatch — verify VIN";hint.className="av-hint "+(valid?"success":"error");}
+  input.className='av-input '+(valid?'valid':'error');
+  if(hint){hint.textContent=valid?'Valid VIN - check digit confirmed':'Check digit mismatch - verify VIN';hint.className='av-hint '+(valid?'success':'error');}
   var existing=allVehicles.find(function(x){return x.vin===v;});
-  if(warn)warn.classList.toggle("show",!!existing);
+  if(warn)warn.classList.toggle('show',!!existing);
 }
 function avDecodeVIN(){
-  var vin=(document.getElementById("av-vin")||{}).value||"";
-  vin=vin.toUpperCase();
-  if(vin.length!==17){toast("Enter a complete 17-char VIN first",true);return;}
+  var vin=((document.getElementById('av-vin')||{}).value||'').toUpperCase();
+  if(vin.length!==17){toast('Enter a complete 17-char VIN first',true);return;}
   var decoded=avDetectFromVIN(vin);
-  if(decoded.year)document.getElementById("av-year").value=decoded.year;
-  if(decoded.trim)document.getElementById("av-trim").value=decoded.trim;
-  var hint=document.getElementById("av-vin-hint");
-  if(hint){hint.textContent="Decoded: "+(decoded.year||"?")+" "+(decoded.trim||"unknown trim");hint.className="av-hint success";}
+  if(decoded.year)document.getElementById('av-year').value=decoded.year;
+  if(decoded.trim)document.getElementById('av-trim').value=decoded.trim;
+  var hint=document.getElementById('av-vin-hint');
+  if(hint){hint.textContent='Decoded: '+(decoded.year||'?')+' '+(decoded.trim||'unknown trim');hint.className='av-hint success';}
 }
 function avOpenExisting(e){
   e.preventDefault();
-  var vin=((document.getElementById("av-vin")||{}).value||"").toUpperCase();
+  var vin=(((document.getElementById('av-vin')||{}).value||'').toUpperCase());
   closeAddVehicle();openFleetDrawer(vin);
 }
-
 function avCollectStage1(){
-  avData.vin=((document.getElementById("av-vin")||{}).value||"").toUpperCase().trim();
-  avData.year=(document.getElementById("av-year")||{}).value||"";
-  avData.trim=(document.getElementById("av-trim")||{}).value||"";
-  avData.exterior=((document.getElementById("av-exterior")||{}).value||"").trim();
-  avData.upholstery=((document.getElementById("av-upholstery")||{}).value||"").trim();
-  avData.last_title_state=((document.getElementById("av-state")||{}).value||"").toUpperCase().trim();
-  avData.curr_odo=(document.getElementById("av-odo")||{}).value||"";
-  avData.vdp_url=((document.getElementById("av-url")||{}).value||"").trim();
-  avData.asking_price=(document.getElementById("av-price")||{}).value||"";
-  avData.platform=(document.getElementById("av-platform")||{}).value||"";
+  avData.vin=(((document.getElementById('av-vin')||{}).value||'').toUpperCase().trim());
+  avData.year=((document.getElementById('av-year')||{}).value||'');
+  avData.trim=((document.getElementById('av-trim')||{}).value||'');
+  avData.exterior=(((document.getElementById('av-exterior')||{}).value||'').trim());
+  avData.upholstery=(((document.getElementById('av-upholstery')||{}).value||'').trim());
+  avData.last_title_state=(((document.getElementById('av-state')||{}).value||'').toUpperCase().trim());
+  avData.curr_odo=((document.getElementById('av-odo')||{}).value||'');
+  avData.vdp_url=(((document.getElementById('av-url')||{}).value||'').trim());
+  avData.asking_price=((document.getElementById('av-price')||{}).value||'');
+  avData.platform=((document.getElementById('av-platform')||{}).value||'');
 }
 function avCollectStage2(){
-  avData.total_owners=(document.getElementById("av-owners")||{}).value||"";
-  avData.accident_count=(document.getElementById("av-accidents")||{}).value||"0";
-  avData.svc_per_yr=(document.getElementById("av-svc")||{}).value||"";
-  var projEl=document.getElementById("av-proj");
-  avData.proj_mi_jan28=(projEl&&projEl.value)||avProjectMiles(avData.curr_odo)||"";
-  avData.lease_history=!!(document.getElementById("av-lease")||{}).checked;
-  avData.trans_confirmed=!!(document.getElementById("av-trans")||{}).checked;
-  avData.ign_confirmed=!!(document.getElementById("av-ign")||{}).checked;
-  avData.susp_confirmed=!!(document.getElementById("av-susp")||{}).checked;
-  avData.brake_confirmed=!!(document.getElementById("av-brake")||{}).checked;
-  avData.research_notes=((document.getElementById("av-notes")||{}).value||"").trim();
+  avData.total_owners=((document.getElementById('av-owners')||{}).value||'');
+  avData.accident_count=((document.getElementById('av-accidents')||{}).value||'0');
+  avData.svc_per_yr=((document.getElementById('av-svc')||{}).value||'');
+  var projEl=document.getElementById('av-proj');
+  avData.proj_mi_jan28=(projEl&&projEl.value)||avProjectMiles(avData.curr_odo)||'';
+  avData.lease_history=!!((document.getElementById('av-lease')||{}).checked);
+  avData.trans_confirmed=!!((document.getElementById('av-trans')||{}).checked);
+  avData.ign_confirmed=!!((document.getElementById('av-ign')||{}).checked);
+  avData.susp_confirmed=!!((document.getElementById('av-susp')||{}).checked);
+  avData.brake_confirmed=!!((document.getElementById('av-brake')||{}).checked);
+  avData.research_notes=(((document.getElementById('av-notes')||{}).value||'').trim());
 }
 function avValidate1(){
-  if(!avData.vin||avData.vin.length!==17){toast("Enter a valid 17-char VIN",true);return false;}
-  if(!vinCheckDigit(avData.vin)&&!confirm("VIN check digit mismatch. Proceed anyway?"))return false;
-  if(!avData.year){toast("Select a model year",true);return false;}
-  if(!avData.trim){toast("Select S65 AMG or S600",true);return false;}
+  if(!avData.vin||avData.vin.length!==17){toast('Enter a valid 17-char VIN',true);return false;}
+  if(!vinCheckDigit(avData.vin)&&!confirm('VIN check digit mismatch. Proceed anyway?'))return false;
+  if(!avData.year){toast('Select a model year',true);return false;}
+  if(!avData.trim){toast('Select S65 AMG or S600',true);return false;}
   return true;
 }
 function avValidate2(){return true;}
@@ -2217,20 +1986,23 @@ function avNext(){
 function avBack(){if(avStage>1){avStage--;renderAVStage();}}
 
 async function avSaveVehicle(){
-  var saveBtn=document.getElementById("av-btn-next");
-  var errEl=document.getElementById("av-save-error");
-  saveBtn.textContent="Saving…";saveBtn.disabled=true;
-  if(errEl){errEl.textContent="";errEl.classList.remove("show");}
+  var saveBtn=document.getElementById('av-btn-next');
+  var errEl=document.getElementById('av-save-error');
+  saveBtn.textContent='Saving\u2026';saveBtn.disabled=true;
+  if(errEl){errEl.textContent='';errEl.classList.remove('show');}
   var score=avComputeScore(avData);
   var acc=parseInt(avData.accident_count)||0;
-  var acqStatus=acc>=2?"DQ - Multiple Accidents":acc===1?"Watch - 1 accident":"Sighting";
+  var acqStatus=acc>=2?'DQ - Multiple Accidents':acc===1?'Watch - 1 accident':'Sighting';
   var vehicleRow={
-    vin:avData.vin,year:parseInt(avData.year)||2017,trim:avData.trim,
-    exterior:avData.exterior||null,upholstery:avData.upholstery||null,
+    vin:avData.vin,
+    year:parseInt(avData.year)||2017,
+    trim:avData.trim,
+    exterior:avData.exterior||null,
+    upholstery:avData.upholstery||null,
     last_title_state:avData.last_title_state||null,
     curr_odo:avData.curr_odo?parseInt(avData.curr_odo):null,
     total_owners:avData.total_owners?parseInt(avData.total_owners):null,
-    accident_count:avData.accident_count||"0",
+    accident_count:avData.accident_count||'0',
     svc_per_yr:avData.svc_per_yr?parseFloat(avData.svc_per_yr):null,
     proj_mi_jan28:avData.proj_mi_jan28?parseInt(avData.proj_mi_jan28):null,
     lease_history:avData.lease_history||false,
@@ -2238,41 +2010,46 @@ async function avSaveVehicle(){
     ign_confirmed:avData.ign_confirmed||false,
     susp_confirmed:avData.susp_confirmed||false,
     brake_confirmed:avData.brake_confirmed||false,
-    quality_score:score.qs,score_pa:score.qs,score_pb:score.pb,score_mod:score.mod,
-    composite_score:score.composite,acq_status:acqStatus,
-    research_notes:avData.research_notes||null,
+    quality_score:score.qs,
+    score_pa:score.qs,
+    score_pb:score.pb,
+    score_mod:score.mod,
+    composite_score:score.composite,
+    acq_status:acqStatus,
+    research_notes:avData.research_notes||null
   };
   try{
     if(allVehicles.find(function(x){return x.vin===avData.vin;})){
-      if(!confirm("VIN already exists. View existing record?")){saveBtn.textContent="💾 Save Vehicle";saveBtn.disabled=false;return;}
+      if(!confirm('VIN already exists. View existing record?')){saveBtn.textContent='Save Vehicle';saveBtn.disabled=false;return;}
       closeAddVehicle();openFleetDrawer(avData.vin);return;
     }
-    var vR=await db.from("vehicles").insert(vehicleRow).select().single();
+    var vR=await db.from('vehicles').insert(vehicleRow).select().single();
     if(vR.error)throw vR.error;
     if(avData.vdp_url||avData.asking_price){
-      await db.from("listing_history").insert({
+      await db.from('listing_history').insert({
         vin:avData.vin,
         price:avData.asking_price?parseInt(avData.asking_price):null,
         miles:avData.curr_odo?parseInt(avData.curr_odo):null,
         platform:avData.platform||null,
         vdp_url:avData.vdp_url||null,
         state:avData.last_title_state||null,
-        first_seen:new Date().toISOString().split("T")[0],
-        link_status:"Unverified"
+        first_seen:new Date().toISOString().split('T')[0],
+        link_status:'Unverified'
       });
     }
     allVehicles.unshift(Object.assign({},vehicleRow,{id:vR.data&&vR.data.id}));
-    updateFleetStats();applyFilters();
-    document.getElementById("fleet-tab-count").textContent=allVehicles.length;
-    document.getElementById("header-counts").textContent=allVehicles.length+" vehicles · "+allContacts.length+" contacts";
+    updateFleetStats();
+    applyFilters();
+    document.getElementById('fleet-tab-count').textContent=allVehicles.length;
+    document.getElementById('header-counts').textContent=allVehicles.length+' vehicles \u00b7 '+allContacts.length+' contacts';
     renderMobileTop40();
     closeAddVehicle();
-    toast(avData.vin+" saved ✓ — "+acqStatus);
+    toast(avData.vin+' saved \u2713 \u2014 '+acqStatus);
     setTimeout(function(){openFleetDrawer(avData.vin);},350);
   }catch(err){
-    console.error("avSaveVehicle error:",err);
-    if(errEl){errEl.textContent="Save failed: "+(err.message||JSON.stringify(err));errEl.classList.add("show");}
-    saveBtn.textContent="💾 Save Vehicle";saveBtn.disabled=false;
+    console.error('avSaveVehicle error:',err);
+    if(errEl){errEl.textContent='Save failed: '+(err.message||JSON.stringify(err));errEl.classList.add('show');}
+    saveBtn.textContent='Save Vehicle';saveBtn.disabled=false;
   }
 }
 
