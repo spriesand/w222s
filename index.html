@@ -572,29 +572,18 @@ td.num{font-family:var(--mono);text-align:right;}
     <div class="sidebar-section">
       <div class="sidebar-label">Fleet Overview</div>
       <div class="stats-grid">
-        <div class="stat-box stat-link" onclick="quickFilter('tracked')" title="Target + Tracked S65s">
+        <div class="stat-box stat-link" onclick="quickFilter('all')" title="All vehicles">
           <span class="stat-num" id="stat-total">&mdash;</span><span class="stat-lbl">Total VINs</span></div>
-        <div class="stat-box stat-link" onclick="quickFilter('ranked')" title="2017 Ranked Universe">
-          <span class="stat-num" id="stat-gold">&mdash;</span><span class="stat-lbl">2017 Ranked</span></div>
+        <div class="stat-box stat-link" onclick="quickFilter('ranked')" title="2017 Ranked">
+          <span class="stat-num" id="stat-gold">&mdash;</span><span class="stat-lbl">Ranked Cars</span></div>
         <div class="stat-box stat-link" onclick="quickFilter('s65')" title="All S65 AMG">
           <span class="stat-num" style="color:var(--s65)" id="stat-s65">&mdash;</span><span class="stat-lbl">S65 AMG</span></div>
-        <div class="stat-box stat-link" onclick="quickFilter('gi')" title="Golden Intersection: 70-100K proj mi">
-          <span class="stat-num" style="color:var(--gold)" id="stat-gi">&mdash;</span><span class="stat-lbl">GI Window</span></div>
+        <div class="stat-box stat-link" onclick="quickFilter('s600')" title="All S600">
+          <span class="stat-num" style="color:var(--s600)" id="stat-s600">&mdash;</span><span class="stat-lbl">S600</span></div>
       </div>
     </div>
     <div class="sidebar-section">
-      <div class="sidebar-label">Model</div>
-      <div class="pill-group">
-        <span class="pill on-s65" id="pill-s65" onclick="toggleTrimFilter('S65 AMG',this)">S65 AMG</span>
-        <span class="pill on-s600" id="pill-s600" onclick="toggleTrimFilter('S600',this)">S600</span>
-      </div>
-    </div>
-    <div class="sidebar-section">
-      <div class="sidebar-label">Flag</div>
-      <label class="filter-row"><input type="checkbox" id="st-active" checked onchange="applyFilters()"><span style="color:var(--accent);font-weight:500">Tracking</span><span class="filter-count" id="cnt-active">&mdash;</span></label>
-      <label class="filter-row"><input type="checkbox" id="st-watch" checked onchange="applyFilters()"><span style="color:var(--gold)">Watching</span><span class="filter-count" id="cnt-watch">&mdash;</span></label>
-      <label class="filter-row"><input type="checkbox" id="st-universe" onchange="applyFilters()"><span style="color:var(--muted)">All Data</span><span class="filter-count" id="cnt-universe">&mdash;</span></label>
-      <label class="filter-row"><input type="checkbox" id="st-dq" onchange="applyFilters()"><span style="color:#bbb">DQ</span><span class="filter-count" id="cnt-dq">&mdash;</span></label>
+      <div class="tracking-pill" id="tracking-pill" onclick="toggleTrackingFilter(this)">&#128065; Tracking Only</div>
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Model Year</div>
@@ -605,16 +594,6 @@ td.num{font-family:var(--mono);text-align:right;}
       <label class="filter-row"><input type="checkbox" id="yr-2016" checked onchange="applyFilters()">2016<span class="filter-count" id="cnt-yr2016">&mdash;</span></label>
       <label class="filter-row"><input type="checkbox" id="yr-2015" checked onchange="applyFilters()">2015<span class="filter-count" id="cnt-yr2015">&mdash;</span></label>
     </div>
-    <div class="sidebar-section">
-      <div class="sidebar-label">Mileage Range</div>
-      <label class="filter-row"><input type="checkbox" id="mi-u30" checked onchange="applyFilters()">&lt; 30K<span class="filter-count" id="cnt-mi-u30">&mdash;</span></label>
-      <label class="filter-row"><input type="checkbox" id="mi-30" checked onchange="applyFilters()">31K &ndash; 50K<span class="filter-count" id="cnt-mi-30">&mdash;</span></label>
-      <label class="filter-row"><input type="checkbox" id="mi-50" checked onchange="applyFilters()">51K &ndash; 80K<span class="filter-count" id="cnt-mi-50">&mdash;</span></label>
-      <label class="filter-row"><input type="checkbox" id="mi-80" checked onchange="applyFilters()">80K &ndash; 110K <span style="color:var(--gold);font-size:9px">&#9670; GI</span><span class="filter-count" id="cnt-mi-80">&mdash;</span></label>
-      <label class="filter-row"><input type="checkbox" id="mi-110" checked onchange="applyFilters()">&gt; 111K<span class="filter-count" id="cnt-mi-110">&mdash;</span></label>
-      <label class="filter-row" style="margin-top:4px"><input type="checkbox" id="mi-any" onchange="miAnyToggle(this)"><span style="color:var(--muted)">No mileage data</span></label>
-    </div>
-
   </aside>
   <main>
     <div id="mobile-search-panel">
@@ -1289,34 +1268,18 @@ function renderScanResults(){
 async function refreshAll(){await toast('Refreshed');}
 
 function updateFleetStats(){
-  const ranked=v=>v.apex_rank!=null&&v.apex_rank!=='';
   const stNorm=s=>(s||'').toLowerCase();
+  const ranked=v=>v.apex_rank!=null&&v.apex_rank!=='';
   const s65=allVehicles.filter(v=>v.trim==='S65 AMG'||v.trim==='S65').length;
   const s600=allVehicles.filter(v=>v.trim==='S600').length;
   const gold=allVehicles.filter(ranked).length;
-  const gi=allVehicles.filter(v=>{const p=Number(v.proj_mi_jan28)||Number(v.curr_odo)||0;return p>=70000&&p<=110000;}).length;
   document.getElementById('stat-total').textContent=allVehicles.length;
   document.getElementById('stat-gold').textContent=gold;
   document.getElementById('stat-s65').textContent=s65;
-  document.getElementById('stat-gi').textContent=gi;
-  // Flag counts
-  document.getElementById('cnt-active').textContent=allVehicles.filter(v=>['active','target'].includes(stNorm(v.acq_status))).length;
-  document.getElementById('cnt-watch').textContent=allVehicles.filter(v=>stNorm(v.acq_status).includes('watch')).length;
-  document.getElementById('cnt-universe').textContent=allVehicles.filter(v=>!v.acq_status||stNorm(v.acq_status)==='universe'||stNorm(v.acq_status)==='sighting').length;
-  document.getElementById('cnt-dq').textContent=allVehicles.filter(v=>stNorm(v.acq_status).includes('dq')).length;
-  // Year counts (all 6 years)
+  document.getElementById('stat-s600').textContent=s600;
   [2015,2016,2017,2018,2019,2020].forEach(function(y){
-    var el=document.getElementById('cnt-yr'+y);
-    if(el)el.textContent=allVehicles.filter(v=>Number(v.year)===y).length;
+    var el=document.getElementById('cnt-yr'+y); if(el)el.textContent=allVehicles.filter(v=>Number(v.year)===y).length;
   });
-  // Mileage band counts
-  function miBand(v){return Number(v.curr_odo)||Number(v.proj_mi_jan28)||0;}
-  document.getElementById('cnt-mi-u30').textContent=allVehicles.filter(v=>{var m=miBand(v);return m>0&&m<=30000;}).length;
-  document.getElementById('cnt-mi-30').textContent=allVehicles.filter(v=>{var m=miBand(v);return m>=31000&&m<=50000;}).length;
-  document.getElementById('cnt-mi-50').textContent=allVehicles.filter(v=>{var m=miBand(v);return m>=51000&&m<=80000;}).length;
-  document.getElementById('cnt-mi-80').textContent=allVehicles.filter(v=>{var m=miBand(v);return m>=80000&&m<=110000;}).length;
-  document.getElementById('cnt-mi-110').textContent=allVehicles.filter(v=>{var m=miBand(v);return m>110000;}).length;
-  // Mobile stats
   document.getElementById('m-stat-total').textContent=allVehicles.length;
   document.getElementById('m-stat-target').textContent=allVehicles.filter(v=>['active','target'].includes(stNorm(v.acq_status))).length;
   document.getElementById('m-stat-s65').textContent=s65;
@@ -1333,56 +1296,27 @@ function toggleTrimFilter(trim,el){
 
 function applyFilters(){
   const q=(document.getElementById('fleet-search').value||'').toLowerCase();
-  // Mileage band checkboxes
-  const miU30=document.getElementById('mi-u30').checked;
-  const mi30=document.getElementById('mi-30').checked;
-  const mi50=document.getElementById('mi-50').checked;
-  const mi80=document.getElementById('mi-80').checked;
-  const mi110=document.getElementById('mi-110').checked;
-  const miAny=document.getElementById('mi-any').checked;
-  const anyMiBandActive=miU30||mi30||mi50||mi80||mi110;
-  const stTarget=document.getElementById('st-active').checked;
-  const stWatch=document.getElementById('st-watch').checked;
-  const stUniverse=document.getElementById('st-universe').checked;
-  const stDq=document.getElementById('st-dq').checked;
   const yr2020=document.getElementById('yr-2020')&&document.getElementById('yr-2020').checked;
   const yr2019=document.getElementById('yr-2019')&&document.getElementById('yr-2019').checked;
   const yr2018=document.getElementById('yr-2018')&&document.getElementById('yr-2018').checked;
   const yr2017=document.getElementById('yr-2017').checked;
   const yr2016=document.getElementById('yr-2016').checked;
   const yr2015=document.getElementById('yr-2015').checked;
-  const goldEl=document.getElementById('gold-only'); const goldOnly=goldEl&&goldEl.checked;
   const sortVal=document.getElementById('fleet-sort').value;
   const[sortCol,sortDir]=sortVal.split('.');
-  const hasAcc=v=>{const a=v.accident_count;if(!a||a==='None'||a==='0'||a==='0 - Clean'||a==='Clean')return false;const n=parseInt(a);if(!isNaN(n))return n>0;return true;};
   const stNorm=s=>(s||'').toLowerCase();
-  const ranked=v=>v.apex_rank!=null&&v.apex_rank!=='';
   let data=allVehicles.filter(v=>{
-    const t=v.trim||'';if(!trimFilter.has(t))return false;
-    // Mileage band filter
-    const odo=Number(v.curr_odo)||Number(v.proj_mi_jan28)||0;
-    // All 5 bands checked = no mileage filter (show everything)
-    const allBandsChecked=miU30&&mi30&&mi50&&mi80&&mi110;
-    if(anyMiBandActive&&!allBandsChecked){
-      const inU30=odo>0&&odo<=30000;
-      const in30=odo>=31000&&odo<=50000;
-      const in50=odo>=51000&&odo<=80000;
-      const in80=odo>=80000&&odo<=110000;
-      const in110=odo>110000;
-      const noData=odo===0;
-      const pass=(miU30&&inU30)||(mi30&&in30)||(mi50&&in50)||(mi80&&in80)||(mi110&&in110)||(miAny&&noData);
-      if(!pass)return false;
-    }
+    const t=v.trim||''; if(!trimFilter.has(t))return false;
     const st=stNorm(v.acq_status);
-    const isTarget=['active','target'].includes(st);const isWatch=st.includes('watch');
-    const isDq=st.includes('dq');const isUniverse=!v.acq_status||st==='universe'||st==='sighting';
-    if(isTarget&&!stTarget)return false;if(isWatch&&!stWatch)return false;
-    if(isUniverse&&!stUniverse)return false;if(isDq&&!stDq)return false;
+    const isDq=st.includes('dq');
+    if(isDq)return false;
     const yr=Number(v.year)||2017;
-    if(yr===2020&&!yr2020)return false;if(yr===2019&&!yr2019)return false;
-    if(yr===2018&&!yr2018)return false;if(yr===2017&&!yr2017)return false;
-    if(yr===2016&&!yr2016)return false;if(yr===2015&&!yr2015)return false;
-    if(goldOnly&&!ranked(v))return false;
+    if(yr===2020&&!yr2020)return false;
+    if(yr===2019&&!yr2019)return false;
+    if(yr===2018&&!yr2018)return false;
+    if(yr===2017&&!yr2017)return false;
+    if(yr===2016&&!yr2016)return false;
+    if(yr===2015&&!yr2015)return false;
     if(trackingFilterOn&&!['active','target'].includes(st))return false;
     if(q&&![(v.vin||''),(v.trim||''),(v.last_title_state||''),(v.exterior||''),(v.sale_history||'')].some(f=>f.toLowerCase().includes(q)))return false;
     return true;
@@ -1397,32 +1331,6 @@ function applyFilters(){
   const page=data.slice(fleetPage*PAGE_SIZE,(fleetPage+1)*PAGE_SIZE);
   renderFleet(page);renderPagination(total);
   document.getElementById('fleet-count').textContent=`Showing ${page.length} of ${total}`;
-}
-
-function saleChainHTML(h,short){
-  if(!h)return '<span style="color:#bbb;font-family:var(--mono);font-size:10px">&mdash;</span>';
-  const parts=h.split('->').map(s=>s.trim()).filter(Boolean);
-  if(short)return parts.map((p,i)=>`<span class="sale-item${i===parts.length-1?' latest':''}">${p}</span>`).join('<span class="arrow">&rarr;</span>');
-  return parts.map((p,i)=>{const[price,odo]=p.split('/');return`<div class="timeline-item"><span class="timeline-price" style="${i===parts.length-1?'color:var(--accent)':''}">${price}</span><span class="timeline-odo">@ ${odo||'&mdash;'}</span></div>`;}).join('');
-}
-
-function vinLinksHTML(vin){
-  return`<div class="link-cluster">
-    <a class="ext-link lnk-bat" href="https://bringatrailer.com/listing/mercedes-benz-s65-amg/?q=${vin}" target="_blank" onclick="event.stopPropagation()">BaT</a>
-    <a class="ext-link lnk-cb" href="https://carsandbids.com/search#q=${vin}" target="_blank" onclick="event.stopPropagation()">C&amp;B</a>
-    <a class="ext-link lnk-cfx" href="https://www.carfax.com/VehicleHistory/p/Report.cfm?vin=${vin}" target="_blank" onclick="event.stopPropagation()">CFX</a>
-    <a class="ext-link lnk-more" href="#" onclick="event.stopPropagation();openFleetDrawer('${vin}')">&hellip;</a>
-  </div>`;
-}
-
-function flagChip(s,dqReason){
-  const st=(s||'').toLowerCase();
-  if(st==='active'||st==='target')return`<span class="status-chip chip-target">Target</span>`;
-  if(st.includes('watch'))return`<span class="status-chip chip-watch">Watch</span>`;
-  if(st.includes('dq')){const r=(dqReason||'DQ').replace(/DQ\s*-+\s*/,'');return`<span class="status-chip chip-dq" title="${r}">DQ</span>`;}
-  if(st==='sighting')return`<span class="status-chip chip-pending">Sighting</span>`;
-  if(st==='universe'||!s)return`<span class="status-chip chip-universe">Universe</span>`;
-  return`<span class="status-chip chip-universe">${s||'&mdash;'}</span>`;
 }
 
 function renderFleet(data){
@@ -2571,74 +2479,31 @@ function downloadCSVTemplate(){
 
 
 
-function miAnyToggle(cb){
-  // If "no mileage data" is toggled off and no bands selected, re-check it
-  var anyBand=document.getElementById('mi-u30').checked||document.getElementById('mi-30').checked||
-    document.getElementById('mi-50').checked||document.getElementById('mi-80').checked||
-    document.getElementById('mi-110').checked;
-  if(!cb.checked&&!anyBand) cb.checked=true;
-  applyFilters();
-}
+
 
 function quickFilter(preset){
-  // Reset all filters first
-  ['mi-u30','mi-30','mi-50','mi-80','mi-110'].forEach(function(id){
-    var el=document.getElementById(id); if(el) el.checked=false;
+  trimFilter=new Set(['S65 AMG','S65','S600']);
+  [2015,2016,2017,2018,2019,2020].forEach(function(y){
+    var el=document.getElementById('yr-'+y); if(el)el.checked=true;
   });
-  ['st-active','st-watch','st-universe','st-dq'].forEach(function(id){
-    var el=document.getElementById(id); if(el) el.checked=false;
-  });
-  ['yr-2015','yr-2016','yr-2017','yr-2018','yr-2019','yr-2020'].forEach(function(id){
-    var el=document.getElementById(id); if(el) el.checked=true;
-  });
-  document.getElementById('gold-only').checked=false;
   trackingFilterOn=false;
   var tp=document.getElementById('tracking-pill');
-  if(tp){tp.classList.remove('on');tp.innerHTML='&#128065; Show Tracking Only';}
-  // Reset trim
-  trimFilter=new Set(['S65 AMG','S65','S600']);
-  document.getElementById('pill-s65').className='pill on-s65';
-  document.getElementById('pill-s600').className='pill on-s600';
-
-  if(preset==='tracked'){
-    // Total VINs — show ALL data, all flags, all years, all mileage
-    document.getElementById('st-active').checked=true;
-    document.getElementById('st-watch').checked=true;
-    document.getElementById('st-universe').checked=true;
-    document.getElementById('st-dq').checked=true;
-    ['mi-u30','mi-30','mi-50','mi-80','mi-110'].forEach(function(id){document.getElementById(id).checked=true;});
-    document.getElementById('mi-any').checked=true;
-  } else if(preset==='ranked'){
-    // 2017 ranked universe
-    document.getElementById('st-active').checked=true;
-    document.getElementById('st-watch').checked=true;
-    document.getElementById('st-universe').checked=true;
-    document.getElementById('gold-only').checked=true;
-    ['yr-2018','yr-2019','yr-2020'].forEach(function(id){document.getElementById(id).checked=false;});
-    document.getElementById('mi-any').checked=true;
-    ['mi-u30','mi-30','mi-50','mi-80','mi-110'].forEach(function(id){document.getElementById(id).checked=true;});
-  } else if(preset==='s65'){
-    // All S65 AMG
-    document.getElementById('st-active').checked=true;
-    document.getElementById('st-watch').checked=true;
-    document.getElementById('st-universe').checked=true;
-    trimFilter=new Set(['S65 AMG','S65']);
-    document.getElementById('pill-s65').className='pill on-s65';
-    document.getElementById('pill-s600').className='pill';
-    document.getElementById('mi-any').checked=true;
-    ['mi-u30','mi-30','mi-50','mi-80','mi-110'].forEach(function(id){document.getElementById(id).checked=true;});
-  } else if(preset==='gi'){
-    // Golden Intersection: 70-110K projected miles, all flags
-    document.getElementById('st-active').checked=true;
-    document.getElementById('st-watch').checked=true;
-    document.getElementById('st-universe').checked=true;
-    document.getElementById('mi-80').checked=true;
-    document.getElementById('mi-any').checked=false;
-  }
+  if(tp){tp.classList.remove('on');tp.innerHTML='&#128065; Tracking Only';}
+  document.getElementById('fleet-sort').value='composite_score.desc';
   fleetPage=0;
+  if(preset==='all'){
+    // everything — defaults already set above, DQ included via direct flag check below
+  } else if(preset==='ranked'){
+    [2015,2016,2018,2019,2020].forEach(function(y){var el=document.getElementById('yr-'+y);if(el)el.checked=false;});
+    document.getElementById('fleet-sort').value='apex_rank.asc';
+  } else if(preset==='s65'){
+    trimFilter=new Set(['S65 AMG','S65']);
+  } else if(preset==='s600'){
+    trimFilter=new Set(['S600']);
+  }
   applyFilters();
-  toast('View: '+({'tracked':'Tracking Only','ranked':'2017 Ranked','s65':'All S65','gi':'Golden Intersection'}[preset]||preset));
 }
+
 
 
 loadAll();
