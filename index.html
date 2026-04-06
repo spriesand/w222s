@@ -1443,12 +1443,6 @@ async function openFleetDrawer(vin){
   document.getElementById('fd-acc').textContent=v.accident_count||'0 — Clean';
   document.getElementById('fd-svc').textContent=v.svc_per_yr!=null?Number(v.svc_per_yr).toFixed(1)+'/yr':'—';
   const bStr=x=>boolVal(x)?'✓ Confirmed':'—';
-  document.getElementById('fd-trans').textContent=bStr(v.trans_confirmed);
-  document.getElementById('fd-trans').className='drawer-field-value '+(boolVal(v.trans_confirmed)?'green':'');
-  document.getElementById('fd-ign').textContent=bStr(v.ign_confirmed);
-  document.getElementById('fd-ign').className='drawer-field-value '+(boolVal(v.ign_confirmed)?'green':'');
-  document.getElementById('fd-susp').textContent=bStr(v.susp_confirmed);
-  document.getElementById('fd-susp').className='drawer-field-value '+(boolVal(v.susp_confirmed)?'green':'');
   fdRenderSwallToggles(v);
   document.getElementById('fd-qs').textContent=v.quality_score??'—';
   document.getElementById('fd-sub-scores').textContent=`${v.score_pa??'—'} · ${v.score_pb??'—'} · ${v.score_mod??'—'}`;
