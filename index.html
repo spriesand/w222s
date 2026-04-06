@@ -2087,13 +2087,27 @@ async function avSaveVehicle(){
     acq_status:acqStatus,
     research_notes:avData.research_notes||null
   };
+  // Self-healing insert: drops columns not in schema and retries automatically
+  function badCol(msg){var m=(msg||'').match(/find the '([^']+)' column/);return m?m[1]:null;}
+
   try{
     if(allVehicles.find(function(x){return x.vin===avData.vin;})){
       if(!confirm('VIN already exists. View existing record?')){saveBtn.textContent='Save Vehicle';saveBtn.disabled=false;return;}
       closeAddVehicle();openFleetDrawer(avData.vin);return;
     }
-    var vR=await db.from('vehicles').insert(vehicleRow).select().single();
+    // Retry loop: drop unknown columns until insert succeeds (max 12 attempts)
+    var row=Object.assign({},vehicleRow);
+    var dropped=[];
+    var vR=null;
+    for(var attempt=0;attempt<12;attempt++){
+      vR=await db.from('vehicles').insert(row).select('vin').single();
+      if(!vR.error)break;
+      var col=badCol(vR.error.message);
+      if(col&&row.hasOwnProperty(col)){delete row[col];dropped.push(col);}
+      else{throw vR.error;}
+    }
     if(vR.error)throw vR.error;
+    if(dropped.length)console.warn('V12 Apex: dropped unknown columns on insert:',dropped.join(', '));
     if(avData.vdp_url||avData.asking_price){
       await db.from('listing_history').insert({
         vin:avData.vin,
@@ -2106,14 +2120,14 @@ async function avSaveVehicle(){
         link_status:'Unverified'
       });
     }
-    allVehicles.unshift(Object.assign({},vehicleRow,{id:vR.data&&vR.data.id}));
-    updateFleetStats();
-    applyFilters();
+    allVehicles.unshift(Object.assign({},vehicleRow,{id:vR.data&&vR.data.vin}));
+    updateFleetStats();applyFilters();
     document.getElementById('fleet-tab-count').textContent=allVehicles.length;
-    document.getElementById('header-counts').textContent=allVehicles.length+' vehicles \u00b7 '+allContacts.length+' contacts';
+    document.getElementById('header-counts').textContent=allVehicles.length+' vehicles · '+allContacts.length+' contacts';
     renderMobileTop40();
     closeAddVehicle();
-    toast(avData.vin+' saved \u2713 \u2014 '+acqStatus);
+    var dropNote=dropped.length?' ('+dropped.length+' cols skipped — check console)':'';
+    toast(avData.vin+' saved ✓ — '+acqStatus+dropNote);
     setTimeout(function(){openFleetDrawer(avData.vin);},350);
   }catch(err){
     console.error('avSaveVehicle error:',err);
