@@ -2002,7 +2002,6 @@ async function avSaveVehicle(){
     last_title_state:avData.last_title_state||null,
     curr_odo:avData.curr_odo?parseInt(avData.curr_odo):null,
     total_owners:avData.total_owners?parseInt(avData.total_owners):null,
-    accident_count:avData.accident_count||'0',
     svc_per_yr:avData.svc_per_yr?parseFloat(avData.svc_per_yr):null,
     proj_mi_jan28:avData.proj_mi_jan28?parseInt(avData.proj_mi_jan28):null,
     lease_history:avData.lease_history||false,
@@ -2010,10 +2009,6 @@ async function avSaveVehicle(){
     ign_confirmed:avData.ign_confirmed||false,
     susp_confirmed:avData.susp_confirmed||false,
     brake_confirmed:avData.brake_confirmed||false,
-    quality_score:score.qs,
-    score_pa:score.qs,
-    score_pb:score.pb,
-    score_mod:score.mod,
     composite_score:score.composite,
     acq_status:acqStatus,
     research_notes:avData.research_notes||null
