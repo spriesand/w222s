@@ -607,17 +607,15 @@ td.num{font-family:var(--mono);text-align:right;}
     </div>
     <div class="sidebar-section">
       <div class="sidebar-label">Mileage Range</div>
-      <label class="filter-row"><input type="checkbox" id="mi-u30" onchange="applyFilters()">&lt; 30K<span class="filter-count" id="cnt-mi-u30">&mdash;</span></label>
-      <label class="filter-row"><input type="checkbox" id="mi-30" onchange="applyFilters()">31K &ndash; 50K<span class="filter-count" id="cnt-mi-30">&mdash;</span></label>
-      <label class="filter-row"><input type="checkbox" id="mi-50" onchange="applyFilters()">51K &ndash; 80K<span class="filter-count" id="cnt-mi-50">&mdash;</span></label>
+      <label class="filter-row"><input type="checkbox" id="mi-u30" checked onchange="applyFilters()">&lt; 30K<span class="filter-count" id="cnt-mi-u30">&mdash;</span></label>
+      <label class="filter-row"><input type="checkbox" id="mi-30" checked onchange="applyFilters()">31K &ndash; 50K<span class="filter-count" id="cnt-mi-30">&mdash;</span></label>
+      <label class="filter-row"><input type="checkbox" id="mi-50" checked onchange="applyFilters()">51K &ndash; 80K<span class="filter-count" id="cnt-mi-50">&mdash;</span></label>
       <label class="filter-row"><input type="checkbox" id="mi-80" checked onchange="applyFilters()">80K &ndash; 110K <span style="color:var(--gold);font-size:9px">&#9670; GI</span><span class="filter-count" id="cnt-mi-80">&mdash;</span></label>
-      <label class="filter-row"><input type="checkbox" id="mi-110" onchange="applyFilters()">&gt; 111K<span class="filter-count" id="cnt-mi-110">&mdash;</span></label>
-      <label class="filter-row" style="margin-top:4px"><input type="checkbox" id="mi-any" checked onchange="miAnyToggle(this)"><span style="color:var(--muted)">No mileage data</span></label>
+      <label class="filter-row"><input type="checkbox" id="mi-110" checked onchange="applyFilters()">&gt; 111K<span class="filter-count" id="cnt-mi-110">&mdash;</span></label>
+      <label class="filter-row" style="margin-top:4px"><input type="checkbox" id="mi-any" onchange="miAnyToggle(this)"><span style="color:var(--muted)">No mileage data</span></label>
     </div>
     <div class="sidebar-section">
-      <div class="sidebar-label">Tracking</div>
-      <div class="tracking-pill" id="tracking-pill" onclick="toggleTrackingFilter(this)">&#128065; Show Tracking Only</div>
-      <label class="filter-row" style="margin-top:8px;padding-left:4px"><input type="checkbox" id="gold-only" onchange="applyFilters()"><span style="color:var(--muted);font-size:12px">2017 Ranked only</span></label>
+      <label class="filter-row"><input type="checkbox" id="gold-only" onchange="applyFilters()"><span style="color:var(--muted);font-size:12px">2017 Ranked only</span></label>
     </div>
   </aside>
   <main>
@@ -1365,7 +1363,9 @@ function applyFilters(){
     const t=v.trim||'';if(!trimFilter.has(t))return false;
     // Mileage band filter
     const odo=Number(v.curr_odo)||Number(v.proj_mi_jan28)||0;
-    if(anyMiBandActive){
+    // All 5 bands checked = no mileage filter (show everything)
+    const allBandsChecked=miU30&&mi30&&mi50&&mi80&&mi110;
+    if(anyMiBandActive&&!allBandsChecked){
       const inU30=odo>0&&odo<=30000;
       const in30=odo>=31000&&odo<=50000;
       const in50=odo>=51000&&odo<=80000;
