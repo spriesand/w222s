@@ -1342,6 +1342,22 @@ function flagChip(s,dqReason){
   return`<span class="status-chip chip-universe">${s||'Universe'}</span>`;
 }
 
+function saleChainHTML(h,short){
+  if(!h)return '<span style="color:#bbb;font-family:var(--mono);font-size:10px">—</span>';
+  const parts=h.split('->').map(s=>s.trim()).filter(Boolean);
+  if(short)return parts.map((p,i)=>`<span class="sale-item${i===parts.length-1?' latest':''}">${p}</span>`).join('<span class="arrow">&rarr;</span>');
+  return parts.map((p,i)=>{const[price,odo]=p.split('/');return`<div class="timeline-item"><span class="timeline-price" style="${i===parts.length-1?'color:var(--accent)':''}">${price}</span><span class="timeline-odo">@ ${odo||'—'}</span></div>`;}).join('');
+}
+
+function vinLinksHTML(vin){
+  return`<div class="link-cluster">
+    <a class="ext-link lnk-bat" href="https://bringatrailer.com/listing/mercedes-benz-s65-amg/?q=${vin}" target="_blank" onclick="event.stopPropagation()">BaT</a>
+    <a class="ext-link lnk-cb" href="https://carsandbids.com/search#q=${vin}" target="_blank" onclick="event.stopPropagation()">C&amp;B</a>
+    <a class="ext-link lnk-cfx" href="https://www.carfax.com/VehicleHistory/p/Report.cfm?vin=${vin}" target="_blank" onclick="event.stopPropagation()">CFX</a>
+    <a class="ext-link lnk-more" href="#" onclick="event.stopPropagation();openFleetDrawer('${vin}')">&hellip;</a>
+  </div>`;
+}
+
 function renderFleet(data){
   const tbody=document.getElementById('fleet-tbody');
   if(!data.length){tbody.innerHTML=`<tr class="empty-row"><td colspan="44">No vehicles match current filters.</td></tr>`;return;}
