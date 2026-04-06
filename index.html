@@ -2117,7 +2117,7 @@ async function avSaveVehicle(){
     score_pb:score.pb,
     score_mod:score.mod,
     acq_status:acqStatus,
-    cohort:avData.trim==='S65 AMG'?'S65 AMG':(avData.trim==='S600'?'S600':null),
+    cohort:(avData.year&&avData.trim)?avData.year+'_'+(avData.trim==='S65 AMG'?'S65 AMG':'S600'):null,
     source:'App - Sighting',
     research_notes:avData.research_notes||null
   };
@@ -2395,7 +2395,7 @@ async function saveBulkEntry(){
       composite_score:score.composite, quality_score:score.qs,
       score_pa:score.qs, score_pb:score.pb, score_mod:score.mod,
       acq_status:'Sighting',
-      cohort: r.trim==='S65 AMG'?'S65 AMG':(r.trim==='S600'?'S600':null),
+      cohort: (r.year&&r.trim)?r.year+'_'+(r.trim==='S65 AMG'?'S65 AMG':'S600'):null,
       source:'App - Bulk Entry'
     };
     var vR = await db.from('vehicles').insert(vRow);
