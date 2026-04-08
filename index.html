@@ -571,6 +571,16 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
 .vlog-attach-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
 .vlog-attach-label{display:inline-flex;align-items:center;gap:5px;border:1px dashed var(--rule);border-radius:4px;padding:5px 10px;font-family:var(--mono);font-size:10px;color:var(--muted);cursor:pointer;transition:all .15s;}
 .vlog-attach-label:hover{border-color:var(--ink);color:var(--ink);}
+/* ── Active listing URL rows ── */
+.listing-url-row{display:flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid var(--rule);border-radius:4px;background:#fff;margin-bottom:5px;}
+.listing-url-platform{font-family:var(--mono);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#fff;background:var(--s65);padding:2px 7px;border-radius:3px;white-space:nowrap;flex-shrink:0;}
+.listing-url-link{flex:1;font-family:var(--mono);font-size:10px;color:var(--s65);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.listing-url-link:hover{text-decoration:underline;}
+.listing-url-edit-input{flex:1;border:none;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:10px;color:var(--ink);background:transparent;outline:none;padding:1px 0;}
+.listing-url-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:13px;padding:0 3px;line-height:1;transition:color .1s;flex-shrink:0;}
+.listing-url-btn:hover{color:var(--ink);}
+.listing-url-btn.del:hover{color:var(--accent);}
+.listing-url-empty{font-family:var(--mono);font-size:11px;color:var(--muted);padding:4px 0 10px;}
 /* General Notes tab */
 .gnotes-shell{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 98px);width:100%;}
 .gnotes-sidebar{background:#fff;border-right:1px solid var(--rule);padding:16px;position:sticky;top:98px;height:calc(100vh - 98px);overflow-y:auto;}
@@ -703,15 +713,16 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
       <div class="stats-grid">
         <div class="stat-box stat-link" onclick="quickFilter('all')" title="All vehicles">
           <span class="stat-num" id="stat-total">&mdash;</span><span class="stat-lbl">Total VINs</span></div>
+        <div class="stat-box stat-link" onclick="quickFilter('active')" title="Active listings">
+          <span class="stat-num" style="color:#1a6b3a" id="stat-active">&mdash;</span><span class="stat-lbl">Active</span></div>
         <div class="stat-box stat-link" onclick="quickFilter('targeted')" title="Targeted">
           <span class="stat-num" style="color:var(--accent)" id="stat-targeted">&mdash;</span><span class="stat-lbl">Targeted</span></div>
         <div class="stat-box stat-link" onclick="quickFilter('s65')" title="All S65 AMG">
           <span class="stat-num" style="color:var(--s65)" id="stat-s65">&mdash;</span><span class="stat-lbl">S65 AMG</span></div>
-        <div class="stat-box stat-link" onclick="quickFilter('s600')" title="All S600">
-          <span class="stat-num" style="color:var(--s600)" id="stat-s600">&mdash;</span><span class="stat-lbl">S600</span></div>
       </div>
     </div>
     <div class="sidebar-section">
+      <div class="tracking-pill" id="active-pill" onclick="toggleActiveFilter(this)" style="background:#edfaf3;color:#1a6b3a;border-color:#9ee8bf">&#9679; Active Listings Only</div>
       <div class="tracking-pill" id="tracking-pill" onclick="toggleTrackingFilter(this)">&#128065; Targeted &amp; Watched</div>
       <div class="show-all-toggle" id="show-all-toggle" onclick="toggleShowAll(this)">&#8942; Show Data-Only Rows</div>
     </div>
@@ -1104,6 +1115,27 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
       <button class="ls-btn" id="ls-btn-recently" onclick="fdSetListingStatus('recently_acquired')"><span class="ls-dot-indicator" style="background:#1a3a5c"></span>Acquired</button>
       <button class="ls-btn" id="ls-btn-silent" onclick="fdSetListingStatus('silent')"><span class="ls-dot-indicator" style="background:#aaa"></span>Silent</button>
     </div>
+
+    <!-- Active Listing URLs — above photo -->
+    <div class="section-head">Active Listing URLs</div>
+    <div id="fd-listing-urls" style="margin-bottom:10px"></div>
+    <div style="display:flex;gap:6px;margin-bottom:16px;align-items:stretch">
+      <input id="fd-new-url-input" type="url" placeholder="https://cargurus.com/listing/…"
+        style="flex:1;border:1px solid var(--rule);border-radius:4px;padding:7px 10px;font-family:var(--mono);font-size:11px;background:#fff;color:var(--ink);outline:none"
+        onkeydown="if(event.key==='Enter')fdAddListingUrl()">
+      <select id="fd-new-url-platform" style="border:1px solid var(--rule);border-radius:4px;padding:6px 8px;font-family:var(--mono);font-size:11px;background:#fff;color:var(--ink);outline:none">
+        <option value="CarGurus">CarGurus</option>
+        <option value="Cars.com">Cars.com</option>
+        <option value="AutoTrader">AutoTrader</option>
+        <option value="Dealer">Dealer</option>
+        <option value="eBay">eBay</option>
+        <option value="BaT">BaT</option>
+        <option value="Private">Private</option>
+        <option value="Other">Other</option>
+      </select>
+      <button class="btn btn-accent" onclick="fdAddListingUrl()" style="white-space:nowrap;padding:6px 10px">+ Add</button>
+    </div>
+
     <div class="section-head">Vehicle Photo</div>
     <div class="img-upload-zone" id="img-zone">
       <input type="file" accept="image/*" id="img-file-input" onchange="uploadVehicleImage(this)" style="display:none">
@@ -1122,8 +1154,6 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
       <div class="doc-slot" id="slot-publicrecords" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'publicrecords')"><input type="file" onchange="uploadDoc(this,'publicrecords')"><div class="doc-slot-label">Public Records</div><div class="doc-slot-icon">&#128193;</div><div class="doc-slot-status">Click or drop PDF</div></div>
       <div class="doc-slot" id="slot-ppi" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'ppi')"><input type="file" onchange="uploadDoc(this,'ppi')"><div class="doc-slot-label">PPI Report</div><div class="doc-slot-icon">&#128295;</div><div class="doc-slot-status">Click or drop PDF</div></div>
     </div>
-    <div class="section-head">Listing Link</div>
-    <div id="fd-listing-link" style="margin-bottom:16px;font-family:var(--mono);font-size:11px;color:var(--muted)">—</div>
     <div class="section-head">Identity &amp; Color</div>
     <div class="drawer-grid">
       <div class="drawer-field"><div class="drawer-field-label">Exterior</div><div class="drawer-field-value" id="fd-ext">&mdash;</div></div>
@@ -1523,10 +1553,11 @@ function updateFleetStats(){
   const targeted=allVehicles.filter(v=>getTier(v)==='targeted').length;
   const watched=allVehicles.filter(v=>getTier(v)==='watched').length;
   const dataOnly=allVehicles.filter(v=>getTier(v)==='data_only').length;
+  const active=allVehicles.filter(v=>getListingStatus(v)==='active').length;
   document.getElementById('stat-total').textContent=allVehicles.length;
   document.getElementById('stat-targeted').textContent=targeted;
+  const sa=document.getElementById('stat-active');if(sa)sa.textContent=active;
   document.getElementById('stat-s65').textContent=s65;
-  document.getElementById('stat-s600').textContent=s600;
   const ct=document.getElementById('cnt-targeted');if(ct)ct.textContent=targeted;
   const cw=document.getElementById('cnt-watched');if(cw)cw.textContent=watched;
   const cd=document.getElementById('cnt-data');if(cd)cd.textContent=dataOnly;
@@ -1556,6 +1587,7 @@ function getListingStatus(v){
 function tierSortKey(v){const t=getTier(v);return t==='targeted'?0:t==='watched'?1:2;}
 
 let showDataOnly=false;
+var activeFilterOn=false;
 function toggleShowAll(el){
   showDataOnly=!showDataOnly;
   el.classList.toggle('on',showDataOnly);
@@ -1614,6 +1646,7 @@ function applyFilters(){
     if(tier==='watched'&&!tierWatched)return false;
     if(tier==='data_only'&&!tierData)return false;
     if(trackingFilterOn&&tier==='data_only')return false;
+    if(activeFilterOn&&getListingStatus(v)!=='active')return false;
     if(q&&![(v.vin||''),(v.trim||''),(v.last_title_state||''),(v.exterior||''),(v.sale_history||'')].some(f=>f.toLowerCase().includes(q)))return false;
     return true;
   });
@@ -1767,13 +1800,6 @@ async function openFleetDrawer(vin){
   document.getElementById('sc-walk').innerHTML=$m(v.walk_away);
   document.getElementById('sc-ultra').innerHTML=$m(v.price_ultra_jan28);
 
-  // Single listing link
-  const llEl=document.getElementById('fd-listing-link');
-  if(llEl){
-    if(v.vdp_url){llEl.innerHTML=`<a href="${v.vdp_url}" target="_blank" style="color:var(--s65);text-decoration:underline;word-break:break-all">${v.vdp_url.substring(0,70)}${v.vdp_url.length>70?'…':''}</a>`;}
-    else{llEl.innerHTML='<span style="color:var(--muted)">No listing URL on file</span>';}
-  }
-
   const svcs=allServiceRecs.filter(s=>s.vin===vin);
   const svcMap=new Map();
   svcs.forEach(s=>{
@@ -1795,6 +1821,7 @@ async function openFleetDrawer(vin){
   document.getElementById('fleet-overlay').classList.add('open');
   document.getElementById('fleet-drawer').classList.add('open');
   loadListingHistory(vin);
+  fdLoadListingUrls(vin);
   // Reset and load vlog
   const vlogInput=document.getElementById('fd-vlog-input');
   if(vlogInput){vlogInput.value='';fdVlogSetupPaste(vlogInput);}
@@ -1901,6 +1928,111 @@ async function doUploadDoc(file,slotId){
   if(iE){toast('DB save failed: '+iE.message,true);return;}
   await loadDocSlots(activeFD.vin);
   toast(`${slotId} saved \u2713`);
+}
+
+// ── Active listing URLs ──
+var fdListingUrlsCache = []; // [{id, platform, vdp_url}]
+
+async function fdLoadListingUrls(vin){
+  const wrap = document.getElementById('fd-listing-urls');
+  if(!wrap) return;
+  // Pull from listing_history where link_status = 'Active'
+  try{
+    const{data,error} = await db.from('listing_history')
+      .select('id,platform,vdp_url,price,link_status')
+      .eq('vin', vin)
+      .eq('link_status','Active')
+      .order('first_seen',{ascending:false,nullsFirst:false});
+    if(error) throw error;
+    fdListingUrlsCache = data||[];
+    fdRenderListingUrls(vin);
+  }catch(e){
+    wrap.innerHTML = `<div class="listing-url-empty">Could not load URLs: ${e.message}</div>`;
+  }
+}
+
+function fdRenderListingUrls(vin){
+  const wrap = document.getElementById('fd-listing-urls');
+  if(!wrap) return;
+  if(!fdListingUrlsCache.length){
+    wrap.innerHTML = '<div class="listing-url-empty">No active listing URLs — add one below</div>';
+    return;
+  }
+  wrap.innerHTML = fdListingUrlsCache.map((r,i) => {
+    const shortUrl = r.vdp_url ? r.vdp_url.replace(/^https?:\/\//,'').substring(0,55) + (r.vdp_url.length>65?'…':'') : '—';
+    return `<div class="listing-url-row" id="lur-${i}">
+      <span class="listing-url-platform">${escHtml(r.platform||'?')}</span>
+      <a class="listing-url-link" id="lur-link-${i}" href="${r.vdp_url||'#'}" target="_blank" rel="noopener">${shortUrl}</a>
+      <input class="listing-url-edit-input" id="lur-input-${i}" value="${escHtml(r.vdp_url||'')}" style="display:none" onkeydown="if(event.key==='Enter')fdSaveUrlEdit(${i},'${vin}');if(event.key==='Escape')fdCancelUrlEdit(${i})">
+      <button class="listing-url-btn" onclick="fdStartUrlEdit(${i})" title="Edit">&#9998;</button>
+      <button class="listing-url-btn" id="lur-save-${i}" onclick="fdSaveUrlEdit(${i},'${vin}')" title="Save" style="display:none;color:#1a6b3a">&#10003;</button>
+      <button class="listing-url-btn del" onclick="fdMarkUrlDead(${i},'${vin}')" title="Mark dead / remove">&#215;</button>
+    </div>`;
+  }).join('');
+}
+
+function fdStartUrlEdit(i){
+  document.getElementById(`lur-link-${i}`).style.display='none';
+  document.getElementById(`lur-input-${i}`).style.display='flex';
+  document.getElementById(`lur-save-${i}`).style.display='inline';
+  document.getElementById(`lur-input-${i}`).focus();
+  document.getElementById(`lur-row-${i}`)?.classList.add('editing');
+}
+function fdCancelUrlEdit(i){
+  document.getElementById(`lur-link-${i}`).style.display='';
+  document.getElementById(`lur-input-${i}`).style.display='none';
+  document.getElementById(`lur-save-${i}`).style.display='none';
+}
+async function fdSaveUrlEdit(i, vin){
+  const row = fdListingUrlsCache[i];
+  if(!row) return;
+  const newUrl = document.getElementById(`lur-input-${i}`).value.trim();
+  if(!newUrl){ toast('URL cannot be empty',true); return; }
+  const{error} = await db.from('listing_history').update({vdp_url:newUrl}).eq('id',row.id);
+  if(error){ toast('Save failed: '+error.message,true); return; }
+  row.vdp_url = newUrl;
+  fdRenderListingUrls(vin);
+  toast('URL updated ✓');
+}
+async function fdMarkUrlDead(i, vin){
+  const row = fdListingUrlsCache[i];
+  if(!row) return;
+  const{error} = await db.from('listing_history').update({link_status:'Dead'}).eq('id',row.id);
+  if(error){ toast('Remove failed: '+error.message,true); return; }
+  fdListingUrlsCache.splice(i,1);
+  fdRenderListingUrls(vin);
+  toast('Marked dead — kept in listing history');
+}
+async function fdAddListingUrl(){
+  if(!activeFD) return;
+  const url = document.getElementById('fd-new-url-input').value.trim();
+  const platform = document.getElementById('fd-new-url-platform').value;
+  if(!url){ toast('Enter a URL first',true); return; }
+  const{data,error} = await db.from('listing_history').insert({
+    vin: activeFD.vin,
+    platform,
+    vdp_url: url,
+    link_status: 'Active',
+    first_seen: new Date().toISOString().split('T')[0]
+  }).select('id,platform,vdp_url,link_status').single();
+  if(error){ toast('Add failed: '+error.message,true); return; }
+  fdListingUrlsCache.unshift(data);
+  fdRenderListingUrls(activeFD.vin);
+  document.getElementById('fd-new-url-input').value='';
+  toast('Listing URL added ✓');
+}
+
+// ── Active filter ──
+function toggleActiveFilter(el){
+  activeFilterOn = !activeFilterOn;
+  if(activeFilterOn){
+    el.style.background='#1a6b3a';el.style.color='#fff';el.style.borderColor='#1a6b3a';
+    el.innerHTML='✓ Active Listings Only';
+  } else {
+    el.style.background='#edfaf3';el.style.color='#1a6b3a';el.style.borderColor='#9ee8bf';
+    el.innerHTML='&#9679; Active Listings Only';
+  }
+  applyFilters();
 }
 
 // ── Vehicle notes log ──
@@ -2930,9 +3062,11 @@ function quickFilter(preset){
     var el=document.getElementById('yr-'+y);if(el)el.checked=true;
   });
   trackingFilterOn=false;
+  activeFilterOn=false;
   var tp=document.getElementById('tracking-pill');
   if(tp){tp.classList.remove('on');tp.innerHTML='&#128065; Targeted &amp; Watched';}
-  // Reset tier checkboxes
+  var ap=document.getElementById('active-pill');
+  if(ap){ap.style.background='#edfaf3';ap.style.color='#1a6b3a';ap.style.borderColor='#9ee8bf';ap.innerHTML='&#9679; Active Listings Only';}
   ['targeted','watched'].forEach(function(t){var cb=document.getElementById('tier-'+t);if(cb)cb.checked=true;});
   var cbd=document.getElementById('tier-data');if(cbd)cbd.checked=false;
   showDataOnly=false;
@@ -2940,10 +3074,15 @@ function quickFilter(preset){
   if(sat){sat.classList.remove('on');sat.innerHTML='\u22ee Show Data-Only Rows';}
   document.getElementById('fleet-sort').value='tier_then_year';
   fleetPage=0;
-  if(preset==='targeted'){
+  if(preset==='active'){
+    activeFilterOn=true;
+    if(ap){ap.style.background='#1a6b3a';ap.style.color='#fff';ap.style.borderColor='#1a6b3a';ap.innerHTML='\u2713 Active Listings Only';}
+    // Show all tiers when filtering by active
+    var cbd2=document.getElementById('tier-data');if(cbd2)cbd2.checked=true;
+    showDataOnly=true;
+  } else if(preset==='targeted'){
     trackingFilterOn=true;
-    var tp2=document.getElementById('tracking-pill');
-    if(tp2){tp2.classList.add('on');tp2.innerHTML='\u2713 Targeted &amp; Watched';}
+    if(tp){tp.classList.add('on');tp.innerHTML='\u2713 Targeted &amp; Watched';}
   } else if(preset==='s65'){
     trimFilter=new Set(['S65 AMG','S65']);
   } else if(preset==='s600'){
