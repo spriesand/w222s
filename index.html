@@ -2008,18 +2008,19 @@ async function fdAddListingUrl(){
   const url = document.getElementById('fd-new-url-input').value.trim();
   const platform = document.getElementById('fd-new-url-platform').value;
   if(!url){ toast('Enter a URL first',true); return; }
-  const{data,error} = await db.from('listing_history').insert({
+  const row = {
     vin: activeFD.vin,
     platform,
     vdp_url: url,
     link_status: 'Active',
     first_seen: new Date().toISOString().split('T')[0]
-  }).select('id,platform,vdp_url,link_status').single();
+  };
+  const{error} = await db.from('listing_history').insert(row);
   if(error){ toast('Add failed: '+error.message,true); return; }
-  fdListingUrlsCache.unshift(data);
-  fdRenderListingUrls(activeFD.vin);
+  // Reload from DB to get the actual id assigned by the sequence
+  await fdLoadListingUrls(activeFD.vin);
   document.getElementById('fd-new-url-input').value='';
-  toast('Listing URL added ✓');
+  toast('Listing URL added \u2713');
 }
 
 // ── Active filter ──
