@@ -1835,9 +1835,9 @@ async function loadListingHistory(vin){
   tbody.innerHTML='<tr><td colspan="8" class="lh-empty">Loading&hellip;</td></tr>';
   summary.innerHTML='';
   try{
-    const{data,error}=await db.from('listing_history').select('price,miles,first_seen,platform,seller_name,state,link_status,vdp_url').eq('vin',vin).not('first_seen','is',null).order('first_seen',{ascending:false}).limit(50);
+    const{data,error}=await db.from('listing_history').select('price,miles,first_seen,platform,seller_name,state,link_status,vdp_url').eq('vin',vin).order('first_seen',{ascending:false,nullsFirst:false}).limit(100);
     if(error)throw error;
-    if(!data||data.length===0){tbody.innerHTML='<tr><td colspan="8" class="lh-empty">No listing history found</td></tr>';return;}
+    if(!data||data.length===0){tbody.innerHTML='<tr><td colspan="8" class="lh-empty">No listing history found for this VIN</td></tr>';return;}
     const active=data.filter(r=>r.link_status==='Active').length;
     const dead=data.filter(r=>r.link_status==='Dead').length;
     const unver=data.filter(r=>r.link_status==='Unverified').length;
@@ -1857,7 +1857,7 @@ async function loadListingHistory(vin){
       const urlCell=r.vdp_url?`<a class="lh-url-link" href="${r.vdp_url}" target="_blank" title="${r.vdp_url}">${(r.platform||r.vdp_url).substring(0,22)}</a>`:'&mdash;';
       return`<tr><td>${r.first_seen?r.first_seen.substring(0,10):'&mdash;'}</td><td style="font-weight:500">${r.price?'$'+Number(r.price).toLocaleString():'&mdash;'}</td><td>${r.miles?Number(r.miles).toLocaleString()+' mi':'&mdash;'}</td><td>${(r.platform||'&mdash;').substring(0,18)}</td><td>${(r.seller_name||'&mdash;').substring(0,16)}</td><td>${r.state||'&mdash;'}</td><td><span class="${statusClass}">${r.link_status||'&mdash;'}</span></td><td>${urlCell}</td></tr>`;
     }).join('');
-  }catch(err){tbody.innerHTML='<tr><td colspan="8" class="lh-empty">Could not load &mdash; check console</td></tr>';console.error('listing history error',err);}
+  }catch(err){tbody.innerHTML=`<tr><td colspan="8" class="lh-empty" style="color:var(--accent)">Error loading history: ${err.message}</td></tr>`;console.error('listing history error',err);}
 }
 
 function closeFleetDrawer(){
