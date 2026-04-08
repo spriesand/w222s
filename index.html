@@ -1334,7 +1334,12 @@ async function loadAll(){
     if(vR.error)throw vR.error;
     const marketByVin={};
     (mR.data||[]).forEach(m=>marketByVin[m.vin]=m);
-    allVehicles=(vR.data||[]).map(v=>({...v,...(marketByVin[v.vin]||{})}));
+    allVehicles=(vR.data||[]).map(v=>{
+      const m=marketByVin[v.vin]||{};
+      // Merge market data but never overwrite key identity/status fields from vehicles table
+      const{acq_status:_a,target_tier:_t,listing_status:_ls,trim:_tr,year:_y,...marketRest}=m;
+      return{...v,...marketRest};
+    });
     allContacts=cR.data||[];allAlerts=aR.data||[];allLogs=lR.data||[];allServiceRecs=sR.data||[];
     updateFleetStats();applyFilters();updateCRMStats();renderCRM();
     document.getElementById('fleet-tab-count').textContent=allVehicles.length;
@@ -2643,8 +2648,13 @@ function fdRenderTierControls(v){
 
 async function fdSetTier(tier){
   if(!activeFD)return;
+  // Try writing to target_tier column — if it fails, column may not exist yet
   const{error}=await db.from('vehicles').update({target_tier:tier}).eq('vin',activeFD.vin);
-  if(error){toast('Save failed',true);return;}
+  if(error){
+    toast('Save failed \u2014 run DB migration (see comment in index.html): '+error.message,true);
+    console.error('fdSetTier error \u2014 have you run the migration SQL?',error);
+    return;
+  }
   activeFD.target_tier=tier;
   const v=allVehicles.find(x=>x.vin===activeFD.vin);
   if(v)v.target_tier=tier;
@@ -2656,7 +2666,11 @@ async function fdSetTier(tier){
 async function fdSetListingStatus(ls){
   if(!activeFD)return;
   const{error}=await db.from('vehicles').update({listing_status:ls}).eq('vin',activeFD.vin);
-  if(error){toast('Save failed',true);return;}
+  if(error){
+    toast('Save failed \u2014 run DB migration (see comment in index.html): '+error.message,true);
+    console.error('fdSetListingStatus error \u2014 have you run the migration SQL?',error);
+    return;
+  }
   activeFD.listing_status=ls;
   const v=allVehicles.find(x=>x.vin===activeFD.vin);
   if(v)v.listing_status=ls;
