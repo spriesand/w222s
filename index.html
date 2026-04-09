@@ -1575,7 +1575,7 @@ function getTier(v){
   if(v.target_tier)return v.target_tier;
   const st=(v.acq_status||'').toLowerCase();
   if(st==='active'||st==='target')return 'targeted';
-  if(st.includes('watch'))return 'watched';
+  if(st.includes('watch')||st==='acquired')return 'watched';
   return 'data_only';
 }
 function getListingStatus(v){
@@ -1610,11 +1610,11 @@ function clearFleetSearch(){
   applyFilters();
 }
 
-let trimFilter=new Set(['S65 AMG','S65','S600']);
+let trimFilter=new Set(['S65 AMG','S65','S65 AMG Final Edition','S600']);
 function toggleTrimFilter(trim,el){
   const key=trim==='S65 AMG'?'S65 AMG':'S600';
-  if(trimFilter.has(key)){trimFilter.delete(key);if(trim==='S65 AMG')trimFilter.delete('S65');el.classList.remove('on-s65','on-s600');}
-  else{trimFilter.add(key);if(trim==='S65 AMG')trimFilter.add('S65');el.classList.add(trim==='S65 AMG'?'on-s65':'on-s600');}
+  if(trimFilter.has(key)){trimFilter.delete(key);if(trim==='S65 AMG'){trimFilter.delete('S65');trimFilter.delete('S65 AMG Final Edition');}el.classList.remove('on-s65','on-s600');}
+  else{trimFilter.add(key);if(trim==='S65 AMG'){trimFilter.add('S65');trimFilter.add('S65 AMG Final Edition');}el.classList.add(trim==='S65 AMG'?'on-s65':'on-s600');}
   fleetPage=0;applyFilters();
 }
 
