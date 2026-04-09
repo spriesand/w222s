@@ -673,6 +673,14 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
 .stat-box.stat-link:hover{background:var(--ink);border-color:var(--ink);}
 .stat-box.stat-link:hover .stat-num{color:#fff !important;}
 .stat-box.stat-link:hover .stat-lbl{color:#aaa;}
+/* ── Redesigned filter sidebar ── */
+.view-btn-group{display:flex;flex-direction:column;gap:5px;}
+.view-btn{width:100%;text-align:left;padding:7px 11px;border:1px solid var(--rule);border-radius:4px;background:#fff;color:var(--muted);font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .15s;letter-spacing:.03em;}
+.view-btn:hover{border-color:var(--ink);color:var(--ink);}
+.view-btn.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+.view-btn.view-btn-active{color:#1a6b3a;border-color:#9ee8bf;}
+.view-btn.view-btn-active.active{background:#1a6b3a;color:#fff;border-color:#1a6b3a;}
+.tier-count-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;font-size:13px;}
 </style>
 </head>
 <body>
@@ -708,30 +716,40 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
 <div class="page active" id="page-fleet">
 <div class="shell">
   <aside>
+    <!-- Fleet Overview tiles -->
     <div class="sidebar-section">
       <div class="sidebar-label">Fleet Overview</div>
       <div class="stats-grid">
-        <div class="stat-box stat-link" onclick="quickFilter('all')" title="All vehicles">
+        <div class="stat-box stat-link" onclick="quickFilter('all')" title="Show all vehicles">
           <span class="stat-num" id="stat-total">&mdash;</span><span class="stat-lbl">Total VINs</span></div>
-        <div class="stat-box stat-link" onclick="quickFilter('active')" title="Active listings">
+        <div class="stat-box stat-link" onclick="quickFilter('active')" title="Active listings only">
           <span class="stat-num" style="color:#1a6b3a" id="stat-active">&mdash;</span><span class="stat-lbl">Active</span></div>
-        <div class="stat-box stat-link" onclick="quickFilter('targeted')" title="Targeted">
+        <div class="stat-box stat-link" onclick="quickFilter('targeted')" title="Targeted only">
           <span class="stat-num" style="color:var(--accent)" id="stat-targeted">&mdash;</span><span class="stat-lbl">Targeted</span></div>
-        <div class="stat-box stat-link" onclick="quickFilter('s65')" title="All S65 AMG">
+        <div class="stat-box stat-link" onclick="quickFilter('s65')" title="S65 AMG only">
           <span class="stat-num" style="color:var(--s65)" id="stat-s65">&mdash;</span><span class="stat-lbl">S65 AMG</span></div>
       </div>
     </div>
+
+    <!-- View mode: single source of truth -->
     <div class="sidebar-section">
-      <div class="tracking-pill" id="active-pill" onclick="toggleActiveFilter(this)" style="background:#edfaf3;color:#1a6b3a;border-color:#9ee8bf">&#9679; Active Listings Only</div>
-      <div class="tracking-pill" id="tracking-pill" onclick="toggleTrackingFilter(this)">&#128065; Targeted &amp; Watched</div>
-      <div class="show-all-toggle" id="show-all-toggle" onclick="toggleShowAll(this)">&#8942; Show Data-Only Rows</div>
+      <div class="sidebar-label">View</div>
+      <div class="view-btn-group">
+        <button class="view-btn active" id="view-btn-focus" onclick="setView('focus')">&#9679; Targeted &amp; Watched</button>
+        <button class="view-btn" id="view-btn-all" onclick="setView('all')">&#8942; All VINs</button>
+        <button class="view-btn view-btn-active" id="view-btn-active" onclick="setView('active')">&#9675; Active Listings</button>
+      </div>
     </div>
+
+    <!-- Tier breakdown (informational counts only) -->
     <div class="sidebar-section">
-      <div class="sidebar-label">Tier</div>
-      <label class="filter-row"><input type="checkbox" id="tier-targeted" checked onchange="applyFilters()"><span style="color:var(--accent);font-weight:600">&#9679; Targeted</span><span class="filter-count" id="cnt-targeted">&mdash;</span></label>
-      <label class="filter-row"><input type="checkbox" id="tier-watched" checked onchange="applyFilters()"><span style="color:var(--gold);font-weight:600">&#9675; Watched</span><span class="filter-count" id="cnt-watched">&mdash;</span></label>
-      <label class="filter-row"><input type="checkbox" id="tier-data" onchange="applyFilters()"><span style="color:#999">&#8942; Data Only</span><span class="filter-count" id="cnt-data">&mdash;</span></label>
+      <div class="sidebar-label">Tier Breakdown</div>
+      <div class="tier-count-row"><span style="color:var(--accent);font-weight:600">&#9679; Targeted</span><span class="filter-count" id="cnt-targeted">&mdash;</span></div>
+      <div class="tier-count-row"><span style="color:var(--gold);font-weight:600">&#9675; Watched</span><span class="filter-count" id="cnt-watched">&mdash;</span></div>
+      <div class="tier-count-row"><span style="color:#999">&#8942; Data Only</span><span class="filter-count" id="cnt-data">&mdash;</span></div>
     </div>
+
+    <!-- Model Year -->
     <div class="sidebar-section">
       <div class="sidebar-label">Model Year</div>
       <label class="filter-row"><input type="checkbox" id="yr-2020" checked onchange="applyFilters()">2020<span class="filter-count" id="cnt-yr2020">&mdash;</span></label>
@@ -1586,14 +1604,15 @@ function getListingStatus(v){
 }
 function tierSortKey(v){const t=getTier(v);return t==='targeted'?0:t==='watched'?1:2;}
 
-let showDataOnly=false;
-var activeFilterOn=false;
-function toggleShowAll(el){
-  showDataOnly=!showDataOnly;
-  el.classList.toggle('on',showDataOnly);
-  el.innerHTML=showDataOnly?'\u2713 Showing Data-Only':'\u22ee Show Data-Only Rows';
-  // Also tick/untick the tier-data checkbox to match
-  const cb=document.getElementById('tier-data');if(cb)cb.checked=showDataOnly;
+// ── View mode: 'focus' | 'all' | 'active' ──
+var currentView='focus';
+function setView(mode){
+  currentView=mode;
+  ['focus','all','active'].forEach(function(m){
+    var btn=document.getElementById('view-btn-'+m);
+    if(btn)btn.classList.toggle('active',m===mode);
+  });
+  fleetPage=0;
   applyFilters();
 }
 
@@ -1626,9 +1645,6 @@ function applyFilters(){
   const yr2017=document.getElementById('yr-2017').checked;
   const yr2016=document.getElementById('yr-2016').checked;
   const yr2015=document.getElementById('yr-2015').checked;
-  const tierTargeted=document.getElementById('tier-targeted')?.checked??true;
-  const tierWatched=document.getElementById('tier-watched')?.checked??true;
-  const tierData=document.getElementById('tier-data')?.checked??false;
   const sortVal=document.getElementById('fleet-sort').value;
   let data=allVehicles.filter(v=>{
     const t=v.trim||'';if(!trimFilter.has(t))return false;
@@ -1642,11 +1658,9 @@ function applyFilters(){
     if(yr===2016&&!yr2016)return false;
     if(yr===2015&&!yr2015)return false;
     const tier=getTier(v);
-    if(tier==='targeted'&&!tierTargeted)return false;
-    if(tier==='watched'&&!tierWatched)return false;
-    if(tier==='data_only'&&!tierData)return false;
-    if(trackingFilterOn&&tier==='data_only')return false;
-    if(activeFilterOn&&getListingStatus(v)!=='active')return false;
+    // View mode is the single gate for tier visibility
+    if(currentView==='focus'&&tier==='data_only')return false;
+    if(currentView==='active'&&getListingStatus(v)!=='active')return false;
     if(q&&![(v.vin||''),(v.trim||''),(v.last_title_state||''),(v.exterior||''),(v.sale_history||'')].some(f=>f.toLowerCase().includes(q)))return false;
     return true;
   });
@@ -1698,7 +1712,7 @@ function renderFleet(data){
   tbody.innerHTML=data.map(v=>{
     const gi=(Number(v.curr_odo)>=70000&&Number(v.curr_odo)<=100000);
     const tier=getTier(v);
-    const isCompact=(tier==='data_only')&&!showDataOnly;
+    const isCompact=(tier==='data_only')&&(currentView==='focus');
     let rowClass=isCompact?'row-compact':'';
     if(tier==='targeted'&&!isCompact)rowClass='row-watch'; // gold left border reused for targeted highlight
     if(isCompact){
@@ -2025,15 +2039,8 @@ async function fdAddListingUrl(){
 
 // ── Active filter ──
 function toggleActiveFilter(el){
-  activeFilterOn = !activeFilterOn;
-  if(activeFilterOn){
-    el.style.background='#1a6b3a';el.style.color='#fff';el.style.borderColor='#1a6b3a';
-    el.innerHTML='✓ Active Listings Only';
-  } else {
-    el.style.background='#edfaf3';el.style.color='#1a6b3a';el.style.borderColor='#9ee8bf';
-    el.innerHTML='&#9679; Active Listings Only';
-  }
-  applyFilters();
+  // Legacy stub — now handled by setView()
+  setView(currentView==='active'?'focus':'active');
 }
 
 // ── Vehicle notes log ──
@@ -2816,13 +2823,9 @@ async function fdSetListingStatus(ls){
 // TRACKING FILTER
 // ============================================================
 
+// Legacy stubs — view state now managed by setView()
 var trackingFilterOn=false;
-function toggleTrackingFilter(el){
-  trackingFilterOn=!trackingFilterOn;
-  el.classList.toggle('on',trackingFilterOn);
-  el.innerHTML=trackingFilterOn?'\u2713 Targeted &amp; Watched':'&#128065; Targeted &amp; Watched';
-  applyFilters();
-}
+function toggleTrackingFilter(el){ setView(currentView==='focus'?'all':'focus'); }
 
 // ============================================================
 // BULK ENTRY MODAL
@@ -3058,38 +3061,29 @@ function downloadCSVTemplate(){
 
 
 function quickFilter(preset){
-  trimFilter=new Set(['S65 AMG','S65','S600']);
+  // Reset to clean defaults
+  trimFilter=new Set(['S65 AMG','S65','S65 AMG Final Edition','S600']);
   [2015,2016,2017,2018,2019,2020].forEach(function(y){
     var el=document.getElementById('yr-'+y);if(el)el.checked=true;
   });
-  trackingFilterOn=false;
-  activeFilterOn=false;
-  var tp=document.getElementById('tracking-pill');
-  if(tp){tp.classList.remove('on');tp.innerHTML='&#128065; Targeted &amp; Watched';}
-  var ap=document.getElementById('active-pill');
-  if(ap){ap.style.background='#edfaf3';ap.style.color='#1a6b3a';ap.style.borderColor='#9ee8bf';ap.innerHTML='&#9679; Active Listings Only';}
-  ['targeted','watched'].forEach(function(t){var cb=document.getElementById('tier-'+t);if(cb)cb.checked=true;});
-  var cbd=document.getElementById('tier-data');if(cbd)cbd.checked=false;
-  showDataOnly=false;
-  var sat=document.getElementById('show-all-toggle');
-  if(sat){sat.classList.remove('on');sat.innerHTML='\u22ee Show Data-Only Rows';}
   document.getElementById('fleet-sort').value='tier_then_year';
   fleetPage=0;
+  // Apply preset
   if(preset==='active'){
-    activeFilterOn=true;
-    if(ap){ap.style.background='#1a6b3a';ap.style.color='#fff';ap.style.borderColor='#1a6b3a';ap.innerHTML='\u2713 Active Listings Only';}
-    // Show all tiers when filtering by active
-    var cbd2=document.getElementById('tier-data');if(cbd2)cbd2.checked=true;
-    showDataOnly=true;
+    setView('active');
   } else if(preset==='targeted'){
-    trackingFilterOn=true;
-    if(tp){tp.classList.add('on');tp.innerHTML='\u2713 Targeted &amp; Watched';}
+    setView('focus');
+  } else if(preset==='all'){
+    setView('all');
   } else if(preset==='s65'){
-    trimFilter=new Set(['S65 AMG','S65']);
+    trimFilter=new Set(['S65 AMG','S65','S65 AMG Final Edition']);
+    setView('focus');
   } else if(preset==='s600'){
     trimFilter=new Set(['S600']);
+    setView('all');
+  } else {
+    setView('focus');
   }
-  applyFilters();
 }
 
 // ── Utility ──
