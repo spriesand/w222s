@@ -1118,8 +1118,8 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
       <div class="drawer-title" id="fd-title">Vehicle Detail</div>
       <div class="drawer-subtitle" id="fd-sub">—</div>
       <div class="fd-actions">
-        <button class="fd-action-btn track" onclick="fdSetStatus('Target')">&#9679; Track</button>
-        <button class="fd-action-btn watch-btn" onclick="fdSetStatus('Watch - 1 accident')">○ Watch</button>
+        <button class="fd-action-btn track" onclick="fdSetStatus('Targeted')">&#9679; Track</button>
+        <button class="fd-action-btn watch-btn" onclick="fdSetStatus('Watch')">○ Watch</button>
         <button class="fd-action-btn dq-btn" onclick="fdSetStatus('DQ - Multiple Accidents')">&#215; DQ</button>
         <button class="fd-action-btn unset" onclick="fdSetStatus('Universe')">&#8635; Unset</button>
       </div>
@@ -1621,7 +1621,7 @@ function updateFleetStats(){
 function getTier(v){
   if(v.target_tier)return v.target_tier;
   const st=(v.acq_status||'').toLowerCase();
-  if(st==='active'||st==='target')return 'targeted';
+  if(st==='active'||st==='target'||st==='targeted')return 'targeted';
   if(st.includes('watch')||st==='acquired')return 'watched';
   return 'data_only';
 }
@@ -2642,7 +2642,7 @@ async function avSaveVehicle(){
   if(errEl){errEl.textContent='';errEl.classList.remove('show');}
   var score=avComputeScore(avData);
   var acc=parseInt(avData.accident_count)||0;
-  var acqStatus=acc>=2?'DQ - Multiple Accidents':acc===1?'Watch - 1 accident':'Sighting';
+  var acqStatus=acc>=2?'Data Only':acc===1?'Watch':'Data Only';
   // Insert payload — only columns confirmed in vehicles schema
   // Mileage/owner/service wall cols live in vehicle_market, not vehicles
   var vehicleRow={
