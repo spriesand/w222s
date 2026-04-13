@@ -1687,8 +1687,8 @@ function renderDashboard(){
   if(!allVehicles||!allVehicles.length)return;
 
   // ── Pipeline counts ──
-  const targeted=allVehicles.filter(v=>(v.acq_status||'').toLowerCase()==='targeted');
-  const watched=allVehicles.filter(v=>(v.acq_status||'').toLowerCase()==='watch');
+  const targeted=allVehicles.filter(v=>getTier(v)==='targeted');
+  const watched=allVehicles.filter(v=>getTier(v)==='watched');
   const active=allVehicles.filter(v=>getListingStatus(v)==='active');
   // Ultra Rare: S65 with 3+ of the premium options (ceramic, fridge, magic sky, carbon, designo)
   const ultraRare=allVehicles.filter(v=>{
@@ -2091,8 +2091,8 @@ function applyFilters(){
     if(currentView==='s600'&&(v.trim||'')!=='S600')return false;
     if(currentView==='s600'&&tier==='data_only')return false;
     // Dashboard-specific views
-    if(currentView==='targeted_only'&&st!=='targeted')return false;
-    if(currentView==='watch_only'&&st!=='watch')return false;
+    if(currentView==='targeted_only'&&getTier(v)!=='targeted')return false;
+    if(currentView==='watch_only'&&getTier(v)!=='watched')return false;
     if(currentView==='ultra_rare'){
       if(!['S65 AMG','S65','S65 AMG Final Edition'].includes(v.trim||''))return false;
       const b=allBuildData[v.vin]||{};
