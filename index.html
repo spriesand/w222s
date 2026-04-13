@@ -1633,6 +1633,11 @@ function dashGoYear(yr){
   switchTab('fleet');
 }
 
+function dashGoColorByIndex(idx){
+  var g=PAINT_GROUPS[idx];if(!g)return;
+  dashGoColor(g.contains,'S65',g.excludes);
+}
+
 function dashGoColor(contains, trimType, excludes){
   dashPaintFilter={contains:contains, excludes:excludes||[]};
   if(trimType==='S65'){trimFilter=new Set(['S65 AMG','S65','S65 AMG Final Edition']);}
@@ -1699,15 +1704,17 @@ function renderPaintTiles(){
   if(sec)sec.textContent='Factory Paint · S65 Universe ('+s65total+' cars)';
   var container=document.getElementById('dash-paint-tiles');
   if(!container)return;
-  container.innerHTML=tiles.map(function(t){
+  var html='';
+  tiles.forEach(function(t){
     var g=t.g;
-    var excJson=JSON.stringify(g.excludes);
-    return '<div class="dcolor" style="background:'+g.bg+';border-color:'+g.br+';" '+
-      'onclick="dashGoColor(''+g.contains+'','S65','+excJson+')">'+
-      '<div class="dcolor-n" style="color:'+g.nc+';">'+t.count+'</div>'+
-      '<div class="dcolor-l" style="color:'+g.lc+';">'+g.label+'</div>'+
-      '</div>';
-  }).join('');
+    var idx=PAINT_GROUPS.indexOf(g);
+    html+='<div class="dcolor" style="background:'+g.bg+';border-color:'+g.br+
+          ';" data-pgidx="'+idx+'" onclick="dashGoColorByIndex(+this.dataset.pgidx)">'+
+          '<div class="dcolor-n" style="color:'+g.nc+';">'+t.count+'</div>'+
+          '<div class="dcolor-l" style="color:'+g.lc+';">'+g.label+'</div>'+
+          '</div>';
+  });
+  container.innerHTML=html;
 }
 
 
