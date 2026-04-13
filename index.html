@@ -224,6 +224,10 @@ td.num{font-family:var(--mono);text-align:right;}
 .drawer-body{padding:20px;flex:1;}
 .section-head{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:8px;margin-top:18px;padding-bottom:4px;border-bottom:1px solid var(--rule);}
 .section-head:first-child{margin-top:0;}
+.build-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:4px;}
+.build-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:3px;font-family:var(--mono);font-size:10px;font-weight:500;}
+.build-chip.yes{background:#edfaf3;color:#1a6b3a;border:1px solid #9ee8bf;}
+.build-chip.no{background:var(--paper);color:#ccc;border:1px solid var(--rule);text-decoration:line-through;}
 .drawer-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:4px;}
 .drawer-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
 .drawer-field{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px 10px;}
@@ -1424,9 +1428,17 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
     </div>
     <div class="section-head">Identity &amp; Color</div>
     <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">Exterior</div><div class="drawer-field-value" id="fd-ext">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Paint</div><div class="drawer-field-value" id="fd-ext">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Paint Code</div><div class="drawer-field-value mono" id="fd-paint-code">&mdash;</div></div>
       <div class="drawer-field"><div class="drawer-field-label">Upholstery</div><div class="drawer-field-value" id="fd-uph">&mdash;</div></div>
+    </div>
+    <div class="drawer-grid">
       <div class="drawer-field"><div class="drawer-field-label">State</div><div class="drawer-field-value" id="fd-state">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Production Date</div><div class="drawer-field-value mono" id="fd-prod-date">&mdash;</div></div>
+    </div>
+    <div class="section-head">Factory Equipment</div>
+    <div id="fd-build-equipment" style="margin-bottom:14px;">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);">No factory build data on file for this VIN.</div>
     </div>
     <div class="section-head">Vehicle Data</div>
     <div class="drawer-grid">
@@ -2217,6 +2229,44 @@ async function openFleetDrawer(vin){
   document.getElementById('fd-ext').textContent=v.exterior||'—';
   document.getElementById('fd-uph').textContent=v.upholstery||'—';
   document.getElementById('fd-state').textContent=v.last_title_state||'—';
+
+  // ── Factory Build Data ──
+  const bd = allBuildData[vin] || null;
+  // Paint: prefer build paint_name, fall back to v.exterior
+  const paintName = (bd && bd.paint_name) || v.exterior || '—';
+  const paintCode = (bd && bd.paint_code) || '—';
+  const uphName = (bd && bd.upholstery_name) || v.upholstery || '—';
+  const prodDate = (bd && bd.production_date) ? bd.production_date.substring(0,7) : '—';
+  document.getElementById('fd-ext').textContent = paintName;
+  document.getElementById('fd-paint-code').textContent = paintCode;
+  document.getElementById('fd-uph').textContent = uphName;
+  document.getElementById('fd-prod-date').textContent = prodDate;
+
+  // Equipment chips
+  const buildEl = document.getElementById('fd-build-equipment');
+  if (!bd) {
+    buildEl.innerHTML = '<div style="font-family:var(--mono);font-size:10px;color:var(--muted);">No factory build data on file for this VIN.</div>';
+  } else {
+    const opts = [
+      {label:'Refrigerator',     key:'has_refrigerator'},
+      {label:'Ceramic Brakes',   key:'has_ceramic_brakes'},
+      {label:'Carbon Package',   key:'has_carbon_pkg'},
+      {label:'Magic Sky',        key:'has_magic_sky'},
+      {label:'Burmester Audio',  key:'has_burmester'},
+      {label:'Night Vision',     key:'has_night_vision'},
+      {label:'Executive Rear',   key:'has_executive_rear_seat'},
+      {label:'Rear Entertainment',key:'has_rear_entertainment'},
+      {label:'Designo Paint',    key:'has_designo'},
+      {label:'Keyless Go',       key:'has_keyless_go'},
+      {label:'ABC Suspension',   key:'has_abc_suspension'},
+      {label:'Chauffeur Pkg',    key:'has_chauffeur_pkg'},
+    ];
+    const chips = opts.map(o => {
+      const on = bd[o.key] === true || bd[o.key] === 'true' || bd[o.key] === 'TRUE';
+      return `<span class="build-chip ${on?'yes':'no'}">${on?'&#10003;':''} ${o.label}</span>`;
+    }).join('');
+    buildEl.innerHTML = `<div class="build-chips">${chips}</div>`;
+  }
   document.getElementById('fd-own').textContent=v.total_owners??'—';
   document.getElementById('fd-acc').textContent=v.accident_count||'0 — Clean';
   document.getElementById('fd-svc').textContent=v.svc_per_yr!=null?Number(v.svc_per_yr).toFixed(1)+'/yr':'—';
