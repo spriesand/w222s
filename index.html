@@ -824,38 +824,9 @@ td.num{font-family:var(--mono);text-align:right;}
     </div>
   </div>
 
-  <div class="dash-sec">Factory Paint &middot; S65 Universe (438 cars)</div>
-  <div class="dash-paint">
-    <div class="dcolor" style="background:#1C1C1A;border-color:rgba(255,255,255,.1);" onclick="dashGoColor('BLACK','S65',['RUBY','MOCCA'])">
-      <div class="dcolor-n" style="color:#fff;">168</div><div class="dcolor-l" style="color:#aaa;">Black Variants</div>
-    </div>
-    <div class="dcolor" style="background:#F4F4F2;border-color:rgba(0,0,0,.1);" onclick="dashGoColor('DIAMOND WHITE','S65')">
-      <div class="dcolor-n" style="color:#1a1a1a;">80</div><div class="dcolor-l" style="color:#555;">Diamond White</div>
-    </div>
-    <div class="dcolor" style="background:#9EA0A0;border-color:rgba(0,0,0,.1);" onclick="dashGoColor('IRIDIUM','S65')">
-      <div class="dcolor-n" style="color:#1a1a1a;">33</div><div class="dcolor-l" style="color:#333;">Iridium Silver</div>
-    </div>
-    <div class="dcolor" style="background:#3B5C8A;border-color:rgba(255,255,255,.1);" onclick="dashGoColor('CAVANSITE','S65')">
-      <div class="dcolor-n" style="color:#fff;">24</div><div class="dcolor-l" style="color:#c8d8ee;">Cavansite Blue</div>
-    </div>
-    <div class="dcolor" style="background:#B2B4B2;border-color:rgba(0,0,0,.1);" onclick="dashGoColor('PALLADIUM','S65')">
-      <div class="dcolor-n" style="color:#222;">13</div><div class="dcolor-l" style="color:#333;">Palladium Silver</div>
-    </div>
-    <div class="dcolor" style="background:#8C8E8C;border-color:rgba(0,0,0,.1);" onclick="dashGoColor('SELENITE','S65')">
-      <div class="dcolor-n" style="color:#fff;">9</div><div class="dcolor-l" style="color:#eee;">Selenite Grey</div>
-    </div>
-    <div class="dcolor" style="background:#F8F6F0;border-color:rgba(0,0,0,.1);" onclick="dashGoColor('KASHMIR','S65')">
-      <div class="dcolor-n" style="color:#1a1a1a;">7</div><div class="dcolor-l" style="color:#555;">Designo Kashmir White</div>
-    </div>
-    <div class="dcolor" style="background:#2A1A08;border-color:rgba(255,255,255,.1);" onclick="dashGoColor('MOCCA','S65')">
-      <div class="dcolor-n" style="color:#fff;">6</div><div class="dcolor-l" style="color:#c8a878;">Designo Mocca Black</div>
-    </div>
-    <div class="dcolor" style="background:#3B1212;border-color:rgba(255,255,255,.1);" onclick="dashGoColor('RUBY','S65')">
-      <div class="dcolor-n" style="color:#fff;">6</div><div class="dcolor-l" style="color:#f0a0a0;">Ruby Black</div>
-    </div>
-    <div class="dcolor" style="background:#6A5C80;border-color:rgba(255,255,255,.1);" onclick="dashGoColor('MYSTIC','S65')">
-      <div class="dcolor-n" style="color:#fff;">1</div><div class="dcolor-l" style="color:#d8c8f0;">Designo Mystic Blue</div>
-    </div>
+  <div class="dash-sec" id="dash-paint-sec">Factory Paint &middot; S65 Universe</div>
+  <div class="dash-paint" id="dash-paint-tiles">
+    <div class="dcolor" style="background:#f5f4f0;border-color:rgba(0,0,0,.05);"><div class="dcolor-n" style="color:#bbb;">—</div><div class="dcolor-l" style="color:#ccc;">Loading&hellip;</div></div>
   </div>
 
   <div class="dash-sec">By Model Year</div>
@@ -1683,6 +1654,63 @@ function toggleDS600(){
   else{b.classList.add('open');a.innerHTML='&#9650;';}
 }
 
+// Paint group definitions — shared by dashboard tiles AND applyFilters
+var PAINT_GROUPS=[
+  {label:'Black Variants',   contains:'BLACK',        excludes:['RUBY','MOCCA','GRAPHITE'], bg:'#1C1C1A', br:'rgba(255,255,255,.1)', nc:'#fff',    lc:'#aaa'},
+  {label:'Diamond White',    contains:'DIAMOND WHITE', excludes:[],                          bg:'#F4F4F2', br:'rgba(0,0,0,.1)',       nc:'#1a1a1a', lc:'#555'},
+  {label:'Iridium Silver',   contains:'IRIDIUM',       excludes:[],                          bg:'#9EA0A0', br:'rgba(0,0,0,.1)',       nc:'#1a1a1a', lc:'#333'},
+  {label:'Cavansite Blue',   contains:'CAVANSITE',     excludes:[],                          bg:'#3B5C8A', br:'rgba(255,255,255,.1)', nc:'#fff',    lc:'#c8d8ee'},
+  {label:'Palladium Silver', contains:'PALLADIUM',     excludes:[],                          bg:'#B2B4B2', br:'rgba(0,0,0,.1)',       nc:'#222',    lc:'#333'},
+  {label:'Selenite Grey',    contains:'SELENITE',      excludes:[],                          bg:'#8C8E8C', br:'rgba(0,0,0,.1)',       nc:'#fff',    lc:'#eee'},
+  {label:'Allanite Grey',    contains:'ALLANIT',       excludes:[],                          bg:'#9C9882', br:'rgba(0,0,0,.1)',       nc:'#fff',    lc:'#eee'},
+  {label:'Designo Kashmir White', contains:'KASHMIR',  excludes:[],                          bg:'#F8F6F0', br:'rgba(0,0,0,.1)',       nc:'#1a1a1a', lc:'#555'},
+  {label:'Designo Mocca Black',   contains:'MOCCA',    excludes:[],                          bg:'#2A1A08', br:'rgba(255,255,255,.1)', nc:'#fff',    lc:'#c8a878'},
+  {label:'Ruby Black',       contains:'RUBY',          excludes:[],                          bg:'#3B1212', br:'rgba(255,255,255,.1)', nc:'#fff',    lc:'#f0a0a0'},
+  {label:'Designo Mystic Blue',   contains:'MYSTIC',   excludes:[],                          bg:'#6A5C80', br:'rgba(255,255,255,.1)', nc:'#fff',    lc:'#d8c8f0'},
+  {label:'Designo Graphite', contains:'GRAPHITE',      excludes:[],                          bg:'#3A3A3A', br:'rgba(255,255,255,.1)', nc:'#fff',    lc:'#ccc'},
+];
+
+function paintMatch(pn, group){
+  if(!pn)return false;
+  const u=pn.toUpperCase();
+  if(!u.includes(group.contains))return false;
+  if(group.excludes&&group.excludes.some(function(x){return u.includes(x);}))return false;
+  return true;
+}
+
+function renderPaintTiles(){
+  var s65Trims=new Set(['S65 AMG','S65','S65 AMG Final Edition']);
+  var s65=allVehicles.filter(function(v){return s65Trims.has(v.trim||'');});
+  var tiles=[];
+  var matched=new Set(); // track S65 VINs already matched
+  PAINT_GROUPS.forEach(function(g){
+    var ct=0;
+    s65.forEach(function(v){
+      var b=allBuildData[v.vin];
+      var pn=(b&&b.paint_name)||v.exterior||'';
+      if(paintMatch(pn,g))ct++;
+    });
+    if(ct>0)tiles.push({g:g,count:ct});
+  });
+  // Sort descending
+  tiles.sort(function(a,b){return b.count-a.count;});
+  var sec=document.getElementById('dash-paint-sec');
+  var s65total=s65.length;
+  if(sec)sec.textContent='Factory Paint · S65 Universe ('+s65total+' cars)';
+  var container=document.getElementById('dash-paint-tiles');
+  if(!container)return;
+  container.innerHTML=tiles.map(function(t){
+    var g=t.g;
+    var excJson=JSON.stringify(g.excludes);
+    return '<div class="dcolor" style="background:'+g.bg+';border-color:'+g.br+';" '+
+      'onclick="dashGoColor(''+g.contains+'','S65','+excJson+')">'+
+      '<div class="dcolor-n" style="color:'+g.nc+';">'+t.count+'</div>'+
+      '<div class="dcolor-l" style="color:'+g.lc+';">'+g.label+'</div>'+
+      '</div>';
+  }).join('');
+}
+
+
 function renderDashboard(){
   if(!allVehicles||!allVehicles.length)return;
 
@@ -1714,6 +1742,7 @@ function renderDashboard(){
     .sort((a,b)=>(Number(b.composite_score)||0)-(Number(a.composite_score)||0))
     .slice(0,3);
 
+  renderPaintTiles();
   var container=document.getElementById('dash-targets');
   if(!container)return;
 
@@ -2103,10 +2132,8 @@ function applyFilters(){
     }
     if(currentView==='paint_filter'&&dashPaintFilter){
       const b=allBuildData[v.vin];
-      const pn=((b&&b.paint_name)||v.exterior||'').toUpperCase();
-      if(!pn)return false;
-      if(dashPaintFilter.contains&&!pn.includes(dashPaintFilter.contains.toUpperCase()))return false;
-      if(dashPaintFilter.excludes&&dashPaintFilter.excludes.some(x=>pn.includes(x.toUpperCase())))return false;
+      const pn=(b&&b.paint_name)||v.exterior||'';
+      if(!paintMatch(pn,dashPaintFilter))return false;
     }
     if(q&&![(v.vin||''),(v.trim||''),(v.last_title_state||''),(v.exterior||''),(v.sale_history||'')].some(f=>f.toLowerCase().includes(q)))return false;
     return true;
