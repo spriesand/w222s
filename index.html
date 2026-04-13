@@ -837,14 +837,20 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
 
   <div class="dash-sec">Factory Paint &middot; S65 Universe (438 cars)</div>
   <div class="dash-paint">
-    <div class="dcolor" style="background:#F4F4F2;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#1a1a1a;">80</div><div class="dcolor-l" style="color:#555;">Diamond White</div>
+    <div class="dcolor" style="background:#6A5C80;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#fff;">1</div><div class="dcolor-l" style="color:#d8c8f0;">Designo Mystic Blue</div>
     </div>
-    <div class="dcolor" style="background:#1C1C1A;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#fff;">168</div><div class="dcolor-l" style="color:#aaa;">Black Variants</div>
+    <div class="dcolor" style="background:#2A1A08;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#fff;">6</div><div class="dcolor-l" style="color:#c8a878;">Designo Mocca Black</div>
     </div>
-    <div class="dcolor" style="background:#9EA0A0;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#1a1a1a;">33</div><div class="dcolor-l" style="color:#333;">Iridium Silver</div>
+    <div class="dcolor" style="background:#3B1212;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#fff;">6</div><div class="dcolor-l" style="color:#f0a0a0;">Ruby Black</div>
+    </div>
+    <div class="dcolor" style="background:#F8F6F0;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#1a1a1a;">7</div><div class="dcolor-l" style="color:#555;">Designo Kashmir White</div>
+    </div>
+    <div class="dcolor" style="background:#8C8E8C;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#fff;">9</div><div class="dcolor-l" style="color:#eee;">Selenite Grey</div>
     </div>
     <div class="dcolor" style="background:#B2B4B2;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
       <div class="dcolor-n" style="color:#222;">13</div><div class="dcolor-l" style="color:#333;">Palladium Silver</div>
@@ -852,20 +858,14 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
     <div class="dcolor" style="background:#3B5C8A;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
       <div class="dcolor-n" style="color:#fff;">24</div><div class="dcolor-l" style="color:#c8d8ee;">Cavansite Blue</div>
     </div>
-    <div class="dcolor" style="background:#2A1A08;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#fff;">6</div><div class="dcolor-l" style="color:#c8a878;">Designo Mocca Black</div>
+    <div class="dcolor" style="background:#9EA0A0;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#1a1a1a;">33</div><div class="dcolor-l" style="color:#333;">Iridium Silver</div>
     </div>
-    <div class="dcolor" style="background:#F8F6F0;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#1a1a1a;">7</div><div class="dcolor-l" style="color:#555;">Designo Kashmir White</div>
+    <div class="dcolor" style="background:#F4F4F2;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#1a1a1a;">80</div><div class="dcolor-l" style="color:#555;">Diamond White</div>
     </div>
-    <div class="dcolor" style="background:#6A5C80;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#fff;">1</div><div class="dcolor-l" style="color:#d8c8f0;">Designo Mystic Blue</div>
-    </div>
-    <div class="dcolor" style="background:#8C8E8C;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#fff;">9</div><div class="dcolor-l" style="color:#eee;">Selenite Grey</div>
-    </div>
-    <div class="dcolor" style="background:#3B1212;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#fff;">6</div><div class="dcolor-l" style="color:#f0a0a0;">Ruby Black</div>
+    <div class="dcolor" style="background:#1C1C1A;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#fff;">168</div><div class="dcolor-l" style="color:#aaa;">Black Variants</div>
     </div>
   </div>
 
@@ -1763,15 +1763,6 @@ async function loadAll(){
     console.error(err);
   }
 }
-    (mR.data||[]).forEach(m=>marketByVin[m.vin]=m);
-    allVehicles=(vR.data||[]).map(v=>{
-      const m=marketByVin[v.vin]||{};
-      // Merge market data but never overwrite key identity/status fields from vehicles table
-      const{acq_status:_a,target_tier:_t,listing_status:_ls,trim:_tr,year:_y,...marketRest}=m;
-      return{...v,...marketRest};
-    });
-    allContacts=cR.data||[];allAlerts=aR.data||[];allLogs=lR.data||[];allServiceRecs=sR.data||[];
-
 function renderMobileTop40(){
   const priority=allVehicles
     .filter(v=>{const t=getTier(v);return t==='targeted'||t==='watched';})
