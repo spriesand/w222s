@@ -215,12 +215,12 @@ td.num{font-family:var(--mono);text-align:right;}
 .drawer-overlay.open{opacity:1;pointer-events:all;}
 .drawer{position:fixed;top:0;right:0;width:600px;height:100vh;background:#fff;z-index:201;box-shadow:-4px 0 30px rgba(0,0,0,.2);transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column;}
 .drawer.open{transform:translateX(0);}
-.drawer-header{background:var(--ink);color:var(--paper);padding:18px 22px;display:flex;justify-content:space-between;align-items:flex-start;flex-shrink:0;}
-.drawer-eyebrow{font-family:var(--mono);font-size:10px;color:#aaa;margin-bottom:3px;}
+.drawer-header{background:#fff;color:var(--ink);padding:16px 20px;display:flex;justify-content:space-between;align-items:flex-start;flex-shrink:0;border-bottom:1px solid var(--rule);}
+.drawer-eyebrow{font-family:var(--mono);font-size:10px;color:var(--muted);margin-bottom:3px;letter-spacing:.06em;}
 .drawer-title{font-family:var(--sans);font-size:17px;font-weight:600;}
-.drawer-subtitle{font-family:var(--mono);font-size:10px;color:#aaa;margin-top:3px;}
-.drawer-close{background:none;border:none;color:#aaa;font-size:22px;cursor:pointer;line-height:1;padding:0;}
-.drawer-close:hover{color:#fff;}
+.drawer-subtitle{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px;}
+.drawer-close{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;padding:0;}
+.drawer-close:hover{color:var(--ink);}
 .drawer-body{padding:20px;flex:1;}
 .section-head{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:8px;margin-top:18px;padding-bottom:4px;border-bottom:1px solid var(--rule);}
 .section-head:first-child{margin-top:0;}
@@ -518,17 +518,6 @@ td.num{font-family:var(--mono);text-align:right;}
 .mob-log-area{width:100%;border:1px solid var(--rule);border-radius:6px;padding:10px 12px;font-family:var(--sans);font-size:13px;background:#fff;color:var(--ink);outline:none;resize:none;min-height:72px;-webkit-appearance:none;}
 .mob-log-area:focus,.mob-status-sel:focus{border-color:var(--ink);}
 
-/* ── Quick-action buttons in fleet drawer header ── */
-.fd-actions{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap;}
-.fd-action-btn{padding:5px 12px;border-radius:3px;font-family:var(--mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;cursor:pointer;border:none;transition:all .15s;}
-.fd-action-btn.track{background:#1a6b3a;color:#fff;}
-.fd-action-btn.track:hover{background:#145530;}
-.fd-action-btn.watch-btn{background:var(--gold);color:#fff;}
-.fd-action-btn.watch-btn:hover{background:#9a7a22;}
-.fd-action-btn.dq-btn{background:var(--accent);color:#fff;}
-.fd-action-btn.dq-btn:hover{background:#6b1212;}
-.fd-action-btn.unset{background:#555;color:#fff;}
-.fd-action-btn.unset:hover{background:#333;}
 /* ── Service wall toggle switches ── */
 .swall-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
 .swall-toggle{display:flex;align-items:center;justify-content:space-between;background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px 10px;cursor:pointer;transition:all .15s;}
@@ -559,9 +548,6 @@ td.num{font-family:var(--mono);text-align:right;}
 .ls-btn.active-silent{background:#f5f5f5;border-color:#999;color:#555;}
 .ls-dot-indicator{width:7px;height:7px;border-radius:50%;display:inline-block;flex-shrink:0;}
 /* Compact data-only rows */
-tbody tr.row-compact{background:#fafaf8;}
-tbody tr.row-compact td{padding:3px 8px;font-size:10px;color:#999;}
-tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
 /* Vehicle notes log */
 .vlog-entry{padding:10px 0;border-bottom:1px dashed var(--rule);}
 .vlog-entry:last-child{border-bottom:none;}
@@ -1363,12 +1349,6 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
       <div class="drawer-eyebrow" id="fd-vin">—</div>
       <div class="drawer-title" id="fd-title">Vehicle Detail</div>
       <div class="drawer-subtitle" id="fd-sub">—</div>
-      <div class="fd-actions">
-        <button class="fd-action-btn track" onclick="fdSetStatus('Targeted')">&#9679; Track</button>
-        <button class="fd-action-btn watch-btn" onclick="fdSetStatus('Watch')">○ Watch</button>
-        <button class="fd-action-btn dq-btn" onclick="fdSetStatus('DQ - Multiple Accidents')">&#215; DQ</button>
-        <button class="fd-action-btn unset" onclick="fdSetStatus('Universe')">&#8635; Unset</button>
-      </div>
     </div>
     <button class="drawer-close" onclick="closeFleetDrawer()">&#215;</button>
   </div>
@@ -2152,25 +2132,18 @@ function renderFleet(data){
   tbody.innerHTML=data.map(v=>{
     const gi=(Number(v.curr_odo)>=70000&&Number(v.curr_odo)<=100000);
     const tier=getTier(v);
-    const isCompact=(tier==='data_only')&&(currentView!=='all');
-    let rowClass=isCompact?'row-compact':'';
-    if(tier==='targeted'&&!isCompact)rowClass='row-watch'; // gold left border reused for targeted highlight
-    if(isCompact){
-      return`<tr onclick="openFleetDrawer('${v.vin}')" class="${rowClass}${activeFD?.vin===v.vin?' selected':''}">
-        <td style="font-family:var(--mono);font-size:9px;color:#bbb">${v.vin}</td>
-        <td><span class="trim-badge ${(v.trim==='S65 AMG'||v.trim==='S65')?'s65':'s600'}">${v.trim||'—'}</span></td>
-        <td class="num">${v.year||'—'}</td>
-        <td></td><td></td>
-        <td colspan="33" style="font-family:var(--mono);font-size:10px;color:#aaa">${v.exterior||''} ${v.last_title_state?'· '+v.last_title_state:''} ${v.curr_odo?'· '+Number(v.curr_odo).toLocaleString()+' mi':''}</td>
-      </tr>`;
-    }
+    let rowClass='';
+    if(tier==='targeted')rowClass='row-watch';
+    // Paint: prefer vehicle_build paint_name (authoritative MB factory name), fall back to v.exterior
+    const bd=allBuildData[v.vin]||null;
+    const paintDisplay=(bd&&bd.paint_name)||v.exterior||null;
     return`<tr onclick="openFleetDrawer('${v.vin}')" class="${rowClass}${activeFD?.vin===v.vin?' selected':''}">
       <td style="font-family:var(--mono);font-size:10px;color:var(--muted)">${v.vin}</td>
       <td><span class="trim-badge ${(v.trim==='S65 AMG'||v.trim==='S65')?'s65':'s600'}">${v.trim||'&mdash;'}</span></td>
       <td class="num">${v.year||2017}</td>
       <td>${tierChip(v)}</td>
       <td>${listingDot(v)}</td>
-      <td style="font-size:11px;max-width:120px;overflow:hidden;text-overflow:ellipsis">${v.exterior||'&mdash;'}</td>
+      <td style="font-size:11px;max-width:140px;overflow:hidden;text-overflow:ellipsis">${paintDisplay||'&mdash;'}</td>
       <td><span class="state-tag">${v.last_title_state||'&mdash;'}</span></td>
       <td class="num">${v.total_owners??'&mdash;'}</td>
       <td>${hasAcc(v)?'<span class="bool-yes" style="color:var(--gold)">\u2713</span>':'<span class="bool-no">&mdash;</span>'}</td>
