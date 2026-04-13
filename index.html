@@ -881,16 +881,8 @@ td.num{font-family:var(--mono);text-align:right;}
     </div>
     <div class="ds600-body" id="ds600-body">
       <div class="ds600-divider"></div>
-      <div class="ds600-grid">
-        <div class="ds600-row" onclick="dashGoColor('BLACK','S600',['RUBY','MOCCA'])" style="cursor:pointer;"><div class="ds600-sw" style="background:#1C1C1A;"></div><span class="ds600-name">Black variants</span><span class="ds600-ct">142</span></div>
-        <div class="ds600-row" onclick="dashGoColor('DIAMOND WHITE','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#F4F4F2;border-color:rgba(0,0,0,.15);"></div><span class="ds600-name">Diamond White</span><span class="ds600-ct">44</span></div>
-        <div class="ds600-row" onclick="dashGoColor('IRIDIUM','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#9EA0A0;"></div><span class="ds600-name">Iridium Silver</span><span class="ds600-ct">28</span></div>
-        <div class="ds600-row" onclick="dashGoColor('CAVANSITE','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#3B5C8A;"></div><span class="ds600-name">Cavansite Blue</span><span class="ds600-ct">22</span></div>
-        <div class="ds600-row" onclick="dashGoColor('ALLANITE','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#9C9882;"></div><span class="ds600-name">Allanite Grey</span><span class="ds600-ct">18</span></div>
-        <div class="ds600-row" onclick="dashGoColor('ALANITE','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#989A80;"></div><span class="ds600-name">Designo Alanite Grey</span><span class="ds600-ct">14</span></div>
-        <div class="ds600-row" onclick="dashGoColor('MOCCA','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#2A1A08;"></div><span class="ds600-name">Designo Mocca Black</span><span class="ds600-ct">9</span></div>
-        <div class="ds600-row" onclick="dashGoColor('KASHMIR','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#F8F6F0;border-color:rgba(0,0,0,.12);"></div><span class="ds600-name">Designo Kashmir White</span><span class="ds600-ct">6</span></div>
-        <div class="ds600-row" onclick="dashGoColor('GRAPHITE','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#5B4B7A;"></div><span class="ds600-name">Designo Graphite</span><span class="ds600-ct">3</span></div>
+      <div class="ds600-grid" id="ds600-grid">
+        <div class="ds600-row"><span class="ds600-name" style="color:#bbb;">Loading&hellip;</span></div>
       </div>
     </div>
   </div>
@@ -1667,7 +1659,7 @@ var PAINT_GROUPS=[
   {label:'Cavansite Blue',   contains:'CAVANSITE',     excludes:[],                          bg:'#3B5C8A', br:'rgba(255,255,255,.1)', nc:'#fff',    lc:'#c8d8ee'},
   {label:'Palladium Silver', contains:'PALLADIUM',     excludes:[],                          bg:'#B2B4B2', br:'rgba(0,0,0,.1)',       nc:'#222',    lc:'#333'},
   {label:'Selenite Grey',    contains:'SELENITE',      excludes:[],                          bg:'#8C8E8C', br:'rgba(0,0,0,.1)',       nc:'#fff',    lc:'#eee'},
-  {label:'Allanite Grey',    contains:'ALLANIT',       excludes:[],                          bg:'#9C9882', br:'rgba(0,0,0,.1)',       nc:'#fff',    lc:'#eee'},
+  {label:'Allanite Grey',    contains:'LANIT',       excludes:[],                          bg:'#9C9882', br:'rgba(0,0,0,.1)',       nc:'#fff',    lc:'#eee'},
   {label:'Designo Kashmir White', contains:'KASHMIR',  excludes:[],                          bg:'#F8F6F0', br:'rgba(0,0,0,.1)',       nc:'#1a1a1a', lc:'#555'},
   {label:'Designo Mocca Black',   contains:'MOCCA',    excludes:[],                          bg:'#2A1A08', br:'rgba(255,255,255,.1)', nc:'#fff',    lc:'#c8a878'},
   {label:'Ruby Black',       contains:'RUBY',          excludes:[],                          bg:'#3B1212', br:'rgba(255,255,255,.1)', nc:'#fff',    lc:'#f0a0a0'},
@@ -1718,6 +1710,50 @@ function renderPaintTiles(){
 }
 
 
+var S600_PAINT_GROUPS=[
+  {label:'Black variants',       contains:'BLACK',        excludes:['RUBY','MOCCA'], sw:'#1C1C1A', swb:'rgba(255,255,255,.1)'},
+  {label:'Diamond White',        contains:'DIAMOND WHITE',excludes:[],               sw:'#F4F4F2', swb:'rgba(0,0,0,.15)'},
+  {label:'Iridium Silver',       contains:'IRIDIUM',      excludes:[],               sw:'#9EA0A0', swb:'rgba(0,0,0,.1)'},
+  {label:'Cavansite Blue',       contains:'CAVANSITE',    excludes:[],               sw:'#3B5C8A', swb:'rgba(255,255,255,.1)'},
+  {label:'Allanite Grey',        contains:'LANIT',        excludes:[],               sw:'#9C9882', swb:'rgba(0,0,0,.1)'},
+  {label:'Designo Mocca Black',  contains:'MOCCA',        excludes:[],               sw:'#2A1A08', swb:'rgba(255,255,255,.1)'},
+  {label:'Designo Kashmir White',contains:'KASHMIR',      excludes:[],               sw:'#F8F6F0', swb:'rgba(0,0,0,.12)'},
+  {label:'Designo Graphite',     contains:'GRAPHITE',     excludes:[],               sw:'#5B4B7A', swb:'rgba(255,255,255,.1)'},
+  {label:'Palladium Silver',     contains:'PALLADIUM',    excludes:[],               sw:'#B2B4B2', swb:'rgba(0,0,0,.1)'},
+  {label:'Selenite Grey',        contains:'SELENITE',     excludes:[],               sw:'#8C8E8C', swb:'rgba(0,0,0,.1)'},
+];
+
+function renderS600Colors(){
+  var grid=document.getElementById('ds600-grid');
+  if(!grid)return;
+  var s600=allVehicles.filter(function(v){return (v.trim||'')==='S600';});
+  var rows=[];
+  S600_PAINT_GROUPS.forEach(function(g){
+    var ct=s600.filter(function(v){
+      var b=allBuildData[v.vin];
+      var pn=(b&&b.paint_name)||v.exterior||'';
+      return paintMatch(pn,g);
+    }).length;
+    if(ct>0)rows.push({g:g,count:ct});
+  });
+  rows.sort(function(a,b){return b.count-a.count;});
+  grid.innerHTML=rows.map(function(r){
+    var g=r.g;
+    var idx=S600_PAINT_GROUPS.indexOf(g);
+    return '<div class="ds600-row" onclick="dashGoS600ByIndex('+idx+')" style="cursor:pointer;">'+
+      '<div class="ds600-sw" style="background:'+g.sw+';border:0.5px solid '+g.swb+';"></div>'+
+      '<span class="ds600-name">'+g.label+'</span>'+
+      '<span class="ds600-ct">'+r.count+'</span>'+
+      '</div>';
+  }).join('')||'<div class="ds600-row"><span class="ds600-name" style="color:#bbb;">No S600 build data</span></div>';
+}
+
+function dashGoS600ByIndex(idx){
+  var g=S600_PAINT_GROUPS[idx];if(!g)return;
+  dashGoColor(g.contains,'S600',g.excludes);
+}
+
+
 function renderDashboard(){
   if(!allVehicles||!allVehicles.length)return;
 
@@ -1750,6 +1786,7 @@ function renderDashboard(){
     .slice(0,3);
 
   renderPaintTiles();
+  renderS600Colors();
   var container=document.getElementById('dash-targets');
   if(!container)return;
 
