@@ -674,6 +674,83 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
 .stat-box.stat-link:hover .stat-num{color:#fff !important;}
 .stat-box.stat-link:hover .stat-lbl{color:#aaa;}
 /* ── Redesigned filter sidebar ── */
+/* ── DASHBOARD ── */
+.dash-content{padding:18px 24px 36px;max-width:1400px;margin:0 auto;}
+.dash-sec{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin:22px 0 10px;}
+.dash-sec:first-child{margin-top:0;}
+.dash-targets{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;}
+.dtgt{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:16px 18px;cursor:pointer;transition:all .15s;position:relative;overflow:hidden;}
+.dtgt:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-1px);}
+.dtgt.rank1{border-left:3px solid var(--s65);padding-left:16px;}
+.dtgt.rank1:hover{border-color:var(--s65);}
+.dtgt-rank{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;}
+.dtgt.rank1 .dtgt-rank{color:var(--s65);}
+.dtgt-vin{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.02em;color:var(--ink);}
+.dtgt-desc{font-size:11px;font-family:var(--sans);color:var(--muted);margin-top:3px;line-height:1.45;}
+.dtgt-stats{display:flex;gap:16px;margin-top:12px;padding-top:12px;border-top:1px solid var(--rule);}
+.dtgt-stat-n{font-family:var(--serif);font-size:17px;color:var(--ink);line-height:1;}
+.dtgt-stat-l{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:2px;}
+.dtgt-flags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px;}
+.dflag{font-family:var(--mono);font-size:10px;font-weight:500;padding:2px 7px;border-radius:3px;}
+.dflag-g{background:#edfaf3;color:#1a6b3a;border:1px solid #9ee8bf;}
+.dflag-b{background:#edf3fd;color:var(--s65);border:1px solid #b8cef0;}
+.dflag-p{background:#f5edfb;color:#5b2d8e;border:1px solid #d4b8f0;}
+.dflag-gray{background:var(--paper);color:var(--muted);border:1px solid var(--rule);}
+.dtgt-footer{margin-top:10px;font-family:var(--mono);font-size:10px;color:var(--muted);line-height:1.5;}
+.dtgt-dealer{font-weight:500;color:var(--ink);}
+.dtgt-status{display:inline-block;margin-top:4px;font-family:var(--mono);font-size:9px;font-weight:500;padding:2px 7px;border-radius:3px;text-transform:uppercase;letter-spacing:.04em;}
+.dsts-active{background:#edfaf3;color:#1a6b3a;border:1px solid #9ee8bf;}
+.dsts-watch{background:var(--paper);color:var(--muted);border:1px solid var(--rule);}
+.dtgt-empty{background:#fff;border:1px dashed var(--rule);border-radius:6px;padding:24px 18px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;cursor:pointer;}
+.dtgt-empty:hover{border-color:var(--muted);}
+.dash-pipeline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
+.dptile{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:14px 16px;cursor:pointer;position:relative;overflow:hidden;transition:all .15s;}
+.dptile:hover{border-color:var(--muted);transform:translateY(-1px);}
+.dptile-bar{position:absolute;top:0;left:0;right:0;height:3px;}
+.dpt-blue{background:var(--s65);}
+.dpt-green{background:#1a6b3a;}
+.dpt-red{background:var(--accent);}
+.dpt-purple{background:#5b2d8e;}
+.dptile-n{font-family:var(--serif);font-size:26px;color:var(--ink);line-height:1;margin-top:4px;}
+.dptile-l{font-family:var(--mono);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-top:4px;color:var(--ink);}
+.dptile-s{font-family:var(--sans);font-size:11px;color:var(--muted);margin-top:2px;line-height:1.35;}
+.dptile-tag{display:inline-block;margin-top:9px;font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;border:1px solid var(--rule);color:var(--muted);}
+.dash-paint{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;}
+.dcolor{border-radius:5px;border:1px solid rgba(0,0,0,.1);padding:13px 11px 11px;cursor:pointer;min-height:68px;display:flex;flex-direction:column;justify-content:flex-end;transition:opacity .15s;}
+.dcolor:hover{opacity:.88;}
+.dcolor-n{font-family:var(--serif);font-size:19px;font-weight:700;line-height:1;}
+.dcolor-l{font-family:var(--mono);font-size:9px;margin-top:3px;text-transform:uppercase;letter-spacing:.06em;line-height:1.3;}
+.dash-years{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;}
+.dyear{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:13px 12px;cursor:pointer;text-align:center;transition:all .15s;}
+.dyear:hover{border-color:var(--s65);transform:translateY(-1px);}
+.dyear-n{font-family:var(--serif);font-size:16px;color:var(--ink);}
+.dyear-c{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px;}
+.dyear-k{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:1px;}
+.dyear-dots{display:flex;gap:3px;justify-content:center;margin-top:8px;}
+.dyd{width:7px;height:7px;border-radius:50%;}
+.dyd-s65{background:var(--s65);}
+.dyd-s600{background:var(--s600);}
+.dash-s600{background:#fff;border:1px solid var(--rule);border-radius:6px;overflow:hidden;}
+.ds600-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;font-family:var(--mono);}
+.ds600-header:hover{background:var(--paper);}
+.ds600-title{font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+.ds600-meta{font-size:10px;color:var(--muted);display:flex;align-items:center;gap:8px;}
+.ds600-body{padding:0 16px 14px;display:none;}
+.ds600-body.open{display:block;}
+.ds600-divider{height:1px;background:var(--rule);margin-bottom:12px;}
+.ds600-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:4px 16px;}
+.ds600-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid #f5f4f0;}
+.ds600-row:last-child{border:none;}
+.ds600-sw{width:10px;height:10px;border-radius:2px;flex-shrink:0;border:1px solid rgba(0,0,0,.1);}
+.ds600-name{font-family:var(--mono);font-size:10px;color:var(--muted);flex:1;}
+.ds600-ct{font-family:var(--mono);font-size:10px;color:var(--rule);}
+.dash-legend{display:flex;gap:20px;align-items:center;margin-top:10px;padding:13px 16px;background:#fff;border:1px solid var(--rule);border-radius:6px;}
+.dleg-item{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;color:var(--muted);}
+.dleg-img{width:42px;height:27px;object-fit:contain;mix-blend-mode:multiply;}
+.dleg-div{width:1px;height:28px;background:var(--rule);}
+.logo-home{cursor:pointer;}
+.logo-home:hover .logo-mark{opacity:.75;}
+
 .view-btn{width:100%;text-align:left;padding:7px 11px;border:1px solid var(--rule);border-radius:4px;background:#fff;color:var(--muted);font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .15s;letter-spacing:.03em;margin-bottom:5px;display:block;}
 .view-btn:hover{border-color:var(--ink);color:var(--ink);}
 .view-btn.active{background:var(--ink);color:#fff;border-color:var(--ink);}
@@ -691,7 +768,7 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
 <div id="toast"></div>
 
 <header>
-  <div class="logo">W222<span>s</span></div>
+  <div class="logo logo-home" onclick="switchTab('dashboard')" title="Return to dashboard"><span class="logo-mark">W222<span>s</span></span></div>
   <div class="header-sync">
     <span class="sync-dot" id="sync-dot"></span>
     <span style="font-family:var(--mono);font-size:11px;color:#aaa" id="sync-label">Connecting&hellip;</span>
@@ -702,7 +779,8 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
 </header>
 
 <div class="tab-bar">
-  <div class="tab active" onclick="switchTab('fleet')">Fleet <span class="tab-badge" id="fleet-tab-count">&mdash;</span></div>
+  <div class="tab active" id="tab-home" onclick="switchTab('dashboard')">&#8962; Home</div>
+  <div class="tab" onclick="switchTab('fleet')">Fleet <span class="tab-badge" id="fleet-tab-count">&mdash;</span></div>
   <div class="tab" onclick="switchTab('crm')">Contacts <span class="tab-badge" id="crm-tab-count">&mdash;</span></div>
   <div class="tab" onclick="switchTab('market')">Market <span class="tab-badge" id="market-tab-count" style="background:var(--bat-orange);color:#fff;">BaT</span></div>
   <div class="tab" onclick="switchTab('notes')">Notes &#128221;</div>
@@ -714,8 +792,172 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
   </div>
 </div>
 
+<!-- DASHBOARD PAGE -->
+<div class="page active" id="page-dashboard">
+<div class="dash-content">
+
+  <div class="dash-sec">Active Targets</div>
+  <div class="dash-targets" id="dash-targets">
+    <div class="dtgt-empty">Loading targets&hellip;</div>
+    <div class="dtgt-empty">Loading&hellip;</div>
+    <div class="dtgt-empty">Loading&hellip;</div>
+  </div>
+
+  <div class="dash-sec">Acquisition Pipeline</div>
+  <div class="dash-pipeline">
+    <div class="dptile" onclick="dashGoFleet('targeted')">
+      <div class="dptile-bar dpt-blue"></div>
+      <div class="dptile-n" id="dp-targeted">—</div>
+      <div class="dptile-l">Targeted</div>
+      <div class="dptile-s">Active acquisition candidates</div>
+      <div class="dptile-tag">View all &rarr;</div>
+    </div>
+    <div class="dptile" onclick="dashGoFleet('focus')">
+      <div class="dptile-bar dpt-green"></div>
+      <div class="dptile-n" id="dp-watch">—</div>
+      <div class="dptile-l">Watch</div>
+      <div class="dptile-s">On radar &middot; monitoring pricing</div>
+      <div class="dptile-tag">View all &rarr;</div>
+    </div>
+    <div class="dptile" onclick="dashGoFleet('active')">
+      <div class="dptile-bar dpt-red"></div>
+      <div class="dptile-n" id="dp-active">—</div>
+      <div class="dptile-l">Active Listings</div>
+      <div class="dptile-s">Currently for sale in market</div>
+      <div class="dptile-tag" style="color:#1a6b3a;border-color:#9ee8bf;background:#edfaf3;">Live now</div>
+    </div>
+    <div class="dptile" onclick="dashGoFleet('ultra_rare')">
+      <div class="dptile-bar dpt-purple"></div>
+      <div class="dptile-n" id="dp-rare">—</div>
+      <div class="dptile-l">Ultra Rare</div>
+      <div class="dptile-s">3+ premium options &middot; ceramics &middot; fridge &middot; magic sky</div>
+      <div class="dptile-tag" style="color:#5b2d8e;border-color:#d4b8f0;background:#f5edfb;">Short list</div>
+    </div>
+  </div>
+
+  <div class="dash-sec">Factory Paint &middot; S65 Universe (438 cars)</div>
+  <div class="dash-paint">
+    <div class="dcolor" style="background:#F4F4F2;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#1a1a1a;">80</div><div class="dcolor-l" style="color:#555;">Diamond White</div>
+    </div>
+    <div class="dcolor" style="background:#1C1C1A;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#fff;">168</div><div class="dcolor-l" style="color:#aaa;">Black Variants</div>
+    </div>
+    <div class="dcolor" style="background:#9EA0A0;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#1a1a1a;">33</div><div class="dcolor-l" style="color:#333;">Iridium Silver</div>
+    </div>
+    <div class="dcolor" style="background:#B2B4B2;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#222;">13</div><div class="dcolor-l" style="color:#333;">Palladium Silver</div>
+    </div>
+    <div class="dcolor" style="background:#3B5C8A;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#fff;">24</div><div class="dcolor-l" style="color:#c8d8ee;">Cavansite Blue</div>
+    </div>
+    <div class="dcolor" style="background:#2A1A08;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#fff;">6</div><div class="dcolor-l" style="color:#c8a878;">Designo Mocca Black</div>
+    </div>
+    <div class="dcolor" style="background:#F8F6F0;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#1a1a1a;">7</div><div class="dcolor-l" style="color:#555;">Designo Kashmir White</div>
+    </div>
+    <div class="dcolor" style="background:#6A5C80;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#fff;">1</div><div class="dcolor-l" style="color:#d8c8f0;">Designo Mystic Blue</div>
+    </div>
+    <div class="dcolor" style="background:#8C8E8C;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#fff;">9</div><div class="dcolor-l" style="color:#eee;">Selenite Grey</div>
+    </div>
+    <div class="dcolor" style="background:#3B1212;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
+      <div class="dcolor-n" style="color:#fff;">6</div><div class="dcolor-l" style="color:#f0a0a0;">Ruby Black</div>
+    </div>
+  </div>
+
+  <div class="dash-sec">By Model Year</div>
+  <div class="dash-years">
+    <div class="dyear" onclick="dashGoYear(2015)">
+      <div class="dyear-n">2015</div>
+      <div class="dyear-c">315 S65</div>
+      <div class="dyear-c" style="color:#bbb;">231 S600</div>
+      <div class="dyear-dots"><div class="dyd dyd-s65"></div><div class="dyd dyd-s600"></div></div>
+    </div>
+    <div class="dyear" onclick="dashGoYear(2016)">
+      <div class="dyear-n">2016</div>
+      <div class="dyear-c">56 S65</div>
+      <div class="dyear-c" style="color:#bbb;">26 S600</div>
+      <div class="dyear-dots"><div class="dyd dyd-s65"></div><div class="dyd dyd-s600"></div></div>
+    </div>
+    <div class="dyear" onclick="dashGoYear(2017)">
+      <div class="dyear-n">2017</div>
+      <div class="dyear-c">27 S65</div>
+      <div class="dyear-c" style="color:#bbb;">29 S600</div>
+      <div class="dyear-k">Scored &#10003;</div>
+      <div class="dyear-dots"><div class="dyd dyd-s65"></div><div class="dyd dyd-s600"></div></div>
+    </div>
+    <div class="dyear" onclick="dashGoYear(2018)">
+      <div class="dyear-n">2018</div>
+      <div class="dyear-c">21 S65</div>
+      <div class="dyear-c" style="color:#bbb;">&mdash; S600</div>
+      <div class="dyear-dots"><div class="dyd dyd-s65"></div></div>
+    </div>
+    <div class="dyear" onclick="dashGoYear(2019)">
+      <div class="dyear-n">2019</div>
+      <div class="dyear-c">19 S65</div>
+      <div class="dyear-k" style="color:var(--accent);">Needs MC pull</div>
+      <div class="dyear-dots"><div class="dyd dyd-s65"></div></div>
+    </div>
+    <div class="dyear" onclick="dashGoYear(2020)">
+      <div class="dyear-n">2020</div>
+      <div class="dyear-c">3 S65</div>
+      <div class="dyear-k">Final Edition</div>
+      <div class="dyear-dots"><div class="dyd dyd-s65"></div></div>
+    </div>
+  </div>
+
+  <div class="dash-sec">S600 Reference</div>
+  <div class="dash-s600">
+    <div class="ds600-header" onclick="toggleDS600()">
+      <span class="ds600-title">S600 &middot; 286 cars &middot; paint by color</span>
+      <div class="ds600-meta">
+        <span>2015&ndash;2017 &middot; data only</span>
+        <span id="ds600-arrow">&#9660;</span>
+      </div>
+    </div>
+    <div class="ds600-body" id="ds600-body">
+      <div class="ds600-divider"></div>
+      <div class="ds600-grid">
+        <div class="ds600-row"><div class="ds600-sw" style="background:#1C1C1A;"></div><span class="ds600-name">Black variants</span><span class="ds600-ct">142</span></div>
+        <div class="ds600-row"><div class="ds600-sw" style="background:#F4F4F2;border-color:rgba(0,0,0,.15);"></div><span class="ds600-name">Diamond White</span><span class="ds600-ct">44</span></div>
+        <div class="ds600-row"><div class="ds600-sw" style="background:#9EA0A0;"></div><span class="ds600-name">Iridium Silver</span><span class="ds600-ct">28</span></div>
+        <div class="ds600-row"><div class="ds600-sw" style="background:#3B5C8A;"></div><span class="ds600-name">Cavansite Blue</span><span class="ds600-ct">22</span></div>
+        <div class="ds600-row"><div class="ds600-sw" style="background:#9C9882;"></div><span class="ds600-name">Allanite Grey</span><span class="ds600-ct">18</span></div>
+        <div class="ds600-row"><div class="ds600-sw" style="background:#989A80;"></div><span class="ds600-name">Designo Alanite Grey</span><span class="ds600-ct">14</span></div>
+        <div class="ds600-row"><div class="ds600-sw" style="background:#2A1A08;"></div><span class="ds600-name">Designo Mocca Black</span><span class="ds600-ct">9</span></div>
+        <div class="ds600-row"><div class="ds600-sw" style="background:#F8F6F0;border-color:rgba(0,0,0,.12);"></div><span class="ds600-name">Designo Kashmir White</span><span class="ds600-ct">6</span></div>
+        <div class="ds600-row"><div class="ds600-sw" style="background:#5B4B7A;"></div><span class="ds600-name">Designo Graphite</span><span class="ds600-ct">3</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="dash-legend">
+    <div class="dleg-item">
+      <img src="https://spriesand.github.io/w222s/assets/engine_m279.jpg" class="dleg-img" alt="M279" onerror="this.style.display='none'" />
+      <div>
+        <div style="font-weight:500;font-size:11px;">S65 AMG &middot; M279</div>
+        <div style="color:var(--muted);font-size:10px;margin-top:1px;">6.0L V12 Biturbo &middot; 621 hp &middot; hand-built AMG &middot; acquisition target</div>
+      </div>
+    </div>
+    <div class="dleg-div"></div>
+    <div class="dleg-item">
+      <img src="https://spriesand.github.io/w222s/assets/engine_m277.jpg" class="dleg-img" alt="M277" onerror="this.style.display='none'" />
+      <div>
+        <div style="font-weight:500;font-size:11px;">S600 &middot; M277</div>
+        <div style="color:var(--muted);font-size:10px;margin-top:1px;">6.0L V12 &middot; 523 hp &middot; reference universe only</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
 <!-- FLEET PAGE -->
-<div class="page active" id="page-fleet">
+<div class="page" id="page-fleet">
 <div class="shell">
   <aside>
     <!-- 4 Quick-filter tiles -->
@@ -1354,12 +1596,14 @@ function setSyncStatus(s){
 
 let allBatComparables=[], allListingSummary=[], allScanResults=[];
 let batFilter='all', listingFilter='all';
+let allBuildData={}; // keyed by vin from vehicle_build table
 
 function switchTab(t){
   const tabs=document.querySelectorAll('.tab');
   tabs.forEach(el=>el.classList.remove('active'));
-  const idx={fleet:0,crm:1,market:2,notes:3,bookmarks:4};
+  const idx={dashboard:0,fleet:1,crm:2,market:3,notes:4,bookmarks:5};
   if(tabs[idx[t]])tabs[idx[t]].classList.add('active');
+  document.getElementById('page-dashboard').classList.toggle('active',t==='dashboard');
   document.getElementById('page-fleet').classList.toggle('active',t==='fleet');
   document.getElementById('page-crm').classList.toggle('active',t==='crm');
   document.getElementById('page-notes').classList.toggle('active',t==='notes');
@@ -1371,6 +1615,110 @@ function switchTab(t){
   if(t==='notes'){loadGNotes();}
   if(t==='bookmarks'){renderBookmarks();}
 }
+
+function dashGoFleet(preset){
+  quickFilter(preset==='ultra_rare'?'focus':preset);
+  switchTab('fleet');
+}
+
+function dashGoYear(yr){
+  // Reset all years off, then turn on only the selected year
+  trimFilter=new Set(['S65 AMG','S65','S65 AMG Final Edition','S600']);
+  [2015,2016,2017,2018,2019,2020].forEach(function(y){
+    var el=document.getElementById('yr-'+y);if(el)el.checked=(y===yr);
+  });
+  document.getElementById('fleet-sort').value='tier_then_year';
+  fleetPage=0;
+  setView('all');
+  switchTab('fleet');
+}
+
+function toggleDS600(){
+  var b=document.getElementById('ds600-body');
+  var a=document.getElementById('ds600-arrow');
+  if(b.classList.contains('open')){b.classList.remove('open');a.innerHTML='&#9660;';}
+  else{b.classList.add('open');a.innerHTML='&#9650;';}
+}
+
+function renderDashboard(){
+  if(!allVehicles||!allVehicles.length)return;
+
+  // ── Pipeline counts ──
+  const targeted=allVehicles.filter(v=>(v.acq_status||'').toLowerCase()==='targeted');
+  const watched=allVehicles.filter(v=>(v.acq_status||'').toLowerCase()==='watch');
+  const active=allVehicles.filter(v=>getListingStatus(v)==='active');
+  // Ultra Rare: S65 with 3+ of the premium options (ceramic, fridge, magic sky, carbon, designo)
+  const ultraRare=allVehicles.filter(v=>{
+    if(!['S65 AMG','S65','S65 AMG Final Edition'].includes(v.trim||''))return false;
+    // We'll use a simple proxy: check vehicle_build flags via allBuildData if loaded
+    const b=allBuildData[v.vin]||{};
+    let ct=0;
+    if(b.has_ceramic_brakes)ct++;
+    if(b.has_refrigerator)ct++;
+    if(b.has_magic_sky)ct++;
+    if(b.has_carbon_pkg)ct++;
+    if(b.has_designo)ct++;
+    return ct>=3;
+  });
+
+  var dpT=document.getElementById('dp-targeted');if(dpT)dpT.textContent=targeted.length;
+  var dpW=document.getElementById('dp-watch');if(dpW)dpW.textContent=watched.length;
+  var dpA=document.getElementById('dp-active');if(dpA)dpA.textContent=active.length;
+  var dpR=document.getElementById('dp-rare');if(dpR)dpR.textContent=ultraRare.length||'~12';
+
+  // ── Top 3 targets ──
+  const top3=targeted
+    .sort((a,b)=>(Number(b.composite_score)||0)-(Number(a.composite_score)||0))
+    .slice(0,3);
+
+  var container=document.getElementById('dash-targets');
+  if(!container)return;
+
+  // Pad to 3 with empty slots
+  while(top3.length<3)top3.push(null);
+
+  container.innerHTML=top3.map(function(v,i){
+    if(!v){
+      return`<div class="dtgt-empty" onclick="switchTab('fleet')">
+        <div>No target &mdash; <span style="text-decoration:underline">open Fleet</span> to assign</div>
+      </div>`;
+    }
+    const isR1=i===0;
+    const score=v.composite_score?Number(v.composite_score).toFixed(0):'—';
+    const proj=v.proj_mi_jan28?Number(v.proj_mi_jan28).toLocaleString()+' mi':'—';
+    const offer=v.offer_target?'$'+Number(v.offer_target).toLocaleString():'<$40K';
+    const b=allBuildData[v.vin]||{};
+    const flags=[];
+    if(b.has_refrigerator)flags.push('<span class="dflag dflag-g">&#10003; Fridge</span>');
+    if(b.has_carbon_pkg)flags.push('<span class="dflag dflag-p">&#10003; Carbon</span>');
+    if(b.has_ceramic_brakes)flags.push('<span class="dflag dflag-p">&#10003; Ceramics</span>');
+    if(b.has_magic_sky)flags.push('<span class="dflag dflag-b">&#10003; Magic Sky</span>');
+    if(b.has_designo)flags.push('<span class="dflag dflag-gray">Designo</span>');
+    if(b.has_burmester)flags.push('<span class="dflag dflag-b">Burmester</span>');
+    const ls=getListingStatus(v);
+    const statusHtml=ls==='active'
+      ?`<span class="dtgt-status dsts-active">&#9679; Active listing${v.curr_odo?' &middot; '+Number(v.curr_odo).toLocaleString()+' mi':''}</span>`
+      :`<span class="dtgt-status dsts-watch">&#9675; Monitoring</span>`;
+    const paint=b.paint_name||(v.exterior||'');
+    const rankLabel=i===0?'Rank 1':(i===1?'Rank 2':'Rank 3');
+    const scoreLabel=score!=='—'?` &middot; Composite ${score}`:'';
+    return`<div class="dtgt${isR1?' rank1':''}" onclick="openFleetDrawer('${escHtml(v.vin)}');switchTab('fleet');">
+      <div class="dtgt-rank">${rankLabel}${scoreLabel}</div>
+      <div class="dtgt-vin">${escHtml(v.vin)}</div>
+      <div class="dtgt-desc">${v.year||''} ${v.trim||''}${paint?' &middot; '+escHtml(paint):''}${v.total_owners?' &middot; '+v.total_owners:''}${v.total_owners&&!String(v.total_owners).includes('Owner')?' owners':''}</div>
+      <div class="dtgt-stats">
+        <div><div class="dtgt-stat-n">${score}</div><div class="dtgt-stat-l">Score</div></div>
+        <div><div class="dtgt-stat-n">${proj}</div><div class="dtgt-stat-l">Proj. mi Jan 28</div></div>
+        <div><div class="dtgt-stat-n" style="color:var(--s65);">${offer}</div><div class="dtgt-stat-l">Target offer</div></div>
+      </div>
+      ${flags.length?`<div class="dtgt-flags">${flags.join('')}</div>`:''}
+      <div class="dtgt-footer">
+        ${v.broker_name?`<span class="dtgt-dealer">${escHtml(v.broker_name)}</span><br>`:''}
+        ${statusHtml}
+      </div>
+    </div>`;
+  }).join('');
+}
 function $m(n){return n!=null&&n!==''?'$'+Number(n).toLocaleString():'—';}
 function oFmt(n){return n?Number(n).toLocaleString()+' mi':'—';}
 function boolCell(v){return(v===true||v==='TRUE'||v==='true'||v==='Yes')?'<span class="bool-yes">\u2713</span>':'<span class="bool-no">&mdash;</span>';}
@@ -1379,23 +1727,26 @@ function boolVal(v){return(v===true||v==='TRUE'||v==='true'||v==='Yes');}
 async function loadAll(){
   setSyncStatus('loading');
   try{
-    const[vR,mR,cR,aR,lR,sR]=await Promise.all([
+    const[vR,mR,cR,aR,lR,sR,bR]=await Promise.all([
       db.from('vehicles').select('*').order('composite_score',{ascending:false,nullsFirst:false}).limit(10000),
       db.from('vehicle_market').select('*').limit(10000),
       db.from('broker_contacts').select('*').order('last_activity',{ascending:false,nullsFirst:false}),
       db.from('contact_alerts').select('*').eq('active',true),
       db.from('contact_log').select('*').order('logged_at',{ascending:false}),
       db.from('vehicle_service').select('*').order('record_date',{ascending:true}).limit(10000),
+      db.from('vehicle_build').select('vin,paint_code,paint_name,upholstery_name,production_date,has_ceramic_brakes,has_carbon_pkg,has_magic_sky,has_rear_entertainment,has_chauffeur_pkg,has_burmester,has_refrigerator,has_night_vision,has_abc_suspension,has_keyless_go,has_executive_rear_seat,has_designo,scraper_version').limit(10000),
     ]);
     if(vR.error)throw vR.error;
     const marketByVin={};
     (mR.data||[]).forEach(m=>marketByVin[m.vin]=m);
     allVehicles=(vR.data||[]).map(v=>{
       const m=marketByVin[v.vin]||{};
-      // Merge market data but never overwrite key identity/status fields from vehicles table
       const{acq_status:_a,target_tier:_t,listing_status:_ls,trim:_tr,year:_y,...marketRest}=m;
       return{...v,...marketRest};
     });
+    // Index build data by vin
+    allBuildData={};
+    (bR.data||[]).forEach(b=>{ allBuildData[b.vin]=b; });
     allContacts=cR.data||[];allAlerts=aR.data||[];allLogs=lR.data||[];allServiceRecs=sR.data||[];
     updateFleetStats();applyFilters();updateCRMStats();renderCRM();
     document.getElementById('fleet-tab-count').textContent=allVehicles.length;
@@ -1405,12 +1756,21 @@ async function loadAll(){
     document.getElementById('loading-banner').classList.add('done');
     renderMobileTop40();
     loadBookmarks();
+    renderDashboard();
   }catch(err){
     setSyncStatus('error');
     document.getElementById('loading-banner').textContent='\u26a0 Could not connect. Check credentials at top of file.';
     console.error(err);
   }
 }
+    (mR.data||[]).forEach(m=>marketByVin[m.vin]=m);
+    allVehicles=(vR.data||[]).map(v=>{
+      const m=marketByVin[v.vin]||{};
+      // Merge market data but never overwrite key identity/status fields from vehicles table
+      const{acq_status:_a,target_tier:_t,listing_status:_ls,trim:_tr,year:_y,...marketRest}=m;
+      return{...v,...marketRest};
+    });
+    allContacts=cR.data||[];allAlerts=aR.data||[];allLogs=lR.data||[];allServiceRecs=sR.data||[];
 
 function renderMobileTop40(){
   const priority=allVehicles
