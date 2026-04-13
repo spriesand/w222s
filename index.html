@@ -57,6 +57,7 @@
   --mono:'IBM Plex Mono',monospace;
   --serif:'Instrument Sans','system-ui',sans-serif;
   --sans:'Instrument Sans','system-ui',sans-serif;
+  --surface:#f6f5f2;
   --st-pending:#b8972e; --st-active:#1a6b3a; --st-declined:#8b1a1a;
   --st-scheduled:#1a3a5c; --st-hold:#666; --st-inbound:#5b2d8e;
 }
@@ -108,7 +109,7 @@ aside{background:#fff;border-right:1px solid var(--rule);padding:20px 0;position
 .pill.on-s600{background:var(--s600);color:#fff;border-color:var(--s600);}
 .pill.on{background:var(--ink);color:#fff;border-color:var(--ink);}
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
-.stat-box{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px;text-align:center;}
+.stat-box{background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:8px;text-align:center;}
 .stat-num{font-family:var(--sans);font-size:20px;font-weight:600;display:block;}
 .stat-lbl{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:2px;display:block;}
 main{padding:16px 20px;flex:1;overflow:hidden;}
@@ -148,7 +149,6 @@ thead tr.col-row th:hover{color:var(--gold);}
 tbody tr{border-bottom:1px solid var(--rule);transition:background .1s;cursor:pointer;}
 tbody tr:hover{background:#faf9f7;}
 tbody tr.selected{background:#fdf5f5;}
-tbody tr.row-dq{opacity:.55;}
 tbody tr.row-watch td:first-child{border-left:3px solid var(--gold);}
 .empty-row td{padding:28px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--muted);}
 td{padding:7px 8px;vertical-align:middle;border-right:1px solid #f0ede8;}
@@ -175,7 +175,6 @@ td.num{font-family:var(--mono);text-align:right;}
 .chip-target{background:#fdf0f0;color:var(--accent);border:1px solid #f0b8b8;}
 .chip-active{background:#fdf0f0;color:var(--accent);border:1px solid #f0b8b8;}
 .chip-watch{background:#fdf8ec;color:var(--gold);border:1px solid #f0d89a;}
-.chip-dq{background:#3c0000;color:#f0b8b8;border:1px solid #6b1212;}
 .chip-universe{background:#f5f5f5;color:#999;border:1px solid #ddd;}
 .chip-pending{background:#f5f5f5;color:#666;border:1px solid #ddd;}
 
@@ -230,7 +229,7 @@ td.num{font-family:var(--mono);text-align:right;}
 .build-chip.no{background:var(--paper);color:#ccc;border:1px solid var(--rule);text-decoration:line-through;}
 .drawer-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:4px;}
 .drawer-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px;}
-.drawer-field{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px 10px;}
+.drawer-field{background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:8px 10px;}
 .drawer-field-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:2px;}
 .drawer-field-value{font-family:var(--mono);font-size:13px;font-weight:500;}
 .drawer-field-value.accent{color:var(--accent);}
@@ -429,7 +428,7 @@ td.num{font-family:var(--mono);text-align:right;}
 .av-hint.error{color:var(--accent);}
 .av-checkbox-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;cursor:pointer;font-family:var(--mono);font-size:12px;}
 .av-checkbox-row input{accent-color:var(--s65);width:16px;height:16px;}
-.av-swall-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px;background:var(--paper);border:1px solid var(--rule);border-radius:4px;margin-top:6px;}
+.av-swall-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px;background:var(--surface);border:1px solid var(--rule);border-radius:4px;margin-top:6px;}
 .av-score-preview{background:var(--ink);border-radius:6px;padding:16px;color:var(--paper);margin-bottom:16px;}
 .av-score-preview-title{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:#aaa;margin-bottom:10px;}
 .av-score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
@@ -502,7 +501,7 @@ td.num{font-family:var(--mono);text-align:right;}
 .mob-result-title{font-family:var(--sans);font-size:16px;font-weight:600;color:#fff;}
 .mob-result-body{padding:12px 14px;}
 .mob-field-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;}
-.mob-field{background:var(--paper);border-radius:4px;padding:8px 10px;}
+.mob-field{background:var(--surface);border-radius:4px;padding:8px 10px;}
 .mob-field-label{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:2px;}
 .mob-field-value{font-family:var(--mono);font-size:13px;font-weight:500;}
 .mob-field-value.accent{color:var(--accent);}
@@ -520,7 +519,7 @@ td.num{font-family:var(--mono);text-align:right;}
 
 /* ── Service wall toggle switches ── */
 .swall-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;}
-.swall-toggle{display:flex;align-items:center;justify-content:space-between;background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px 10px;cursor:pointer;transition:all .15s;}
+.swall-toggle{display:flex;align-items:center;justify-content:space-between;background:var(--surface);border:1px solid var(--rule);border-radius:4px;padding:8px 10px;cursor:pointer;transition:all .15s;}
 .swall-toggle.confirmed{background:#edfaf3;border-color:#9ee8bf;}
 .swall-toggle-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);}
 .swall-toggle.confirmed .swall-toggle-label{color:#1a6b3a;}
@@ -575,7 +574,7 @@ td.num{font-family:var(--mono);text-align:right;}
 .gnotes-shell{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 94px);width:100%;}
 .gnotes-sidebar{background:#fff;border-right:1px solid var(--rule);padding:16px;position:sticky;top:94px;height:calc(100vh - 94px);overflow-y:auto;}
 .gnotes-main{padding:20px;overflow-y:auto;max-height:calc(100vh - 94px);}
-.gnote-tag{padding:4px 11px;border-radius:20px;font-family:var(--mono);font-size:11px;cursor:pointer;border:1px solid var(--rule);background:var(--paper);color:var(--muted);transition:all .15s;display:block;margin-bottom:5px;text-align:left;}
+.gnote-tag{padding:4px 11px;border-radius:20px;font-family:var(--mono);font-size:11px;cursor:pointer;border:1px solid var(--rule);background:var(--surface);color:var(--muted);transition:all .15s;display:block;margin-bottom:5px;text-align:left;}
 .gnote-tag:hover{border-color:var(--ink);}
 .gnote-tag.on{background:var(--ink);color:#fff;border-color:var(--ink);}
 .gnote-add-panel{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:16px;margin-bottom:14px;}
@@ -802,7 +801,7 @@ td.num{font-family:var(--mono);text-align:right;}
       <div class="dptile-s">Active acquisition candidates</div>
       <div class="dptile-tag">View all &rarr;</div>
     </div>
-    <div class="dptile" onclick="dashGoFleet('focus')">
+    <div class="dptile" onclick="dashGoFleet('watch')">
       <div class="dptile-bar dpt-green"></div>
       <div class="dptile-n" id="dp-watch">—</div>
       <div class="dptile-l">Watch</div>
@@ -1023,6 +1022,11 @@ td.num{font-family:var(--mono);text-align:right;}
         </div>
         <div id="mob-top40-list"></div>
       </div>
+    </div>
+    <div id="dash-filter-banner" style="display:none;align-items:center;gap:8px;padding:6px 0 2px;margin-bottom:2px;">
+      <span style="font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;">Filter:</span>
+      <span id="dash-filter-label" style="font-family:var(--mono);font-size:11px;font-weight:500;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:2px 9px;"></span>
+      <button onclick="clearDashFilter()" style="background:none;border:none;font-family:var(--mono);font-size:10px;color:var(--muted);cursor:pointer;padding:0 4px;letter-spacing:.04em;">&#215; clear</button>
     </div>
     <div class="toolbar">
       <div class="search-wrap">
@@ -1608,12 +1612,32 @@ function switchTab(t){
   if(t==='bookmarks'){renderBookmarks();}
 }
 
+function setDashFilterBanner(label){
+  var b=document.getElementById('dash-filter-banner');
+  var l=document.getElementById('dash-filter-label');
+  if(!b||!l)return;
+  if(label){b.style.display='flex';l.textContent=label;}
+  else{b.style.display='none';l.textContent='';}
+}
+
+function clearDashFilter(){
+  dashPaintFilter=null;
+  setDashFilterBanner(null);
+  trimFilter=new Set(['S65 AMG','S65','S65 AMG Final Edition','S600']);
+  [2015,2016,2017,2018,2019,2020].forEach(function(y){var el=document.getElementById('yr-'+y);if(el)el.checked=true;});
+  document.getElementById('fleet-sort').value='tier_then_year';
+  fleetPage=0;
+  setView('all');
+}
+
 function dashGoFleet(preset){
   dashPaintFilter=null;
   trimFilter=new Set(['S65 AMG','S65','S65 AMG Final Edition','S600']);
   [2015,2016,2017,2018,2019,2020].forEach(function(y){var el=document.getElementById('yr-'+y);if(el)el.checked=true;});
   document.getElementById('fleet-sort').value='tier_then_year';
   fleetPage=0;
+  const labels={targeted:'Targeted only',watch:'Watch only',focus:'Targeted & Watch',active:'Active listings',ultra_rare:'Ultra Rare · 3+ options',s65:'S65 AMG',s600:'S600'};
+  setDashFilterBanner(labels[preset]||preset);
   if(preset==='targeted'){setView('targeted_only');}
   else if(preset==='watch'){setView('watch_only');}
   else if(preset==='focus'){setView('focus');}
@@ -1633,12 +1657,12 @@ function dashGoYear(yr){
   });
   document.getElementById('fleet-sort').value='tier_then_year';
   fleetPage=0;
+  setDashFilterBanner('Model Year '+yr);
   setView('all');
   switchTab('fleet');
 }
 
 function dashGoColor(contains, trimType, excludes){
-  // excludes is optional array of strings to exclude from paint match
   dashPaintFilter={contains:contains, excludes:excludes||[]};
   if(trimType==='S65'){trimFilter=new Set(['S65 AMG','S65','S65 AMG Final Edition']);}
   else if(trimType==='S600'){trimFilter=new Set(['S600']);}
@@ -1646,6 +1670,8 @@ function dashGoColor(contains, trimType, excludes){
   [2015,2016,2017,2018,2019,2020].forEach(function(y){var el=document.getElementById('yr-'+y);if(el)el.checked=true;});
   document.getElementById('fleet-sort').value='tier_then_year';
   fleetPage=0;
+  const trimLabel=trimType?(' · '+trimType):'';
+  setDashFilterBanner(contains+trimLabel);
   setView('paint_filter');
   switchTab('fleet');
 }
@@ -2005,6 +2031,7 @@ function tierSortKey(v){const t=getTier(v);return t==='targeted'?0:t==='watched'
 var currentView='focus';
 function setView(mode){
   currentView=mode;
+  if(mode!=='paint_filter')dashPaintFilter=null;
   var btn=document.getElementById('view-btn-all');
   if(btn)btn.classList.toggle('active',mode==='all');
   fleetPage=0;
@@ -2489,7 +2516,6 @@ async function fdAddListingUrl(){
 }
 
 // ── Active filter ──
-function toggleActiveFilter(el){ setView(currentView==='active'?'focus':'active'); }
 
 // ── Vehicle notes log ──
 var fdVlogPendingImg=null;
@@ -3211,7 +3237,7 @@ async function fdSetStatus(status){
   var scoreStr=activeFD.composite_score?'Score '+activeFD.composite_score+' \u00b7 ':'';
   document.getElementById('fd-sub').textContent=scoreStr+status;
   fdRenderTierControls(activeFD);
-  updateFleetStats();applyFilters();
+  updateFleetStats();applyFilters();renderDashboard();
   toast(status+' \u2713');
 }
 
@@ -3236,19 +3262,18 @@ function fdRenderTierControls(v){
 
 async function fdSetTier(tier){
   if(!activeFD)return;
-  // Try writing to target_tier column — if it fails, column may not exist yet
-  const{error}=await db.from('vehicles').update({target_tier:tier}).eq('vin',activeFD.vin);
-  if(error){
-    toast('Save failed \u2014 run DB migration (see comment in index.html): '+error.message,true);
-    console.error('fdSetTier error \u2014 have you run the migration SQL?',error);
-    return;
-  }
+  const acqMap={targeted:'Targeted',watched:'Watch',data_only:'Data Only'};
+  const newStatus=acqMap[tier]||'Data Only';
+  const{error}=await db.from('vehicles').update({target_tier:tier,acq_status:newStatus}).eq('vin',activeFD.vin);
+  if(error){toast('Save failed: '+error.message,true);console.error('fdSetTier',error);return;}
   activeFD.target_tier=tier;
+  activeFD.acq_status=newStatus;
   const v=allVehicles.find(x=>x.vin===activeFD.vin);
-  if(v)v.target_tier=tier;
+  if(v){v.target_tier=tier;v.acq_status=newStatus;}
   fdRenderTierControls(activeFD);
-  updateFleetStats();applyFilters();
-  toast('Tier: '+tier.replace('_',' ')+' \u2713');
+  document.getElementById('fd-sub').textContent=(activeFD.composite_score?'Score '+activeFD.composite_score+' · ':'')+newStatus;
+  updateFleetStats();applyFilters();renderDashboard();
+  toast(newStatus+' ✓');
 }
 
 async function fdSetListingStatus(ls){
@@ -3272,7 +3297,6 @@ async function fdSetListingStatus(ls){
 // ============================================================
 
 var trackingFilterOn=false; // legacy stub
-function toggleTrackingFilter(el){ setView(currentView==='focus'?'all':'focus'); }
 
 // ============================================================
 // BULK ENTRY MODAL
