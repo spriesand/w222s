@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>W222s &mdash; Live Database</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <script>
   const SUPABASE_URL = 'https://kevwkxuloxxrevodsukg.supabase.co';
@@ -51,12 +51,12 @@
 
 <style>
 :root {
-  --ink:#0f0f0f; --paper:#f7f5f1; --rule:#d4cfc6;
+  --ink:#0f0f0f; --paper:#ffffff; --rule:#d4cfc6;
   --accent:#8b1a1a; --gold:#b8972e; --muted:#888;
   --s65:#1a3a5c; --s600:#2d4a2d;
   --mono:'IBM Plex Mono',monospace;
-  --serif:'Playfair Display',Georgia,serif;
-  --sans:'IBM Plex Sans',sans-serif;
+  --serif:'Instrument Sans','system-ui',sans-serif;
+  --sans:'Instrument Sans','system-ui',sans-serif;
   --st-pending:#b8972e; --st-active:#1a6b3a; --st-declined:#8b1a1a;
   --st-scheduled:#1a3a5c; --st-hold:#666; --st-inbound:#5b2d8e;
 }
@@ -69,22 +69,22 @@ body{font-family:var(--sans);background:var(--paper);color:var(--ink);min-height
 #toast.show{opacity:1;transform:translateY(0);}
 #toast.error{border-left-color:var(--accent);}
 
-header{background:var(--ink);color:var(--paper);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:56px;border-bottom:2px solid var(--accent);position:sticky;top:0;z-index:100;}
-.logo{font-family:var(--serif);font-size:18px;letter-spacing:.04em;}
-.logo span{color:var(--gold);}
-.header-meta{font-family:var(--mono);font-size:11px;color:#aaa;text-align:right;line-height:1.6;}
+header{background:#fff;color:var(--ink);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:52px;border-bottom:0.5px solid var(--rule);position:sticky;top:0;z-index:100;}
+.logo{font-family:var(--sans);font-size:14px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink);}
+.logo span{color:var(--s65);}
+.header-meta{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:right;line-height:1.6;}
 .header-sync{display:flex;align-items:center;gap:10px;}
-.sync-btn{padding:5px 12px;border:1px solid #444;border-radius:3px;background:none;color:#aaa;font-family:var(--mono);font-size:11px;cursor:pointer;}
-.sync-btn:hover{border-color:var(--gold);color:var(--gold);}
+.sync-btn{padding:5px 12px;border:0.5px solid var(--rule);border-radius:3px;background:none;color:var(--muted);font-family:var(--mono);font-size:11px;cursor:pointer;transition:all .15s;}
+.sync-btn:hover{border-color:var(--ink);color:var(--ink);}
 .sync-dot{width:7px;height:7px;border-radius:50%;background:#2e7d4f;display:inline-block;}
 .sync-dot.error{background:var(--accent);}
 .sync-dot.loading{background:var(--gold);animation:pulse 1s infinite;}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 
-.playbook-link{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border:1px solid var(--gold);border-radius:3px;background:none;color:var(--gold);font-family:var(--mono);font-size:11px;text-decoration:none;letter-spacing:.04em;transition:all .15s;white-space:nowrap;}
-.playbook-link:hover{background:var(--gold);color:var(--ink);}
+.playbook-link{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border:0.5px solid var(--rule);border-radius:3px;background:none;color:var(--muted);font-family:var(--mono);font-size:11px;text-decoration:none;letter-spacing:.04em;transition:all .15s;white-space:nowrap;}
+.playbook-link:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
 
-.tab-bar{background:#fff;border-bottom:1px solid var(--rule);display:flex;padding:0 32px;position:sticky;top:56px;z-index:99;}
+.tab-bar{background:#fff;border-bottom:1px solid var(--rule);display:flex;padding:0 28px;position:sticky;top:52px;z-index:99;}
 .tab{padding:14px 24px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);transition:all .15s;user-select:none;}
 .tab:hover{color:var(--ink);}
 .tab.active{color:var(--ink);border-bottom-color:var(--accent);}
@@ -94,8 +94,8 @@ header{background:var(--ink);color:var(--paper);padding:0 32px;display:flex;alig
 
 .page{display:none;}
 .page.active{display:flex;}
-.shell{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 98px);width:100%;}
-aside{background:#fff;border-right:1px solid var(--rule);padding:20px 0;position:sticky;top:98px;height:calc(100vh - 98px);overflow-y:auto;}
+.shell{display:grid;grid-template-columns:240px 1fr;min-height:calc(100vh - 94px);width:100%;}
+aside{background:#fff;border-right:1px solid var(--rule);padding:20px 0;position:sticky;top:94px;height:calc(100vh - 94px);overflow-y:auto;}
 .sidebar-section{padding:0 16px 16px;border-bottom:1px solid var(--rule);margin-bottom:16px;}
 .sidebar-section:last-child{border-bottom:none;}
 .sidebar-label{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:8px;}
@@ -109,7 +109,7 @@ aside{background:#fff;border-right:1px solid var(--rule);padding:20px 0;position
 .pill.on{background:var(--ink);color:#fff;border-color:var(--ink);}
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
 .stat-box{background:var(--paper);border:1px solid var(--rule);border-radius:4px;padding:8px;text-align:center;}
-.stat-num{font-family:var(--serif);font-size:20px;display:block;}
+.stat-num{font-family:var(--sans);font-size:20px;font-weight:600;display:block;}
 .stat-lbl{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-top:2px;display:block;}
 main{padding:16px 20px;flex:1;overflow:hidden;}
 
@@ -189,7 +189,7 @@ td.num{font-family:var(--mono);text-align:right;}
 .crm-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-1px);}
 .crm-card.selected{border-color:var(--accent);box-shadow:0 0 0 2px rgba(139,26,26,.15);}
 .crm-card-header{padding:12px 14px 8px;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;align-items:flex-start;}
-.crm-company{font-family:var(--serif);font-size:14px;line-height:1.3;}
+.crm-company{font-family:var(--sans);font-size:14px;font-weight:600;line-height:1.3;}
 .crm-location{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px;}
 .status-badge{display:inline-block;padding:2px 8px;border-radius:20px;font-family:var(--mono);font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;flex-shrink:0;margin-left:8px;}
 .st-pending{background:#fdf8ec;color:var(--st-pending);border:1px solid #f0d89a;}
@@ -217,7 +217,7 @@ td.num{font-family:var(--mono);text-align:right;}
 .drawer.open{transform:translateX(0);}
 .drawer-header{background:var(--ink);color:var(--paper);padding:18px 22px;display:flex;justify-content:space-between;align-items:flex-start;flex-shrink:0;}
 .drawer-eyebrow{font-family:var(--mono);font-size:10px;color:#aaa;margin-bottom:3px;}
-.drawer-title{font-family:var(--serif);font-size:19px;}
+.drawer-title{font-family:var(--sans);font-size:17px;font-weight:600;}
 .drawer-subtitle{font-family:var(--mono);font-size:10px;color:#aaa;margin-top:3px;}
 .drawer-close{background:none;border:none;color:#aaa;font-size:22px;cursor:pointer;line-height:1;padding:0;}
 .drawer-close:hover{color:#fff;}
@@ -341,7 +341,7 @@ td.num{font-family:var(--mono);text-align:right;}
 .mi-stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--rule);}
 .mi-stat{background:#fff;padding:16px 20px;border-right:1px solid var(--rule);}
 .mi-stat:last-child{border-right:none;}
-.mi-stat-val{font-family:var(--serif);font-size:24px;font-weight:700;color:var(--ink);margin-bottom:4px;}
+.mi-stat-val{font-family:var(--sans);font-size:24px;font-weight:700;color:var(--ink);margin-bottom:4px;}
 .mi-stat-val.orange{color:var(--bat-orange);}
 .mi-stat-val.gold{color:var(--gold);}
 .mi-stat-val.red{color:var(--accent);}
@@ -430,7 +430,7 @@ td.num{font-family:var(--mono);text-align:right;}
 .av-score-preview-title{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:#aaa;margin-bottom:10px;}
 .av-score-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
 .av-score-cell{text-align:center;}
-.av-score-num{font-family:var(--serif);font-size:22px;display:block;}
+.av-score-num{font-family:var(--sans);font-size:22px;font-weight:600;display:block;}
 .av-score-lbl{font-family:var(--mono);font-size:9px;color:#aaa;text-transform:uppercase;letter-spacing:.06em;}
 .av-score-num.gold{color:var(--gold);}
 .av-section-divider{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);border-bottom:1px solid var(--rule);padding-bottom:5px;margin:18px 0 12px;}
@@ -487,7 +487,7 @@ td.num{font-family:var(--mono);text-align:right;}
 .mob-hint{font-family:var(--mono);font-size:11px;color:var(--muted);text-align:center;margin-bottom:16px;line-height:1.5;}
 .mob-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:16px;}
 .mob-stat{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:10px 6px;text-align:center;}
-.mob-stat-num{font-family:var(--serif);font-size:18px;display:block;}
+.mob-stat-num{font-family:var(--sans);font-size:18px;font-weight:600;display:block;}
 .mob-stat-lbl{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);display:block;margin-top:2px;}
 .mob-top40-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
 .mob-top40-title{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
@@ -495,7 +495,7 @@ td.num{font-family:var(--mono);text-align:right;}
 .mob-result{background:#fff;border:1px solid var(--rule);border-radius:8px;overflow:hidden;margin-bottom:10px;}
 .mob-result-header{background:var(--ink);padding:12px 16px;display:flex;justify-content:space-between;align-items:flex-start;}
 .mob-result-vin{font-family:var(--mono);font-size:10px;color:#aaa;margin-bottom:2px;}
-.mob-result-title{font-family:var(--serif);font-size:16px;color:#fff;}
+.mob-result-title{font-family:var(--sans);font-size:16px;font-weight:600;color:#fff;}
 .mob-result-body{padding:12px 14px;}
 .mob-field-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px;}
 .mob-field{background:var(--paper);border-radius:4px;padding:8px 10px;}
@@ -582,9 +582,9 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
 .listing-url-btn.del:hover{color:var(--accent);}
 .listing-url-empty{font-family:var(--mono);font-size:11px;color:var(--muted);padding:4px 0 10px;}
 /* General Notes tab */
-.gnotes-shell{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 98px);width:100%;}
-.gnotes-sidebar{background:#fff;border-right:1px solid var(--rule);padding:16px;position:sticky;top:98px;height:calc(100vh - 98px);overflow-y:auto;}
-.gnotes-main{padding:20px;overflow-y:auto;max-height:calc(100vh - 98px);}
+.gnotes-shell{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 94px);width:100%;}
+.gnotes-sidebar{background:#fff;border-right:1px solid var(--rule);padding:16px;position:sticky;top:94px;height:calc(100vh - 94px);overflow-y:auto;}
+.gnotes-main{padding:20px;overflow-y:auto;max-height:calc(100vh - 94px);}
 .gnote-tag{padding:4px 11px;border-radius:20px;font-family:var(--mono);font-size:11px;cursor:pointer;border:1px solid var(--rule);background:var(--paper);color:var(--muted);transition:all .15s;display:block;margin-bottom:5px;text-align:left;}
 .gnote-tag:hover{border-color:var(--ink);}
 .gnote-tag.on{background:var(--ink);color:#fff;border-color:var(--ink);}
@@ -610,9 +610,9 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
 .gnote-body a{color:var(--s65);text-decoration:underline;}
 .gnote-img{max-width:220px;max-height:160px;object-fit:contain;border-radius:4px;border:1px solid var(--rule);margin-top:8px;cursor:zoom-in;}
 /* Bookmarks tab */
-.bm-shell{display:grid;grid-template-columns:180px 1fr;min-height:calc(100vh - 98px);width:100%;}
-.bm-sidebar{background:#fff;border-right:1px solid var(--rule);padding:16px;position:sticky;top:98px;height:calc(100vh - 98px);overflow-y:auto;}
-.bm-main{padding:20px;overflow-y:auto;max-height:calc(100vh - 98px);}
+.bm-shell{display:grid;grid-template-columns:180px 1fr;min-height:calc(100vh - 94px);width:100%;}
+.bm-sidebar{background:#fff;border-right:1px solid var(--rule);padding:16px;position:sticky;top:94px;height:calc(100vh - 94px);overflow-y:auto;}
+.bm-main{padding:20px;overflow-y:auto;max-height:calc(100vh - 94px);}
 .bm-cat-btn{display:block;width:100%;padding:7px 10px;border-radius:4px;font-family:var(--mono);font-size:11px;cursor:pointer;border:none;background:none;color:var(--muted);text-align:left;transition:all .15s;text-transform:uppercase;letter-spacing:.07em;margin-bottom:3px;}
 .bm-cat-btn:hover{background:var(--paper);color:var(--ink);}
 .bm-cat-btn.active{background:var(--ink);color:#fff;}
@@ -688,7 +688,7 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
 .dtgt-vin{font-family:var(--mono);font-size:13px;font-weight:500;letter-spacing:.02em;color:var(--ink);}
 .dtgt-desc{font-size:11px;font-family:var(--sans);color:var(--muted);margin-top:3px;line-height:1.45;}
 .dtgt-stats{display:flex;gap:16px;margin-top:12px;padding-top:12px;border-top:1px solid var(--rule);}
-.dtgt-stat-n{font-family:var(--serif);font-size:17px;color:var(--ink);line-height:1;}
+.dtgt-stat-n{font-family:var(--sans);font-size:17px;font-weight:600;color:var(--ink);line-height:1;}
 .dtgt-stat-l{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-top:2px;}
 .dtgt-flags{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px;}
 .dflag{font-family:var(--mono);font-size:10px;font-weight:500;padding:2px 7px;border-radius:3px;}
@@ -711,19 +711,19 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
 .dpt-green{background:#1a6b3a;}
 .dpt-red{background:var(--accent);}
 .dpt-purple{background:#5b2d8e;}
-.dptile-n{font-family:var(--serif);font-size:26px;color:var(--ink);line-height:1;margin-top:4px;}
+.dptile-n{font-family:var(--sans);font-size:26px;font-weight:600;color:var(--ink);line-height:1;margin-top:4px;}
 .dptile-l{font-family:var(--mono);font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-top:4px;color:var(--ink);}
 .dptile-s{font-family:var(--sans);font-size:11px;color:var(--muted);margin-top:2px;line-height:1.35;}
 .dptile-tag{display:inline-block;margin-top:9px;font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:3px;border:1px solid var(--rule);color:var(--muted);}
 .dash-paint{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;}
 .dcolor{border-radius:5px;border:1px solid rgba(0,0,0,.1);padding:13px 11px 11px;cursor:pointer;min-height:68px;display:flex;flex-direction:column;justify-content:flex-end;transition:opacity .15s;}
 .dcolor:hover{opacity:.88;}
-.dcolor-n{font-family:var(--serif);font-size:19px;font-weight:700;line-height:1;}
+.dcolor-n{font-family:var(--sans);font-size:19px;font-weight:700;line-height:1;}
 .dcolor-l{font-family:var(--mono);font-size:9px;margin-top:3px;text-transform:uppercase;letter-spacing:.06em;line-height:1.3;}
 .dash-years{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;}
 .dyear{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:13px 12px;cursor:pointer;text-align:center;transition:all .15s;}
 .dyear:hover{border-color:var(--s65);transform:translateY(-1px);}
-.dyear-n{font-family:var(--serif);font-size:16px;color:var(--ink);}
+.dyear-n{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--ink);}
 .dyear-c{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px;}
 .dyear-k{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:1px;}
 .dyear-dots{display:flex;gap:3px;justify-content:center;margin-top:8px;}
@@ -837,35 +837,35 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
 
   <div class="dash-sec">Factory Paint &middot; S65 Universe (438 cars)</div>
   <div class="dash-paint">
-    <div class="dcolor" style="background:#6A5C80;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#fff;">1</div><div class="dcolor-l" style="color:#d8c8f0;">Designo Mystic Blue</div>
+    <div class="dcolor" style="background:#1C1C1A;border-color:rgba(255,255,255,.1);" onclick="dashGoColor('BLACK','S65',['RUBY','MOCCA'])">
+      <div class="dcolor-n" style="color:#fff;">168</div><div class="dcolor-l" style="color:#aaa;">Black Variants</div>
     </div>
-    <div class="dcolor" style="background:#2A1A08;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#fff;">6</div><div class="dcolor-l" style="color:#c8a878;">Designo Mocca Black</div>
-    </div>
-    <div class="dcolor" style="background:#3B1212;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#fff;">6</div><div class="dcolor-l" style="color:#f0a0a0;">Ruby Black</div>
-    </div>
-    <div class="dcolor" style="background:#F8F6F0;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#1a1a1a;">7</div><div class="dcolor-l" style="color:#555;">Designo Kashmir White</div>
-    </div>
-    <div class="dcolor" style="background:#8C8E8C;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#fff;">9</div><div class="dcolor-l" style="color:#eee;">Selenite Grey</div>
-    </div>
-    <div class="dcolor" style="background:#B2B4B2;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#222;">13</div><div class="dcolor-l" style="color:#333;">Palladium Silver</div>
-    </div>
-    <div class="dcolor" style="background:#3B5C8A;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#fff;">24</div><div class="dcolor-l" style="color:#c8d8ee;">Cavansite Blue</div>
-    </div>
-    <div class="dcolor" style="background:#9EA0A0;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#1a1a1a;">33</div><div class="dcolor-l" style="color:#333;">Iridium Silver</div>
-    </div>
-    <div class="dcolor" style="background:#F4F4F2;border-color:rgba(0,0,0,.1);" onclick="dashGoFleet('s65')">
+    <div class="dcolor" style="background:#F4F4F2;border-color:rgba(0,0,0,.1);" onclick="dashGoColor('DIAMOND WHITE','S65')">
       <div class="dcolor-n" style="color:#1a1a1a;">80</div><div class="dcolor-l" style="color:#555;">Diamond White</div>
     </div>
-    <div class="dcolor" style="background:#1C1C1A;border-color:rgba(255,255,255,.1);" onclick="dashGoFleet('s65')">
-      <div class="dcolor-n" style="color:#fff;">168</div><div class="dcolor-l" style="color:#aaa;">Black Variants</div>
+    <div class="dcolor" style="background:#9EA0A0;border-color:rgba(0,0,0,.1);" onclick="dashGoColor('IRIDIUM','S65')">
+      <div class="dcolor-n" style="color:#1a1a1a;">33</div><div class="dcolor-l" style="color:#333;">Iridium Silver</div>
+    </div>
+    <div class="dcolor" style="background:#3B5C8A;border-color:rgba(255,255,255,.1);" onclick="dashGoColor('CAVANSITE','S65')">
+      <div class="dcolor-n" style="color:#fff;">24</div><div class="dcolor-l" style="color:#c8d8ee;">Cavansite Blue</div>
+    </div>
+    <div class="dcolor" style="background:#B2B4B2;border-color:rgba(0,0,0,.1);" onclick="dashGoColor('PALLADIUM','S65')">
+      <div class="dcolor-n" style="color:#222;">13</div><div class="dcolor-l" style="color:#333;">Palladium Silver</div>
+    </div>
+    <div class="dcolor" style="background:#8C8E8C;border-color:rgba(0,0,0,.1);" onclick="dashGoColor('SELENITE','S65')">
+      <div class="dcolor-n" style="color:#fff;">9</div><div class="dcolor-l" style="color:#eee;">Selenite Grey</div>
+    </div>
+    <div class="dcolor" style="background:#F8F6F0;border-color:rgba(0,0,0,.1);" onclick="dashGoColor('KASHMIR','S65')">
+      <div class="dcolor-n" style="color:#1a1a1a;">7</div><div class="dcolor-l" style="color:#555;">Designo Kashmir White</div>
+    </div>
+    <div class="dcolor" style="background:#2A1A08;border-color:rgba(255,255,255,.1);" onclick="dashGoColor('MOCCA','S65')">
+      <div class="dcolor-n" style="color:#fff;">6</div><div class="dcolor-l" style="color:#c8a878;">Designo Mocca Black</div>
+    </div>
+    <div class="dcolor" style="background:#3B1212;border-color:rgba(255,255,255,.1);" onclick="dashGoColor('RUBY','S65')">
+      <div class="dcolor-n" style="color:#fff;">6</div><div class="dcolor-l" style="color:#f0a0a0;">Ruby Black</div>
+    </div>
+    <div class="dcolor" style="background:#6A5C80;border-color:rgba(255,255,255,.1);" onclick="dashGoColor('MYSTIC','S65')">
+      <div class="dcolor-n" style="color:#fff;">1</div><div class="dcolor-l" style="color:#d8c8f0;">Designo Mystic Blue</div>
     </div>
   </div>
 
@@ -922,15 +922,15 @@ tbody tr.row-compact .trim-badge{font-size:9px;padding:1px 5px;}
     <div class="ds600-body" id="ds600-body">
       <div class="ds600-divider"></div>
       <div class="ds600-grid">
-        <div class="ds600-row"><div class="ds600-sw" style="background:#1C1C1A;"></div><span class="ds600-name">Black variants</span><span class="ds600-ct">142</span></div>
-        <div class="ds600-row"><div class="ds600-sw" style="background:#F4F4F2;border-color:rgba(0,0,0,.15);"></div><span class="ds600-name">Diamond White</span><span class="ds600-ct">44</span></div>
-        <div class="ds600-row"><div class="ds600-sw" style="background:#9EA0A0;"></div><span class="ds600-name">Iridium Silver</span><span class="ds600-ct">28</span></div>
-        <div class="ds600-row"><div class="ds600-sw" style="background:#3B5C8A;"></div><span class="ds600-name">Cavansite Blue</span><span class="ds600-ct">22</span></div>
-        <div class="ds600-row"><div class="ds600-sw" style="background:#9C9882;"></div><span class="ds600-name">Allanite Grey</span><span class="ds600-ct">18</span></div>
-        <div class="ds600-row"><div class="ds600-sw" style="background:#989A80;"></div><span class="ds600-name">Designo Alanite Grey</span><span class="ds600-ct">14</span></div>
-        <div class="ds600-row"><div class="ds600-sw" style="background:#2A1A08;"></div><span class="ds600-name">Designo Mocca Black</span><span class="ds600-ct">9</span></div>
-        <div class="ds600-row"><div class="ds600-sw" style="background:#F8F6F0;border-color:rgba(0,0,0,.12);"></div><span class="ds600-name">Designo Kashmir White</span><span class="ds600-ct">6</span></div>
-        <div class="ds600-row"><div class="ds600-sw" style="background:#5B4B7A;"></div><span class="ds600-name">Designo Graphite</span><span class="ds600-ct">3</span></div>
+        <div class="ds600-row" onclick="dashGoColor('BLACK','S600',['RUBY','MOCCA'])" style="cursor:pointer;"><div class="ds600-sw" style="background:#1C1C1A;"></div><span class="ds600-name">Black variants</span><span class="ds600-ct">142</span></div>
+        <div class="ds600-row" onclick="dashGoColor('DIAMOND WHITE','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#F4F4F2;border-color:rgba(0,0,0,.15);"></div><span class="ds600-name">Diamond White</span><span class="ds600-ct">44</span></div>
+        <div class="ds600-row" onclick="dashGoColor('IRIDIUM','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#9EA0A0;"></div><span class="ds600-name">Iridium Silver</span><span class="ds600-ct">28</span></div>
+        <div class="ds600-row" onclick="dashGoColor('CAVANSITE','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#3B5C8A;"></div><span class="ds600-name">Cavansite Blue</span><span class="ds600-ct">22</span></div>
+        <div class="ds600-row" onclick="dashGoColor('ALLANITE','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#9C9882;"></div><span class="ds600-name">Allanite Grey</span><span class="ds600-ct">18</span></div>
+        <div class="ds600-row" onclick="dashGoColor('ALANITE','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#989A80;"></div><span class="ds600-name">Designo Alanite Grey</span><span class="ds600-ct">14</span></div>
+        <div class="ds600-row" onclick="dashGoColor('MOCCA','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#2A1A08;"></div><span class="ds600-name">Designo Mocca Black</span><span class="ds600-ct">9</span></div>
+        <div class="ds600-row" onclick="dashGoColor('KASHMIR','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#F8F6F0;border-color:rgba(0,0,0,.12);"></div><span class="ds600-name">Designo Kashmir White</span><span class="ds600-ct">6</span></div>
+        <div class="ds600-row" onclick="dashGoColor('GRAPHITE','S600')" style="cursor:pointer;"><div class="ds600-sw" style="background:#5B4B7A;"></div><span class="ds600-name">Designo Graphite</span><span class="ds600-ct">3</span></div>
       </div>
     </div>
   </div>
@@ -1617,12 +1617,24 @@ function switchTab(t){
 }
 
 function dashGoFleet(preset){
-  quickFilter(preset==='ultra_rare'?'focus':preset);
+  dashPaintFilter=null;
+  trimFilter=new Set(['S65 AMG','S65','S65 AMG Final Edition','S600']);
+  [2015,2016,2017,2018,2019,2020].forEach(function(y){var el=document.getElementById('yr-'+y);if(el)el.checked=true;});
+  document.getElementById('fleet-sort').value='tier_then_year';
+  fleetPage=0;
+  if(preset==='targeted'){setView('targeted_only');}
+  else if(preset==='watch'){setView('watch_only');}
+  else if(preset==='focus'){setView('focus');}
+  else if(preset==='active'){setView('active');}
+  else if(preset==='ultra_rare'){setView('ultra_rare');}
+  else if(preset==='s65'){trimFilter=new Set(['S65 AMG','S65','S65 AMG Final Edition']);setView('all');}
+  else if(preset==='s600'){trimFilter=new Set(['S600']);setView('all');}
+  else{setView('focus');}
   switchTab('fleet');
 }
 
 function dashGoYear(yr){
-  // Reset all years off, then turn on only the selected year
+  dashPaintFilter=null;
   trimFilter=new Set(['S65 AMG','S65','S65 AMG Final Edition','S600']);
   [2015,2016,2017,2018,2019,2020].forEach(function(y){
     var el=document.getElementById('yr-'+y);if(el)el.checked=(y===yr);
@@ -1630,6 +1642,19 @@ function dashGoYear(yr){
   document.getElementById('fleet-sort').value='tier_then_year';
   fleetPage=0;
   setView('all');
+  switchTab('fleet');
+}
+
+function dashGoColor(contains, trimType, excludes){
+  // excludes is optional array of strings to exclude from paint match
+  dashPaintFilter={contains:contains, excludes:excludes||[]};
+  if(trimType==='S65'){trimFilter=new Set(['S65 AMG','S65','S65 AMG Final Edition']);}
+  else if(trimType==='S600'){trimFilter=new Set(['S600']);}
+  else{trimFilter=new Set(['S65 AMG','S65','S65 AMG Final Edition','S600']);}
+  [2015,2016,2017,2018,2019,2020].forEach(function(y){var el=document.getElementById('yr-'+y);if(el)el.checked=true;});
+  document.getElementById('fleet-sort').value='tier_then_year';
+  fleetPage=0;
+  setView('paint_filter');
   switchTab('fleet');
 }
 
@@ -2008,10 +2033,13 @@ function clearFleetSearch(){
 }
 
 let trimFilter=new Set(['S65 AMG','S65','S65 AMG Final Edition','S600']);
+let dashPaintFilter=null; // {contains:'BLACK'} or {exact:'DIAMOND WHITE - METALLIC PAINT'}, set by dashboard color tiles
+
 function toggleTrimFilter(trim,el){
   const key=trim==='S65 AMG'?'S65 AMG':'S600';
   if(trimFilter.has(key)){trimFilter.delete(key);if(trim==='S65 AMG'){trimFilter.delete('S65');trimFilter.delete('S65 AMG Final Edition');}el.classList.remove('on-s65','on-s600');}
   else{trimFilter.add(key);if(trim==='S65 AMG'){trimFilter.add('S65');trimFilter.add('S65 AMG Final Edition');}el.classList.add(trim==='S65 AMG'?'on-s65':'on-s600');}
+  dashPaintFilter=null; // clear dashboard filter when user manually changes trim
   fleetPage=0;applyFilters();
 }
 
@@ -2036,13 +2064,31 @@ function applyFilters(){
     if(yr===2016&&!yr2016)return false;
     if(yr===2015&&!yr2015)return false;
     const tier=getTier(v);
-    // currentView is the single gate
+    // currentView gate
     if(currentView==='focus'&&tier==='data_only')return false;
     if(currentView==='active'&&getListingStatus(v)!=='active')return false;
     if(currentView==='s65'&&!['S65 AMG','S65','S65 AMG Final Edition'].includes(v.trim||''))return false;
     if(currentView==='s65'&&tier==='data_only')return false;
     if(currentView==='s600'&&(v.trim||'')!=='S600')return false;
     if(currentView==='s600'&&tier==='data_only')return false;
+    // Dashboard-specific views
+    if(currentView==='targeted_only'&&st!=='targeted')return false;
+    if(currentView==='watch_only'&&st!=='watch')return false;
+    if(currentView==='ultra_rare'){
+      if(!['S65 AMG','S65','S65 AMG Final Edition'].includes(v.trim||''))return false;
+      const b=allBuildData[v.vin]||{};
+      let ct=0;
+      if(b.has_ceramic_brakes)ct++;if(b.has_refrigerator)ct++;
+      if(b.has_magic_sky)ct++;if(b.has_carbon_pkg)ct++;if(b.has_designo)ct++;
+      if(ct<3)return false;
+    }
+    if(currentView==='paint_filter'&&dashPaintFilter){
+      const b=allBuildData[v.vin];
+      const pn=((b&&b.paint_name)||v.exterior||'').toUpperCase();
+      if(!pn)return false;
+      if(dashPaintFilter.contains&&!pn.includes(dashPaintFilter.contains.toUpperCase()))return false;
+      if(dashPaintFilter.excludes&&dashPaintFilter.excludes.some(x=>pn.includes(x.toUpperCase())))return false;
+    }
     if(q&&![(v.vin||''),(v.trim||''),(v.last_title_state||''),(v.exterior||''),(v.sale_history||'')].some(f=>f.toLowerCase().includes(q)))return false;
     return true;
   });
@@ -3714,7 +3760,7 @@ async function bmDelete(id){
 <div class="bulk-overlay" id="bulk-overlay" onclick="closeBulkEntry()"></div>
 <div class="bulk-modal" id="bulk-modal">
   <div class="bulk-modal-header">
-    <span style="font-family:var(--serif);font-size:16px">&#8801; Bulk Vehicle Entry</span>
+    <span style="font-family:var(--sans);font-size:16px;font-weight:600">&#8801; Bulk Vehicle Entry</span>
     <button class="bulk-modal-close" onclick="closeBulkEntry()">&#215;</button>
   </div>
   <div class="bulk-tabs">
