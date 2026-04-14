@@ -226,6 +226,8 @@ td.num{font-family:var(--mono);text-align:right;}
 .drawer-title{font-family:var(--sans);font-size:17px;font-weight:600;}
 .drawer-subtitle{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px;}
 .drawer-close{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;line-height:1;padding:0;}
+.fd-active-dot{width:6px;height:6px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse-dot 1.8s ease-in-out infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.8);}}
 .drawer-close:hover{color:var(--ink);}
 .drawer-body{padding:20px;flex:1;}
 .section-head{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:8px;margin-top:18px;padding-bottom:4px;border-bottom:1px solid var(--rule);}
@@ -515,7 +517,10 @@ td.num{font-family:var(--mono);text-align:right;}
 .vlog-attach-label:hover{border-color:var(--ink);color:var(--ink);}
 /* ── Active listing URL rows ── */
 .listing-url-row{display:flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid var(--rule);border-radius:4px;background:#fff;margin-bottom:5px;}
+.listing-url-row.is-active{border-color:#9ee8bf;border-left:3px solid var(--green);background:#fafffc;}
 .listing-url-platform{font-family:var(--mono);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#fff;background:var(--s65);padding:2px 7px;border-radius:3px;white-space:nowrap;flex-shrink:0;}
+.listing-url-live{font-family:var(--mono);font-size:9px;font-weight:600;color:var(--green);background:#edfaf3;border:1px solid #9ee8bf;padding:1px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:3px;}
+.listing-url-live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse-dot 1.8s ease-in-out infinite;}
 .listing-url-link{flex:1;font-family:var(--mono);font-size:10px;color:var(--s65);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .listing-url-link:hover{text-decoration:underline;}
 .listing-url-edit-input{flex:1;border:none;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:10px;color:var(--ink);background:transparent;outline:none;padding:1px 0;}
@@ -1237,7 +1242,12 @@ td.num{font-family:var(--mono);text-align:right;}
     <div style="flex:1">
       <div class="drawer-eyebrow" id="fd-vin">—</div>
       <div class="drawer-title" id="fd-title">Vehicle Detail</div>
-      <div class="drawer-subtitle" id="fd-sub">—</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:3px;">
+        <div class="drawer-subtitle" id="fd-sub">—</div>
+        <div id="fd-active-badge" style="display:none;align-items:center;gap:4px;font-family:var(--mono);font-size:10px;font-weight:600;color:var(--green);background:#edfaf3;border:1px solid #9ee8bf;border-radius:3px;padding:1px 7px;">
+          <span class="fd-active-dot"></span>Active Listing
+        </div>
+      </div>
     </div>
     <button class="drawer-close" onclick="closeFleetDrawer()">&#215;</button>
   </div>
@@ -1499,10 +1509,10 @@ function switchTab(t){
 }
 
 function dashOpenListing(el){
-  var vin=el.dataset.vin;
+  var card=el.closest?el.closest('[data-vin]'):el;
+  var vin=card&&card.dataset?card.dataset.vin:null;
   if(!vin)return;
-  switchTab('fleet');
-  setTimeout(function(){openFleetDrawer(vin);},200);
+  openFleetDrawer(vin);
 }
 
 function toggleDashAccordion(id){
@@ -1514,41 +1524,61 @@ function toggleDashAccordion(id){
   if(arrow)arrow.classList.toggle('open',!open);
 }
 
-function renderActiveListing(){
+var _activeListingsShowAll=false;
+
+function renderActiveListing(showAll){
+  if(showAll!==undefined)_activeListingsShowAll=showAll;
   var el=document.getElementById('dash-active-listings');
   var ct=document.getElementById('dash-active-count');
   if(!el)return;
-  // Pull active listings from listing_history via allVehicles cross-ref
   var active=allVehicles.filter(function(v){return getListingStatus(v)==='active';});
   if(ct)ct.textContent=active.length?active.length+' live':'';
   if(!active.length){
     el.innerHTML='<div class="dlc-empty">No active listings detected in your universe.</div>';
     return;
   }
-  // Sort by asking_price asc, then by vin
   active.sort(function(a,b){return (Number(a.asking_price)||999999)-(Number(b.asking_price)||999999);});
+  var limit=_activeListingsShowAll?active.length:6;
+  var visible=active.slice(0,limit);
   var html='';
-  active.slice(0,6).forEach(function(v){
+  visible.forEach(function(v){
     var bd=allBuildData[v.vin]||{};
     var paint=(bd.paint_name||v.exterior||'').replace(/ - METALLIC PAINT/i,'').replace(/ METALLIC$/i,'');
     var title=(v.year||'')+' '+(v.trim||'W222');
-    var meta=[paint,v.last_title_state].filter(Boolean).join(' · ');
+    var state=v.last_title_state||'';
+    var meta=[paint,state].filter(Boolean).join(' · ');
     var price=v.asking_price?'$'+Number(v.asking_price).toLocaleString():'';
     var miles=v.curr_odo?Number(v.curr_odo).toLocaleString()+' mi':'';
+    // Get platform from listing_history if available
+    var platform='';
+    if(v.vdp_url){
+      if(v.vdp_url.includes('cargurus'))platform='CarGurus';
+      else if(v.vdp_url.includes('autotrader'))platform='AutoTrader';
+      else if(v.vdp_url.includes('cars.com'))platform='Cars.com';
+      else if(v.vdp_url.includes('bringatrailer'))platform='BaT';
+      else if(v.vdp_url.includes('carsandbids'))platform='Cars & Bids';
+      else if(v.vdp_url.includes('ebay'))platform='eBay';
+      else platform='Dealer';
+    }
+    var rightCol=
+      (price?'<div class="dlc-price">'+price+'</div>':'')+
+      (miles?'<div class="dlc-miles">'+miles+'</div>':'')+
+      (platform?'<div class="dlc-platform">'+platform+'</div>':'');
     html+='<div class="dash-listing-card" data-vin="'+v.vin+'" onclick="dashOpenListing(this)">'+
       '<div>'+
         '<div class="dlc-vin">'+v.vin+'</div>'+
         '<div class="dlc-title">'+title+'</div>'+
-        '<div class="dlc-meta">'+meta+'</div>'+
+        (meta?'<div class="dlc-meta">'+meta+'</div>':'')+
       '</div>'+
-      '<div>'+
-        '<div class="dlc-price">'+price+'</div>'+
-        '<div class="dlc-miles">'+miles+'</div>'+
-      '</div>'+
+      '<div style="text-align:right;">'+rightCol+'</div>'+
     '</div>';
   });
   if(active.length>6){
-    html+='<div style="font-family:var(--mono);font-size:10px;color:var(--muted);text-align:center;padding:6px 0;cursor:pointer;" onclick="dashGoFleet(&quot;active&quot;)">+ '+(active.length-6)+' more &rarr;</div>';
+    if(_activeListingsShowAll){
+      html+='<div style="font-family:var(--mono);font-size:10px;color:var(--muted);text-align:center;padding:6px 0;cursor:pointer;" onclick="renderActiveListing(false)">Show less ▴</div>';
+    } else {
+      html+='<div style="font-family:var(--mono);font-size:10px;color:var(--accent);text-align:center;padding:6px 0;cursor:pointer;font-weight:500;" onclick="renderActiveListing(true)">+ '+(active.length-6)+' more ▾</div>';
+    }
   }
   el.innerHTML=html;
 }
@@ -2479,14 +2509,19 @@ function fdRenderListingUrls(vin){
     return;
   }
   wrap.innerHTML = fdListingUrlsCache.map((r,i) => {
-    const shortUrl = r.vdp_url ? r.vdp_url.replace(/^https?:\/\//,'').substring(0,55) + (r.vdp_url.length>65?'…':'') : '—';
-    return `<div class="listing-url-row" id="lur-${i}">
+    const shortUrl = r.vdp_url ? r.vdp_url.replace(/^https?:\/\//,'').substring(0,50) + (r.vdp_url.length>60?'…':'') : '—';
+    const isActive = r.link_status === 'Active';
+    const liveChip = isActive
+      ? `<span class="listing-url-live"><span class="listing-url-live-dot"></span>LIVE</span>`
+      : '';
+    return `<div class="listing-url-row${isActive?' is-active':''}" id="lur-${i}">
       <span class="listing-url-platform">${escHtml(r.platform||'?')}</span>
+      ${liveChip}
       <a class="listing-url-link" id="lur-link-${i}" href="${r.vdp_url||'#'}" target="_blank" rel="noopener">${shortUrl}</a>
       <input class="listing-url-edit-input" id="lur-input-${i}" value="${escHtml(r.vdp_url||'')}" style="display:none" onkeydown="if(event.key==='Enter')fdSaveUrlEdit(${i},'${vin}');if(event.key==='Escape')fdCancelUrlEdit(${i})">
       <button class="listing-url-btn" onclick="fdStartUrlEdit(${i})" title="Edit">&#9998;</button>
-      <button class="listing-url-btn" id="lur-save-${i}" onclick="fdSaveUrlEdit(${i},'${vin}')" title="Save" style="display:none;color:var(--green)">&#10003;</button>
-      <button class="listing-url-btn del" onclick="fdMarkUrlDead(${i},'${vin}')" title="Mark dead / remove">&#215;</button>
+      <button class="listing-url-btn" id="lur-save-${i}" data-vin="${vin}" onclick="fdSaveUrlEdit(${i},this.dataset.vin)" title="Save" style="display:none;color:var(--green)">&#10003;</button>
+      <button class="listing-url-btn del" data-vin="${vin}" onclick="fdMarkUrlDead(${i},this.dataset.vin)" title="Mark dead / remove">&#215;</button>
     </div>`;
   }).join('');
 }
@@ -3265,6 +3300,11 @@ async function fdSetStatus(status){
   var scoreStr=activeFD.composite_score?'Score '+activeFD.composite_score+' \u00b7 ':'';
   document.getElementById('fd-sub').textContent=scoreStr+status;
   fdRenderTierControls(activeFD);
+  var badge=document.getElementById('fd-active-badge');
+  if(badge){
+    var isActive=getListingStatus(v)==='active';
+    badge.style.display=isActive?'flex':'none';
+  }
   updateFleetStats();applyFilters();renderDashboard();
   toast(status+' \u2713');
 }
@@ -3286,6 +3326,8 @@ function fdRenderTierControls(v){
     btn.className='ls-btn';
     if(ls===key)btn.classList.add('active-'+suffix);
   });
+  const badge=document.getElementById('fd-active-badge');
+  if(badge)badge.style.display=(ls==='active')?'flex':'none';
 }
 
 async function fdSetTier(tier){
@@ -3854,56 +3896,127 @@ function extractVinFromUrl(url){
   return null;
 }
 
-async function handleShareTarget(sharedUrl, sharedTitle, sharedText){
-  if(!sharedUrl&&!sharedText)return;
-  var rawStr=(sharedUrl||'')+(sharedTitle||'')+(sharedText||'');
-  var vin=extractVinFromUrl(sharedUrl)||extractVinFromString(rawStr);
+// ── Edge Function URLs ────────────────────────────────────────────
+var EDGE_BASE='https://kevwkxuloxxrevodsukg.supabase.co/functions/v1';
 
-  // Show share detection banner
+async function callParseListing(url){
+  try{
+    var res=await fetch(EDGE_BASE+'/parse-listing',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPABASE_ANON_KEY},
+      body:JSON.stringify({url}),
+    });
+    return res.ok?await res.json():null;
+  }catch(e){console.error('parse-listing error:',e);return null;}
+}
+
+async function callIngestVehicle(vin,url,parsed,source){
+  try{
+    var res=await fetch(EDGE_BASE+'/ingest-vehicle',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer '+SUPABASE_ANON_KEY},
+      body:JSON.stringify({vin,url,parsed_data:parsed,source}),
+    });
+    return res.ok?await res.json():null;
+  }catch(e){console.error('ingest-vehicle error:',e);return null;}
+}
+
+function showShareBanner(msg){
   var banner=document.getElementById('share-detection-banner');
   if(!banner){
     banner=document.createElement('div');
     banner.id='share-detection-banner';
-    banner.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;background:var(--ink);color:#fff;padding:12px 20px;border-radius:8px;font-family:var(--mono);font-size:12px;box-shadow:0 4px 20px rgba(0,0,0,.3);max-width:340px;text-align:center;';
+    banner.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;background:var(--ink);color:#fff;padding:14px 20px;border-radius:8px;font-family:var(--mono);font-size:12px;box-shadow:0 4px 20px rgba(0,0,0,.3);max-width:360px;text-align:center;line-height:1.5;';
     document.body.appendChild(banner);
   }
+  banner.innerHTML=msg;
+  return banner;
+}
 
+async function handleShareTarget(sharedUrl, sharedTitle, sharedText){
+  if(!sharedUrl&&!sharedText)return;
+  var rawStr=(sharedUrl||'')+(sharedTitle||'')+(sharedText||'');
+
+  // Step 1: try client-side VIN extraction first (fast, no Edge Function needed)
+  var vin=extractVinFromUrl(sharedUrl)||extractVinFromString(rawStr);
+
+  var banner=showShareBanner('⏳ Analyzing listing…');
+
+  if(!vin && sharedUrl){
+    // Step 2: no VIN found client-side — call parse-listing Edge Function
+    banner.innerHTML='⏳ Fetching listing data…<br><small style="color:#aaa;">Calling parse-listing</small>';
+    var parsed=await callParseListing(sharedUrl);
+    if(parsed&&parsed.vin){
+      vin=parsed.vin;
+      // Step 3: ingest the parsed data
+      var ingested=await callIngestVehicle(vin,sharedUrl,parsed,'share');
+      if(ingested){
+        var action=ingested.action;
+        if(action==='created'){
+          banner.innerHTML='✨ New sighting saved<br><small style="color:#aaa;">'+vin+' · '+( parsed.price?'$'+Number(parsed.price).toLocaleString():'' )+'</small>';
+          setTimeout(function(){banner.remove();},4000);
+          // Refresh data and open drawer
+          await loadAll();
+          switchTab('fleet');
+          setTimeout(function(){openFleetDrawer(vin);},400);
+          return;
+        } else if(action==='updated'||action==='active_listing'){
+          banner.innerHTML='✓ Profile updated<br><small style="color:#aaa;">'+vin+' · listing recorded</small>';
+          setTimeout(function(){banner.remove();},3000);
+          await loadAll();
+          switchTab('fleet');
+          setTimeout(function(){openFleetDrawer(vin);},400);
+          return;
+        }
+      }
+    } else if(parsed&&!parsed.vin){
+      // Edge function ran but no VIN found — show what we got and open Add Vehicle
+      banner.innerHTML='VIN not found in listing<br><small style="color:#aaa;">Opening Add Vehicle — fill in manually</small>';
+      setTimeout(function(){banner.remove();},3000);
+      setTimeout(function(){
+        openAddVehicle();
+        setTimeout(function(){
+          var vdpInput=document.getElementById('av-vdp-url');
+          if(vdpInput)vdpInput.value=sharedUrl;
+          if(parsed.price){var priceEl=document.getElementById('av-price');if(priceEl)priceEl.value=parsed.price;}
+        },300);
+      },400);
+      return;
+    }
+  }
+
+  // VIN found client-side — route to existing or new
   if(vin){
-    // Check if VIN exists in DB
     var existing=allVehicles.find(function(v){return v.vin===vin;});
     if(existing){
-      banner.innerHTML='<strong>'+vin.slice(-8)+'</strong> found in your fleet — opening profile<br><small style="color:#aaa;margin-top:4px;display:block;">'+(sharedUrl||'').substring(0,50)+'</small>';
-      setTimeout(function(){banner.remove();},3000);
-      // Open drawer and offer to update listing URL
+      banner.innerHTML='✓ <strong>'+vin.slice(-8)+'</strong> in your fleet<br><small style="color:#aaa;">Opening profile — add listing URL below</small>';
+      setTimeout(function(){banner.remove();},3500);
       switchTab('fleet');
       setTimeout(function(){
         openFleetDrawer(vin);
-        // Pre-fill listing URL if we have it
         if(sharedUrl){
-          var urlInput=document.getElementById('fd-new-url-input');
-          if(urlInput)urlInput.value=sharedUrl;
-          toast('VIN found — verify listing URL above ✓');
+          setTimeout(function(){
+            var urlInput=document.getElementById('fd-new-url-input');
+            if(urlInput)urlInput.value=sharedUrl;
+            toast('Paste VIN URL confirmed ✓');
+          },500);
         }
       },400);
     } else {
-      banner.innerHTML='<strong>VIN detected:</strong> '+vin+'<br><small style="color:#aaa;margin-top:4px;display:block;">New sighting — opening Add Vehicle</small>';
+      banner.innerHTML='✨ New VIN detected<br><small style="color:#aaa;">'+vin+' — opening Add Vehicle</small>';
       setTimeout(function(){banner.remove();},3000);
-      // Open Add Vehicle with pre-filled data
       setTimeout(function(){
         openAddVehicle();
         setTimeout(function(){
           var vinInput=document.getElementById('av-vin');
           if(vinInput){vinInput.value=vin;vinInput.dispatchEvent(new Event('input'));}
-          if(sharedUrl){
-            var vdpInput=document.getElementById('av-vdp-url');
-            if(vdpInput)vdpInput.value=sharedUrl;
-          }
+          if(sharedUrl){var vdpInput=document.getElementById('av-vdp-url');if(vdpInput)vdpInput.value=sharedUrl;}
         },300);
       },400);
     }
   } else {
-    // No VIN found — open Add Vehicle with URL pre-filled
-    banner.innerHTML='Listing URL received<br><small style="color:#aaa;margin-top:4px;display:block;">Opening Add Vehicle — VIN not detected in URL</small>';
+    // Total fallback — no VIN anywhere
+    banner.innerHTML='URL received<br><small style="color:#aaa;">Could not detect VIN — opening Add Vehicle</small>';
     setTimeout(function(){banner.remove();},3000);
     setTimeout(function(){
       openAddVehicle();
