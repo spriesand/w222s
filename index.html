@@ -821,7 +821,10 @@ td.num{font-family:var(--mono);text-align:right;}
 
   <div class="dash-sec" style="display:flex;align-items:center;justify-content:space-between;">
     <span>Active Listings</span>
-    <span id="dash-active-count" style="font-family:var(--mono);font-size:10px;color:var(--green);font-weight:600;"></span>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span id="dash-active-count" style="font-family:var(--mono);font-size:10px;color:var(--green);font-weight:600;"></span>
+      <button onclick="enrichActiveListings()" style="font-family:var(--mono);font-size:9px;padding:2px 9px;border-radius:3px;border:1px solid var(--rule);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor='var(--muted)'" onmouseout="this.style.borderColor='var(--rule)'">&#9889; Enrich</button>
+    </div>
   </div>
   <div id="dash-active-listings" style="margin-bottom:18px;">
     <div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:12px 0;">Loading active listings&hellip;</div>
@@ -1502,6 +1505,7 @@ function setSyncStatus(s){
 }
 
 let allBatComparables=[];
+let allActiveEpisodes={};
 
 let allBuildData={}; // keyed by vin from vehicle_build table
 
@@ -1580,9 +1584,14 @@ function renderActiveListing(showAll){
     var paint=(bd.paint_name||v.exterior||"").replace(/ - METALLIC PAINT/i,"").replace(/ METALLIC$/i,"");
     var title=(v.year||"")+" "+(v.trim||"W222");
     var state=v.last_title_state||"";
-    var price=v.asking_price?"$"+Number(v.asking_price).toLocaleString():"—";
-    var miles=v.curr_odo?Number(v.curr_odo).toLocaleString()+" mi":"";
-    var platform=platformFromUrl(v.vdp_url||"");
+    var ep=allActiveEpisodes[v.vin]||{};
+    var rawPrice=ep.price||v.asking_price||null;
+    var rawMiles=ep.miles||v.curr_odo||null;
+    var rawUrl=ep.vdp_url||v.vdp_url||"";
+    var rawPlatform=ep.platform||platformFromUrl(rawUrl);
+    var price=rawPrice?"$"+Number(rawPrice).toLocaleString():"—";
+    var miles=rawMiles?Number(rawMiles).toLocaleString()+" mi":"";
+    var platform=rawPlatform;
     var tier=getTier(v);
     var tierColor=tier==="targeted"?"var(--accent)":tier==="watched"?"var(--gold)":"var(--muted)";
     var tierLabel=tier==="targeted"?"TARGET":tier==="watched"?"WATCH":"DATA";
@@ -1844,7 +1853,7 @@ function boolVal(v){return(v===true||v==='TRUE'||v==='true'||v==='Yes');}
 async function loadAll(){
   setSyncStatus('loading');
   try{
-    const[vR,mR,cR,aR,lR,sR,bR,batR]=await Promise.all([
+    const[vR,mR,cR,aR,lR,sR,bR,batR,lhR]=await Promise.all([
       db.from('vehicles').select('*').order('composite_score',{ascending:false,nullsFirst:false}).limit(10000),
       db.from('vehicle_market').select('*').limit(10000),
       db.from('broker_contacts').select('*').order('last_activity',{ascending:false,nullsFirst:false}),
@@ -1853,6 +1862,7 @@ async function loadAll(){
       db.from('vehicle_service').select('*').order('record_date',{ascending:true}).limit(10000),
       db.from('vehicle_build').select('vin,paint_code,paint_name,upholstery_name,production_date,has_ceramic_brakes,has_carbon_pkg,has_magic_sky,has_rear_entertainment,has_chauffeur_pkg,has_burmester,has_refrigerator,has_night_vision,has_abc_suspension,has_keyless_go,has_executive_rear_seat,has_designo,scraper_version').limit(10000),
       db.from('bat_comparables').select('vin,model_year,trim,miles,result,hammer_price,sale_date,bat_url_primary,gold_record').order('sale_date',{ascending:false}).limit(2000),
+      db.from('listing_history').select('vin,price,miles,platform,vdp_url,first_seen,link_status').eq('link_status','Active').order('first_seen',{ascending:false,nullsFirst:false}).limit(500),
     ]);
     if(vR.error)throw vR.error;
     const marketByVin={};
@@ -1871,6 +1881,13 @@ async function loadAll(){
     allBuildData={};
     (bR.data||[]).forEach(b=>{ allBuildData[b.vin]=b; });
     allBatComparables=(batR&&batR.data)||[];
+    // Index active listing episodes by VIN for dashboard cards
+    allActiveEpisodes={};
+    ((lhR&&lhR.data)||[]).forEach(function(r){
+      if(!allActiveEpisodes[r.vin])allActiveEpisodes[r.vin]=r;
+      // Keep the one with a price if available
+      else if(r.price&&!allActiveEpisodes[r.vin].price)allActiveEpisodes[r.vin]=r;
+    });
     allContacts=cR.data||[];allAlerts=aR.data||[];allLogs=lR.data||[];allServiceRecs=sR.data||[];
     updateFleetStats();applyFilters();updateCRMStats();renderCRM();
     document.getElementById('fleet-tab-count').textContent=allVehicles.length;
@@ -4097,6 +4114,69 @@ function showShareBanner(msg){
   banner.innerHTML=msg;
   return banner;
 }
+
+async function enrichActiveListings(){
+  // Find all Active listing_history rows with a URL but missing price or miles
+  toast('Scanning active listings…');
+  try{
+    var{data,error}=await db.from('listing_history')
+      .select('id,vin,vdp_url,price,miles,platform')
+      .eq('link_status','Active')
+      .not('vdp_url','is',null)
+      .order('first_seen',{ascending:false})
+      .limit(100);
+    if(error)throw error;
+
+    // Filter to rows missing price OR miles
+    var needsEnrich=(data||[]).filter(function(r){
+      return r.vdp_url && (!r.price || !r.miles);
+    });
+
+    if(!needsEnrich.length){
+      toast('All active listings already have data ✓');
+      return;
+    }
+
+    toast('Enriching '+needsEnrich.length+' listings…');
+    var enriched=0, failed=0;
+
+    for(var i=0;i<needsEnrich.length;i++){
+      var row=needsEnrich[i];
+      try{
+        var parsed=await callParseListing(row.vdp_url);
+        if(parsed&&(parsed.price||parsed.mileage)){
+          // Update listing_history row directly with fresh data
+          var updates={};
+          if(parsed.price&&!row.price)updates.price=parsed.price;
+          if(parsed.mileage&&!row.miles)updates.miles=parsed.mileage;
+          if(Object.keys(updates).length){
+            await db.from('listing_history').update(updates).eq('id',row.id);
+          }
+          // Also call ingest-vehicle to update vehicle_market
+          if(parsed.vin||row.vin){
+            await callIngestVehicle(parsed.vin||row.vin, row.vdp_url, parsed, 'batch');
+          }
+          enriched++;
+        } else {
+          failed++;
+        }
+        // Small delay to avoid rate limits
+        await new Promise(function(r){setTimeout(r,800);});
+      }catch(e){
+        console.warn('Enrich failed for',row.vdp_url,e);
+        failed++;
+      }
+    }
+
+    // Reload data to reflect updates
+    await loadAll();
+    toast('Enriched '+enriched+' listings'+(failed?' · '+failed+' failed':''));
+  }catch(err){
+    toast('Enrich error: '+err.message,true);
+    console.error('enrichActiveListings error:',err);
+  }
+}
+
 
 async function handleShareTarget(sharedUrl, sharedTitle, sharedText){
   if(!sharedUrl&&!sharedText)return;
