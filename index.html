@@ -1617,7 +1617,14 @@ function renderActiveListing(showAll){
             (platform?"<div class=\"dlc-platform\">"+platform+"</div>":"")+
           "</div>"+
         "</div>"+
-        "<div style=\"display:flex;gap:5px;margin-top:7px;flex-wrap:wrap;\">"+cfx+ws+contacted+"</div>"+
+        "<div style=\"display:flex;gap:5px;margin-top:7px;flex-wrap:wrap;align-items:center;\">"+cfx+ws+contacted+
+        (rawUrl?
+          "<button data-url=\""+rawUrl+"\" data-vin=\""+v.vin+"\" onclick=\"event.stopPropagation();enrichSingleListing(this.dataset.vin,this.dataset.url)\" "+
+          "style=\"margin-left:auto;font-family:var(--mono);font-size:9px;padding:1px 8px;border-radius:3px;border:1px solid var(--rule);background:var(--surface);color:var(--muted);cursor:pointer;\" "+
+          "onmouseover=\"this.style.color='var(--green)';this.style.borderColor='#9ee8bf'\" onmouseout=\"this.style.color='var(--muted)';this.style.borderColor='var(--rule)'\">"+
+          "&#9889; Open &amp; Enrich</button>"
+        :"")+
+        "</div>"+
       "</div>";
   });
   if(active.length>6){
@@ -4114,6 +4121,39 @@ function showShareBanner(msg){
   banner.innerHTML=msg;
   return banner;
 }
+
+async function enrichSingleListing(vin, url){
+  if(!url){toast('No URL on record for this listing',true);return;}
+  // Open listing in new tab simultaneously
+  window.open(url,'_blank','noopener');
+  toast('Fetching data…');
+  try{
+    var parsed=await callParseListing(url);
+    if(!parsed||(!parsed.price&&!parsed.mileage&&!parsed.vin)){
+      toast('Could not extract data — site may block scrapers',true);
+      return;
+    }
+    // Update listing_history row
+    var updates={};
+    if(parsed.price)updates.price=parsed.price;
+    if(parsed.mileage)updates.miles=parsed.mileage;
+    if(parsed.exterior)updates.seller_name=parsed.dealer||null;
+    if(Object.keys(updates).length){
+      await db.from('listing_history').update(updates)
+        .eq('vin',vin)
+        .eq('link_status','Active')
+        .eq('vdp_url',url);
+    }
+    // Update vehicle_market
+    await callIngestVehicle(vin,url,parsed,'manual');
+    await loadAll();
+    toast((parsed.price?'$'+Number(parsed.price).toLocaleString():'')+(parsed.mileage?' · '+Number(parsed.mileage).toLocaleString()+' mi':'')+' ✓');
+  }catch(err){
+    toast('Enrich error: '+err.message,true);
+    console.error('enrichSingleListing error:',err);
+  }
+}
+
 
 async function enrichActiveListings(){
   // Find all Active listing_history rows with a URL but missing price or miles
