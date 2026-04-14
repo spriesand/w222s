@@ -4246,7 +4246,6 @@ async function enrichSingleListing(vin, url){
 
 
 async function enrichActiveListings(){
-  // Find all Active listing_history rows with a URL but missing price or miles
   toast('Scanning active listings…');
   try{
     var{data,error}=await db.from('listing_history')
@@ -4257,7 +4256,6 @@ async function enrichActiveListings(){
       .limit(100);
     if(error)throw error;
 
-    // Filter to rows missing price OR miles
     var needsEnrich=(data||[]).filter(function(r){
       return r.vdp_url && (!r.price || !r.miles);
     });
@@ -4268,39 +4266,81 @@ async function enrichActiveListings(){
     }
 
     toast('Enriching '+needsEnrich.length+' listings…');
-    var enriched=0, failed=0;
+    var results=[];
 
     for(var i=0;i<needsEnrich.length;i++){
       var row=needsEnrich[i];
+      var shortUrl=row.vdp_url.replace(/^https?:\/\//,'').substring(0,40);
       try{
         var parsed=await callParseListing(row.vdp_url);
         if(parsed&&(parsed.price||parsed.mileage)){
-          // Update listing_history row directly with fresh data
           var updates={};
           if(parsed.price&&!row.price)updates.price=parsed.price;
           if(parsed.mileage&&!row.miles)updates.miles=parsed.mileage;
           if(Object.keys(updates).length){
             await db.from('listing_history').update(updates).eq('id',row.id);
           }
-          // Also call ingest-vehicle to update vehicle_market
           if(parsed.vin||row.vin){
             await callIngestVehicle(parsed.vin||row.vin, row.vdp_url, parsed, 'batch');
           }
-          enriched++;
+          results.push({ok:true, vin:row.vin, url:shortUrl,
+            detail:(parsed.price?'$'+Number(parsed.price).toLocaleString():'')
+              +(parsed.mileage?' · '+Number(parsed.mileage).toLocaleString()+' mi':'')});
         } else {
-          failed++;
+          var reason=parsed&&parsed.error?parsed.error:'No data returned';
+          results.push({ok:false, vin:row.vin, url:shortUrl, detail:reason});
         }
-        // Small delay to avoid rate limits
         await new Promise(function(r){setTimeout(r,800);});
       }catch(e){
-        console.warn('Enrich failed for',row.vdp_url,e);
-        failed++;
+        results.push({ok:false, vin:row.vin, url:shortUrl, detail:e.message});
       }
     }
 
-    // Reload data to reflect updates
     await loadAll();
-    toast('Enriched '+enriched+' listings'+(failed?' · '+failed+' failed':''));
+
+    // Show results panel
+    var ok=results.filter(function(r){return r.ok;});
+    var fail=results.filter(function(r){return !r.ok;});
+    var panel=document.getElementById('enrich-results-panel');
+    if(!panel){
+      panel=document.createElement('div');
+      panel.id='enrich-results-panel';
+      panel.style.cssText='position:fixed;bottom:24px;right:24px;z-index:99999;background:#fff;border:1px solid var(--rule);border-radius:8px;padding:16px;width:380px;max-height:400px;overflow-y:auto;box-shadow:0 4px 20px rgba(0,0,0,.12);font-family:var(--mono);font-size:11px;';
+      document.body.appendChild(panel);
+    }
+    var html='<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">'+
+      '<strong style="font-size:12px;">Enrich Results</strong>'+
+      '<button onclick="this.parentElement.parentElement.remove()" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:16px;">×</button>'+
+    '</div>';
+    if(ok.length){
+      html+='<div style="color:var(--green);font-weight:600;margin-bottom:6px;">✓ '+ok.length+' updated</div>';
+      ok.forEach(function(r){
+        html+='<div style="padding:5px 0;border-bottom:1px solid var(--rule);cursor:pointer;" '+
+          'data-vin="'+r.vin+'" onclick="openFleetDrawer(this.dataset.vin)" '+
+          '>'+
+          '<span style="color:var(--muted);">'+r.vin.slice(-8)+'</span> '+
+          '<span style="color:var(--ink);">'+r.detail+'</span> '+
+          '<span style="color:#bbb;font-size:9px;">→ open</span>'+
+        '</div>';
+      });
+    }
+    if(fail.length){
+      html+='<div style="color:var(--accent);font-weight:600;margin:10px 0 6px;">✕ '+fail.length+' failed</div>';
+      fail.forEach(function(r){
+        html+='<div style="padding:5px 0;border-bottom:1px solid var(--rule);cursor:pointer;" '+
+          'data-vin="'+r.vin+'" onclick="openFleetDrawer(this.dataset.vin)" '+
+          '>'+
+          '<div style="display:flex;align-items:center;gap:6px;">'+
+            '<span style="color:var(--accent);font-weight:600;">'+r.vin.slice(-8)+'</span>'+
+            '<span style="color:#999;font-size:10px;">→ open drawer</span>'+
+          '</div>'+
+          '<div style="color:#bbb;font-size:9px;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+r.url+'</div>'+
+          '<div style="color:#aaa;font-size:9px;">'+r.detail+'</div>'+
+        '</div>';
+      });
+    }
+    panel.innerHTML=html;
+
   }catch(err){
     toast('Enrich error: '+err.message,true);
     console.error('enrichActiveListings error:',err);
