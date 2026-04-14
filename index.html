@@ -1538,65 +1538,88 @@ function toggleDashAccordion(id){
   if(arrow)arrow.classList.toggle('open',!open);
 }
 
+function platformFromUrl(url){
+  if(!url)return "";
+  if(url.indexOf("cargurus")>-1)return "CarGurus";
+  if(url.indexOf("autotrader")>-1)return "AutoTrader";
+  if(url.indexOf("cars.com")>-1)return "Cars.com";
+  if(url.indexOf("bringatrailer")>-1)return "BaT";
+  if(url.indexOf("carsandbids")>-1)return "Cars & Bids";
+  if(url.indexOf("classiccars")>-1)return "ClassicCars";
+  if(url.indexOf("ebay")>-1)return "eBay";
+  if(url.indexOf("ipacket")>-1)return "iPacket";
+  return "Dealer";
+}
+
+function dlcBadge(label, on){
+  var border=on?"1px solid #9ee8bf":"1px solid var(--rule)";
+  var bg=on?"#edfaf3":"var(--surface)";
+  var color=on?"var(--green)":"#bbb";
+  var check=on?"✓ ":"";
+  return "<span style=\"font-family:var(--mono);font-size:9px;padding:1px 6px;border-radius:3px;border:"+border+";background:"+bg+";color:"+color+";white-space:nowrap;\">"+check+label+"</span>";
+}
+
 var _activeListingsShowAll=false;
 
 function renderActiveListing(showAll){
   if(showAll!==undefined)_activeListingsShowAll=showAll;
-  var el=document.getElementById('dash-active-listings');
-  var ct=document.getElementById('dash-active-count');
+  var el=document.getElementById("dash-active-listings");
+  var ct=document.getElementById("dash-active-count");
   if(!el)return;
-  var active=allVehicles.filter(function(v){return getListingStatus(v)==='active';});
-  if(ct)ct.textContent=active.length?active.length+' live':'';
+  var active=allVehicles.filter(function(v){return getListingStatus(v)==="active";});
+  if(ct)ct.textContent=active.length?active.length+" live":"";
   if(!active.length){
-    el.innerHTML='<div class="dlc-empty">No active listings detected in your universe.</div>';
+    el.innerHTML="<div class=\"dlc-empty\">No active listings detected in your universe.</div>";
     return;
   }
   active.sort(function(a,b){return (Number(a.asking_price)||999999)-(Number(b.asking_price)||999999);});
   var limit=_activeListingsShowAll?active.length:6;
-  var visible=active.slice(0,limit);
-  var html='';
-  visible.forEach(function(v){
+  var html="";
+  active.slice(0,limit).forEach(function(v){
     var bd=allBuildData[v.vin]||{};
-    var paint=(bd.paint_name||v.exterior||'').replace(/ - METALLIC PAINT/i,'').replace(/ METALLIC$/i,'');
-    var title=(v.year||'')+' '+(v.trim||'W222');
-    var state=v.last_title_state||'';
-    var meta=[paint,state].filter(Boolean).join(' · ');
-    var price=v.asking_price?'$'+Number(v.asking_price).toLocaleString():'';
-    var miles=v.curr_odo?Number(v.curr_odo).toLocaleString()+' mi':'';
-    // Get platform from listing_history if available
-    var platform='';
-    if(v.vdp_url){
-      if(v.vdp_url.includes('cargurus'))platform='CarGurus';
-      else if(v.vdp_url.includes('autotrader'))platform='AutoTrader';
-      else if(v.vdp_url.includes('cars.com'))platform='Cars.com';
-      else if(v.vdp_url.includes('bringatrailer'))platform='BaT';
-      else if(v.vdp_url.includes('carsandbids'))platform='Cars & Bids';
-      else if(v.vdp_url.includes('ebay'))platform='eBay';
-      else platform='Dealer';
-    }
-    var rightCol=
-      (price?'<div class="dlc-price">'+price+'</div>':'')+
-      (miles?'<div class="dlc-miles">'+miles+'</div>':'')+
-      (platform?'<div class="dlc-platform">'+platform+'</div>':'');
-    html+='<div class="dash-listing-card" data-vin="'+v.vin+'" onclick="dashOpenListing(this)">'+
-      '<div>'+
-        '<div class="dlc-vin">'+v.vin+'</div>'+
-        '<div class="dlc-title">'+title+'</div>'+
-        (meta?'<div class="dlc-meta">'+meta+'</div>':'')+
-      '</div>'+
-      '<div style="text-align:right;">'+rightCol+'</div>'+
-    '</div>';
+    var paint=(bd.paint_name||v.exterior||"").replace(/ - METALLIC PAINT/i,"").replace(/ METALLIC$/i,"");
+    var title=(v.year||"")+" "+(v.trim||"W222");
+    var state=v.last_title_state||"";
+    var price=v.asking_price?"$"+Number(v.asking_price).toLocaleString():"---";
+    var miles=v.curr_odo?Number(v.curr_odo).toLocaleString()+" mi":"---";
+    var platform=platformFromUrl(v.vdp_url||"");
+    var tier=getTier(v);
+    var tierColor=tier==="targeted"?"var(--accent)":tier==="watched"?"var(--gold)":"var(--muted)";
+    var tierLabel=tier==="targeted"?"TARGET":tier==="watched"?"WATCH":"DATA";
+    var cfx=dlcBadge("CFX", boolVal(v.has_carfax));
+    var ws=dlcBadge("Sticker", boolVal(v.has_window_sticker));
+    var contacted=dlcBadge("Contacted", !!(v.broker_name));
+    var metaStr=(paint||state)?(escHtml(paint)+(paint&&state?" · ":"")+state):"";
+    html+=
+      "<div class=\"dash-listing-card\" data-vin=\""+v.vin+"\" onclick=\"dashOpenListing(this)\">"+
+        "<div style=\"display:flex;align-items:flex-start;justify-content:space-between;gap:8px;\">"+
+          "<div style=\"min-width:0;flex:1;\">"+
+            "<div style=\"display:flex;align-items:center;gap:6px;margin-bottom:2px;\">"+
+              "<div class=\"dlc-vin\">"+v.vin+"</div>"+
+              "<span style=\"font-family:var(--mono);font-size:9px;font-weight:600;color:"+tierColor+";border:1px solid "+tierColor+";padding:0 5px;border-radius:3px;\">"+tierLabel+"</span>"+
+            "</div>"+
+            "<div class=\"dlc-title\">"+title+"</div>"+
+            (metaStr?"<div class=\"dlc-meta\">"+metaStr+"</div>":"")+
+            (v.broker_name?"<div class=\"dlc-meta\" style=\"margin-top:1px;\">"+escHtml(v.broker_name)+"</div>":"")+
+          "</div>"+
+          "<div style=\"text-align:right;flex-shrink:0;\">"+
+            "<div class=\"dlc-price\">"+price+"</div>"+
+            "<div class=\"dlc-miles\">"+miles+"</div>"+
+            (platform?"<div class=\"dlc-platform\">"+platform+"</div>":"")+
+          "</div>"+
+        "</div>"+
+        "<div style=\"display:flex;gap:5px;margin-top:7px;flex-wrap:wrap;\">"+cfx+ws+contacted+"</div>"+
+      "</div>";
   });
   if(active.length>6){
     if(_activeListingsShowAll){
-      html+='<div style="font-family:var(--mono);font-size:10px;color:var(--muted);text-align:center;padding:6px 0;cursor:pointer;" onclick="renderActiveListing(false)">Show less ▴</div>';
+      html+="<div style=\"font-family:var(--mono);font-size:10px;color:var(--muted);text-align:center;padding:6px 0;cursor:pointer;\" onclick=\"renderActiveListing(false)\">Show less</div>";
     } else {
-      html+='<div style="font-family:var(--mono);font-size:10px;color:var(--accent);text-align:center;padding:6px 0;cursor:pointer;font-weight:500;" onclick="renderActiveListing(true)">+ '+(active.length-6)+' more ▾</div>';
+      html+="<div style=\"font-family:var(--mono);font-size:10px;color:var(--accent);text-align:center;padding:6px 0;cursor:pointer;font-weight:500;\" onclick=\"renderActiveListing(true)\">+ "+(active.length-6)+" more</div>";
     }
   }
   el.innerHTML=html;
 }
-
 
 function setDashFilterBanner(label){
   var b=document.getElementById('dash-filter-banner');
