@@ -1374,11 +1374,26 @@ td.num{font-family:var(--mono);text-align:right;}
       <div class="drawer-field"><div class="drawer-field-label">PA &middot; PB &middot; MOD</div><div class="drawer-field-value" id="fd-sub-scores">&mdash;</div></div>
       <div class="drawer-field"><div class="drawer-field-label">Composite Score</div><div class="drawer-field-value accent" id="fd-score">&mdash;</div></div>
     </div>
-    <div class="section-head">Mileage</div>
+    <div class="section-head" style="display:flex;align-items:center;justify-content:space-between;">
+      <span>Mileage &amp; Pricing</span>
+      <button onclick="fdSaveLiveData()" style="font-family:var(--mono);font-size:9px;padding:2px 9px;border-radius:3px;border:1px solid var(--green);background:#edfaf3;color:var(--green);cursor:pointer;">Save Updates</button>
+    </div>
     <div class="drawer-grid">
-      <div class="drawer-field"><div class="drawer-field-label">Last Known Odo</div><div class="drawer-field-value accent" id="fd-odo">&mdash;</div></div>
+      <div class="drawer-field">
+        <div class="drawer-field-label">Current Odo</div>
+        <input id="fd-odo-input" type="number" placeholder="e.g. 63440"
+          style="width:100%;border:none;background:transparent;font-family:var(--mono);font-size:13px;font-weight:500;color:var(--accent);outline:none;padding:0;"
+          oninput="document.getElementById('fd-odo').textContent=this.value?Number(this.value).toLocaleString()+' mi':'—'">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);" id="fd-odo">&mdash;</div>
+      </div>
+      <div class="drawer-field">
+        <div class="drawer-field-label">Asking Price</div>
+        <input id="fd-asking-input" type="number" placeholder="e.g. 42799"
+          style="width:100%;border:none;background:transparent;font-family:var(--mono);font-size:13px;font-weight:500;color:var(--green);outline:none;padding:0;"
+          oninput="document.getElementById('fd-asking-display').textContent=this.value?'$'+Number(this.value).toLocaleString():'—'">
+        <div style="font-family:var(--mono);font-size:10px;color:var(--muted);" id="fd-asking-display">&mdash;</div>
+      </div>
       <div class="drawer-field"><div class="drawer-field-label">Last Sale Mi</div><div class="drawer-field-value" id="fd-last-sale-mi">&mdash;</div></div>
-      <div class="drawer-field"><div class="drawer-field-label">iSC Est Mi</div><div class="drawer-field-value" id="fd-isc-mi">&mdash;</div></div>
     </div>
     <div class="drawer-grid-2">
       <div class="drawer-field"><div class="drawer-field-label">Proj Mi @ Jan 2028</div><div class="drawer-field-value gold" id="fd-proj-mi">&mdash;</div></div>
@@ -2366,6 +2381,13 @@ async function openFleetDrawer(vin){
   document.getElementById('fd-sub-scores').textContent=`${v.score_pa??'—'} · ${v.score_pb??'—'} · ${v.score_mod??'—'}`;
   document.getElementById('fd-score').textContent=v.composite_score?`${v.composite_score} / 175`:'—';
   document.getElementById('fd-odo').textContent=v.curr_odo?Number(v.curr_odo).toLocaleString()+' mi':'—';
+  var odoInp=document.getElementById('fd-odo-input');if(odoInp)odoInp.value=v.curr_odo||'';
+  var ep=allActiveEpisodes[v.vin]||{};
+  var askInp=document.getElementById('fd-asking-input');
+  var askDisp=document.getElementById('fd-asking-display');
+  var askPrice=ep.price||null;
+  if(askInp)askInp.value=askPrice||'';
+  if(askDisp)askDisp.textContent=askPrice?'$'+Number(askPrice).toLocaleString():'—';
   document.getElementById('fd-last-sale-mi').textContent=v.last_sale_mi?Number(v.last_sale_mi).toLocaleString()+' mi':'—';
   document.getElementById('fd-isc-mi').textContent=v.iseecars_est_mi?Number(v.iseecars_est_mi).toLocaleString()+' mi':'—';
   document.getElementById('fd-proj-mi').textContent=v.proj_mi_jan28?Number(v.proj_mi_jan28).toLocaleString()+' mi':'—';
@@ -3496,6 +3518,37 @@ async function fdSetStatus(status){
   updateFleetStats();applyFilters();renderDashboard();
   toast(status+' \u2713');
 }
+
+async function fdSaveLiveData(){
+  if(!activeFD)return;
+  var vin=activeFD.vin;
+  var odoEl=document.getElementById('fd-odo-input');
+  var priceEl=document.getElementById('fd-asking-input');
+  var odo=odoEl&&odoEl.value?parseInt(odoEl.value):null;
+  var price=priceEl&&priceEl.value?parseInt(priceEl.value):null;
+  if(!odo&&!price){toast('Enter odometer or price to save',true);return;}
+  var updates={vin:vin};
+  if(odo)updates.curr_odo=odo;
+  var{error:vmErr}=await db.from('vehicle_market').upsert(updates,{onConflict:'vin'});
+  if(vmErr){toast('Save failed: '+vmErr.message,true);return;}
+  // Update listing_history active row if price provided
+  if(price){
+    await db.from('listing_history')
+      .update({price:price,miles:odo||null})
+      .eq('vin',vin).eq('link_status','Active');
+  }
+  // Update in-memory
+  var v=allVehicles.find(function(x){return x.vin===vin;});
+  if(v){if(odo)v.curr_odo=odo;}
+  if(allActiveEpisodes[vin]){
+    if(price)allActiveEpisodes[vin].price=price;
+    if(odo)allActiveEpisodes[vin].miles=odo;
+  }
+  activeFD.curr_odo=odo||activeFD.curr_odo;
+  renderActiveListing();
+  toast('Saved '+(odo?Number(odo).toLocaleString()+' mi':'')+(price&&odo?' · ':'')+(price?'$'+Number(price).toLocaleString():'')+' ✓');
+}
+
 
 function fdRenderTierControls(v){
   const tier=getTier(v);
