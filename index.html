@@ -2627,6 +2627,21 @@ async function doUploadDoc(file,slotId){
   const{error:iE}=await db.from('documents').insert({vin:activeFD.vin,doc_type:docType,storage_url:publicUrl,uploaded_at:new Date().toISOString()});
   if(iE){toast('DB save failed: '+iE.message,true);return;}
   await loadDocSlots(activeFD.vin);
+  // Sync boolean flag on vehicles table
+  const docBoolMap={
+    carfax:'has_carfax',
+    iseecars:'has_iseecars',
+    autocheck:'has_autocheck',
+    windowsticker:'has_window_sticker',
+  };
+  const boolField=docBoolMap[slotId];
+  if(boolField){
+    await db.from('vehicles').update({[boolField]:true}).eq('vin',activeFD.vin);
+    // Update in-memory vehicle record so dashboard badge refreshes
+    const v=allVehicles.find(x=>x.vin===activeFD.vin);
+    if(v)v[boolField]=true;
+    if(activeFD)activeFD[boolField]=true;
+  }
   toast(`${slotId} saved \u2713`);
 }
 
