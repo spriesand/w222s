@@ -3,6 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="V12 Pursuit">
+<meta name="theme-color" content="#0f0f0f">
+<link rel="manifest" href="/w222s/manifest.json">
 <title>W222s &mdash; Live Database</title>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
@@ -338,63 +344,9 @@ td.num{font-family:var(--mono);text-align:right;}
 .lh-sum-pill.dead{border-color:var(--accent);color:var(--accent);background:#fdf0f0;}
 
 /* -- Market Intelligence Tab -- */
-:root{--bat-orange:#e06a2c;--active-green:#2d6a3f;--dead-red:#8b2a2a;}
-.mi-header{background:linear-gradient(135deg,#1a0f05 0%,#2d1a08 100%);padding:20px 28px;border-bottom:2px solid var(--bat-orange);}
-.mi-header h2{font-family:var(--serif);font-size:18px;color:#f0e8d8;margin-bottom:4px;}
-.mi-header p{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:.08em;}
-.mi-stats{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--rule);}
-.mi-stat{background:#fff;padding:16px 20px;border-right:1px solid var(--rule);}
-.mi-stat:last-child{border-right:none;}
-.mi-stat-val{font-family:var(--sans);font-size:24px;font-weight:700;color:var(--ink);margin-bottom:4px;}
-.mi-stat-val.orange{color:var(--bat-orange);}
-.mi-stat-val.gold{color:var(--gold);}
-.mi-stat-val.red{color:var(--accent);}
-.mi-stat-label{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
-.mi-section-head{display:flex;align-items:center;justify-content:space-between;padding:14px 28px 10px;border-bottom:1px solid var(--rule);background:#faf8f4;}
-.mi-section-head h3{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--ink);}
-.mi-filter-row{display:flex;gap:6px;align-items:center;}
-.mi-filter-btn{font-family:var(--mono);font-size:9px;padding:3px 10px;border:1px solid var(--rule);border-radius:2px;background:#fff;cursor:pointer;color:var(--muted);letter-spacing:.06em;}
-.mi-filter-btn:hover{border-color:var(--gold);color:var(--ink);}
-.mi-filter-btn.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
-.bat-table-wrap{margin:0 28px 20px;border:1px solid var(--bat-orange);background:#fff;overflow:hidden;border-radius:4px;}
-.bat-table-header{background:var(--bat-orange);padding:10px 14px;display:flex;align-items:center;gap:10px;}
-.bat-logo{font-family:var(--mono);font-size:10px;font-weight:700;color:#fff;background:rgba(0,0,0,0.25);padding:2px 8px;border-radius:2px;letter-spacing:.1em;}
-.bat-table-header h4{font-family:var(--mono);font-size:11px;color:#fff;letter-spacing:.06em;}
-.bat-table-meta{margin-left:auto;font-family:var(--mono);font-size:9px;color:rgba(255,255,255,0.7);}
-.bat-table{width:100%;border-collapse:collapse;font-size:11px;}
-.bat-table th{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.1em;padding:7px 10px;background:#fff8f5;border-bottom:1px solid #f0d4c0;color:var(--muted);white-space:nowrap;}
-.bat-table td{font-family:var(--mono);font-size:10px;padding:8px 10px;border-bottom:1px solid #faeee6;vertical-align:middle;}
-.bat-table tr:last-child td{border-bottom:none;}
-.bat-table tr:hover td{background:#fff8f5;}
-.bat-row-2017 td{border-left:3px solid var(--gold);}
-.bat-sold{color:var(--active-green);font-weight:600;}
-.bat-rnm{color:var(--accent);}
-.year-tag{font-family:var(--mono);font-size:8px;padding:1px 6px;border-radius:2px;font-weight:600;}
-.year-2017{background:#fff8e8;color:var(--gold);border:1px solid var(--gold);}
-.year-2016{background:#e8f0ff;color:var(--s65);border:1px solid var(--s65);}
-.year-2015{background:#f0f0f0;color:#555;border:1px solid #bbb;}
-.gold-tag{font-family:var(--mono);font-size:8px;padding:1px 5px;border-radius:2px;background:#fff8e8;color:var(--gold);border:1px solid var(--gold);}
-.link-status{display:inline-flex;align-items:center;gap:4px;font-family:var(--mono);font-size:9px;}
-.link-dot{width:6px;height:6px;border-radius:50%;display:inline-block;}
-.status-active .link-dot{background:var(--active-green);}
-.status-active{color:var(--active-green);}
-.status-dead .link-dot{background:var(--accent);}
-.status-dead{color:var(--accent);}
-.status-unverified .link-dot{background:var(--muted);}
-.status-unverified{color:var(--muted);}
-.bat-url-link{font-family:var(--mono);font-size:9px;color:var(--bat-orange);text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;display:inline-block;}
-.bat-url-link:hover{text-decoration:underline;}
-.scan-table-wrap{margin:0 28px 20px;border:1px solid var(--rule);background:#fff;overflow:hidden;border-radius:4px;}
-.scan-table{width:100%;border-collapse:collapse;font-size:11px;}
-.scan-table th{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.1em;padding:7px 10px;background:#f5f5f4;border-bottom:1px solid var(--rule);color:var(--muted);white-space:nowrap;}
-.scan-table td{font-family:var(--mono);font-size:10px;padding:7px 10px;border-bottom:1px solid var(--rule);vertical-align:middle;}
-.scan-table tr:last-child td{border-bottom:none;}
-.scan-table tr:hover td{background:#fafaf8;}
-.scan-tp{color:var(--active-green);font-weight:600;}
+
 .scan-flag{background:#fff8e8;}
 .mi-empty{font-family:var(--mono);font-size:11px;color:var(--muted);padding:24px 28px;text-align:center;}
-#tab-market{display:none;}
-#tab-market.tab-panel-active{display:block;}
 
 /* -- Add Vehicle Modal -- */
 .av-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;opacity:0;pointer-events:none;transition:opacity .2s;}
@@ -710,6 +662,31 @@ td.num{font-family:var(--mono);text-align:right;}
 .dcolor:hover{opacity:.88;}
 .dcolor-n{font-family:var(--sans);font-size:19px;font-weight:700;line-height:1;}
 .dcolor-l{font-family:var(--mono);font-size:9px;margin-top:3px;text-transform:uppercase;letter-spacing:.06em;line-height:1.3;}
+/* Paint accordion small tiles */
+.dash-paint-sm{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;padding:10px 0 4px;}
+.dcolor-sm{border-radius:4px;border:1px solid rgba(0,0,0,.1);padding:8px 7px 6px;cursor:pointer;min-height:48px;display:flex;flex-direction:column;justify-content:flex-end;transition:opacity .15s;}
+.dcolor-sm:hover{opacity:.85;}
+.dcolor-sm-n{font-family:var(--sans);font-size:13px;font-weight:700;line-height:1;}
+.dcolor-sm-l{font-family:var(--mono);font-size:8px;margin-top:2px;text-transform:uppercase;letter-spacing:.05em;line-height:1.2;}
+/* Dashboard accordion */
+.dash-accordion{border:1px solid var(--rule);border-radius:6px;margin-bottom:14px;overflow:hidden;}
+.dash-acc-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;background:var(--surface);user-select:none;}
+.dash-acc-header:hover{background:#eeede9;}
+.dash-acc-title{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);}
+.dash-acc-arrow{font-size:9px;color:var(--muted);transition:transform .2s;}
+.dash-acc-arrow.open{transform:rotate(90deg);}
+.dash-acc-body{padding:0 14px 12px;}
+/* Active listings cards */
+.dash-listing-card{border:1px solid var(--rule);border-radius:6px;padding:11px 14px;margin-bottom:8px;display:grid;grid-template-columns:1fr auto;gap:4px;cursor:pointer;transition:border-color .15s;}
+.dash-listing-card:hover{border-color:var(--muted);}
+.dash-listing-card:last-child{margin-bottom:0;}
+.dlc-vin{font-family:var(--mono);font-size:9px;color:var(--muted);}
+.dlc-title{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink);margin-top:1px;}
+.dlc-meta{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:3px;}
+.dlc-price{font-family:var(--sans);font-size:15px;font-weight:700;color:var(--green);text-align:right;}
+.dlc-miles{font-family:var(--mono);font-size:9px;color:var(--muted);text-align:right;margin-top:2px;}
+.dlc-platform{font-family:var(--mono);font-size:9px;color:var(--muted);text-align:right;margin-top:2px;}
+.dlc-empty{font-family:var(--mono);font-size:11px;color:var(--muted);padding:16px 0;text-align:center;}
 .dash-years{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;}
 .dyear{background:#fff;border:1px solid var(--rule);border-radius:6px;padding:13px 12px;cursor:pointer;text-align:center;transition:all .15s;}
 .dyear:hover{border-color:var(--s65);transform:translateY(-1px);}
@@ -772,7 +749,7 @@ td.num{font-family:var(--mono);text-align:right;}
   <div class="tab active" id="tab-home" onclick="switchTab('dashboard')">&#8962; Home</div>
   <div class="tab" onclick="switchTab('fleet')">Fleet <span class="tab-badge" id="fleet-tab-count">&mdash;</span></div>
   <div class="tab" onclick="switchTab('crm')">Contacts <span class="tab-badge" id="crm-tab-count">&mdash;</span></div>
-  <div class="tab" onclick="switchTab('market')">Market <span class="tab-badge" id="market-tab-count" style="background:var(--bat-orange);color:#fff;">BaT</span></div>
+
   <div class="tab" onclick="switchTab('notes')">Notes &#128221;</div>
   <div class="tab" onclick="switchTab('bookmarks')">Resources &#128279;</div>
   <div class="tab-actions">
@@ -785,13 +762,6 @@ td.num{font-family:var(--mono);text-align:right;}
 <!-- DASHBOARD PAGE -->
 <div class="page active" id="page-dashboard">
 <div class="dash-content">
-
-  <div class="dash-sec">Active Targets</div>
-  <div class="dash-targets" id="dash-targets">
-    <div class="dtgt-empty">Loading targets&hellip;</div>
-    <div class="dtgt-empty">Loading&hellip;</div>
-    <div class="dtgt-empty">Loading&hellip;</div>
-  </div>
 
   <div class="dash-sec">Acquisition Pipeline</div>
   <div class="dash-pipeline">
@@ -825,9 +795,12 @@ td.num{font-family:var(--mono);text-align:right;}
     </div>
   </div>
 
-  <div class="dash-sec" id="dash-paint-sec">Factory Paint &middot; S65 Universe</div>
-  <div class="dash-paint" id="dash-paint-tiles">
-    <div class="dcolor" style="background:#f5f4f0;border-color:rgba(0,0,0,.05);"><div class="dcolor-n" style="color:#bbb;">—</div><div class="dcolor-l" style="color:#ccc;">Loading&hellip;</div></div>
+  <div class="dash-sec" style="display:flex;align-items:center;justify-content:space-between;">
+    <span>Active Listings</span>
+    <span id="dash-active-count" style="font-family:var(--mono);font-size:10px;color:var(--green);font-weight:600;"></span>
+  </div>
+  <div id="dash-active-listings" style="margin-bottom:18px;">
+    <div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:12px 0;">Loading active listings&hellip;</div>
   </div>
 
   <div class="dash-sec">By Model Year</div>
@@ -868,6 +841,19 @@ td.num{font-family:var(--mono);text-align:right;}
       <div class="dyear-c">3 S65</div>
       <div class="dyear-k">Final Edition</div>
       <div class="dyear-dots"><div class="dyd dyd-s65"></div></div>
+    </div>
+  </div>
+
+  <!-- Factory Paint S65 accordion -->
+  <div class="dash-accordion" id="dash-paint-accordion">
+    <div class="dash-acc-header" onclick="toggleDashAccordion('paint')">
+      <span class="dash-acc-title" id="dash-paint-sec">Factory Paint &middot; S65 Universe</span>
+      <span class="dash-acc-arrow" id="dash-paint-arrow">&#9654;</span>
+    </div>
+    <div class="dash-acc-body" id="dash-paint-body" style="display:none;">
+      <div class="dash-paint-sm" id="dash-paint-tiles">
+        <div class="dcolor-sm" style="background:#f5f4f0;"><div class="dcolor-sm-n" style="color:#bbb;">—</div><div class="dcolor-sm-l" style="color:#ccc;">Loading&hellip;</div></div>
+      </div>
     </div>
   </div>
 
@@ -930,6 +916,7 @@ td.num{font-family:var(--mono);text-align:right;}
     <!-- Single view toggle -->
     <div class="sidebar-section">
       <button class="view-btn" id="view-btn-all" onclick="setView('all')">&#8942; All VINs</button>
+      <button class="view-btn" id="view-btn-bat" onclick="setView('bat')" style="margin-top:4px;">&#9733; BaT History</button>
     </div>
 
     <!-- Model Year -->
@@ -995,7 +982,7 @@ td.num{font-family:var(--mono);text-align:right;}
     <div class="toolbar">
       <div class="search-wrap">
         <span class="search-icon">&#9906;</span>
-        <input type="text" id="fleet-search" placeholder="VIN, state, exterior&hellip;" oninput="applyFilters();updateSearchClear(this)">
+        <input type="text" id="fleet-search" placeholder="VIN, state, exterior&hellip;" oninput="debouncedApplyFilters();updateSearchClear(this)">
         <button class="search-clear" id="fleet-search-clear" onclick="clearFleetSearch()" title="Clear search">&#215;</button>
       </div>
       <select class="sort-select" id="fleet-sort" onchange="applyFilters()">
@@ -1138,72 +1125,6 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 
 <!-- MARKET INTELLIGENCE TAB -->
-<div id="tab-market">
-  <div style="max-width:1200px;margin:0 auto;padding-bottom:40px;">
-    <div class="mi-header">
-      <h2>Market Intelligence &mdash; BaT Comparables &amp; Listing History</h2>
-      <p id="mi-header-meta">Loading from Supabase&hellip;</p>
-    </div>
-    <div class="mi-stats">
-      <div class="mi-stat"><div class="mi-stat-val orange" id="mi-stat-bat-count">&mdash;</div><div class="mi-stat-label">BaT Events Tracked</div></div>
-      <div class="mi-stat"><div class="mi-stat-val gold" id="mi-stat-s65-ceiling">&mdash;</div><div class="mi-stat-label">2017 S65 Ceiling</div></div>
-      <div class="mi-stat"><div class="mi-stat-val" id="mi-stat-s600-ceiling">&mdash;</div><div class="mi-stat-label">2017 S600 Ceiling</div></div>
-      <div class="mi-stat"><div class="mi-stat-val" id="mi-stat-listing-count">&mdash;</div><div class="mi-stat-label">Listing History Episodes</div></div>
-    </div>
-    <div class="mi-section-head">
-      <h3>BaT Sales &mdash; All Cohorts</h3>
-      <div class="mi-filter-row">
-        <button class="mi-filter-btn active" onclick="filterBat('all',this)">All</button>
-        <button class="mi-filter-btn" onclick="filterBat('S65',this)">S65</button>
-        <button class="mi-filter-btn" onclick="filterBat('S600',this)">S600</button>
-        <button class="mi-filter-btn" onclick="filterBat('2017',this)">2017 Only</button>
-        <button class="mi-filter-btn" onclick="filterBat('gold',this)">GOLD Only</button>
-      </div>
-    </div>
-    <div class="bat-table-wrap">
-      <div class="bat-table-header">
-        <span class="bat-logo">BaT</span>
-        <h4>Bring a Trailer &mdash; Confirmed Sales &amp; RNM Events</h4>
-        <div class="bat-table-meta" id="bat-table-meta">Loading&hellip;</div>
-      </div>
-      <div style="overflow-x:auto;">
-        <table class="bat-table" id="bat-table">
-          <thead><tr><th>VIN (last 8)</th><th>Year</th><th>Trim</th><th>Miles</th><th>Result</th><th>Price</th><th>Date</th><th>Bids</th><th>GOLD</th><th>Notes</th><th>BaT Link</th><th>Status</th></tr></thead>
-          <tbody id="bat-tbody"><tr><td colspan="12" class="mi-empty">Loading BaT comparables&hellip;</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-    <div class="mi-section-head" style="margin-top:12px;">
-      <h3>Listing History &mdash; VIN Summary</h3>
-      <div class="mi-filter-row">
-        <button class="mi-filter-btn active" onclick="filterListings('all',this)">All</button>
-        <button class="mi-filter-btn" onclick="filterListings('2017',this)">2017</button>
-        <button class="mi-filter-btn" onclick="filterListings('S65',this)">S65</button>
-        <button class="mi-filter-btn" onclick="filterListings('S600',this)">S600</button>
-      </div>
-    </div>
-    <div class="scan-table-wrap">
-      <div style="overflow-x:auto;">
-        <table class="scan-table" id="listing-summary-table">
-          <thead><tr><th>VIN</th><th>Year</th><th>Trim</th><th>Episodes</th><th>Low Price</th><th>High Price</th><th>Max Miles</th><th>First Seen</th><th>Last Seen</th></tr></thead>
-          <tbody id="listing-summary-tbody"><tr><td colspan="9" class="mi-empty">Loading listing history&hellip;</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-    <div class="mi-section-head" style="margin-top:12px;">
-      <h3>Brave Scan &mdash; Active Listing Detections</h3>
-      <div class="mi-filter-row"><span style="font-family:var(--mono);font-size:9px;color:var(--muted);" id="scan-meta">Last scan: &mdash;</span></div>
-    </div>
-    <div class="scan-table-wrap">
-      <div style="overflow-x:auto;">
-        <table class="scan-table" id="scan-table">
-          <thead><tr><th>Scan Date</th><th>Rank</th><th>VIN</th><th>Cohort</th><th>URL</th><th>Title</th></tr></thead>
-          <tbody id="scan-tbody"><tr><td colspan="6" class="mi-empty">Loading scan results&hellip;</td></tr></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
 
 <!-- LIGHTBOX -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
@@ -1452,6 +1373,8 @@ td.num{font-family:var(--mono);text-align:right;}
       <div class="scenario-box s-walk"><div class="s-label">Walk-Away</div><div class="s-val" id="sc-walk">—</div></div>
       <div class="scenario-box s-ultra"><div class="s-label">ULTRA</div><div class="s-val" id="sc-ultra">—</div></div>
     </div>
+    <div class="section-head" id="fd-bat-section" style="display:none;">BaT History</div>
+    <div id="fd-bat-content" style="margin-bottom:14px;display:none;"></div>
     <div class="section-head">Listing History</div>
     <div class="lh-summary" id="fd-lh-summary"></div>
     <div style="overflow-x:auto;border:1px solid var(--rule);border-radius:4px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)" id="fd-lh-wrap">
@@ -1554,8 +1477,8 @@ function setSyncStatus(s){
   if(s==='error'){d.className='sync-dot error';l.textContent='Connection error';}
 }
 
-let allBatComparables=[], allListingSummary=[], allScanResults=[];
-let batFilter='all', listingFilter='all';
+let allBatComparables=[];
+
 let allBuildData={}; // keyed by vin from vehicle_build table
 
 function switchTab(t){
@@ -1569,13 +1492,67 @@ function switchTab(t){
   document.getElementById('page-crm').classList.toggle('active',t==='crm');
   document.getElementById('page-notes').classList.toggle('active',t==='notes');
   document.getElementById('page-bookmarks').classList.toggle('active',t==='bookmarks');
-  const mkt=document.getElementById('tab-market');
   if(t==='market'){mkt.classList.add('tab-panel-active');}
   else{mkt.classList.remove('tab-panel-active');}
-  if(t==='market'&&allBatComparables.length===0)loadMarketData();
   if(t==='notes'){loadGNotes();}
   if(t==='bookmarks'){renderBookmarks();}
 }
+
+function dashOpenListing(el){
+  var vin=el.dataset.vin;
+  if(!vin)return;
+  switchTab('fleet');
+  setTimeout(function(){openFleetDrawer(vin);},200);
+}
+
+function toggleDashAccordion(id){
+  var body=document.getElementById('dash-'+id+'-body');
+  var arrow=document.getElementById('dash-'+id+'-arrow');
+  if(!body)return;
+  var open=body.style.display!=='none';
+  body.style.display=open?'none':'block';
+  if(arrow)arrow.classList.toggle('open',!open);
+}
+
+function renderActiveListing(){
+  var el=document.getElementById('dash-active-listings');
+  var ct=document.getElementById('dash-active-count');
+  if(!el)return;
+  // Pull active listings from listing_history via allVehicles cross-ref
+  var active=allVehicles.filter(function(v){return getListingStatus(v)==='active';});
+  if(ct)ct.textContent=active.length?active.length+' live':'';
+  if(!active.length){
+    el.innerHTML='<div class="dlc-empty">No active listings detected in your universe.</div>';
+    return;
+  }
+  // Sort by asking_price asc, then by vin
+  active.sort(function(a,b){return (Number(a.asking_price)||999999)-(Number(b.asking_price)||999999);});
+  var html='';
+  active.slice(0,6).forEach(function(v){
+    var bd=allBuildData[v.vin]||{};
+    var paint=(bd.paint_name||v.exterior||'').replace(/ - METALLIC PAINT/i,'').replace(/ METALLIC$/i,'');
+    var title=(v.year||'')+' '+(v.trim||'W222');
+    var meta=[paint,v.last_title_state].filter(Boolean).join(' · ');
+    var price=v.asking_price?'$'+Number(v.asking_price).toLocaleString():'';
+    var miles=v.curr_odo?Number(v.curr_odo).toLocaleString()+' mi':'';
+    html+='<div class="dash-listing-card" data-vin="'+v.vin+'" onclick="dashOpenListing(this)">'+
+      '<div>'+
+        '<div class="dlc-vin">'+v.vin+'</div>'+
+        '<div class="dlc-title">'+title+'</div>'+
+        '<div class="dlc-meta">'+meta+'</div>'+
+      '</div>'+
+      '<div>'+
+        '<div class="dlc-price">'+price+'</div>'+
+        '<div class="dlc-miles">'+miles+'</div>'+
+      '</div>'+
+    '</div>';
+  });
+  if(active.length>6){
+    html+='<div style="font-family:var(--mono);font-size:10px;color:var(--muted);text-align:center;padding:6px 0;cursor:pointer;" onclick="dashGoFleet(&quot;active&quot;)">+ '+(active.length-6)+' more &rarr;</div>';
+  }
+  el.innerHTML=html;
+}
+
 
 function setDashFilterBanner(label){
   var b=document.getElementById('dash-filter-banner');
@@ -1702,10 +1679,10 @@ function renderPaintTiles(){
   tiles.forEach(function(t){
     var g=t.g;
     var idx=PAINT_GROUPS.indexOf(g);
-    html+='<div class="dcolor" style="background:'+g.bg+';border-color:'+g.br+
+    html+='<div class="dcolor-sm" style="background:'+g.bg+';border-color:'+g.br+
           ';" data-pgidx="'+idx+'" onclick="dashGoColorByIndex(+this.dataset.pgidx)">'+
-          '<div class="dcolor-n" style="color:'+g.nc+';">'+t.count+'</div>'+
-          '<div class="dcolor-l" style="color:'+g.lc+';">'+g.label+'</div>'+
+          '<div class="dcolor-sm-n" style="color:'+g.nc+';">'+t.count+'</div>'+
+          '<div class="dcolor-sm-l" style="color:'+g.lc+';">'+g.label+'</div>'+
           '</div>';
   });
   container.innerHTML=html;
@@ -1789,53 +1766,8 @@ function renderDashboard(){
 
   renderPaintTiles();
   renderS600Colors();
-  var container=document.getElementById('dash-targets');
-  if(!container)return;
+  renderActiveListing();
 
-  // Pad to 3 with empty slots
-  while(top3.length<3)top3.push(null);
-
-  container.innerHTML=top3.map(function(v,i){
-    if(!v){
-      return`<div class="dtgt-empty" onclick="switchTab('fleet')">
-        <div>No target &mdash; <span style="text-decoration:underline">open Fleet</span> to assign</div>
-      </div>`;
-    }
-    const isR1=i===0;
-    const score=v.composite_score?Number(v.composite_score).toFixed(0):'—';
-    const proj=v.proj_mi_jan28?Number(v.proj_mi_jan28).toLocaleString()+' mi':'—';
-    const offer=v.offer_target?'$'+Number(v.offer_target).toLocaleString():'<$40K';
-    const b=allBuildData[v.vin]||{};
-    const flags=[];
-    if(b.has_refrigerator)flags.push('<span class="dflag dflag-g">&#10003; Fridge</span>');
-    if(b.has_carbon_pkg)flags.push('<span class="dflag dflag-p">&#10003; Carbon</span>');
-    if(b.has_ceramic_brakes)flags.push('<span class="dflag dflag-p">&#10003; Ceramics</span>');
-    if(b.has_magic_sky)flags.push('<span class="dflag dflag-b">&#10003; Magic Sky</span>');
-    if(b.has_designo)flags.push('<span class="dflag dflag-gray">Designo</span>');
-    if(b.has_burmester)flags.push('<span class="dflag dflag-b">Burmester</span>');
-    const ls=getListingStatus(v);
-    const statusHtml=ls==='active'
-      ?`<span class="dtgt-status dsts-active">&#9679; Active listing${v.curr_odo?' &middot; '+Number(v.curr_odo).toLocaleString()+' mi':''}</span>`
-      :`<span class="dtgt-status dsts-watch">&#9675; Monitoring</span>`;
-    const paint=b.paint_name||(v.exterior||'');
-    const rankLabel=i===0?'Rank 1':(i===1?'Rank 2':'Rank 3');
-    const scoreLabel=score!=='—'?` &middot; Composite ${score}`:'';
-    return`<div class="dtgt${isR1?' rank1':''}" onclick="openFleetDrawer('${escHtml(v.vin)}');switchTab('fleet');">
-      <div class="dtgt-rank">${rankLabel}${scoreLabel}</div>
-      <div class="dtgt-vin">${escHtml(v.vin)}</div>
-      <div class="dtgt-desc">${v.year||''} ${v.trim||''}${paint?' &middot; '+escHtml(paint):''}${v.total_owners?' &middot; '+v.total_owners:''}${v.total_owners&&!String(v.total_owners).includes('Owner')?' owners':''}</div>
-      <div class="dtgt-stats">
-        <div><div class="dtgt-stat-n">${score}</div><div class="dtgt-stat-l">Score</div></div>
-        <div><div class="dtgt-stat-n">${proj}</div><div class="dtgt-stat-l">Proj. mi Jan 28</div></div>
-        <div><div class="dtgt-stat-n" style="color:var(--s65);">${offer}</div><div class="dtgt-stat-l">Target offer</div></div>
-      </div>
-      ${flags.length?`<div class="dtgt-flags">${flags.join('')}</div>`:''}
-      <div class="dtgt-footer">
-        ${v.broker_name?`<span class="dtgt-dealer">${escHtml(v.broker_name)}</span><br>`:''}
-        ${statusHtml}
-      </div>
-    </div>`;
-  }).join('');
 }
 function $m(n){return n!=null&&n!==''?'$'+Number(n).toLocaleString():'—';}
 function oFmt(n){return n?Number(n).toLocaleString()+' mi':'—';}
@@ -1845,7 +1777,7 @@ function boolVal(v){return(v===true||v==='TRUE'||v==='true'||v==='Yes');}
 async function loadAll(){
   setSyncStatus('loading');
   try{
-    const[vR,mR,cR,aR,lR,sR,bR]=await Promise.all([
+    const[vR,mR,cR,aR,lR,sR,bR,batR]=await Promise.all([
       db.from('vehicles').select('*').order('composite_score',{ascending:false,nullsFirst:false}).limit(10000),
       db.from('vehicle_market').select('*').limit(10000),
       db.from('broker_contacts').select('*').order('last_activity',{ascending:false,nullsFirst:false}),
@@ -1853,6 +1785,7 @@ async function loadAll(){
       db.from('contact_log').select('*').order('logged_at',{ascending:false}),
       db.from('vehicle_service').select('*').order('record_date',{ascending:true}).limit(10000),
       db.from('vehicle_build').select('vin,paint_code,paint_name,upholstery_name,production_date,has_ceramic_brakes,has_carbon_pkg,has_magic_sky,has_rear_entertainment,has_chauffeur_pkg,has_burmester,has_refrigerator,has_night_vision,has_abc_suspension,has_keyless_go,has_executive_rear_seat,has_designo,scraper_version').limit(10000),
+      db.from('bat_comparables').select('vin,model_year,trim,miles,result,hammer_price,sale_date,bat_url_primary,gold_record').order('sale_date',{ascending:false}).limit(2000),
     ]);
     if(vR.error)throw vR.error;
     const marketByVin={};
@@ -1870,6 +1803,7 @@ async function loadAll(){
     // Index build data by vin
     allBuildData={};
     (bR.data||[]).forEach(b=>{ allBuildData[b.vin]=b; });
+    allBatComparables=(batR&&batR.data)||[];
     allContacts=cR.data||[];allAlerts=aR.data||[];allLogs=lR.data||[];allServiceRecs=sR.data||[];
     updateFleetStats();applyFilters();updateCRMStats();renderCRM();
     document.getElementById('fleet-tab-count').textContent=allVehicles.length;
@@ -2006,78 +1940,19 @@ function mobileSearch(q){
   el.innerHTML=html;
 }
 
-async function loadMarketData(){
+async function refreshAll(){
+  const prevTab=document.querySelector('.page.active')?.id?.replace('page-','') || 'dashboard';
+  setSyncStatus('loading');
   try{
-    const[bR,lR,sR]=await Promise.all([
-      db.from('bat_comparables').select('*').order('model_year',{ascending:false}).order('hammer_price',{ascending:false}),
-      db.from('vin_listing_summary').select('*').order('model_year',{ascending:false}).order('episode_count',{ascending:false}),
-      db.from('scan_results').select('*').eq('true_positive',true).order('scan_date',{ascending:false}).limit(200),
-    ]);
-    allBatComparables=bR.data||[];allListingSummary=lR.data||[];allScanResults=sR.data||[];
-    renderMarketStats();renderBatTable();renderListingSummary();renderScanResults();
-  }catch(err){console.error('Market data load error:',err);}
+    await loadAll();
+    switchTab(prevTab);
+    toast('Refreshed ✓');
+  }catch(err){
+    setSyncStatus('error');
+    toast('Refresh failed',true);
+    console.error('refreshAll error:',err);
+  }
 }
-
-function renderMarketStats(){
-  const total=allBatComparables.length;
-  const sold=allBatComparables.filter(r=>r.result==='Sold');
-  const s65_2017=sold.filter(r=>r.model_year===2017&&r.trim==='S65');
-  const s600_2017=sold.filter(r=>r.model_year===2017&&r.trim==='S600');
-  const s65ceil=s65_2017.length?Math.max(...s65_2017.map(r=>r.hammer_price||0)):null;
-  const s600ceil=s600_2017.length?Math.max(...s600_2017.map(r=>r.hammer_price||0)):null;
-  document.getElementById('mi-stat-bat-count').textContent=total;
-  document.getElementById('mi-stat-s65-ceiling').textContent=s65ceil?'$'+s65ceil.toLocaleString():'—';
-  document.getElementById('mi-stat-s600-ceiling').textContent=s600ceil?'$'+s600ceil.toLocaleString():'—';
-  document.getElementById('mi-stat-listing-count').textContent=allListingSummary.reduce((a,r)=>a+(r.episode_count||0),0).toLocaleString();
-  const sold_count=sold.length,rnm_count=allBatComparables.filter(r=>r.rnm).length;
-  document.getElementById('bat-table-meta').textContent=`${total} records \u00b7 ${sold_count} sold \u00b7 ${rnm_count} RNM`;
-  const lastScan=allScanResults.length?allScanResults[0].scan_date:'&mdash;';
-  document.getElementById('scan-meta').textContent=`Last scan: ${lastScan}`;
-  document.getElementById('mi-header-meta').textContent=`${total} BaT events \u00b7 ${allListingSummary.length} VINs tracked`;
-  document.getElementById('market-tab-count').textContent=total;
-}
-
-function filterBat(f,btn){batFilter=f;document.querySelectorAll('.mi-filter-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderBatTable();}
-
-function renderBatTable(){
-  let rows=allBatComparables;
-  if(batFilter==='S65')rows=rows.filter(r=>r.trim==='S65');
-  else if(batFilter==='S600')rows=rows.filter(r=>r.trim==='S600');
-  else if(batFilter==='2017')rows=rows.filter(r=>r.model_year===2017);
-  else if(batFilter==='gold')rows=rows.filter(r=>r.gold_record);
-  if(!rows.length){document.getElementById('bat-tbody').innerHTML='<tr><td colspan="12" class="mi-empty">No records match filter</td></tr>';return;}
-  document.getElementById('bat-tbody').innerHTML=rows.map(r=>{
-    const rowClass=r.model_year===2017?'bat-row-2017':'';
-    const yearTag=`<span class="year-tag year-${r.model_year}">${r.model_year}</span>`;
-    const resultCell=r.result==='Sold'?`<span class="bat-sold">&#128296; SOLD</span>`:`<span class="bat-rnm">RNM</span>`;
-    const price=r.hammer_price?`<strong>$${Number(r.hammer_price).toLocaleString()}</strong>`:'&mdash;';
-    const miles=r.miles?Number(r.miles).toLocaleString()+'k':'&mdash;';
-    const goldTag=r.gold_record?'<span class="gold-tag">GOLD</span>':'';
-    const linkStatus=r.link_status||'Unverified';
-    const statusClass=linkStatus==='Active'?'status-active':linkStatus==='Dead'?'status-dead':'status-unverified';
-    const url=r.bat_url_primary?`<a class="bat-url-link" href="${r.bat_url_primary}" target="_blank">${r.bat_url_primary.replace('https://bringatrailer.com/listing/','\u2026/')}</a>`:'&mdash;';
-    return `<tr class="${rowClass}"><td>${(r.vin||'').slice(-8)}</td><td>${yearTag}</td><td>${r.trim||'&mdash;'}</td><td>${miles}</td><td>${resultCell}</td><td>${price}</td><td>${r.sale_date||'&mdash;'}</td><td>${r.bids||'&mdash;'}</td><td>${goldTag}</td><td style="max-width:200px;white-space:normal;font-size:9px;">${r.notes||'&mdash;'}</td><td>${url}</td><td><span class="link-status ${statusClass}"><span class="link-dot"></span>${linkStatus}</span></td></tr>`;
-  }).join('');
-}
-
-function filterListings(f,btn){listingFilter=f;document.querySelectorAll('.mi-filter-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderListingSummary();}
-
-function renderListingSummary(){
-  let rows=allListingSummary;
-  if(listingFilter==='2017')rows=rows.filter(r=>r.model_year===2017);
-  else if(listingFilter==='S65')rows=rows.filter(r=>r.trim==='S65');
-  else if(listingFilter==='S600')rows=rows.filter(r=>r.trim==='S600');
-  if(!rows.length){document.getElementById('listing-summary-tbody').innerHTML='<tr><td colspan="9" class="mi-empty">No records match filter</td></tr>';return;}
-  document.getElementById('listing-summary-tbody').innerHTML=rows.map(r=>`<tr><td>${r.vin||'&mdash;'}</td><td>${r.model_year||'&mdash;'}</td><td>${r.trim||'&mdash;'}</td><td>${r.episode_count||0}</td><td>${r.lowest_list_price?'$'+Number(r.lowest_list_price).toLocaleString():'&mdash;'}</td><td>${r.highest_list_price?'$'+Number(r.highest_list_price).toLocaleString():'&mdash;'}</td><td>${r.max_observed_miles?Number(r.max_observed_miles).toLocaleString()+' mi':'&mdash;'}</td><td>${r.first_market_date||'&mdash;'}</td><td>${r.last_market_date||'&mdash;'}</td></tr>`).join('');
-}
-
-function renderScanResults(){
-  const rows=allScanResults;
-  if(!rows.length){document.getElementById('scan-tbody').innerHTML='<tr><td colspan="6" class="mi-empty">No confirmed listing detections yet</td></tr>';return;}
-  document.getElementById('scan-tbody').innerHTML=rows.map(r=>`<tr class="scan-flag"><td>${r.scan_date||'&mdash;'}</td><td>${r.rank||'&mdash;'}</td><td style="font-weight:600;">${r.query_id||'&mdash;'}</td><td>${r.cohort||'&mdash;'}</td><td><a href="${r.url||'#'}" target="_blank" style="font-family:var(--mono);font-size:9px;color:var(--accent);word-break:break-all;">${(r.url||'&mdash;').substring(0,80)}${(r.url||'').length>80?'\u2026':''}</a></td><td style="font-size:9px;max-width:200px;white-space:normal;">${r.title||'&mdash;'}</td></tr>`).join('');
-}
-
-async function refreshAll(){await toast('Refreshed');}
 
 function updateFleetStats(){
   const S65_TRIMS=new Set(['S65 AMG','S65','S65 AMG Final Edition']);
@@ -2144,6 +2019,8 @@ var currentView='focus';
 function setView(mode){
   currentView=mode;
   if(mode!=='paint_filter')dashPaintFilter=null;
+  var batBtn=document.getElementById('view-btn-bat');
+  if(batBtn)batBtn.classList.toggle('on',mode==='bat');
   var btn=document.getElementById('view-btn-all');
   if(btn)btn.classList.toggle('active',mode==='all');
   fleetPage=0;
@@ -2174,6 +2051,16 @@ function toggleTrimFilter(trim,el){
   fleetPage=0;applyFilters();
 }
 
+function debounce(fn,delay){
+  var t;
+  return function(){
+    var args=arguments;
+    clearTimeout(t);
+    t=setTimeout(function(){fn.apply(null,args);},delay);
+  };
+}
+var debouncedApplyFilters=debounce(applyFilters,200);
+
 function applyFilters(){
   const q=(document.getElementById('fleet-search').value||'').toLowerCase();
   const yr2020=document.getElementById('yr-2020')&&document.getElementById('yr-2020').checked;
@@ -2203,6 +2090,10 @@ function applyFilters(){
     if(currentView==='s600'&&(v.trim||'')!=='S600')return false;
     if(currentView==='s600'&&tier==='data_only')return false;
     // Dashboard-specific views
+    if(currentView==='bat'){
+      var hasBat=allBatComparables.some(function(r){return r.vin===v.vin;});
+      if(!hasBat)return false;
+    }
     if(currentView==='targeted_only'&&getTier(v)!=='targeted')return false;
     if(currentView==='watch_only'&&getTier(v)!=='watched')return false;
     if(currentView==='ultra_rare'){
@@ -2418,6 +2309,33 @@ async function openFleetDrawer(vin){
   if(v.image_url){
     const{data:su}=await db.storage.from(BUCKET).createSignedUrl(v.image_url,3600);
     if(su){iz.classList.add('has-img');const im=document.createElement('img');im.src=su.signedUrl;iz.prepend(im);}
+  }
+  // BaT history badge
+  const batRecs=allBatComparables.filter(function(r){return r.vin===vin;});
+  const batSec=document.getElementById('fd-bat-section');
+  const batContent=document.getElementById('fd-bat-content');
+  if(batSec&&batContent){
+    if(batRecs.length){
+      batSec.style.display='';
+      batContent.style.display='';
+      batContent.innerHTML=batRecs.map(function(r){
+        var sold=r.result==='Sold';
+        var price=r.hammer_price?'$'+Number(r.hammer_price).toLocaleString():'RNM';
+        var miles=r.miles?Number(r.miles).toLocaleString()+'k mi':'';
+        var gold=r.gold_record?'<span style="font-family:var(--mono);font-size:9px;color:var(--gold);font-weight:600;margin-left:4px;">GOLD</span>':'';
+        var link=r.bat_url_primary?'<a href="'+r.bat_url_primary+'" target="_blank" style="font-family:var(--mono);font-size:9px;color:var(--accent);">BaT ↗</a>':'';
+        return '<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:11px;">'+
+          '<span style="font-weight:600;color:'+(sold?'var(--green)':'var(--muted)')+';">'+(sold?'✓ SOLD':'RNM')+'</span>'+
+          '<span style="font-weight:700;">'+price+'</span>'+
+          '<span style="color:var(--muted);">'+miles+'</span>'+
+          '<span style="color:var(--muted);">'+(r.sale_date||'')+'</span>'+
+          gold+link+
+        '</div>';
+      }).join('');
+    } else {
+      batSec.style.display='none';
+      batContent.style.display='none';
+    }
   }
   await loadDocSlots(vin);
   document.getElementById('fleet-overlay').classList.add('open');
@@ -3901,6 +3819,121 @@ async function bmDelete(id){
 }
 
 // Auto-initialize on page load
+// ── Service Worker Registration ──────────────────────────────────
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('/w222s/sw.js', {scope:'/w222s/'})
+      .then(function(reg){ console.log('[SW] Registered:', reg.scope); })
+      .catch(function(err){ console.log('[SW] Registration failed:', err); });
+  });
+}
+
+// ── Share Target Handler ─────────────────────────────────────────
+function extractVinFromString(str){
+  if(!str)return null;
+  // MB VIN pattern: WDD + 14 chars alphanumeric (no I,O,Q)
+  var match=str.match(/WDD[A-HJ-NPR-Z0-9]{14}/i);
+  return match?match[0].toUpperCase():null;
+}
+
+function extractVinFromUrl(url){
+  if(!url)return null;
+  // Try direct VIN in URL first
+  var vin=extractVinFromString(url);
+  if(vin)return vin;
+  // Common URL patterns: /vin/WDDXXX, vin=WDDXXX, /WDDXXX
+  var patterns=[
+    /[?&/]vin[=/]([A-HJ-NPR-Z0-9]{17})/i,
+    /vehicle[s]?[/=]([A-HJ-NPR-Z0-9]{17})/i,
+    /listing[/=]([A-HJ-NPR-Z0-9]{17})/i,
+  ];
+  for(var p of patterns){
+    var m=url.match(p);
+    if(m&&m[1].toUpperCase().startsWith('WDD'))return m[1].toUpperCase();
+  }
+  return null;
+}
+
+async function handleShareTarget(sharedUrl, sharedTitle, sharedText){
+  if(!sharedUrl&&!sharedText)return;
+  var rawStr=(sharedUrl||'')+(sharedTitle||'')+(sharedText||'');
+  var vin=extractVinFromUrl(sharedUrl)||extractVinFromString(rawStr);
+
+  // Show share detection banner
+  var banner=document.getElementById('share-detection-banner');
+  if(!banner){
+    banner=document.createElement('div');
+    banner.id='share-detection-banner';
+    banner.style.cssText='position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;background:var(--ink);color:#fff;padding:12px 20px;border-radius:8px;font-family:var(--mono);font-size:12px;box-shadow:0 4px 20px rgba(0,0,0,.3);max-width:340px;text-align:center;';
+    document.body.appendChild(banner);
+  }
+
+  if(vin){
+    // Check if VIN exists in DB
+    var existing=allVehicles.find(function(v){return v.vin===vin;});
+    if(existing){
+      banner.innerHTML='<strong>'+vin.slice(-8)+'</strong> found in your fleet — opening profile<br><small style="color:#aaa;margin-top:4px;display:block;">'+(sharedUrl||'').substring(0,50)+'</small>';
+      setTimeout(function(){banner.remove();},3000);
+      // Open drawer and offer to update listing URL
+      switchTab('fleet');
+      setTimeout(function(){
+        openFleetDrawer(vin);
+        // Pre-fill listing URL if we have it
+        if(sharedUrl){
+          var urlInput=document.getElementById('fd-new-url-input');
+          if(urlInput)urlInput.value=sharedUrl;
+          toast('VIN found — verify listing URL above ✓');
+        }
+      },400);
+    } else {
+      banner.innerHTML='<strong>VIN detected:</strong> '+vin+'<br><small style="color:#aaa;margin-top:4px;display:block;">New sighting — opening Add Vehicle</small>';
+      setTimeout(function(){banner.remove();},3000);
+      // Open Add Vehicle with pre-filled data
+      setTimeout(function(){
+        openAddVehicle();
+        setTimeout(function(){
+          var vinInput=document.getElementById('av-vin');
+          if(vinInput){vinInput.value=vin;vinInput.dispatchEvent(new Event('input'));}
+          if(sharedUrl){
+            var vdpInput=document.getElementById('av-vdp-url');
+            if(vdpInput)vdpInput.value=sharedUrl;
+          }
+        },300);
+      },400);
+    }
+  } else {
+    // No VIN found — open Add Vehicle with URL pre-filled
+    banner.innerHTML='Listing URL received<br><small style="color:#aaa;margin-top:4px;display:block;">Opening Add Vehicle — VIN not detected in URL</small>';
+    setTimeout(function(){banner.remove();},3000);
+    setTimeout(function(){
+      openAddVehicle();
+      setTimeout(function(){
+        var vdpInput=document.getElementById('av-vdp-url');
+        if(vdpInput)vdpInput.value=sharedUrl||sharedText||'';
+      },300);
+    },400);
+  }
+}
+
+// Check for share target params on load
+window.addEventListener('DOMContentLoaded', function(){
+  var params=new URLSearchParams(window.location.search);
+  var shareUrl=params.get('share_url');
+  var shareTitle=params.get('share_title');
+  var shareText=params.get('share_text');
+  if(shareUrl||shareText){
+    // Wait for data to load then handle
+    var checkReady=setInterval(function(){
+      if(allVehicles.length>0){
+        clearInterval(checkReady);
+        handleShareTarget(shareUrl,shareTitle,shareText);
+      }
+    },300);
+    // Timeout after 10s
+    setTimeout(function(){clearInterval(checkReady);},10000);
+  }
+});
+
 (async function initApp(){
   try {
     await loadAll();
