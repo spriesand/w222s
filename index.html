@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -48,7 +47,6 @@
   ALTER TABLE vehicles ADD COLUMN IF NOT EXISTS listing_status text;
   */
 </script>
-
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
@@ -753,7 +751,6 @@ td.num{font-family:var(--mono);text-align:right;}
 .cohort-count{color:var(--ink);font-weight:500;}
 .cohort-divider{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--rule);margin:6px 0 4px;border-top:1px solid var(--rule);padding-top:6px;}
 </style>
-
 </head>
 <body>
 
@@ -786,7 +783,6 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 
 <!-- DASHBOARD PAGE -->
-
 <div class="page active" id="page-dashboard">
 <div class="dash-content">
 
@@ -914,7 +910,6 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 
 <!-- FLEET PAGE -->
-
 <div class="page" id="page-fleet">
 <div class="shell">
   <aside>
@@ -932,44 +927,41 @@ td.num{font-family:var(--mono);text-align:right;}
       </div>
     </div>
 
-```
-<!-- Single view toggle -->
-<div class="sidebar-section">
-  <button class="view-btn" id="view-btn-all" onclick="setView('all')">&#8942; All VINs</button>
-</div>
+    <!-- Single view toggle -->
+    <div class="sidebar-section">
+      <button class="view-btn" id="view-btn-all" onclick="setView('all')">&#8942; All VINs</button>
+    </div>
 
-<!-- Model Year -->
-<div class="sidebar-section">
-  <div class="sidebar-label">Model Year</div>
-  <label class="filter-row"><input type="checkbox" id="yr-2020" checked onchange="applyFilters()">2020<span class="filter-count" id="cnt-yr2020">&mdash;</span></label>
-  <label class="filter-row"><input type="checkbox" id="yr-2019" checked onchange="applyFilters()">2019<span class="filter-count" id="cnt-yr2019">&mdash;</span></label>
-  <label class="filter-row"><input type="checkbox" id="yr-2018" checked onchange="applyFilters()">2018<span class="filter-count" id="cnt-yr2018">&mdash;</span></label>
-  <label class="filter-row"><input type="checkbox" id="yr-2017" checked onchange="applyFilters()">2017<span class="filter-count" id="cnt-yr2017">&mdash;</span></label>
-  <label class="filter-row"><input type="checkbox" id="yr-2016" checked onchange="applyFilters()">2016<span class="filter-count" id="cnt-yr2016">&mdash;</span></label>
-  <label class="filter-row"><input type="checkbox" id="yr-2015" checked onchange="applyFilters()">2015<span class="filter-count" id="cnt-yr2015">&mdash;</span></label>
-</div>
+    <!-- Model Year -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">Model Year</div>
+      <label class="filter-row"><input type="checkbox" id="yr-2020" checked onchange="applyFilters()">2020<span class="filter-count" id="cnt-yr2020">&mdash;</span></label>
+      <label class="filter-row"><input type="checkbox" id="yr-2019" checked onchange="applyFilters()">2019<span class="filter-count" id="cnt-yr2019">&mdash;</span></label>
+      <label class="filter-row"><input type="checkbox" id="yr-2018" checked onchange="applyFilters()">2018<span class="filter-count" id="cnt-yr2018">&mdash;</span></label>
+      <label class="filter-row"><input type="checkbox" id="yr-2017" checked onchange="applyFilters()">2017<span class="filter-count" id="cnt-yr2017">&mdash;</span></label>
+      <label class="filter-row"><input type="checkbox" id="yr-2016" checked onchange="applyFilters()">2016<span class="filter-count" id="cnt-yr2016">&mdash;</span></label>
+      <label class="filter-row"><input type="checkbox" id="yr-2015" checked onchange="applyFilters()">2015<span class="filter-count" id="cnt-yr2015">&mdash;</span></label>
+    </div>
 
-<!-- Cohort Totals (read-only) -->
-<div class="sidebar-section">
-  <div class="sidebar-label">Cohort Totals</div>
-  <div class="cohort-divider">S65</div>
-  <div class="cohort-row"><span class="cohort-label">2015</span><span class="cohort-count" id="coh-2015-s65">&mdash;</span></div>
-  <div class="cohort-row"><span class="cohort-label">2016</span><span class="cohort-count" id="coh-2016-s65">&mdash;</span></div>
-  <div class="cohort-row"><span class="cohort-label">2017</span><span class="cohort-count" id="coh-2017-s65">&mdash;</span></div>
-  <div class="cohort-row"><span class="cohort-label">2018</span><span class="cohort-count" id="coh-2018-s65">&mdash;</span></div>
-  <div class="cohort-row"><span class="cohort-label">2019</span><span class="cohort-count" id="coh-2019-s65">&mdash;</span></div>
-  <div class="cohort-row"><span class="cohort-label">2020</span><span class="cohort-count" id="coh-2020-s65">&mdash;</span></div>
-  <div class="cohort-row"><span class="cohort-label">2020 FE</span><span class="cohort-count" id="coh-2020-fe">&mdash;</span></div>
-  <div class="cohort-divider">S600</div>
-  <div class="cohort-row"><span class="cohort-label">2015</span><span class="cohort-count" id="coh-2015-s600">&mdash;</span></div>
-  <div class="cohort-row"><span class="cohort-label">2016</span><span class="cohort-count" id="coh-2016-s600">&mdash;</span></div>
-  <div class="cohort-row"><span class="cohort-label">2017</span><span class="cohort-count" id="coh-2017-s600">&mdash;</span></div>
-  <div class="cohort-row"><span class="cohort-label">2018</span><span class="cohort-count" id="coh-2018-s600">&mdash;</span></div>
-  <div class="cohort-row"><span class="cohort-label">2019</span><span class="cohort-count" id="coh-2019-s600">&mdash;</span></div>
-  <div class="cohort-row"><span class="cohort-label">2020</span><span class="cohort-count" id="coh-2020-s600">&mdash;</span></div>
-</div>
-```
-
+    <!-- Cohort Totals (read-only) -->
+    <div class="sidebar-section">
+      <div class="sidebar-label">Cohort Totals</div>
+      <div class="cohort-divider">S65</div>
+      <div class="cohort-row"><span class="cohort-label">2015</span><span class="cohort-count" id="coh-2015-s65">&mdash;</span></div>
+      <div class="cohort-row"><span class="cohort-label">2016</span><span class="cohort-count" id="coh-2016-s65">&mdash;</span></div>
+      <div class="cohort-row"><span class="cohort-label">2017</span><span class="cohort-count" id="coh-2017-s65">&mdash;</span></div>
+      <div class="cohort-row"><span class="cohort-label">2018</span><span class="cohort-count" id="coh-2018-s65">&mdash;</span></div>
+      <div class="cohort-row"><span class="cohort-label">2019</span><span class="cohort-count" id="coh-2019-s65">&mdash;</span></div>
+      <div class="cohort-row"><span class="cohort-label">2020</span><span class="cohort-count" id="coh-2020-s65">&mdash;</span></div>
+      <div class="cohort-row"><span class="cohort-label">2020 FE</span><span class="cohort-count" id="coh-2020-fe">&mdash;</span></div>
+      <div class="cohort-divider">S600</div>
+      <div class="cohort-row"><span class="cohort-label">2015</span><span class="cohort-count" id="coh-2015-s600">&mdash;</span></div>
+      <div class="cohort-row"><span class="cohort-label">2016</span><span class="cohort-count" id="coh-2016-s600">&mdash;</span></div>
+      <div class="cohort-row"><span class="cohort-label">2017</span><span class="cohort-count" id="coh-2017-s600">&mdash;</span></div>
+      <div class="cohort-row"><span class="cohort-label">2018</span><span class="cohort-count" id="coh-2018-s600">&mdash;</span></div>
+      <div class="cohort-row"><span class="cohort-label">2019</span><span class="cohort-count" id="coh-2019-s600">&mdash;</span></div>
+      <div class="cohort-row"><span class="cohort-label">2020</span><span class="cohort-count" id="coh-2020-s600">&mdash;</span></div>
+    </div>
   </aside>
   <main>
     <div id="mobile-search-panel">
@@ -1080,7 +1072,6 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 
 <!-- CRM PAGE -->
-
 <div class="page" id="page-crm">
 <div class="shell">
   <aside>
@@ -1147,7 +1138,6 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 
 <!-- MARKET INTELLIGENCE TAB -->
-
 <div id="tab-market">
   <div style="max-width:1200px;margin:0 auto;padding-bottom:40px;">
     <div class="mi-header">
@@ -1216,14 +1206,12 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 
 <!-- LIGHTBOX -->
-
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()">&#215;</button>
   <img id="lightbox-img" src="" alt="">
 </div>
 
 <!-- GENERAL NOTES PAGE -->
-
 <div class="page" id="page-notes">
   <div class="gnotes-shell">
     <div class="gnotes-sidebar">
@@ -1267,7 +1255,6 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 
 <!-- BOOKMARKS PAGE -->
-
 <div class="page" id="page-bookmarks">
   <div class="bm-shell">
     <div class="bm-sidebar">
@@ -1303,7 +1290,6 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 
 <!-- ADD VEHICLE OVERLAY + MODAL -->
-
 <div class="av-overlay" id="av-overlay" onclick="closeAddVehicle()"></div>
 <div class="av-modal" id="av-modal">
   <div class="av-modal-header">
@@ -1324,7 +1310,6 @@ td.num{font-family:var(--mono);text-align:right;}
 </div>
 
 <!-- FLEET DRAWER -->
-
 <div class="drawer-overlay" id="fleet-overlay" onclick="closeFleetDrawer()"></div>
 <div class="drawer" id="fleet-drawer">
   <div class="drawer-header">
@@ -1351,150 +1336,146 @@ td.num{font-family:var(--mono);text-align:right;}
       <button class="ls-btn" id="ls-btn-silent" onclick="fdSetListingStatus('silent')"><span class="ls-dot-indicator" style="background:#aaa"></span>Silent</button>
     </div>
 
-```
-<!-- Active Listing URLs — above photo -->
-<div class="section-head">Active Listing URLs</div>
-<div id="fd-listing-urls" style="margin-bottom:10px"></div>
-<div style="display:flex;gap:6px;margin-bottom:16px;align-items:stretch">
-  <input id="fd-new-url-input" type="url" placeholder="https://cargurus.com/listing/…"
-    style="flex:1;border:1px solid var(--rule);border-radius:4px;padding:7px 10px;font-family:var(--mono);font-size:11px;background:#fff;color:var(--ink);outline:none"
-    onkeydown="if(event.key==='Enter')fdAddListingUrl()">
-  <select id="fd-new-url-platform" style="border:1px solid var(--rule);border-radius:4px;padding:6px 8px;font-family:var(--mono);font-size:11px;background:#fff;color:var(--ink);outline:none">
-    <option value="CarGurus">CarGurus</option>
-    <option value="Cars.com">Cars.com</option>
-    <option value="AutoTrader">AutoTrader</option>
-    <option value="Dealer">Dealer</option>
-    <option value="eBay">eBay</option>
-    <option value="BaT">BaT</option>
-    <option value="Private">Private</option>
-    <option value="Other">Other</option>
-  </select>
-  <button class="btn btn-accent" onclick="fdAddListingUrl()" style="white-space:nowrap;padding:6px 10px">+ Add</button>
-</div>
+    <!-- Active Listing URLs — above photo -->
+    <div class="section-head">Active Listing URLs</div>
+    <div id="fd-listing-urls" style="margin-bottom:10px"></div>
+    <div style="display:flex;gap:6px;margin-bottom:16px;align-items:stretch">
+      <input id="fd-new-url-input" type="url" placeholder="https://cargurus.com/listing/…"
+        style="flex:1;border:1px solid var(--rule);border-radius:4px;padding:7px 10px;font-family:var(--mono);font-size:11px;background:#fff;color:var(--ink);outline:none"
+        onkeydown="if(event.key==='Enter')fdAddListingUrl()">
+      <select id="fd-new-url-platform" style="border:1px solid var(--rule);border-radius:4px;padding:6px 8px;font-family:var(--mono);font-size:11px;background:#fff;color:var(--ink);outline:none">
+        <option value="CarGurus">CarGurus</option>
+        <option value="Cars.com">Cars.com</option>
+        <option value="AutoTrader">AutoTrader</option>
+        <option value="Dealer">Dealer</option>
+        <option value="eBay">eBay</option>
+        <option value="BaT">BaT</option>
+        <option value="Private">Private</option>
+        <option value="Other">Other</option>
+      </select>
+      <button class="btn btn-accent" onclick="fdAddListingUrl()" style="white-space:nowrap;padding:6px 10px">+ Add</button>
+    </div>
 
-<div class="section-head">Vehicle Photo</div>
-<div class="img-upload-zone" id="img-zone">
-  <input type="file" accept="image/*" id="img-file-input" onchange="uploadVehicleImage(this)" style="display:none">
-  <div class="img-placeholder" style="font-size:24px">&#128247;</div>
-  <div class="img-placeholder" style="font-family:var(--mono);font-size:11px;color:var(--muted)">Drop or click to upload photo</div>
-  <div class="img-overlay">Change photo</div>
-</div>
-<button class="btn" style="width:100%;margin-bottom:14px" onclick="document.getElementById('img-file-input').click()">&#128247; Upload / Change Photo</button>
-<div class="section-head">Documents</div>
-<div class="doc-slots" id="fd-docs">
-  <div class="doc-slot" id="slot-carfax" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'carfax')"><input type="file" onchange="uploadDoc(this,'carfax')"><div class="doc-slot-label">Carfax</div><div class="doc-slot-icon">&#128203;</div><div class="doc-slot-status">Click or drop PDF</div></div>
-  <div class="doc-slot" id="slot-goodcar" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'goodcar')"><input type="file" onchange="uploadDoc(this,'goodcar')"><div class="doc-slot-label">GoodCar</div><div class="doc-slot-icon">&#10003;</div><div class="doc-slot-status">Click or drop PDF</div></div>
-  <div class="doc-slot" id="slot-iseecars" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'iseecars')"><input type="file" onchange="uploadDoc(this,'iseecars')"><div class="doc-slot-label">iSeeCars</div><div class="doc-slot-icon">&#128202;</div><div class="doc-slot-status">Click or drop PDF</div></div>
-  <div class="doc-slot" id="slot-autocheck" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'autocheck')"><input type="file" onchange="uploadDoc(this,'autocheck')"><div class="doc-slot-label">AutoCheck</div><div class="doc-slot-icon">&#128269;</div><div class="doc-slot-status">Click or drop PDF</div></div>
-  <div class="doc-slot" id="slot-windowsticker" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'windowsticker')"><input type="file" onchange="uploadDoc(this,'windowsticker')"><div class="doc-slot-label">Window Sticker</div><div class="doc-slot-icon">&#129695;</div><div class="doc-slot-status">Click or drop PDF</div></div>
-  <div class="doc-slot" id="slot-publicrecords" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'publicrecords')"><input type="file" onchange="uploadDoc(this,'publicrecords')"><div class="doc-slot-label">Public Records</div><div class="doc-slot-icon">&#128193;</div><div class="doc-slot-status">Click or drop PDF</div></div>
-  <div class="doc-slot" id="slot-ppi" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'ppi')"><input type="file" onchange="uploadDoc(this,'ppi')"><div class="doc-slot-label">PPI Report</div><div class="doc-slot-icon">&#128295;</div><div class="doc-slot-status">Click or drop PDF</div></div>
-</div>
-<div class="section-head">Identity &amp; Color</div>
-<div class="drawer-grid">
-  <div class="drawer-field"><div class="drawer-field-label">Paint</div><div class="drawer-field-value" id="fd-ext">&mdash;</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Paint Code</div><div class="drawer-field-value mono" id="fd-paint-code">&mdash;</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Upholstery</div><div class="drawer-field-value" id="fd-uph">&mdash;</div></div>
-</div>
-<div class="drawer-grid">
-  <div class="drawer-field"><div class="drawer-field-label">State</div><div class="drawer-field-value" id="fd-state">&mdash;</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Production Date</div><div class="drawer-field-value mono" id="fd-prod-date">&mdash;</div></div>
-</div>
-<div class="section-head">Factory Equipment</div>
-<div id="fd-build-equipment" style="margin-bottom:14px;">
-  <div style="font-family:var(--mono);font-size:10px;color:var(--muted);">No factory build data on file for this VIN.</div>
-</div>
-<div class="section-head">Vehicle Data</div>
-<div class="drawer-grid">
-  <div class="drawer-field"><div class="drawer-field-label">Owners</div><div class="drawer-field-value" id="fd-own">&mdash;</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Accidents</div><div class="drawer-field-value" id="fd-acc">&mdash;</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Svc/Yr</div><div class="drawer-field-value" id="fd-svc">&mdash;</div></div>
-</div>
-<div class="swall-grid">
-  <div class="swall-toggle" id="swall-trans" onclick="fdToggleSwall('trans_confirmed',this)">
-    <span class="swall-toggle-label">Transmission</span>
-    <span class="swall-switch"></span>
-  </div>
-  <div class="swall-toggle" id="swall-ign" onclick="fdToggleSwall('ign_confirmed',this)">
-    <span class="swall-toggle-label">Ignition / Plugs</span>
-    <span class="swall-switch"></span>
-  </div>
-  <div class="swall-toggle" id="swall-susp" onclick="fdToggleSwall('susp_confirmed',this)">
-    <span class="swall-toggle-label">Suspension</span>
-    <span class="swall-switch"></span>
-  </div>
-  <div class="swall-toggle" id="swall-brake" onclick="fdToggleSwall('brake_confirmed',this)">
-    <span class="swall-toggle-label">Brakes</span>
-    <span class="swall-switch"></span>
-  </div>
-</div>
-<div class="section-head">Scoring</div>
-<div class="drawer-grid">
-  <div class="drawer-field"><div class="drawer-field-label">QS</div><div class="drawer-field-value" id="fd-qs">&mdash;</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">PA &middot; PB &middot; MOD</div><div class="drawer-field-value" id="fd-sub-scores">&mdash;</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Composite Score</div><div class="drawer-field-value accent" id="fd-score">&mdash;</div></div>
-</div>
-<div class="section-head">Mileage</div>
-<div class="drawer-grid">
-  <div class="drawer-field"><div class="drawer-field-label">Last Known Odo</div><div class="drawer-field-value accent" id="fd-odo">&mdash;</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Last Sale Mi</div><div class="drawer-field-value" id="fd-last-sale-mi">&mdash;</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">iSC Est Mi</div><div class="drawer-field-value" id="fd-isc-mi">&mdash;</div></div>
-</div>
-<div class="drawer-grid-2">
-  <div class="drawer-field"><div class="drawer-field-label">Proj Mi @ Jan 2028</div><div class="drawer-field-value gold" id="fd-proj-mi">&mdash;</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Last Sale Year</div><div class="drawer-field-value" id="fd-sale">&mdash;</div></div>
-</div>
-<div class="section-head">Sale History</div>
-<div id="fd-timeline" style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)"></div>
-<div class="section-head">Service Records</div>
-<div id="fd-service" class="svc-timeline"><div class="svc-empty">Loading&hellip;</div></div>
-<div class="section-head">Observed Pricing</div>
-<div class="drawer-grid">
-  <div class="drawer-field"><div class="drawer-field-label">S-Class Est</div><div class="drawer-field-value" id="fd-sclass">&mdash;</div></div>
-  <div class="drawer-field"><div class="drawer-field-label"># Listings</div><div class="drawer-field-value" id="fd-listings">&mdash;</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Last Sale $</div><div class="drawer-field-value" id="fd-last-price">&mdash;</div></div>
-</div>
-<div class="section-head">Depreciation</div>
-<div class="drawer-grid">
-  <div class="drawer-field"><div class="drawer-field-label">Depr 5yr</div><div class="drawer-field-value" id="fd-depr">&mdash;</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Val @ 1yr</div><div class="drawer-field-value" id="fd-val1">&mdash;</div></div>
-  <div class="drawer-field"><div class="drawer-field-label">Val @ 3yr</div><div class="drawer-field-value" id="fd-val3">&mdash;</div></div>
-</div>
-<div class="section-head">Jan 2028 Scenarios</div>
-<div class="scenario-row">
-  <div class="scenario-box s-low"><div class="s-label">LOW</div><div class="s-val" id="sc-low">—</div></div>
-  <div class="scenario-box s-mid"><div class="s-label">MID</div><div class="s-val" id="sc-mid">—</div></div>
-  <div class="scenario-box s-offer"><div class="s-label">Offer</div><div class="s-val" id="sc-offer">—</div></div>
-  <div class="scenario-box s-walk"><div class="s-label">Walk-Away</div><div class="s-val" id="sc-walk">—</div></div>
-  <div class="scenario-box s-ultra"><div class="s-label">ULTRA</div><div class="s-val" id="sc-ultra">—</div></div>
-</div>
-<div class="section-head">Listing History</div>
-<div class="lh-summary" id="fd-lh-summary"></div>
-<div style="overflow-x:auto;border:1px solid var(--rule);border-radius:4px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)" id="fd-lh-wrap">
-  <table class="lh-table" id="fd-lh-table">
-    <thead><tr><th>Date</th><th>Price</th><th>Miles</th><th>Platform</th><th>Seller</th><th>State</th><th>Status</th><th>Link</th></tr></thead>
-    <tbody id="fd-lh-tbody"><tr><td colspan="8" class="lh-empty">Loading&hellip;</td></tr></tbody>
-  </table>
-</div>
-<div class="section-head">Research Notes Log</div>
-<textarea class="vlog-input" id="fd-vlog-input" placeholder="Paste dealer notes, diagnosis, listing details, chat takeaways, URLs&hellip; Images: Ctrl+V to paste or attach below."></textarea>
-<div id="fd-vlog-img-wrap" style="display:none;margin-bottom:8px;align-items:center;gap:8px">
-  <img id="fd-vlog-img-preview" style="max-width:120px;max-height:80px;border-radius:3px;border:1px solid var(--rule);cursor:zoom-in" onclick="openLightbox(this.src)" alt="">
-  <button onclick="fdVlogClearImg()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px">&#215; Remove</button>
-</div>
-<div class="vlog-attach-bar">
-  <label class="vlog-attach-label">&#128247; Attach Image<input type="file" accept="image/*" style="display:none" onchange="fdVlogAttachFile(this)"></label>
-  <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">or Ctrl+V to paste</span>
-  <button class="btn btn-accent" onclick="fdSaveVlogEntry()" style="margin-left:auto">+ Add Note</button>
-</div>
-<div id="fd-vlog-list"></div>
-```
-
+    <div class="section-head">Vehicle Photo</div>
+    <div class="img-upload-zone" id="img-zone">
+      <input type="file" accept="image/*" id="img-file-input" onchange="uploadVehicleImage(this)" style="display:none">
+      <div class="img-placeholder" style="font-size:24px">&#128247;</div>
+      <div class="img-placeholder" style="font-family:var(--mono);font-size:11px;color:var(--muted)">Drop or click to upload photo</div>
+      <div class="img-overlay">Change photo</div>
+    </div>
+    <button class="btn" style="width:100%;margin-bottom:14px" onclick="document.getElementById('img-file-input').click()">&#128247; Upload / Change Photo</button>
+    <div class="section-head">Documents</div>
+    <div class="doc-slots" id="fd-docs">
+      <div class="doc-slot" id="slot-carfax" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'carfax')"><input type="file" onchange="uploadDoc(this,'carfax')"><div class="doc-slot-label">Carfax</div><div class="doc-slot-icon">&#128203;</div><div class="doc-slot-status">Click or drop PDF</div></div>
+      <div class="doc-slot" id="slot-goodcar" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'goodcar')"><input type="file" onchange="uploadDoc(this,'goodcar')"><div class="doc-slot-label">GoodCar</div><div class="doc-slot-icon">&#10003;</div><div class="doc-slot-status">Click or drop PDF</div></div>
+      <div class="doc-slot" id="slot-iseecars" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'iseecars')"><input type="file" onchange="uploadDoc(this,'iseecars')"><div class="doc-slot-label">iSeeCars</div><div class="doc-slot-icon">&#128202;</div><div class="doc-slot-status">Click or drop PDF</div></div>
+      <div class="doc-slot" id="slot-autocheck" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'autocheck')"><input type="file" onchange="uploadDoc(this,'autocheck')"><div class="doc-slot-label">AutoCheck</div><div class="doc-slot-icon">&#128269;</div><div class="doc-slot-status">Click or drop PDF</div></div>
+      <div class="doc-slot" id="slot-windowsticker" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'windowsticker')"><input type="file" onchange="uploadDoc(this,'windowsticker')"><div class="doc-slot-label">Window Sticker</div><div class="doc-slot-icon">&#129695;</div><div class="doc-slot-status">Click or drop PDF</div></div>
+      <div class="doc-slot" id="slot-publicrecords" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'publicrecords')"><input type="file" onchange="uploadDoc(this,'publicrecords')"><div class="doc-slot-label">Public Records</div><div class="doc-slot-icon">&#128193;</div><div class="doc-slot-status">Click or drop PDF</div></div>
+      <div class="doc-slot" id="slot-ppi" ondragover="dragOver(event,this)" ondragleave="dragLeave(this)" ondrop="dropFile(event,'ppi')"><input type="file" onchange="uploadDoc(this,'ppi')"><div class="doc-slot-label">PPI Report</div><div class="doc-slot-icon">&#128295;</div><div class="doc-slot-status">Click or drop PDF</div></div>
+    </div>
+    <div class="section-head">Identity &amp; Color</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">Paint</div><div class="drawer-field-value" id="fd-ext">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Paint Code</div><div class="drawer-field-value mono" id="fd-paint-code">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Upholstery</div><div class="drawer-field-value" id="fd-uph">&mdash;</div></div>
+    </div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">State</div><div class="drawer-field-value" id="fd-state">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Production Date</div><div class="drawer-field-value mono" id="fd-prod-date">&mdash;</div></div>
+    </div>
+    <div class="section-head">Factory Equipment</div>
+    <div id="fd-build-equipment" style="margin-bottom:14px;">
+      <div style="font-family:var(--mono);font-size:10px;color:var(--muted);">No factory build data on file for this VIN.</div>
+    </div>
+    <div class="section-head">Vehicle Data</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">Owners</div><div class="drawer-field-value" id="fd-own">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Accidents</div><div class="drawer-field-value" id="fd-acc">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Svc/Yr</div><div class="drawer-field-value" id="fd-svc">&mdash;</div></div>
+    </div>
+    <div class="swall-grid">
+      <div class="swall-toggle" id="swall-trans" onclick="fdToggleSwall('trans_confirmed',this)">
+        <span class="swall-toggle-label">Transmission</span>
+        <span class="swall-switch"></span>
+      </div>
+      <div class="swall-toggle" id="swall-ign" onclick="fdToggleSwall('ign_confirmed',this)">
+        <span class="swall-toggle-label">Ignition / Plugs</span>
+        <span class="swall-switch"></span>
+      </div>
+      <div class="swall-toggle" id="swall-susp" onclick="fdToggleSwall('susp_confirmed',this)">
+        <span class="swall-toggle-label">Suspension</span>
+        <span class="swall-switch"></span>
+      </div>
+      <div class="swall-toggle" id="swall-brake" onclick="fdToggleSwall('brake_confirmed',this)">
+        <span class="swall-toggle-label">Brakes</span>
+        <span class="swall-switch"></span>
+      </div>
+    </div>
+    <div class="section-head">Scoring</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">QS</div><div class="drawer-field-value" id="fd-qs">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">PA &middot; PB &middot; MOD</div><div class="drawer-field-value" id="fd-sub-scores">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Composite Score</div><div class="drawer-field-value accent" id="fd-score">&mdash;</div></div>
+    </div>
+    <div class="section-head">Mileage</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">Last Known Odo</div><div class="drawer-field-value accent" id="fd-odo">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Last Sale Mi</div><div class="drawer-field-value" id="fd-last-sale-mi">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">iSC Est Mi</div><div class="drawer-field-value" id="fd-isc-mi">&mdash;</div></div>
+    </div>
+    <div class="drawer-grid-2">
+      <div class="drawer-field"><div class="drawer-field-label">Proj Mi @ Jan 2028</div><div class="drawer-field-value gold" id="fd-proj-mi">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Last Sale Year</div><div class="drawer-field-value" id="fd-sale">&mdash;</div></div>
+    </div>
+    <div class="section-head">Sale History</div>
+    <div id="fd-timeline" style="margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)"></div>
+    <div class="section-head">Service Records</div>
+    <div id="fd-service" class="svc-timeline"><div class="svc-empty">Loading&hellip;</div></div>
+    <div class="section-head">Observed Pricing</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">S-Class Est</div><div class="drawer-field-value" id="fd-sclass">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label"># Listings</div><div class="drawer-field-value" id="fd-listings">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Last Sale $</div><div class="drawer-field-value" id="fd-last-price">&mdash;</div></div>
+    </div>
+    <div class="section-head">Depreciation</div>
+    <div class="drawer-grid">
+      <div class="drawer-field"><div class="drawer-field-label">Depr 5yr</div><div class="drawer-field-value" id="fd-depr">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Val @ 1yr</div><div class="drawer-field-value" id="fd-val1">&mdash;</div></div>
+      <div class="drawer-field"><div class="drawer-field-label">Val @ 3yr</div><div class="drawer-field-value" id="fd-val3">&mdash;</div></div>
+    </div>
+    <div class="section-head">Jan 2028 Scenarios</div>
+    <div class="scenario-row">
+      <div class="scenario-box s-low"><div class="s-label">LOW</div><div class="s-val" id="sc-low">—</div></div>
+      <div class="scenario-box s-mid"><div class="s-label">MID</div><div class="s-val" id="sc-mid">—</div></div>
+      <div class="scenario-box s-offer"><div class="s-label">Offer</div><div class="s-val" id="sc-offer">—</div></div>
+      <div class="scenario-box s-walk"><div class="s-label">Walk-Away</div><div class="s-val" id="sc-walk">—</div></div>
+      <div class="scenario-box s-ultra"><div class="s-label">ULTRA</div><div class="s-val" id="sc-ultra">—</div></div>
+    </div>
+    <div class="section-head">Listing History</div>
+    <div class="lh-summary" id="fd-lh-summary"></div>
+    <div style="overflow-x:auto;border:1px solid var(--rule);border-radius:4px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)" id="fd-lh-wrap">
+      <table class="lh-table" id="fd-lh-table">
+        <thead><tr><th>Date</th><th>Price</th><th>Miles</th><th>Platform</th><th>Seller</th><th>State</th><th>Status</th><th>Link</th></tr></thead>
+        <tbody id="fd-lh-tbody"><tr><td colspan="8" class="lh-empty">Loading&hellip;</td></tr></tbody>
+      </table>
+    </div>
+    <div class="section-head">Research Notes Log</div>
+    <textarea class="vlog-input" id="fd-vlog-input" placeholder="Paste dealer notes, diagnosis, listing details, chat takeaways, URLs&hellip; Images: Ctrl+V to paste or attach below."></textarea>
+    <div id="fd-vlog-img-wrap" style="display:none;margin-bottom:8px;align-items:center;gap:8px">
+      <img id="fd-vlog-img-preview" style="max-width:120px;max-height:80px;border-radius:3px;border:1px solid var(--rule);cursor:zoom-in" onclick="openLightbox(this.src)" alt="">
+      <button onclick="fdVlogClearImg()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px">&#215; Remove</button>
+    </div>
+    <div class="vlog-attach-bar">
+      <label class="vlog-attach-label">&#128247; Attach Image<input type="file" accept="image/*" style="display:none" onchange="fdVlogAttachFile(this)"></label>
+      <span style="font-family:var(--mono);font-size:10px;color:var(--muted)">or Ctrl+V to paste</span>
+      <button class="btn btn-accent" onclick="fdSaveVlogEntry()" style="margin-left:auto">+ Add Note</button>
+    </div>
+    <div id="fd-vlog-list"></div>
   </div>
 </div>
 
 <!-- CRM DRAWER -->
-
 <div class="drawer-overlay" id="crm-overlay" onclick="closeCRMDrawer()"></div>
 <div class="drawer" id="crm-drawer">
   <div class="drawer-header">
@@ -3006,310 +2987,309 @@ function avStage2HTML(){
   h+='<label class="av-checkbox-row"><input type="checkbox" id="av-brake"'+(avData.brake_confirmed?' checked':'')+'>  Brakes (+5 pts)</label></div>';
   h+='<div class="av-section-divider">Notes</div>';
   h+='<textarea class="notes-area" id="av-notes" placeholder="Source, seller context, service docs..." style="min-height:80px">'+(avData.research_notes||'')+'</textarea>';
-
-return h;
+  return h;
 }
 
 function avStage3HTML(){
-var score=avComputeScore(avData);
-var fc=score.flag===‘Target’?‘var(–accent)’:score.flag===‘Watch’?‘var(–gold)’:score.flag===‘DQ’?’#888’:’#999’;
-var fb=score.flag===‘Target’?’#fdf0f0’:score.flag===‘Watch’?’#fdf8ec’:score.flag===‘DQ’?’#3c0000’:’#f5f5f5’;
-var h=’’;
-h+=’<div class="av-score-preview"><div class="av-score-preview-title">Score Preview</div>’;
-h+=’<div class="av-score-grid">’;
-h+=’<div class="av-score-cell"><span class="av-score-num gold">’+score.composite+’</span><span class="av-score-lbl">Composite</span></div>’;
-h+=’<div class="av-score-cell"><span class="av-score-num">’+score.qs+’</span><span class="av-score-lbl">QS (PA)</span></div>’;
-h+=’<div class="av-score-cell"><span class="av-score-num">’+score.pb+’</span><span class="av-score-lbl">Mileage (PB)</span></div>’;
-h+=’<div class="av-score-cell"><span class="av-score-num">’+score.mod+’</span><span class="av-score-lbl">Svc Wall</span></div></div></div>’;
-h+=’<div class="av-section-divider">Profile Summary</div>’;
-h+=’<div class="drawer-grid" style="margin-bottom:12px">’;
-h+=’<div class="drawer-field"><div class="drawer-field-label">VIN</div><div class="drawer-field-value" style="font-size:11px">’+(avData.vin||’—’)+’</div></div>’;
-h+=’<div class="drawer-field"><div class="drawer-field-label">Year / Model</div><div class="drawer-field-value">’+(avData.year||’—’)+’ ‘+(avData.trim||’—’)+’</div></div>’;
-h+=’<div class="drawer-field"><div class="drawer-field-label">Flag</div><div class="drawer-field-value"><span style="background:'+fb+';color:'+fc+';padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600">’+(score.flag||’—’)+’</span></div></div></div>’;
-h+=’<div class="drawer-grid" style="margin-bottom:12px">’;
-h+=’<div class="drawer-field"><div class="drawer-field-label">Exterior</div><div class="drawer-field-value" style="font-size:12px">’+(avData.exterior||’—’)+’</div></div>’;
-h+=’<div class="drawer-field"><div class="drawer-field-label">State</div><div class="drawer-field-value">’+(avData.last_title_state||’—’)+’</div></div>’;
-h+=’<div class="drawer-field"><div class="drawer-field-label">Odometer</div><div class="drawer-field-value" style="color:var(--accent)">’+(avData.curr_odo?Number(avData.curr_odo).toLocaleString()+’ mi’:’—’)+’</div></div></div>’;
-h+=’<div class="drawer-grid" style="margin-bottom:12px">’;
-h+=’<div class="drawer-field"><div class="drawer-field-label">Asking Price</div><div class="drawer-field-value" style="color:var(--green)">’+(avData.asking_price?’$’+Number(avData.asking_price).toLocaleString():’—’)+’</div></div>’;
-h+=’<div class="drawer-field"><div class="drawer-field-label">Platform</div><div class="drawer-field-value">’+(avData.platform||’—’)+’</div></div>’;
-h+=’<div class="drawer-field"><div class="drawer-field-label">Proj @ Jan 2028</div><div class="drawer-field-value" style="color:var(--gold)">’+(avData.proj_mi_jan28?Number(avData.proj_mi_jan28).toLocaleString()+’ mi’:’—’)+’</div></div></div>’;
-h+=’<div class="av-error-msg" id="av-save-error"></div>’;
-h+=’<div class="av-hint" style="margin-top:4px">Saved with status <strong>Sighting</strong> — swept into monthly MarketCheck enrichment automatically.</div>’;
-// vPIC decoded details block
-if(avData._vpic){
-var vp=avData._vpic;
-var vpParts=[];
-if(vp.eng&&vp.cyl)vpParts.push(vp.eng+’ V’+vp.cyl);
-if(vp.hp&&vp.hp!==‘0’)vpParts.push(vp.hp+’ hp’);
-if(vp.trans&&vp.trans!==‘Not Applicable’)vpParts.push(vp.trans);
-if(vp.plant)vpParts.push(‘Built: ‘+vp.plant);
-if(vp.series)vpParts.push(‘Series: ‘+vp.series);
-if(vpParts.length){
-h+=’<div style="background:#edf3fd;border:1px solid #b8cef0;border-radius:4px;padding:9px 12px;margin-top:10px;">’;
-h+=’<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--s65);margin-bottom:5px;">⚙ NHTSA vPIC — Decoded</div>’;
-h+=’<div style="font-family:var(--mono);font-size:11px;color:#1a3a5c;line-height:1.8">’+vpParts.join(’<br>’)+’</div>’;
-h+=’</div>’;
-}
-}
-return h;
+  var score=avComputeScore(avData);
+  var fc=score.flag==='Target'?'var(--accent)':score.flag==='Watch'?'var(--gold)':score.flag==='DQ'?'#888':'#999';
+  var fb=score.flag==='Target'?'#fdf0f0':score.flag==='Watch'?'#fdf8ec':score.flag==='DQ'?'#3c0000':'#f5f5f5';
+  var h='';
+  h+='<div class="av-score-preview"><div class="av-score-preview-title">Score Preview</div>';
+  h+='<div class="av-score-grid">';
+  h+='<div class="av-score-cell"><span class="av-score-num gold">'+score.composite+'</span><span class="av-score-lbl">Composite</span></div>';
+  h+='<div class="av-score-cell"><span class="av-score-num">'+score.qs+'</span><span class="av-score-lbl">QS (PA)</span></div>';
+  h+='<div class="av-score-cell"><span class="av-score-num">'+score.pb+'</span><span class="av-score-lbl">Mileage (PB)</span></div>';
+  h+='<div class="av-score-cell"><span class="av-score-num">'+score.mod+'</span><span class="av-score-lbl">Svc Wall</span></div></div></div>';
+  h+='<div class="av-section-divider">Profile Summary</div>';
+  h+='<div class="drawer-grid" style="margin-bottom:12px">';
+  h+='<div class="drawer-field"><div class="drawer-field-label">VIN</div><div class="drawer-field-value" style="font-size:11px">'+(avData.vin||'&mdash;')+'</div></div>';
+  h+='<div class="drawer-field"><div class="drawer-field-label">Year / Model</div><div class="drawer-field-value">'+(avData.year||'&mdash;')+' '+(avData.trim||'&mdash;')+'</div></div>';
+  h+='<div class="drawer-field"><div class="drawer-field-label">Flag</div><div class="drawer-field-value"><span style="background:'+fb+';color:'+fc+';padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600">'+(score.flag||'&mdash;')+'</span></div></div></div>';
+  h+='<div class="drawer-grid" style="margin-bottom:12px">';
+  h+='<div class="drawer-field"><div class="drawer-field-label">Exterior</div><div class="drawer-field-value" style="font-size:12px">'+(avData.exterior||'&mdash;')+'</div></div>';
+  h+='<div class="drawer-field"><div class="drawer-field-label">State</div><div class="drawer-field-value">'+(avData.last_title_state||'&mdash;')+'</div></div>';
+  h+='<div class="drawer-field"><div class="drawer-field-label">Odometer</div><div class="drawer-field-value" style="color:var(--accent)">'+(avData.curr_odo?Number(avData.curr_odo).toLocaleString()+' mi':'&mdash;')+'</div></div></div>';
+  h+='<div class="drawer-grid" style="margin-bottom:12px">';
+  h+='<div class="drawer-field"><div class="drawer-field-label">Asking Price</div><div class="drawer-field-value" style="color:var(--green)">'+(avData.asking_price?'$'+Number(avData.asking_price).toLocaleString():'&mdash;')+'</div></div>';
+  h+='<div class="drawer-field"><div class="drawer-field-label">Platform</div><div class="drawer-field-value">'+(avData.platform||'&mdash;')+'</div></div>';
+  h+='<div class="drawer-field"><div class="drawer-field-label">Proj @ Jan 2028</div><div class="drawer-field-value" style="color:var(--gold)">'+(avData.proj_mi_jan28?Number(avData.proj_mi_jan28).toLocaleString()+' mi':'&mdash;')+'</div></div></div>';
+  h+='<div class="av-error-msg" id="av-save-error"></div>';
+  h+='<div class="av-hint" style="margin-top:4px">Saved with status <strong>Sighting</strong> &mdash; swept into monthly MarketCheck enrichment automatically.</div>';
+  // vPIC decoded details block
+  if(avData._vpic){
+    var vp=avData._vpic;
+    var vpParts=[];
+    if(vp.eng&&vp.cyl)vpParts.push(vp.eng+' V'+vp.cyl);
+    if(vp.hp&&vp.hp!=='0')vpParts.push(vp.hp+' hp');
+    if(vp.trans&&vp.trans!=='Not Applicable')vpParts.push(vp.trans);
+    if(vp.plant)vpParts.push('Built: '+vp.plant);
+    if(vp.series)vpParts.push('Series: '+vp.series);
+    if(vpParts.length){
+      h+='<div style="background:#edf3fd;border:1px solid #b8cef0;border-radius:4px;padding:9px 12px;margin-top:10px;">';
+      h+='<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--s65);margin-bottom:5px;">&#9881; NHTSA vPIC &mdash; Decoded</div>';
+      h+='<div style="font-family:var(--mono);font-size:11px;color:#1a3a5c;line-height:1.8">'+vpParts.join('<br>')+'</div>';
+      h+='</div>';
+    }
+  }
+  return h;
 }
 
 function openAddVehicle(){
-avStage=1;avData={};renderAVStage();
-document.getElementById(‘av-overlay’).classList.add(‘open’);
-document.getElementById(‘av-modal’).classList.add(‘open’);
-setTimeout(function(){var el=document.getElementById(‘av-vin’);if(el)el.focus();},300);
+  avStage=1;avData={};renderAVStage();
+  document.getElementById('av-overlay').classList.add('open');
+  document.getElementById('av-modal').classList.add('open');
+  setTimeout(function(){var el=document.getElementById('av-vin');if(el)el.focus();},300);
 }
 function closeAddVehicle(){
-document.getElementById(‘av-overlay’).classList.remove(‘open’);
-document.getElementById(‘av-modal’).classList.remove(‘open’);
+  document.getElementById('av-overlay').classList.remove('open');
+  document.getElementById('av-modal').classList.remove('open');
 }
 function renderAVStage(){
-[1,2,3].forEach(function(n){
-var el=document.getElementById(‘av-step-’+n);
-el.className=‘av-step’+(n===avStage?’ active’:n<avStage?’ done’:’’);
-});
-var body=document.getElementById(‘av-modal-body’);
-if(avStage===1)body.innerHTML=avStage1HTML();
-else if(avStage===2)body.innerHTML=avStage2HTML();
-else body.innerHTML=avStage3HTML();
-body.scrollTop=0;
-document.getElementById(‘av-btn-back’).style.display=avStage>1?’’:‘none’;
-var nb=document.getElementById(‘av-btn-next’);
-nb.textContent=avStage===3?‘Save Vehicle’:‘Next >’;
-nb.className=avStage===3?‘btn-add-vehicle’:‘btn btn-accent’;
-document.getElementById(‘av-footer-status’).textContent=‘Step ‘+avStage+’ of 3’;
+  [1,2,3].forEach(function(n){
+    var el=document.getElementById('av-step-'+n);
+    el.className='av-step'+(n===avStage?' active':n<avStage?' done':'');
+  });
+  var body=document.getElementById('av-modal-body');
+  if(avStage===1)body.innerHTML=avStage1HTML();
+  else if(avStage===2)body.innerHTML=avStage2HTML();
+  else body.innerHTML=avStage3HTML();
+  body.scrollTop=0;
+  document.getElementById('av-btn-back').style.display=avStage>1?'':'none';
+  var nb=document.getElementById('av-btn-next');
+  nb.textContent=avStage===3?'Save Vehicle':'Next >';
+  nb.className=avStage===3?'btn-add-vehicle':'btn btn-accent';
+  document.getElementById('av-footer-status').textContent='Step '+avStage+' of 3';
 }
 function avVINInput(input){
-var v=input.value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g,’’);
-input.value=v;
-var hint=document.getElementById(‘av-vin-hint’);
-var warn=document.getElementById(‘av-dup-warn’);
-if(v.length<17){input.className=‘av-input’;if(hint){hint.textContent=v.length+’/17 characters’;hint.className=‘av-hint’;}if(warn)warn.classList.remove(‘show’);return;}
-var valid=vinCheckDigit(v);
-input.className=‘av-input ‘+(valid?‘valid’:‘error’);
-if(hint){hint.textContent=valid?‘Valid VIN - check digit confirmed’:‘Check digit mismatch - verify VIN’;hint.className=‘av-hint ‘+(valid?‘success’:‘error’);}
-var existing=allVehicles.find(function(x){return x.vin===v;});
-if(warn)warn.classList.toggle(‘show’,!!existing);
+  var v=input.value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g,'');
+  input.value=v;
+  var hint=document.getElementById('av-vin-hint');
+  var warn=document.getElementById('av-dup-warn');
+  if(v.length<17){input.className='av-input';if(hint){hint.textContent=v.length+'/17 characters';hint.className='av-hint';}if(warn)warn.classList.remove('show');return;}
+  var valid=vinCheckDigit(v);
+  input.className='av-input '+(valid?'valid':'error');
+  if(hint){hint.textContent=valid?'Valid VIN - check digit confirmed':'Check digit mismatch - verify VIN';hint.className='av-hint '+(valid?'success':'error');}
+  var existing=allVehicles.find(function(x){return x.vin===v;});
+  if(warn)warn.classList.toggle('show',!!existing);
 }
 async function avDecodeVIN(){
-var vin=((document.getElementById(‘av-vin’)||{}).value||’’).toUpperCase();
-if(vin.length!==17){toast(‘Enter a complete 17-char VIN first’,true);return;}
-// Step 1: local decode from VIN positions (instant)
-var local=avDetectFromVIN(vin);
-if(local.year){var ye=document.getElementById(‘av-year’);if(ye&&!ye.value)ye.value=local.year;}
-if(local.trim){var te=document.getElementById(‘av-trim’);if(te&&!te.value)te.value=local.trim;}
-// Step 2: vPIC API decode (async, free, no key)
-var btn=document.querySelector(’.av-decode-btn’);
-var hint=document.getElementById(‘av-vin-hint’);
-if(btn){btn.textContent=‘Decoding…’;btn.disabled=true;}
-if(hint){hint.textContent=‘Querying NHTSA vPIC…’;hint.className=‘av-hint’;}
-try{
-var r=await fetch(‘https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/’+vin+’?format=json’,{signal:AbortSignal.timeout(8000)});
-var d=await r.json();
-var v=d.Results&&d.Results[0];
-if(!v)throw new Error(‘No results’);
-var filled=[];
-// Year
-var yr=v.ModelYear;
-if(yr&&yr!==‘0’){
-var ye2=document.getElementById(‘av-year’);
-if(ye2){ye2.value=yr;filled.push(yr);}
-}
-// Trim / Series -> map to S65 AMG or S600
-var series=(v.Series||’’).trim();
-var bodyClass=(v.BodyClass||’’).trim();
-var trim2=null;
-if(series.toLowerCase().includes(‘s 65’)||series.toLowerCase().includes(‘s65’))trim2=‘S65 AMG’;
-else if(series.toLowerCase().includes(‘s 600’)||series.toLowerCase().includes(‘s600’))trim2=‘S600’;
-else if(local.trim)trim2=local.trim; // fall back to position-7 decode
-if(trim2){var te2=document.getElementById(‘av-trim’);if(te2){te2.value=trim2;filled.push(trim2);}}
-// State (plant is Germany but title state comes from listing — skip)
-// Engine info -> store in avData for reference
-var eng=v.DisplacementL?parseFloat(v.DisplacementL).toFixed(1)+‘L’:’’;
-var cyl=v.EngineCylinders||’’;
-var hp=v.EngineHP||’’;
-var plant=v.PlantCity?v.PlantCity+’, ‘+v.PlantCountry:’’;
-var mfg=v.Manufacturer||’’;
-var model=v.Model||’’;
-var bodyStr=v.BodyClass||’’;
-var trans=v.TransmissionStyle||’’;
-var drive=v.DriveType||’’;
-// Store decoded metadata in avData
-avData._vpic={eng:eng,cyl:cyl,hp:hp,plant:plant,mfg:mfg,model:model,body:bodyStr,trans:trans,drive:drive,series:series};
-// Build hint string from useful decoded fields
-var details=[];
-if(eng&&cyl)details.push(eng+’ V’+cyl);else if(eng)details.push(eng);
-if(hp&&hp!==‘0’)details.push(hp+’ hp’);
-if(plant)details.push(plant);
-if(trans&&trans!==‘Not Applicable’)details.push(trans);
-var yearStr=yr&&yr!==‘0’?yr:(local.year||’?’);
-var trimStr=trim2||‘unknown trim’;
-var hintText=yearStr+’ ‘+trimStr+(details.length?’ · ‘+details.join(’ · ‘):’’);
-if(hint){hint.textContent=‘vPIC: ‘+hintText;hint.className=‘av-hint success’;}
-if(filled.length)toast(‘VIN decoded: ‘+filled.join(’ ‘));
-else toast(‘vPIC returned — year/trim populated from VIN positions’);
-}catch(err){
-// Fallback: local decode only
-var yearStr2=local.year||’?’;
-var trimStr2=local.trim||‘unknown trim’;
-if(hint){hint.textContent=‘Local decode: ‘+yearStr2+’ ‘+trimStr2+’ (vPIC unavailable)’;hint.className=‘av-hint success’;}
-toast(‘vPIC timeout — used local VIN decode’);
-}finally{
-if(btn){btn.textContent=‘Decode’;btn.disabled=false;}
-}
+  var vin=((document.getElementById('av-vin')||{}).value||'').toUpperCase();
+  if(vin.length!==17){toast('Enter a complete 17-char VIN first',true);return;}
+  // Step 1: local decode from VIN positions (instant)
+  var local=avDetectFromVIN(vin);
+  if(local.year){var ye=document.getElementById('av-year');if(ye&&!ye.value)ye.value=local.year;}
+  if(local.trim){var te=document.getElementById('av-trim');if(te&&!te.value)te.value=local.trim;}
+  // Step 2: vPIC API decode (async, free, no key)
+  var btn=document.querySelector('.av-decode-btn');
+  var hint=document.getElementById('av-vin-hint');
+  if(btn){btn.textContent='Decoding…';btn.disabled=true;}
+  if(hint){hint.textContent='Querying NHTSA vPIC…';hint.className='av-hint';}
+  try{
+    var r=await fetch('https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/'+vin+'?format=json',{signal:AbortSignal.timeout(8000)});
+    var d=await r.json();
+    var v=d.Results&&d.Results[0];
+    if(!v)throw new Error('No results');
+    var filled=[];
+    // Year
+    var yr=v.ModelYear;
+    if(yr&&yr!=='0'){
+      var ye2=document.getElementById('av-year');
+      if(ye2){ye2.value=yr;filled.push(yr);}
+    }
+    // Trim / Series -> map to S65 AMG or S600
+    var series=(v.Series||'').trim();
+    var bodyClass=(v.BodyClass||'').trim();
+    var trim2=null;
+    if(series.toLowerCase().includes('s 65')||series.toLowerCase().includes('s65'))trim2='S65 AMG';
+    else if(series.toLowerCase().includes('s 600')||series.toLowerCase().includes('s600'))trim2='S600';
+    else if(local.trim)trim2=local.trim; // fall back to position-7 decode
+    if(trim2){var te2=document.getElementById('av-trim');if(te2){te2.value=trim2;filled.push(trim2);}}
+    // State (plant is Germany but title state comes from listing — skip)
+    // Engine info -> store in avData for reference
+    var eng=v.DisplacementL?parseFloat(v.DisplacementL).toFixed(1)+'L':'';
+    var cyl=v.EngineCylinders||'';
+    var hp=v.EngineHP||'';
+    var plant=v.PlantCity?v.PlantCity+', '+v.PlantCountry:'';
+    var mfg=v.Manufacturer||'';
+    var model=v.Model||'';
+    var bodyStr=v.BodyClass||'';
+    var trans=v.TransmissionStyle||'';
+    var drive=v.DriveType||'';
+    // Store decoded metadata in avData
+    avData._vpic={eng:eng,cyl:cyl,hp:hp,plant:plant,mfg:mfg,model:model,body:bodyStr,trans:trans,drive:drive,series:series};
+    // Build hint string from useful decoded fields
+    var details=[];
+    if(eng&&cyl)details.push(eng+' V'+cyl);else if(eng)details.push(eng);
+    if(hp&&hp!=='0')details.push(hp+' hp');
+    if(plant)details.push(plant);
+    if(trans&&trans!=='Not Applicable')details.push(trans);
+    var yearStr=yr&&yr!=='0'?yr:(local.year||'?');
+    var trimStr=trim2||'unknown trim';
+    var hintText=yearStr+' '+trimStr+(details.length?' · '+details.join(' · '):'');
+    if(hint){hint.textContent='vPIC: '+hintText;hint.className='av-hint success';}
+    if(filled.length)toast('VIN decoded: '+filled.join(' '));
+    else toast('vPIC returned — year/trim populated from VIN positions');
+  }catch(err){
+    // Fallback: local decode only
+    var yearStr2=local.year||'?';
+    var trimStr2=local.trim||'unknown trim';
+    if(hint){hint.textContent='Local decode: '+yearStr2+' '+trimStr2+' (vPIC unavailable)';hint.className='av-hint success';}
+    toast('vPIC timeout — used local VIN decode');
+  }finally{
+    if(btn){btn.textContent='Decode';btn.disabled=false;}
+  }
 }
 function avOpenExisting(e){
-e.preventDefault();
-var vin=(((document.getElementById(‘av-vin’)||{}).value||’’).toUpperCase());
-closeAddVehicle();openFleetDrawer(vin);
+  e.preventDefault();
+  var vin=(((document.getElementById('av-vin')||{}).value||'').toUpperCase());
+  closeAddVehicle();openFleetDrawer(vin);
 }
 function avCollectStage1(){
-avData.vin=(((document.getElementById(‘av-vin’)||{}).value||’’).toUpperCase().trim());
-avData.year=((document.getElementById(‘av-year’)||{}).value||’’);
-avData.trim=((document.getElementById(‘av-trim’)||{}).value||’’);
-avData.exterior=(((document.getElementById(‘av-exterior’)||{}).value||’’).trim());
-avData.upholstery=(((document.getElementById(‘av-upholstery’)||{}).value||’’).trim());
-avData.last_title_state=(((document.getElementById(‘av-state’)||{}).value||’’).toUpperCase().trim());
-avData.curr_odo=((document.getElementById(‘av-odo’)||{}).value||’’);
-avData.vdp_url=(((document.getElementById(‘av-url’)||{}).value||’’).trim());
-avData.asking_price=((document.getElementById(‘av-price’)||{}).value||’’);
-avData.platform=((document.getElementById(‘av-platform’)||{}).value||’’);
+  avData.vin=(((document.getElementById('av-vin')||{}).value||'').toUpperCase().trim());
+  avData.year=((document.getElementById('av-year')||{}).value||'');
+  avData.trim=((document.getElementById('av-trim')||{}).value||'');
+  avData.exterior=(((document.getElementById('av-exterior')||{}).value||'').trim());
+  avData.upholstery=(((document.getElementById('av-upholstery')||{}).value||'').trim());
+  avData.last_title_state=(((document.getElementById('av-state')||{}).value||'').toUpperCase().trim());
+  avData.curr_odo=((document.getElementById('av-odo')||{}).value||'');
+  avData.vdp_url=(((document.getElementById('av-url')||{}).value||'').trim());
+  avData.asking_price=((document.getElementById('av-price')||{}).value||'');
+  avData.platform=((document.getElementById('av-platform')||{}).value||'');
 }
 function avCollectStage2(){
-avData.total_owners=((document.getElementById(‘av-owners’)||{}).value||’’);
-avData.accident_count=((document.getElementById(‘av-accidents’)||{}).value||‘0’);
-avData.svc_per_yr=((document.getElementById(‘av-svc’)||{}).value||’’);
-var projEl=document.getElementById(‘av-proj’);
-avData.proj_mi_jan28=(projEl&&projEl.value)||avProjectMiles(avData.curr_odo)||’’;
-avData.lease_history=!!((document.getElementById(‘av-lease’)||{}).checked);
-avData.trans_confirmed=!!((document.getElementById(‘av-trans’)||{}).checked);
-avData.ign_confirmed=!!((document.getElementById(‘av-ign’)||{}).checked);
-avData.susp_confirmed=!!((document.getElementById(‘av-susp’)||{}).checked);
-avData.brake_confirmed=!!((document.getElementById(‘av-brake’)||{}).checked);
-avData.research_notes=(((document.getElementById(‘av-notes’)||{}).value||’’).trim());
+  avData.total_owners=((document.getElementById('av-owners')||{}).value||'');
+  avData.accident_count=((document.getElementById('av-accidents')||{}).value||'0');
+  avData.svc_per_yr=((document.getElementById('av-svc')||{}).value||'');
+  var projEl=document.getElementById('av-proj');
+  avData.proj_mi_jan28=(projEl&&projEl.value)||avProjectMiles(avData.curr_odo)||'';
+  avData.lease_history=!!((document.getElementById('av-lease')||{}).checked);
+  avData.trans_confirmed=!!((document.getElementById('av-trans')||{}).checked);
+  avData.ign_confirmed=!!((document.getElementById('av-ign')||{}).checked);
+  avData.susp_confirmed=!!((document.getElementById('av-susp')||{}).checked);
+  avData.brake_confirmed=!!((document.getElementById('av-brake')||{}).checked);
+  avData.research_notes=(((document.getElementById('av-notes')||{}).value||'').trim());
 }
 function avValidate1(){
-if(!avData.vin||avData.vin.length!==17){toast(‘Enter a valid 17-char VIN’,true);return false;}
-if(!vinCheckDigit(avData.vin)&&!confirm(‘VIN check digit mismatch. Proceed anyway?’))return false;
-if(!avData.year){toast(‘Select a model year’,true);return false;}
-if(!avData.trim){toast(‘Select S65 AMG or S600’,true);return false;}
-return true;
+  if(!avData.vin||avData.vin.length!==17){toast('Enter a valid 17-char VIN',true);return false;}
+  if(!vinCheckDigit(avData.vin)&&!confirm('VIN check digit mismatch. Proceed anyway?'))return false;
+  if(!avData.year){toast('Select a model year',true);return false;}
+  if(!avData.trim){toast('Select S65 AMG or S600',true);return false;}
+  return true;
 }
 function avValidate2(){return true;}
 function avNext(){
-if(avStage===1){avCollectStage1();if(!avValidate1())return;avStage=2;}
-else if(avStage===2){avCollectStage2();if(!avValidate2())return;avStage=3;}
-else if(avStage===3){avSaveVehicle();return;}
-renderAVStage();
+  if(avStage===1){avCollectStage1();if(!avValidate1())return;avStage=2;}
+  else if(avStage===2){avCollectStage2();if(!avValidate2())return;avStage=3;}
+  else if(avStage===3){avSaveVehicle();return;}
+  renderAVStage();
 }
-function avBack(){if(avStage>1){avStage–;renderAVStage();}}
+function avBack(){if(avStage>1){avStage--;renderAVStage();}}
 
 async function avSaveVehicle(){
-var saveBtn=document.getElementById(‘av-btn-next’);
-var errEl=document.getElementById(‘av-save-error’);
-saveBtn.textContent=‘Saving\u2026’;saveBtn.disabled=true;
-if(errEl){errEl.textContent=’’;errEl.classList.remove(‘show’);}
-var score=avComputeScore(avData);
-var acc=parseInt(avData.accident_count)||0;
-var acqStatus=acc>=2?‘Data Only’:acc===1?‘Watch’:‘Data Only’;
-// Insert payload — only columns confirmed in vehicles schema
-// Mileage/owner/service wall cols live in vehicle_market, not vehicles
-var vehicleRow={
-vin:avData.vin,
-year:parseInt(avData.year)||2017,
-trim:avData.trim,
-exterior:avData.exterior||null,
-upholstery:avData.upholstery||null,
-last_title_state:avData.last_title_state||null,
-svc_per_yr:avData.svc_per_yr?parseFloat(avData.svc_per_yr):null,
-composite_score:score.composite,
-quality_score:score.qs,
-score_pa:score.qs,
-score_pb:score.pb,
-score_mod:score.mod,
-acq_status:acqStatus,
-cohort:(avData.year&&avData.trim)?avData.year+’_’+(avData.trim===‘S65 AMG’?‘S65 AMG’:‘S600’):null,
-source:‘App - Sighting’,
-research_notes:avData.research_notes||null
-};
-try{
-if(allVehicles.find(function(x){return x.vin===avData.vin;})){
-if(!confirm(‘VIN already exists. View existing record?’)){saveBtn.textContent=‘Save Vehicle’;saveBtn.disabled=false;return;}
-closeAddVehicle();openFleetDrawer(avData.vin);return;
-}
-
-```
-// 1. INSERT into vehicles (identity + scoring columns only)
-var vR=await db.from('vehicles').insert(vehicleRow).select('vin').single();
-if(vR.error)throw vR.error;
-
-// 2. INSERT into vehicle_market (mileage, ownership, service wall)
-var marketRow={
-  vin:avData.vin,
-  curr_odo:avData.curr_odo?parseInt(avData.curr_odo):null,
-  proj_mi_jan28:avData.proj_mi_jan28?parseInt(avData.proj_mi_jan28):null,
-  total_owners:avData.total_owners||null,
-  accident_count:avData.accident_count||'0',
-  trans_confirmed:avData.trans_confirmed||false,
-  ign_confirmed:avData.ign_confirmed||false,
-  susp_confirmed:avData.susp_confirmed||false,
-  brake_confirmed:avData.brake_confirmed||false
-};
-var mR=await db.from('vehicle_market').insert(marketRow);
-if(mR.error)console.warn('vehicle_market insert (non-fatal):',mR.error.message);
-
-// 3. INSERT into vehicle_service if odometer or service wall data present
-var hasSvcData=avData.trans_confirmed||avData.ign_confirmed||avData.susp_confirmed||avData.brake_confirmed||avData.curr_odo;
-if(hasSvcData){
-  var svcRow={
+  var saveBtn=document.getElementById('av-btn-next');
+  var errEl=document.getElementById('av-save-error');
+  saveBtn.textContent='Saving\u2026';saveBtn.disabled=true;
+  if(errEl){errEl.textContent='';errEl.classList.remove('show');}
+  var score=avComputeScore(avData);
+  var acc=parseInt(avData.accident_count)||0;
+  var acqStatus=acc>=2?'Data Only':acc===1?'Watch':'Data Only';
+  // Insert payload — only columns confirmed in vehicles schema
+  // Mileage/owner/service wall cols live in vehicle_market, not vehicles
+  var vehicleRow={
     vin:avData.vin,
-    record_date:new Date().toISOString().split('T')[0],
-    odometer:avData.curr_odo?parseInt(avData.curr_odo):null,
+    year:parseInt(avData.year)||2017,
+    trim:avData.trim,
+    exterior:avData.exterior||null,
+    upholstery:avData.upholstery||null,
+    last_title_state:avData.last_title_state||null,
+    svc_per_yr:avData.svc_per_yr?parseFloat(avData.svc_per_yr):null,
+    composite_score:score.composite,
+    quality_score:score.qs,
+    score_pa:score.qs,
+    score_pb:score.pb,
+    score_mod:score.mod,
+    acq_status:acqStatus,
+    cohort:(avData.year&&avData.trim)?avData.year+'_'+(avData.trim==='S65 AMG'?'S65 AMG':'S600'):null,
     source:'App - Sighting',
-    details:'Added via Add Vehicle'+(avData.total_owners?' | Owners: '+avData.total_owners:''),
-    has_transmission:avData.trans_confirmed||false,
-    has_ignition:avData.ign_confirmed||false,
-    has_plugs:avData.ign_confirmed||false,
-    has_brakes:avData.brake_confirmed||false,
-    has_suspension:avData.susp_confirmed||false
+    research_notes:avData.research_notes||null
   };
-  var sR=await db.from('vehicle_service').insert(svcRow);
-  if(sR.error)console.warn('vehicle_service insert (non-fatal):',sR.error.message);
+  try{
+    if(allVehicles.find(function(x){return x.vin===avData.vin;})){
+      if(!confirm('VIN already exists. View existing record?')){saveBtn.textContent='Save Vehicle';saveBtn.disabled=false;return;}
+      closeAddVehicle();openFleetDrawer(avData.vin);return;
+    }
+
+    // 1. INSERT into vehicles (identity + scoring columns only)
+    var vR=await db.from('vehicles').insert(vehicleRow).select('vin').single();
+    if(vR.error)throw vR.error;
+
+    // 2. INSERT into vehicle_market (mileage, ownership, service wall)
+    var marketRow={
+      vin:avData.vin,
+      curr_odo:avData.curr_odo?parseInt(avData.curr_odo):null,
+      proj_mi_jan28:avData.proj_mi_jan28?parseInt(avData.proj_mi_jan28):null,
+      total_owners:avData.total_owners||null,
+      accident_count:avData.accident_count||'0',
+      trans_confirmed:avData.trans_confirmed||false,
+      ign_confirmed:avData.ign_confirmed||false,
+      susp_confirmed:avData.susp_confirmed||false,
+      brake_confirmed:avData.brake_confirmed||false
+    };
+    var mR=await db.from('vehicle_market').insert(marketRow);
+    if(mR.error)console.warn('vehicle_market insert (non-fatal):',mR.error.message);
+
+    // 3. INSERT into vehicle_service if odometer or service wall data present
+    var hasSvcData=avData.trans_confirmed||avData.ign_confirmed||avData.susp_confirmed||avData.brake_confirmed||avData.curr_odo;
+    if(hasSvcData){
+      var svcRow={
+        vin:avData.vin,
+        record_date:new Date().toISOString().split('T')[0],
+        odometer:avData.curr_odo?parseInt(avData.curr_odo):null,
+        source:'App - Sighting',
+        details:'Added via Add Vehicle'+(avData.total_owners?' | Owners: '+avData.total_owners:''),
+        has_transmission:avData.trans_confirmed||false,
+        has_ignition:avData.ign_confirmed||false,
+        has_plugs:avData.ign_confirmed||false,
+        has_brakes:avData.brake_confirmed||false,
+        has_suspension:avData.susp_confirmed||false
+      };
+      var sR=await db.from('vehicle_service').insert(svcRow);
+      if(sR.error)console.warn('vehicle_service insert (non-fatal):',sR.error.message);
+    }
+
+    // 4. INSERT into listing_history if URL or price entered
+    if(avData.vdp_url||avData.asking_price){
+      var lR=await db.from('listing_history').insert({
+        vin:avData.vin,
+        price:avData.asking_price?parseInt(avData.asking_price):null,
+        miles:avData.curr_odo?parseInt(avData.curr_odo):null,
+        platform:avData.platform||null,
+        vdp_url:avData.vdp_url||null,
+        state:avData.last_title_state||null,
+        first_seen:new Date().toISOString().split('T')[0],
+        link_status:'Unverified'
+      });
+      if(lR.error)console.warn('listing_history insert (non-fatal):',lR.error.message);
+    }
+
+    allVehicles.unshift(Object.assign({},vehicleRow,marketRow));
+    updateFleetStats();applyFilters();
+    document.getElementById('fleet-tab-count').textContent=allVehicles.length;
+    document.getElementById('header-counts').textContent=allVehicles.length+' vehicles · '+allContacts.length+' contacts';
+    renderMobileTop40();
+    closeAddVehicle();
+    toast(avData.vin+' saved ✓ — '+acqStatus);
+    setTimeout(function(){openFleetDrawer(avData.vin);},350);
+  }catch(err){
+    console.error('avSaveVehicle error:',err);
+    if(errEl){errEl.textContent='Save failed: '+(err.message||JSON.stringify(err));errEl.classList.add('show');}
+    saveBtn.textContent='Save Vehicle';saveBtn.disabled=false;
+  }
 }
 
-// 4. INSERT into listing_history if URL or price entered
-if(avData.vdp_url||avData.asking_price){
-  var lR=await db.from('listing_history').insert({
-    vin:avData.vin,
-    price:avData.asking_price?parseInt(avData.asking_price):null,
-    miles:avData.curr_odo?parseInt(avData.curr_odo):null,
-    platform:avData.platform||null,
-    vdp_url:avData.vdp_url||null,
-    state:avData.last_title_state||null,
-    first_seen:new Date().toISOString().split('T')[0],
-    link_status:'Unverified'
-  });
-  if(lR.error)console.warn('listing_history insert (non-fatal):',lR.error.message);
-}
 
-allVehicles.unshift(Object.assign({},vehicleRow,marketRow));
-updateFleetStats();applyFilters();
-document.getElementById('fleet-tab-count').textContent=allVehicles.length;
-document.getElementById('header-counts').textContent=allVehicles.length+' vehicles · '+allContacts.length+' contacts';
-renderMobileTop40();
-closeAddVehicle();
-toast(avData.vin+' saved ✓ — '+acqStatus);
-setTimeout(function(){openFleetDrawer(avData.vin);},350);
-```
 
-}catch(err){
-console.error(‘avSaveVehicle error:’,err);
-if(errEl){errEl.textContent=’Save failed: ’+(err.message||JSON.stringify(err));errEl.classList.add(‘show’);}
-saveBtn.textContent=‘Save Vehicle’;saveBtn.disabled=false;
-}
-}
 
 // ============================================================
 // FLEET DRAWER QUICK ACTIONS
@@ -3318,103 +3298,103 @@ saveBtn.textContent=‘Save Vehicle’;saveBtn.disabled=false;
 var fdSwallState = {};
 
 function fdRenderSwallToggles(v){
-var fields = [
-[‘swall-trans’,‘trans_confirmed’],
-[‘swall-ign’,‘ign_confirmed’],
-[‘swall-susp’,‘susp_confirmed’],
-[‘swall-brake’,‘brake_confirmed’],
-];
-fields.forEach(function(f){
-var el = document.getElementById(f[0]);
-if(!el) return;
-el.classList.toggle(‘confirmed’, boolVal(v[f[1]]));
-});
-fdSwallState = {
-trans_confirmed: boolVal(v.trans_confirmed),
-ign_confirmed:   boolVal(v.ign_confirmed),
-susp_confirmed:  boolVal(v.susp_confirmed),
-brake_confirmed: boolVal(v.brake_confirmed),
-};
+  var fields = [
+    ['swall-trans','trans_confirmed'],
+    ['swall-ign','ign_confirmed'],
+    ['swall-susp','susp_confirmed'],
+    ['swall-brake','brake_confirmed'],
+  ];
+  fields.forEach(function(f){
+    var el = document.getElementById(f[0]);
+    if(!el) return;
+    el.classList.toggle('confirmed', boolVal(v[f[1]]));
+  });
+  fdSwallState = {
+    trans_confirmed: boolVal(v.trans_confirmed),
+    ign_confirmed:   boolVal(v.ign_confirmed),
+    susp_confirmed:  boolVal(v.susp_confirmed),
+    brake_confirmed: boolVal(v.brake_confirmed),
+  };
 }
 
 async function fdToggleSwall(col, el){
-if(!activeFD) return;
-var newVal = !fdSwallState[col];
-fdSwallState[col] = newVal;
-el.classList.toggle(‘confirmed’, newVal);
-var upd = {vin: activeFD.vin}; upd[col] = newVal;
-var r = await db.from(‘vehicle_market’).upsert(upd, {onConflict:‘vin’});
-if(r.error){ toast(‘Save failed: ‘+r.error.message, true); return; }
-var v = allVehicles.find(function(x){ return x.vin===activeFD.vin; });
-if(v) v[col] = newVal;
-activeFD[col] = newVal;
-var label = col.replace(’*confirmed’,’’).replace(’*’,’ ’);
-toast((newVal ? ‘\u2713 Confirmed’ : ‘Cleared’) + ’: ’ + label);
+  if(!activeFD) return;
+  var newVal = !fdSwallState[col];
+  fdSwallState[col] = newVal;
+  el.classList.toggle('confirmed', newVal);
+  var upd = {vin: activeFD.vin}; upd[col] = newVal;
+  var r = await db.from('vehicle_market').upsert(upd, {onConflict:'vin'});
+  if(r.error){ toast('Save failed: '+r.error.message, true); return; }
+  var v = allVehicles.find(function(x){ return x.vin===activeFD.vin; });
+  if(v) v[col] = newVal;
+  activeFD[col] = newVal;
+  var label = col.replace('_confirmed','').replace('_',' ');
+  toast((newVal ? '\u2713 Confirmed' : 'Cleared') + ': ' + label);
 }
 
 async function fdSetStatus(status){
-if(!activeFD)return;
-var r=await db.from(‘vehicles’).update({acq_status:status}).eq(‘vin’,activeFD.vin);
-if(r.error){toast(‘Update failed’,true);return;}
-var v=allVehicles.find(function(x){return x.vin===activeFD.vin;});
-if(v)v.acq_status=status;
-activeFD.acq_status=status;
-var scoreStr=activeFD.composite_score?‘Score ‘+activeFD.composite_score+’ \u00b7 ‘:’’;
-document.getElementById(‘fd-sub’).textContent=scoreStr+status;
-fdRenderTierControls(activeFD);
-updateFleetStats();applyFilters();renderDashboard();
-toast(status+’ \u2713’);
+  if(!activeFD)return;
+  var r=await db.from('vehicles').update({acq_status:status}).eq('vin',activeFD.vin);
+  if(r.error){toast('Update failed',true);return;}
+  var v=allVehicles.find(function(x){return x.vin===activeFD.vin;});
+  if(v)v.acq_status=status;
+  activeFD.acq_status=status;
+  var scoreStr=activeFD.composite_score?'Score '+activeFD.composite_score+' \u00b7 ':'';
+  document.getElementById('fd-sub').textContent=scoreStr+status;
+  fdRenderTierControls(activeFD);
+  updateFleetStats();applyFilters();renderDashboard();
+  toast(status+' \u2713');
 }
 
 function fdRenderTierControls(v){
-const tier=getTier(v);
-[‘targeted’,‘watched’,‘data’].forEach(function(t){
-const btn=document.getElementById(‘tier-btn-’+t);
-if(!btn)return;
-btn.className=‘tier-btn’;
-const match=(t===‘data’)?(tier===‘data_only’):(tier===t);
-if(match)btn.classList.add(‘active-’+t);
-});
-const ls=getListingStatus(v);
-const lsMap={active:‘active’,recently_acquired:‘recently’,silent:‘silent’};
-Object.entries(lsMap).forEach(function([key,suffix]){
-const btn=document.getElementById(‘ls-btn-’+suffix);
-if(!btn)return;
-btn.className=‘ls-btn’;
-if(ls===key)btn.classList.add(‘active-’+suffix);
-});
+  const tier=getTier(v);
+  ['targeted','watched','data'].forEach(function(t){
+    const btn=document.getElementById('tier-btn-'+t);
+    if(!btn)return;
+    btn.className='tier-btn';
+    const match=(t==='data')?(tier==='data_only'):(tier===t);
+    if(match)btn.classList.add('active-'+t);
+  });
+  const ls=getListingStatus(v);
+  const lsMap={active:'active',recently_acquired:'recently',silent:'silent'};
+  Object.entries(lsMap).forEach(function([key,suffix]){
+    const btn=document.getElementById('ls-btn-'+suffix);
+    if(!btn)return;
+    btn.className='ls-btn';
+    if(ls===key)btn.classList.add('active-'+suffix);
+  });
 }
 
 async function fdSetTier(tier){
-if(!activeFD)return;
-const acqMap={targeted:‘Targeted’,watched:‘Watch’,data_only:‘Data Only’};
-const newStatus=acqMap[tier]||‘Data Only’;
-const{error}=await db.from(‘vehicles’).update({target_tier:tier,acq_status:newStatus}).eq(‘vin’,activeFD.vin);
-if(error){toast(‘Save failed: ‘+error.message,true);console.error(‘fdSetTier’,error);return;}
-activeFD.target_tier=tier;
-activeFD.acq_status=newStatus;
-const v=allVehicles.find(x=>x.vin===activeFD.vin);
-if(v){v.target_tier=tier;v.acq_status=newStatus;}
-fdRenderTierControls(activeFD);
-document.getElementById(‘fd-sub’).textContent=(activeFD.composite_score?‘Score ‘+activeFD.composite_score+’ · ‘:’’)+newStatus;
-updateFleetStats();applyFilters();renderDashboard();
-toast(newStatus+’ ✓’);
+  if(!activeFD)return;
+  const acqMap={targeted:'Targeted',watched:'Watch',data_only:'Data Only'};
+  const newStatus=acqMap[tier]||'Data Only';
+  const{error}=await db.from('vehicles').update({target_tier:tier,acq_status:newStatus}).eq('vin',activeFD.vin);
+  if(error){toast('Save failed: '+error.message,true);console.error('fdSetTier',error);return;}
+  activeFD.target_tier=tier;
+  activeFD.acq_status=newStatus;
+  const v=allVehicles.find(x=>x.vin===activeFD.vin);
+  if(v){v.target_tier=tier;v.acq_status=newStatus;}
+  fdRenderTierControls(activeFD);
+  document.getElementById('fd-sub').textContent=(activeFD.composite_score?'Score '+activeFD.composite_score+' · ':'')+newStatus;
+  updateFleetStats();applyFilters();renderDashboard();
+  toast(newStatus+' ✓');
 }
 
 async function fdSetListingStatus(ls){
-if(!activeFD)return;
-const{error}=await db.from(‘vehicles’).update({listing_status:ls}).eq(‘vin’,activeFD.vin);
-if(error){
-toast(‘Save failed \u2014 run DB migration (see comment in index.html): ‘+error.message,true);
-console.error(‘fdSetListingStatus error \u2014 have you run the migration SQL?’,error);
-return;
-}
-activeFD.listing_status=ls;
-const v=allVehicles.find(x=>x.vin===activeFD.vin);
-if(v)v.listing_status=ls;
-fdRenderTierControls(activeFD);
-applyFilters();
-toast(‘Listing: ‘+ls.replace(’_’,’ ‘)+’ \u2713’);
+  if(!activeFD)return;
+  const{error}=await db.from('vehicles').update({listing_status:ls}).eq('vin',activeFD.vin);
+  if(error){
+    toast('Save failed \u2014 run DB migration (see comment in index.html): '+error.message,true);
+    console.error('fdSetListingStatus error \u2014 have you run the migration SQL?',error);
+    return;
+  }
+  activeFD.listing_status=ls;
+  const v=allVehicles.find(x=>x.vin===activeFD.vin);
+  if(v)v.listing_status=ls;
+  fdRenderTierControls(activeFD);
+  applyFilters();
+  toast('Listing: '+ls.replace('_',' ')+' \u2713');
 }
 
 // ============================================================
@@ -3428,490 +3408,507 @@ var trackingFilterOn=false; // legacy stub
 // ============================================================
 
 var BULK_ROWS = 10;
-var bulkTab = ‘manual’;
+var bulkTab = 'manual';
 var bulkCsvResults = [];
 
 function openBulkEntry(){
-bulkCsvResults = [];
-renderBulkBody();
-document.getElementById(‘bulk-overlay’).classList.add(‘open’);
-document.getElementById(‘bulk-modal’).classList.add(‘open’);
+  bulkCsvResults = [];
+  renderBulkBody();
+  document.getElementById('bulk-overlay').classList.add('open');
+  document.getElementById('bulk-modal').classList.add('open');
 }
 function closeBulkEntry(){
-document.getElementById(‘bulk-overlay’).classList.remove(‘open’);
-document.getElementById(‘bulk-modal’).classList.remove(‘open’);
+  document.getElementById('bulk-overlay').classList.remove('open');
+  document.getElementById('bulk-modal').classList.remove('open');
 }
 function switchBulkTab(t){
-bulkTab = t;
-document.getElementById(‘bulk-tab-manual’).classList.toggle(‘active’, t===‘manual’);
-document.getElementById(‘bulk-tab-csv’).classList.toggle(‘active’, t===‘csv’);
-renderBulkBody();
+  bulkTab = t;
+  document.getElementById('bulk-tab-manual').classList.toggle('active', t==='manual');
+  document.getElementById('bulk-tab-csv').classList.toggle('active', t==='csv');
+  renderBulkBody();
 }
 
 function renderBulkBody(){
-var body = document.getElementById(‘bulk-modal-body’);
-if(bulkTab === ‘manual’){
-var platforms = [’’,‘Cars.com’,‘AutoTrader’,‘CarGurus’,‘Dealer’,‘eBay’,‘BaT’,‘Private’,‘Other’];
-var years = [2015,2016,2017,2018,2019,2020];
-var h = ‘<p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:12px">VIN auto-decodes year and model. VIN + Year + Model required to save.</p>’;
-h += ‘<div style="overflow-x:auto"><table class="bulk-table"><thead><tr>’;
-h += ‘<th>#</th><th>VIN *</th><th>Yr *</th><th>Model *</th><th>Color</th><th>ST</th><th>Odo</th><th>Ask $</th><th>Platform</th><th>URL</th><th></th>’;
-h += ‘</tr></thead><tbody>’;
-for(var i=0;i<BULK_ROWS;i++){
-h += ‘<tr>’;
-h += ‘<td style="color:var(--muted);font-family:var(--mono);font-size:10px;text-align:center">’+(i+1)+’</td>’;
-h += ‘<td><input class="bulk-input vin-field" id="bvin-'+i+'" maxlength="17" placeholder="17-char VIN" oninput="bulkVinInput('+i+',this)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td>’;
-h += ‘<td><select class="bulk-select" id="byr-'+i+'" style="width:60px"><option value="">\u2014</option>’;
-years.forEach(function(y){h+=’<option value="'+y+'">’+y+’</option>’;});
-h += ‘</select></td>’;
-h += ‘<td><select class="bulk-select" id="btr-'+i+'" style="width:80px"><option value="">\u2014</option><option value="S65 AMG">S65 AMG</option><option value="S600">S600</option></select></td>’;
-h += ‘<td><input class="bulk-input" id="bext-'+i+'" placeholder="Color" style="width:90px"></td>’;
-h += ‘<td><input class="bulk-input" id="bst-'+i+'" maxlength="2" placeholder="TX" style="width:32px;text-transform:uppercase"></td>’;
-h += ‘<td><input class="bulk-input" id="bodo-'+i+'" type="number" placeholder="mi" style="width:68px"></td>’;
-h += ‘<td><input class="bulk-input" id="bpx-'+i+'" type="number" placeholder="$" style="width:72px"></td>’;
-h += ‘<td><select class="bulk-select" id="bpl-'+i+'" style="width:80px">’;
-platforms.forEach(function(p){h+=’<option value="'+p+'">’+( p||’\u2014’)+’</option>’;});
-h += ‘</select></td>’;
-h += ‘<td><input class="bulk-input" id="burl-'+i+'" type="url" placeholder="https://..." style="width:150px"></td>’;
-h += ‘<td class="bulk-row-status" id="bstatus-'+i+'"></td>’;
-h += ‘</tr>’;
-}
-h += ‘</tbody></table></div>’;
-body.innerHTML = h;
-} else {
-var h2 = ‘<div class="csv-drop-zone" id="csv-drop-zone" ondragover="csvDragOver(event)" ondragleave="csvDragLeave()" ondrop="csvDrop(event)">’;
-h2 += ‘<div style="font-size:32px">📄</div>’;
-h2 += ‘<div class="csv-drop-zone-label">Drop CSV here or <label style="color:var(--accent);cursor:pointer;text-decoration:underline">browse<input type="file" accept=".csv" style="display:none" onchange="csvFileSelect(this)"></label></div>’;
-h2 += ‘<div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:10px">Required: <strong>vin, year, trim</strong>  ·  Optional: exterior, state, curr_odo, asking_price, platform, vdp_url</div>’;
-h2 += ‘</div>’;
-h2 += ‘<div style="margin-bottom:12px"><a class="csv-template-link" onclick="downloadCSVTemplate()" style="cursor:pointer">↓ Download CSV template</a></div>’;
-h2 += ‘<div class="bulk-results" id="csv-results"></div>’;
-body.innerHTML = h2;
-if(bulkCsvResults.length) renderCSVResults();
-}
+  var body = document.getElementById('bulk-modal-body');
+  if(bulkTab === 'manual'){
+    var platforms = ['','Cars.com','AutoTrader','CarGurus','Dealer','eBay','BaT','Private','Other'];
+    var years = [2015,2016,2017,2018,2019,2020];
+    var h = '<p style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:12px">VIN auto-decodes year and model. VIN + Year + Model required to save.</p>';
+    h += '<div style="overflow-x:auto"><table class="bulk-table"><thead><tr>';
+    h += '<th>#</th><th>VIN *</th><th>Yr *</th><th>Model *</th><th>Color</th><th>ST</th><th>Odo</th><th>Ask $</th><th>Platform</th><th>URL</th><th></th>';
+    h += '</tr></thead><tbody>';
+    for(var i=0;i<BULK_ROWS;i++){
+      h += '<tr>';
+      h += '<td style="color:var(--muted);font-family:var(--mono);font-size:10px;text-align:center">'+(i+1)+'</td>';
+      h += '<td><input class="bulk-input vin-field" id="bvin-'+i+'" maxlength="17" placeholder="17-char VIN" oninput="bulkVinInput('+i+',this)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></td>';
+      h += '<td><select class="bulk-select" id="byr-'+i+'" style="width:60px"><option value="">\u2014</option>';
+      years.forEach(function(y){h+='<option value="'+y+'">'+y+'</option>';});
+      h += '</select></td>';
+      h += '<td><select class="bulk-select" id="btr-'+i+'" style="width:80px"><option value="">\u2014</option><option value="S65 AMG">S65 AMG</option><option value="S600">S600</option></select></td>';
+      h += '<td><input class="bulk-input" id="bext-'+i+'" placeholder="Color" style="width:90px"></td>';
+      h += '<td><input class="bulk-input" id="bst-'+i+'" maxlength="2" placeholder="TX" style="width:32px;text-transform:uppercase"></td>';
+      h += '<td><input class="bulk-input" id="bodo-'+i+'" type="number" placeholder="mi" style="width:68px"></td>';
+      h += '<td><input class="bulk-input" id="bpx-'+i+'" type="number" placeholder="$" style="width:72px"></td>';
+      h += '<td><select class="bulk-select" id="bpl-'+i+'" style="width:80px">';
+      platforms.forEach(function(p){h+='<option value="'+p+'">'+( p||'\u2014')+'</option>';});
+      h += '</select></td>';
+      h += '<td><input class="bulk-input" id="burl-'+i+'" type="url" placeholder="https://..." style="width:150px"></td>';
+      h += '<td class="bulk-row-status" id="bstatus-'+i+'"></td>';
+      h += '</tr>';
+    }
+    h += '</tbody></table></div>';
+    body.innerHTML = h;
+  } else {
+    var h2 = '<div class="csv-drop-zone" id="csv-drop-zone" ondragover="csvDragOver(event)" ondragleave="csvDragLeave()" ondrop="csvDrop(event)">';
+    h2 += '<div style="font-size:32px">&#128196;</div>';
+    h2 += '<div class="csv-drop-zone-label">Drop CSV here or <label style="color:var(--accent);cursor:pointer;text-decoration:underline">browse<input type="file" accept=".csv" style="display:none" onchange="csvFileSelect(this)"></label></div>';
+    h2 += '<div style="font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:10px">Required: <strong>vin, year, trim</strong> &nbsp;&middot;&nbsp; Optional: exterior, state, curr_odo, asking_price, platform, vdp_url</div>';
+    h2 += '</div>';
+    h2 += '<div style="margin-bottom:12px"><a class="csv-template-link" onclick="downloadCSVTemplate()" style="cursor:pointer">&#8595; Download CSV template</a></div>';
+    h2 += '<div class="bulk-results" id="csv-results"></div>';
+    body.innerHTML = h2;
+    if(bulkCsvResults.length) renderCSVResults();
+  }
 }
 
 function bulkVinInput(i, input){
-var v = input.value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g,’’);
-input.value = v;
-var stEl = document.getElementById(‘bstatus-’+i);
-if(v.length !== 17){ input.className=‘bulk-input vin-field’; if(stEl)stEl.innerHTML=’’; return; }
-var valid = vinCheckDigit(v);
-input.className = ‘bulk-input vin-field ’ + (valid ? ‘vin-ok’ : ‘vin-warn’);
-var decoded = avDetectFromVIN(v);
-if(decoded.year){ var ye=document.getElementById(‘byr-’+i); if(ye&&!ye.value) ye.value=decoded.year; }
-if(decoded.trim){ var te=document.getElementById(‘btr-’+i); if(te&&!te.value) te.value=decoded.trim; }
-var dup = allVehicles.find(function(x){ return x.vin===v; });
-if(stEl){
-if(dup) stEl.innerHTML=’<span style="color:var(--gold)">\u26a0 Exists</span>’;
-else if(valid) stEl.innerHTML=’<span style="color:var(--green)">\u2713</span>’;
-else stEl.innerHTML=’<span style="color:var(--accent)">Check digit</span>’;
-}
+  var v = input.value.toUpperCase().replace(/[^A-HJ-NPR-Z0-9]/g,'');
+  input.value = v;
+  var stEl = document.getElementById('bstatus-'+i);
+  if(v.length !== 17){ input.className='bulk-input vin-field'; if(stEl)stEl.innerHTML=''; return; }
+  var valid = vinCheckDigit(v);
+  input.className = 'bulk-input vin-field ' + (valid ? 'vin-ok' : 'vin-warn');
+  var decoded = avDetectFromVIN(v);
+  if(decoded.year){ var ye=document.getElementById('byr-'+i); if(ye&&!ye.value) ye.value=decoded.year; }
+  if(decoded.trim){ var te=document.getElementById('btr-'+i); if(te&&!te.value) te.value=decoded.trim; }
+  var dup = allVehicles.find(function(x){ return x.vin===v; });
+  if(stEl){
+    if(dup) stEl.innerHTML='<span style="color:var(--gold)">\u26a0 Exists</span>';
+    else if(valid) stEl.innerHTML='<span style="color:var(--green)">\u2713</span>';
+    else stEl.innerHTML='<span style="color:var(--accent)">Check digit</span>';
+  }
 }
 
 function getBulkRows(){
-var rows = [];
-for(var i=0;i<BULK_ROWS;i++){
-var vinEl = document.getElementById(‘bvin-’+i);
-var yrEl  = document.getElementById(‘byr-’+i);
-var trEl  = document.getElementById(‘btr-’+i);
-if(!vinEl||!yrEl||!trEl) continue;
-var vin = vinEl.value.toUpperCase().trim();
-var yr  = yrEl.value;
-var tr  = trEl.value;
-if(!vin || !yr || !tr) continue;
-rows.push({
-vin: vin, year: parseInt(yr), trim: tr,
-exterior:    ((document.getElementById(‘bext-’+i)||{value:’’}).value||’’).trim()||null,
-last_title_state: ((document.getElementById(‘bst-’+i)||{value:’’}).value||’’).toUpperCase()||null,
-curr_odo:    (document.getElementById(‘bodo-’+i)||{value:’’}).value||null,
-asking_price:(document.getElementById(‘bpx-’+i)||{value:’’}).value||null,
-platform:    (document.getElementById(‘bpl-’+i)||{value:’’}).value||null,
-vdp_url:     (document.getElementById(‘burl-’+i)||{value:’’}).value||null,
-});
-}
-return rows;
+  var rows = [];
+  for(var i=0;i<BULK_ROWS;i++){
+    var vinEl = document.getElementById('bvin-'+i);
+    var yrEl  = document.getElementById('byr-'+i);
+    var trEl  = document.getElementById('btr-'+i);
+    if(!vinEl||!yrEl||!trEl) continue;
+    var vin = vinEl.value.toUpperCase().trim();
+    var yr  = yrEl.value;
+    var tr  = trEl.value;
+    if(!vin || !yr || !tr) continue;
+    rows.push({
+      vin: vin, year: parseInt(yr), trim: tr,
+      exterior:    ((document.getElementById('bext-'+i)||{value:''}).value||'').trim()||null,
+      last_title_state: ((document.getElementById('bst-'+i)||{value:''}).value||'').toUpperCase()||null,
+      curr_odo:    (document.getElementById('bodo-'+i)||{value:''}).value||null,
+      asking_price:(document.getElementById('bpx-'+i)||{value:''}).value||null,
+      platform:    (document.getElementById('bpl-'+i)||{value:''}).value||null,
+      vdp_url:     (document.getElementById('burl-'+i)||{value:''}).value||null,
+    });
+  }
+  return rows;
 }
 
 async function saveBulkEntry(){
-var rows = bulkTab===‘manual’ ? getBulkRows() : bulkCsvResults.filter(function(r){return r._ready&&!r.*dup;});
-if(!rows.length){ toast(‘No complete rows to save’, true); return; }
-var btn = document.getElementById(‘bulk-save-btn’);
-btn.textContent = ‘Saving\u2026’; btn.disabled = true;
-var ok=0, skip=0, fail=0;
-for(var i=0;i<rows.length;i++){
-var r = rows[i];
-document.getElementById(‘bulk-progress’).textContent = ‘Saving ‘+(i+1)+’/’+rows.length+’: ‘+r.vin+’\u2026’;
-if(allVehicles.find(function(x){return x.vin===r.vin;})){ skip++; continue; }
-var projMi = r.curr_odo ? parseInt(r.curr_odo)+19004 : null;
-var score = avComputeScore({trim:r.trim, proj_mi_jan28:projMi});
-var vRow = {
-vin:r.vin, year:r.year, trim:r.trim,
-exterior:r.exterior||null, last_title_state:r.last_title_state||null,
-composite_score:score.composite, quality_score:score.qs,
-score_pa:score.qs, score_pb:score.pb, score_mod:score.mod,
-acq_status:‘Sighting’,
-cohort: (r.year&&r.trim)?r.year+’*’+(r.trim===‘S65 AMG’?‘S65 AMG’:‘S600’):null,
-source:‘App - Bulk Entry’
-};
-var vR = await db.from(‘vehicles’).insert(vRow);
-if(vR.error){ fail++; console.error(‘bulk fail’, r.vin, vR.error.message); continue; }
-await db.from(‘vehicle_market’).insert({
-vin:r.vin,
-curr_odo: r.curr_odo?parseInt(r.curr_odo):null,
-proj_mi_jan28: projMi
-});
-if(r.vdp_url||r.asking_price){
-await db.from(‘listing_history’).insert({
-vin:r.vin,
-price:r.asking_price?parseInt(r.asking_price):null,
-miles:r.curr_odo?parseInt(r.curr_odo):null,
-platform:r.platform||null, vdp_url:r.vdp_url||null,
-state:r.last_title_state||null,
-first_seen:new Date().toISOString().split(‘T’)[0],
-link_status:‘Unverified’
-});
-}
-allVehicles.unshift(Object.assign({},vRow));
-ok++;
-}
-updateFleetStats(); applyFilters();
-document.getElementById(‘fleet-tab-count’).textContent = allVehicles.length;
-document.getElementById(‘header-counts’).textContent = allVehicles.length+’ vehicles \u00b7 ‘+allContacts.length+’ contacts’;
-renderMobileTop40();
-btn.textContent = ‘Save All’; btn.disabled = false;
-var msg = ok+’ saved’;
-if(skip) msg += ‘, ‘+skip+’ skipped (duplicate)’;
-if(fail) msg += ‘, ‘+fail+’ failed’;
-document.getElementById(‘bulk-progress’).textContent = msg;
-toast(msg+’ \u2713’);
-if(!fail && ok>0) setTimeout(closeBulkEntry, 1800);
+  var rows = bulkTab==='manual' ? getBulkRows() : bulkCsvResults.filter(function(r){return r._ready&&!r._dup;});
+  if(!rows.length){ toast('No complete rows to save', true); return; }
+  var btn = document.getElementById('bulk-save-btn');
+  btn.textContent = 'Saving\u2026'; btn.disabled = true;
+  var ok=0, skip=0, fail=0;
+  for(var i=0;i<rows.length;i++){
+    var r = rows[i];
+    document.getElementById('bulk-progress').textContent = 'Saving '+(i+1)+'/'+rows.length+': '+r.vin+'\u2026';
+    if(allVehicles.find(function(x){return x.vin===r.vin;})){ skip++; continue; }
+    var projMi = r.curr_odo ? parseInt(r.curr_odo)+19004 : null;
+    var score = avComputeScore({trim:r.trim, proj_mi_jan28:projMi});
+    var vRow = {
+      vin:r.vin, year:r.year, trim:r.trim,
+      exterior:r.exterior||null, last_title_state:r.last_title_state||null,
+      composite_score:score.composite, quality_score:score.qs,
+      score_pa:score.qs, score_pb:score.pb, score_mod:score.mod,
+      acq_status:'Sighting',
+      cohort: (r.year&&r.trim)?r.year+'_'+(r.trim==='S65 AMG'?'S65 AMG':'S600'):null,
+      source:'App - Bulk Entry'
+    };
+    var vR = await db.from('vehicles').insert(vRow);
+    if(vR.error){ fail++; console.error('bulk fail', r.vin, vR.error.message); continue; }
+    await db.from('vehicle_market').insert({
+      vin:r.vin,
+      curr_odo: r.curr_odo?parseInt(r.curr_odo):null,
+      proj_mi_jan28: projMi
+    });
+    if(r.vdp_url||r.asking_price){
+      await db.from('listing_history').insert({
+        vin:r.vin,
+        price:r.asking_price?parseInt(r.asking_price):null,
+        miles:r.curr_odo?parseInt(r.curr_odo):null,
+        platform:r.platform||null, vdp_url:r.vdp_url||null,
+        state:r.last_title_state||null,
+        first_seen:new Date().toISOString().split('T')[0],
+        link_status:'Unverified'
+      });
+    }
+    allVehicles.unshift(Object.assign({},vRow));
+    ok++;
+  }
+  updateFleetStats(); applyFilters();
+  document.getElementById('fleet-tab-count').textContent = allVehicles.length;
+  document.getElementById('header-counts').textContent = allVehicles.length+' vehicles \u00b7 '+allContacts.length+' contacts';
+  renderMobileTop40();
+  btn.textContent = 'Save All'; btn.disabled = false;
+  var msg = ok+' saved';
+  if(skip) msg += ', '+skip+' skipped (duplicate)';
+  if(fail) msg += ', '+fail+' failed';
+  document.getElementById('bulk-progress').textContent = msg;
+  toast(msg+' \u2713');
+  if(!fail && ok>0) setTimeout(closeBulkEntry, 1800);
 }
 
-function csvDragOver(e){ e.preventDefault(); var z=document.getElementById(‘csv-drop-zone’); if(z)z.classList.add(‘dragover’); }
-function csvDragLeave(){ var z=document.getElementById(‘csv-drop-zone’); if(z)z.classList.remove(‘dragover’); }
+function csvDragOver(e){ e.preventDefault(); var z=document.getElementById('csv-drop-zone'); if(z)z.classList.add('dragover'); }
+function csvDragLeave(){ var z=document.getElementById('csv-drop-zone'); if(z)z.classList.remove('dragover'); }
 function csvDrop(e){
-e.preventDefault();
-var z=document.getElementById(‘csv-drop-zone’); if(z)z.classList.remove(‘dragover’);
-var f=e.dataTransfer.files[0]; if(f) parseCSVFile(f);
+  e.preventDefault();
+  var z=document.getElementById('csv-drop-zone'); if(z)z.classList.remove('dragover');
+  var f=e.dataTransfer.files[0]; if(f) parseCSVFile(f);
 }
 function csvFileSelect(input){ if(input.files[0]) parseCSVFile(input.files[0]); }
 
 function parseCSVFile(file){
-var reader = new FileReader();
-reader.onload = function(e){
-var lines = e.target.result.split(’\n’).map(function(l){return l.trim();}).filter(Boolean);
-if(!lines.length){ toast(‘Empty file’, true); return; }
-var headers = lines[0].split(’,’).map(function(h){return h.trim().toLowerCase().replace(/”/g,’’);});
-bulkCsvResults = [];
-for(var i=1;i<lines.length;i++){
-var cols = lines[i].split(’,’).map(function(c){return c.trim().replace(/^”|”$/g,’’);});
-var row = {};
-headers.forEach(function(h,j){ row[h] = cols[j]||’’; });
-// normalize column aliases
-if(!row.curr_odo && row.odometer) row.curr_odo = row.odometer;
-if(!row.trim && row.model) row.trim = row.model;
-if(!row.last_title_state && row.state) row.last_title_state = row.state;
-row._ready = !!(row.vin && row.vin.length===17 && row.year && row.trim);
-row._dup = !!allVehicles.find(function(x){return x.vin===row.vin;});
-bulkCsvResults.push(row);
-}
-renderCSVResults();
-var ready = bulkCsvResults.filter(function(r){return r._ready&&!r._dup;}).length;
-var dups  = bulkCsvResults.filter(function(r){return r._dup;}).length;
-document.getElementById(‘bulk-progress’).textContent = ready+’ rows ready, ‘+dups+’ duplicates’;
-};
-reader.readAsText(file);
+  var reader = new FileReader();
+  reader.onload = function(e){
+    var lines = e.target.result.split('\n').map(function(l){return l.trim();}).filter(Boolean);
+    if(!lines.length){ toast('Empty file', true); return; }
+    var headers = lines[0].split(',').map(function(h){return h.trim().toLowerCase().replace(/"/g,'');});
+    bulkCsvResults = [];
+    for(var i=1;i<lines.length;i++){
+      var cols = lines[i].split(',').map(function(c){return c.trim().replace(/^"|"$/g,'');});
+      var row = {};
+      headers.forEach(function(h,j){ row[h] = cols[j]||''; });
+      // normalize column aliases
+      if(!row.curr_odo && row.odometer) row.curr_odo = row.odometer;
+      if(!row.trim && row.model) row.trim = row.model;
+      if(!row.last_title_state && row.state) row.last_title_state = row.state;
+      row._ready = !!(row.vin && row.vin.length===17 && row.year && row.trim);
+      row._dup = !!allVehicles.find(function(x){return x.vin===row.vin;});
+      bulkCsvResults.push(row);
+    }
+    renderCSVResults();
+    var ready = bulkCsvResults.filter(function(r){return r._ready&&!r._dup;}).length;
+    var dups  = bulkCsvResults.filter(function(r){return r._dup;}).length;
+    document.getElementById('bulk-progress').textContent = ready+' rows ready, '+dups+' duplicates';
+  };
+  reader.readAsText(file);
 }
 
 function renderCSVResults(){
-var el = document.getElementById(‘csv-results’);
-if(!el||!bulkCsvResults.length) return;
-el.innerHTML = ‘<div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px">’+bulkCsvResults.length+’ rows parsed</div>’ +
-bulkCsvResults.map(function(r){
-var cls = r._dup?‘bulk-result-err’:r._ready?‘bulk-result-ok’:‘bulk-result-err’;
-var icon = r._dup?’\u26a0 Duplicate’:r._ready?’\u2713 Ready’:’\u2715 Missing fields’;
-var odoStr = r.curr_odo ? parseInt(r.curr_odo).toLocaleString()+’ mi’ : ‘’;
-return ‘<div class="bulk-result-row">’
-+’<span class="'+cls+'">’+icon+’</span>’
-+’<span style="font-family:var(--mono);font-size:10px;min-width:160px">’+r.vin+’</span>’
-+’<span>’+r.year+’ ‘+r.trim+’</span>’
-+(odoStr?’<span style="color:var(--muted)">’+odoStr+’</span>’:’’)
-+’</div>’;
-}).join(’’);
+  var el = document.getElementById('csv-results');
+  if(!el||!bulkCsvResults.length) return;
+  el.innerHTML = '<div style="font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px">'+bulkCsvResults.length+' rows parsed</div>' +
+    bulkCsvResults.map(function(r){
+      var cls = r._dup?'bulk-result-err':r._ready?'bulk-result-ok':'bulk-result-err';
+      var icon = r._dup?'\u26a0 Duplicate':r._ready?'\u2713 Ready':'\u2715 Missing fields';
+      var odoStr = r.curr_odo ? parseInt(r.curr_odo).toLocaleString()+' mi' : '';
+      return '<div class="bulk-result-row">'
+        +'<span class="'+cls+'">'+icon+'</span>'
+        +'<span style="font-family:var(--mono);font-size:10px;min-width:160px">'+r.vin+'</span>'
+        +'<span>'+r.year+' '+r.trim+'</span>'
+        +(odoStr?'<span style="color:var(--muted)">'+odoStr+'</span>':'')
+        +'</div>';
+    }).join('');
 }
 
 function downloadCSVTemplate(){
-var hdr = ‘vin,year,trim,exterior,state,curr_odo,asking_price,platform,vdp_url’;
-var ex1 = ‘WDDUG7KB0JA000000,2018,S65 AMG,Obsidian Black,TX,45000,89500,CarGurus,https://www.cargurus.com/listing/123’;
-var ex2 = ‘WDDUG7GB0KA000000,2019,S600,Iridium Silver,CA,32000,79900,AutoTrader,https://www.autotrader.com/listing/456’;
-var blob = new Blob([hdr+’\n’+ex1+’\n’+ex2], {type:‘text/csv’});
-var a = document.createElement(‘a’);
-a.href = URL.createObjectURL(blob);
-a.download = ‘v12_apex_bulk_entry.csv’;
-a.click();
+  var hdr = 'vin,year,trim,exterior,state,curr_odo,asking_price,platform,vdp_url';
+  var ex1 = 'WDDUG7KB0JA000000,2018,S65 AMG,Obsidian Black,TX,45000,89500,CarGurus,https://www.cargurus.com/listing/123';
+  var ex2 = 'WDDUG7GB0KA000000,2019,S600,Iridium Silver,CA,32000,79900,AutoTrader,https://www.autotrader.com/listing/456';
+  var blob = new Blob([hdr+'\n'+ex1+'\n'+ex2], {type:'text/csv'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'v12_apex_bulk_entry.csv';
+  a.click();
 }
 
+
+
+
+
 function quickFilter(preset){
-// Reset years and sort
-trimFilter=new Set([‘S65 AMG’,‘S65’,‘S65 AMG Final Edition’,‘S600’]);
-[2015,2016,2017,2018,2019,2020].forEach(function(y){
-var el=document.getElementById(‘yr-’+y);if(el)el.checked=true;
-});
-document.getElementById(‘fleet-sort’).value=‘tier_then_year’;
-fleetPage=0;
-// Route to view
-if(preset===‘s65’)setView(‘s65’);
-else if(preset===‘s600’)setView(‘s600’);
-else if(preset===‘active’)setView(‘active’);
-else if(preset===‘targeted’)setView(‘focus’);
-else setView(‘focus’);
+  // Reset years and sort
+  trimFilter=new Set(['S65 AMG','S65','S65 AMG Final Edition','S600']);
+  [2015,2016,2017,2018,2019,2020].forEach(function(y){
+    var el=document.getElementById('yr-'+y);if(el)el.checked=true;
+  });
+  document.getElementById('fleet-sort').value='tier_then_year';
+  fleetPage=0;
+  // Route to view
+  if(preset==='s65')setView('s65');
+  else if(preset==='s600')setView('s600');
+  else if(preset==='active')setView('active');
+  else if(preset==='targeted')setView('focus');
+  else setView('focus');
 }
 
 // ── Utility ──
-function escHtml(s){return(s||’’).replace(/&/g,’&’).replace(/</g,’<’).replace(/>/g,’>’).replace(/”/g,’"’);}
-function autoLink(s){return s.replace(/(https?://[^\s<>”]+)/g,’<a href="$1" target="_blank" rel="noopener" style="color:var(--s65);text-decoration:underline">$1</a>’);}
+function escHtml(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function autoLink(s){return s.replace(/(https?:\/\/[^\s<>"]+)/g,'<a href="$1" target="_blank" rel="noopener" style="color:var(--s65);text-decoration:underline">$1</a>');}
 function dataURLtoBlob(dataUrl){
-const arr=dataUrl.split(’,’),mime=arr[0].match(/:(.*?);/)[1];
-const bstr=atob(arr[1]);let n=bstr.length;const u8=new Uint8Array(n);
-while(n–)u8[n]=bstr.charCodeAt(n);
-return new Blob([u8],{type:mime});
+  const arr=dataUrl.split(','),mime=arr[0].match(/:(.*?);/)[1];
+  const bstr=atob(arr[1]);let n=bstr.length;const u8=new Uint8Array(n);
+  while(n--)u8[n]=bstr.charCodeAt(n);
+  return new Blob([u8],{type:mime});
 }
 function openLightbox(src){
-document.getElementById(‘lightbox-img’).src=src;
-document.getElementById(‘lightbox’).classList.add(‘open’);
+  document.getElementById('lightbox-img').src=src;
+  document.getElementById('lightbox').classList.add('open');
 }
-function closeLightbox(){document.getElementById(‘lightbox’).classList.remove(‘open’);}
+function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
 
 // ── General Notes ──
 var allGNotes=[];
-var gnActiveTag=‘all’;
+var gnActiveTag='all';
 var gnPendingImg=null;
 
 async function loadGNotes(){
-try{
-const{data,error}=await db.from(‘general_notes’).select(’*’).order(‘created_at’,{ascending:false}).limit(500);
-if(error)throw error;
-allGNotes=data||[];
-}catch(e){
-try{allGNotes=JSON.parse(localStorage.getItem(‘v12_gnotes’)||’[]’);}catch{allGNotes=[];}
-}
-renderGNotes();
+  try{
+    const{data,error}=await db.from('general_notes').select('*').order('created_at',{ascending:false}).limit(500);
+    if(error)throw error;
+    allGNotes=data||[];
+  }catch(e){
+    try{allGNotes=JSON.parse(localStorage.getItem('v12_gnotes')||'[]');}catch{allGNotes=[];}
+  }
+  renderGNotes();
 }
 
 function gnFilterTag(tag,el){
-gnActiveTag=tag;
-document.querySelectorAll(’.gnote-tag’).forEach(t=>t.classList.remove(‘on’));
-el.classList.add(‘on’);
-renderGNotes();
+  gnActiveTag=tag;
+  document.querySelectorAll('.gnote-tag').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  renderGNotes();
 }
 
 function renderGNotes(){
-const list=document.getElementById(‘gn-list’);
-if(!list)return;
-const notes=gnActiveTag===‘all’?allGNotes:allGNotes.filter(n=>n.tag===gnActiveTag);
-const cnt=document.getElementById(‘gn-count’);
-if(cnt)cnt.textContent=notes.length+’ notes’;
-if(!notes.length){
-list.innerHTML=’<div style="font-family:var(--mono);font-size:12px;color:var(--muted);padding:24px 0;text-align:center">No notes yet — add your first above</div>’;
-return;
-}
-list.innerHTML=notes.map(n=>{
-const ts=new Date(n.created_at).toLocaleString();
-const tagChip=n.tag?`<span class="gnote-chip t-${n.tag}">${n.tag}</span>`:’’;
-const body=autoLink(escHtml(n.body||’’));
-const imgHtml=n.image_url?`<img class="gnote-img" src="${n.image_url}" onclick="openLightbox(this.src)" alt="">`:’’;
-const nid=n.id||n._lid;
-return`<div class="gnote-card"> <div class="gnote-meta"> <span class="gnote-ts">${ts}</span> ${tagChip} <button onclick="gnDelete('${nid}')" style="margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px" title="Delete">&#128465;</button> </div> <div class="gnote-body">${body}</div> ${imgHtml} </div>`;
-}).join(’’);
+  const list=document.getElementById('gn-list');
+  if(!list)return;
+  const notes=gnActiveTag==='all'?allGNotes:allGNotes.filter(n=>n.tag===gnActiveTag);
+  const cnt=document.getElementById('gn-count');
+  if(cnt)cnt.textContent=notes.length+' notes';
+  if(!notes.length){
+    list.innerHTML='<div style="font-family:var(--mono);font-size:12px;color:var(--muted);padding:24px 0;text-align:center">No notes yet &mdash; add your first above</div>';
+    return;
+  }
+  list.innerHTML=notes.map(n=>{
+    const ts=new Date(n.created_at).toLocaleString();
+    const tagChip=n.tag?`<span class="gnote-chip t-${n.tag}">${n.tag}</span>`:'';
+    const body=autoLink(escHtml(n.body||''));
+    const imgHtml=n.image_url?`<img class="gnote-img" src="${n.image_url}" onclick="openLightbox(this.src)" alt="">`:'';
+    const nid=n.id||n._lid;
+    return`<div class="gnote-card">
+      <div class="gnote-meta">
+        <span class="gnote-ts">${ts}</span>
+        ${tagChip}
+        <button onclick="gnDelete('${nid}')" style="margin-left:auto;background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px" title="Delete">&#128465;</button>
+      </div>
+      <div class="gnote-body">${body}</div>
+      ${imgHtml}
+    </div>`;
+  }).join('');
 }
 
 // Paste image into general notes textarea
-document.addEventListener(‘paste’,function(e){
-const active=document.activeElement;
-if(active&&active.id===‘gn-input’){
-const items=e.clipboardData&&e.clipboardData.items;
-if(!items)return;
-for(let i=0;i<items.length;i++){
-if(items[i].type.indexOf(‘image’)>=0){
-e.preventDefault();
-const reader=new FileReader();
-reader.onload=function(ev){
-gnPendingImg=ev.target.result;
-document.getElementById(‘gn-img-preview’).src=gnPendingImg;
-document.getElementById(‘gn-img-preview-wrap’).style.display=‘block’;
-};
-reader.readAsDataURL(items[i].getAsFile());
-return;
-}
-}
-}
+document.addEventListener('paste',function(e){
+  const active=document.activeElement;
+  if(active&&active.id==='gn-input'){
+    const items=e.clipboardData&&e.clipboardData.items;
+    if(!items)return;
+    for(let i=0;i<items.length;i++){
+      if(items[i].type.indexOf('image')>=0){
+        e.preventDefault();
+        const reader=new FileReader();
+        reader.onload=function(ev){
+          gnPendingImg=ev.target.result;
+          document.getElementById('gn-img-preview').src=gnPendingImg;
+          document.getElementById('gn-img-preview-wrap').style.display='block';
+        };
+        reader.readAsDataURL(items[i].getAsFile());
+        return;
+      }
+    }
+  }
 });
 
 function gnAttachFile(input){
-const file=input.files[0];if(!file)return;
-const reader=new FileReader();
-reader.onload=function(ev){
-gnPendingImg=ev.target.result;
-document.getElementById(‘gn-img-preview’).src=gnPendingImg;
-document.getElementById(‘gn-img-preview-wrap’).style.display=‘block’;
-};
-reader.readAsDataURL(file);
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    gnPendingImg=ev.target.result;
+    document.getElementById('gn-img-preview').src=gnPendingImg;
+    document.getElementById('gn-img-preview-wrap').style.display='block';
+  };
+  reader.readAsDataURL(file);
 }
 function gnClearImg(){
-gnPendingImg=null;
-document.getElementById(‘gn-img-preview-wrap’).style.display=‘none’;
+  gnPendingImg=null;
+  document.getElementById('gn-img-preview-wrap').style.display='none';
 }
 
 async function gnSaveNote(){
-const body=(document.getElementById(‘gn-input’)||{}).value?.trim()||’’;
-const tag=document.getElementById(‘gn-tag’).value;
-if(!body&&!gnPendingImg){toast(‘Write something first’,true);return;}
-let image_url=null;
-if(gnPendingImg){
-const blob=dataURLtoBlob(gnPendingImg);
-const path=`general_notes/${Date.now()}.${blob.type.split('/')[1]||'jpg'}`;
-const{error:uE}=await db.storage.from(BUCKET).upload(path,blob,{upsert:true});
-if(!uE)image_url=`${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`;
-}
-const note={body,tag:tag||null,image_url,created_at:new Date().toISOString()};
-try{
-const{data,error}=await db.from(‘general_notes’).insert(note).select().single();
-if(error)throw error;
-allGNotes.unshift(data);
-}catch(e){
-note.*lid=’loc*’+Date.now();
-allGNotes.unshift(note);
-try{localStorage.setItem(‘v12_gnotes’,JSON.stringify(allGNotes.slice(0,300)));}catch{}
-}
-document.getElementById(‘gn-input’).value=’’;
-gnClearImg();
-renderGNotes();
-toast(‘Note saved \u2713’);
+  const body=(document.getElementById('gn-input')||{}).value?.trim()||'';
+  const tag=document.getElementById('gn-tag').value;
+  if(!body&&!gnPendingImg){toast('Write something first',true);return;}
+  let image_url=null;
+  if(gnPendingImg){
+    const blob=dataURLtoBlob(gnPendingImg);
+    const path=`general_notes/${Date.now()}.${blob.type.split('/')[1]||'jpg'}`;
+    const{error:uE}=await db.storage.from(BUCKET).upload(path,blob,{upsert:true});
+    if(!uE)image_url=`${SUPABASE_URL}/storage/v1/object/public/${BUCKET}/${path}`;
+  }
+  const note={body,tag:tag||null,image_url,created_at:new Date().toISOString()};
+  try{
+    const{data,error}=await db.from('general_notes').insert(note).select().single();
+    if(error)throw error;
+    allGNotes.unshift(data);
+  }catch(e){
+    note._lid='loc_'+Date.now();
+    allGNotes.unshift(note);
+    try{localStorage.setItem('v12_gnotes',JSON.stringify(allGNotes.slice(0,300)));}catch{}
+  }
+  document.getElementById('gn-input').value='';
+  gnClearImg();
+  renderGNotes();
+  toast('Note saved \u2713');
 }
 
 async function gnDelete(id){
-if(!confirm(‘Delete this note?’))return;
-try{
-const{error}=await db.from(‘general_notes’).delete().eq(‘id’,id);
-if(error)throw error;
-allGNotes=allGNotes.filter(n=>n.id!==id&&n._lid!==id);
-}catch(e){
-allGNotes=allGNotes.filter(n=>(n.id||n._lid)!==id);
-try{localStorage.setItem(‘v12_gnotes’,JSON.stringify(allGNotes));}catch{}
-}
-renderGNotes();
-toast(‘Deleted’);
+  if(!confirm('Delete this note?'))return;
+  try{
+    const{error}=await db.from('general_notes').delete().eq('id',id);
+    if(error)throw error;
+    allGNotes=allGNotes.filter(n=>n.id!==id&&n._lid!==id);
+  }catch(e){
+    allGNotes=allGNotes.filter(n=>(n.id||n._lid)!==id);
+    try{localStorage.setItem('v12_gnotes',JSON.stringify(allGNotes));}catch{}
+  }
+  renderGNotes();
+  toast('Deleted');
 }
 
 // ── Bookmarks ──
 var allBookmarks=[];
-var bmActiveFilter=‘all’;
+var bmActiveFilter='all';
 
 const BM_DEFAULTS=[
-{label:‘Bring a Trailer’,url:‘https://bringatrailer.com’,category:‘Auctions’},
-{label:‘Cars & Bids’,url:‘https://carsandbids.com’,category:‘Auctions’},
-{label:‘eBay Motors’,url:‘https://www.ebay.com/b/Cars-Trucks/6001/bn_1865117’,category:‘Auctions’},
-{label:‘Carfax’,url:‘https://www.carfax.com’,category:‘VIN Tools’},
-{label:‘NHTSA vPIC’,url:‘https://vpic.nhtsa.dot.gov/decoder’,category:‘VIN Tools’},
-{label:‘AutoCheck’,url:‘https://www.autocheck.com’,category:‘VIN Tools’},
-{label:‘GoodCar’,url:‘https://www.goodcar.com’,category:‘VIN Tools’},
-{label:‘iSeeCars’,url:‘https://www.iseecars.com’,category:‘Pricing’},
-{label:‘MarketCheck’,url:‘https://www.marketcheck.com’,category:‘Pricing’},
-{label:‘Classic.com’,url:‘https://www.classic.com’,category:‘Pricing’},
-{label:‘Cars.com’,url:‘https://www.cars.com’,category:‘Dealer Portals’},
-{label:‘AutoTrader’,url:‘https://www.autotrader.com’,category:‘Dealer Portals’},
-{label:‘CarGurus’,url:‘https://www.cargurus.com’,category:‘Dealer Portals’},
-{label:‘Supabase Dashboard’,url:‘https://supabase.com/dashboard’,category:‘Pipeline’},
-{label:‘V12 Apex App’,url:‘https://spriesand.github.io/w222s/’,category:‘Pipeline’},
-{label:‘V12 Playbook’,url:‘https://spriesand.github.io/w222playbook/’,category:‘Pipeline’},
-{label:‘MB USA VIN’,url:‘https://www.mbusa.com/en/vin-lookup’,category:‘Research’},
-{label:‘Colab’,url:‘https://colab.research.google.com’,category:‘Research’},
+  {label:'Bring a Trailer',url:'https://bringatrailer.com',category:'Auctions'},
+  {label:'Cars & Bids',url:'https://carsandbids.com',category:'Auctions'},
+  {label:'eBay Motors',url:'https://www.ebay.com/b/Cars-Trucks/6001/bn_1865117',category:'Auctions'},
+  {label:'Carfax',url:'https://www.carfax.com',category:'VIN Tools'},
+  {label:'NHTSA vPIC',url:'https://vpic.nhtsa.dot.gov/decoder',category:'VIN Tools'},
+  {label:'AutoCheck',url:'https://www.autocheck.com',category:'VIN Tools'},
+  {label:'GoodCar',url:'https://www.goodcar.com',category:'VIN Tools'},
+  {label:'iSeeCars',url:'https://www.iseecars.com',category:'Pricing'},
+  {label:'MarketCheck',url:'https://www.marketcheck.com',category:'Pricing'},
+  {label:'Classic.com',url:'https://www.classic.com',category:'Pricing'},
+  {label:'Cars.com',url:'https://www.cars.com',category:'Dealer Portals'},
+  {label:'AutoTrader',url:'https://www.autotrader.com',category:'Dealer Portals'},
+  {label:'CarGurus',url:'https://www.cargurus.com',category:'Dealer Portals'},
+  {label:'Supabase Dashboard',url:'https://supabase.com/dashboard',category:'Pipeline'},
+  {label:'V12 Apex App',url:'https://spriesand.github.io/w222s/',category:'Pipeline'},
+  {label:'V12 Playbook',url:'https://spriesand.github.io/w222playbook/',category:'Pipeline'},
+  {label:'MB USA VIN',url:'https://www.mbusa.com/en/vin-lookup',category:'Research'},
+  {label:'Colab',url:'https://colab.research.google.com',category:'Research'},
 ];
 
 async function loadBookmarks(){
-try{
-const{data,error}=await db.from(‘bookmarks’).select(’*’).order(‘created_at’,{ascending:true});
-if(error)throw error;
-allBookmarks=data&&data.length>0?data:BM_DEFAULTS.map((b,i)=>({…b,*lid:’def*’+i}));
-}catch(e){
-try{const s=JSON.parse(localStorage.getItem(‘v12_bookmarks’)||‘null’);allBookmarks=s||BM_DEFAULTS.map((b,i)=>({…b,*lid:’def*’+i}));}
-catch{allBookmarks=BM_DEFAULTS.map((b,i)=>({…b,*lid:’def*’+i}));}
-}
+  try{
+    const{data,error}=await db.from('bookmarks').select('*').order('created_at',{ascending:true});
+    if(error)throw error;
+    allBookmarks=data&&data.length>0?data:BM_DEFAULTS.map((b,i)=>({...b,_lid:'def_'+i}));
+  }catch(e){
+    try{const s=JSON.parse(localStorage.getItem('v12_bookmarks')||'null');allBookmarks=s||BM_DEFAULTS.map((b,i)=>({...b,_lid:'def_'+i}));}
+    catch{allBookmarks=BM_DEFAULTS.map((b,i)=>({...b,_lid:'def_'+i}));}
+  }
 }
 
 function bmFilterCat(cat,btn){
-bmActiveFilter=cat;
-document.querySelectorAll(’.bm-cat-btn’).forEach(b=>b.classList.remove(‘active’));
-btn.classList.add(‘active’);
-renderBookmarks();
+  bmActiveFilter=cat;
+  document.querySelectorAll('.bm-cat-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderBookmarks();
 }
 
 function renderBookmarks(){
-const wrap=document.getElementById(‘bm-grid-wrap’);
-if(!wrap)return;
-const bms=bmActiveFilter===‘all’?allBookmarks:allBookmarks.filter(b=>b.category===bmActiveFilter);
-const cats=[…new Set(bms.map(b=>b.category||‘Other’))];
-wrap.innerHTML=cats.map(cat=>{
-const items=bms.filter(b=>(b.category||‘Other’)===cat);
-return`<div style="margin-bottom:20px"> <div class="bm-cat-head">${cat}</div> <div class="bm-grid">${items.map(b=>{ const bid=b.id||b._lid; return`<div style="display:flex;align-items:stretch;gap:0;border:1px solid var(--rule);border-radius:6px;overflow:hidden;background:#fff;transition:box-shadow .15s" onmouseover="this.style.boxShadow='0 3px 12px rgba(0,0,0,.09)'" onmouseout="this.style.boxShadow=''">
-<a href="${b.url}" target="_blank" rel="noopener" class="bm-card" style="border:none;border-radius:0;flex:1">
-<div class="bm-card-label">${escHtml(b.label)}</div>
-<div class="bm-card-url">${b.url}</div>
-</a>
-<button onclick="bmDelete('${bid}')" style="background:none;border:none;border-left:1px solid var(--rule);color:var(--muted);cursor:pointer;padding:0 10px;font-size:13px" title="Remove">×</button>
-</div>`; }).join('')}</div> </div>`;
-}).join(’’);
+  const wrap=document.getElementById('bm-grid-wrap');
+  if(!wrap)return;
+  const bms=bmActiveFilter==='all'?allBookmarks:allBookmarks.filter(b=>b.category===bmActiveFilter);
+  const cats=[...new Set(bms.map(b=>b.category||'Other'))];
+  wrap.innerHTML=cats.map(cat=>{
+    const items=bms.filter(b=>(b.category||'Other')===cat);
+    return`<div style="margin-bottom:20px">
+      <div class="bm-cat-head">${cat}</div>
+      <div class="bm-grid">${items.map(b=>{
+        const bid=b.id||b._lid;
+        return`<div style="display:flex;align-items:stretch;gap:0;border:1px solid var(--rule);border-radius:6px;overflow:hidden;background:#fff;transition:box-shadow .15s" onmouseover="this.style.boxShadow='0 3px 12px rgba(0,0,0,.09)'" onmouseout="this.style.boxShadow=''">
+          <a href="${b.url}" target="_blank" rel="noopener" class="bm-card" style="border:none;border-radius:0;flex:1">
+            <div class="bm-card-label">${escHtml(b.label)}</div>
+            <div class="bm-card-url">${b.url}</div>
+          </a>
+          <button onclick="bmDelete('${bid}')" style="background:none;border:none;border-left:1px solid var(--rule);color:var(--muted);cursor:pointer;padding:0 10px;font-size:13px" title="Remove">&#215;</button>
+        </div>`;
+      }).join('')}</div>
+    </div>`;
+  }).join('');
 }
 
 async function bmAdd(){
-const label=(document.getElementById(‘bm-label’)||{}).value?.trim()||’’;
-const url=(document.getElementById(‘bm-url’)||{}).value?.trim()||’’;
-const cat=(document.getElementById(‘bm-cat’)||{}).value||‘Research’;
-if(!label||!url){toast(‘Label and URL required’,true);return;}
-const bm={label,url,category:cat,created_at:new Date().toISOString()};
-try{
-const{data,error}=await db.from(‘bookmarks’).insert(bm).select().single();
-if(error)throw error;
-allBookmarks.push(data);
-}catch(e){
-bm.*lid=’loc*’+Date.now();
-allBookmarks.push(bm);
-try{localStorage.setItem(‘v12_bookmarks’,JSON.stringify(allBookmarks));}catch{}
-}
-document.getElementById(‘bm-label’).value=’’;
-document.getElementById(‘bm-url’).value=’’;
-renderBookmarks();
-toast(‘Bookmark added \u2713’);
+  const label=(document.getElementById('bm-label')||{}).value?.trim()||'';
+  const url=(document.getElementById('bm-url')||{}).value?.trim()||'';
+  const cat=(document.getElementById('bm-cat')||{}).value||'Research';
+  if(!label||!url){toast('Label and URL required',true);return;}
+  const bm={label,url,category:cat,created_at:new Date().toISOString()};
+  try{
+    const{data,error}=await db.from('bookmarks').insert(bm).select().single();
+    if(error)throw error;
+    allBookmarks.push(data);
+  }catch(e){
+    bm._lid='loc_'+Date.now();
+    allBookmarks.push(bm);
+    try{localStorage.setItem('v12_bookmarks',JSON.stringify(allBookmarks));}catch{}
+  }
+  document.getElementById('bm-label').value='';
+  document.getElementById('bm-url').value='';
+  renderBookmarks();
+  toast('Bookmark added \u2713');
 }
 
 async function bmDelete(id){
-try{
-const{error}=await db.from(‘bookmarks’).delete().eq(‘id’,id);
-if(error)throw error;
-allBookmarks=allBookmarks.filter(b=>b.id!==id&&b._lid!==id);
-}catch(e){
-allBookmarks=allBookmarks.filter(b=>(b.id||b._lid)!==id);
-try{localStorage.setItem(‘v12_bookmarks’,JSON.stringify(allBookmarks));}catch{}
-}
-renderBookmarks();
+  try{
+    const{error}=await db.from('bookmarks').delete().eq('id',id);
+    if(error)throw error;
+    allBookmarks=allBookmarks.filter(b=>b.id!==id&&b._lid!==id);
+  }catch(e){
+    allBookmarks=allBookmarks.filter(b=>(b.id||b._lid)!==id);
+    try{localStorage.setItem('v12_bookmarks',JSON.stringify(allBookmarks));}catch{}
+  }
+  renderBookmarks();
 }
 
 // Auto-initialize on page load
 (async function initApp(){
-try {
-await loadAll();
-} catch(e) {
-console.error(‘initApp failed:’, e);
-var b = document.getElementById(‘loading-banner’);
-if(b) b.textContent = ’⚠ Load error: ’ + e.message;
-setSyncStatus(‘error’);
-}
+  try {
+    await loadAll();
+  } catch(e) {
+    console.error('initApp failed:', e);
+    var b = document.getElementById('loading-banner');
+    if(b) b.textContent = '⚠ Load error: ' + e.message;
+    setSyncStatus('error');
+  }
 })();
 </script>
 
 <!-- BULK ENTRY OVERLAY + MODAL -->
-
 <div class="bulk-overlay" id="bulk-overlay" onclick="closeBulkEntry()"></div>
 <div class="bulk-modal" id="bulk-modal">
   <div class="bulk-modal-header">
