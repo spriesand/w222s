@@ -1580,8 +1580,8 @@ function renderActiveListing(showAll){
     var paint=(bd.paint_name||v.exterior||"").replace(/ - METALLIC PAINT/i,"").replace(/ METALLIC$/i,"");
     var title=(v.year||"")+" "+(v.trim||"W222");
     var state=v.last_title_state||"";
-    var price=v.asking_price?"$"+Number(v.asking_price).toLocaleString():"---";
-    var miles=v.curr_odo?Number(v.curr_odo).toLocaleString()+" mi":"---";
+    var price=v.asking_price?"$"+Number(v.asking_price).toLocaleString():"—";
+    var miles=v.curr_odo?Number(v.curr_odo).toLocaleString()+" mi":"";
     var platform=platformFromUrl(v.vdp_url||"");
     var tier=getTier(v);
     var tierColor=tier==="targeted"?"var(--accent)":tier==="watched"?"var(--gold)":"var(--muted)";
