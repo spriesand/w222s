@@ -2380,12 +2380,15 @@ async function openFleetDrawer(vin){
   document.getElementById('fd-qs').textContent=v.quality_score??'—';
   document.getElementById('fd-sub-scores').textContent=`${v.score_pa??'—'} · ${v.score_pb??'—'} · ${v.score_mod??'—'}`;
   document.getElementById('fd-score').textContent=v.composite_score?`${v.composite_score} / 175`:'—';
-  document.getElementById('fd-odo').textContent=v.curr_odo?Number(v.curr_odo).toLocaleString()+' mi':'—';
-  var odoInp=document.getElementById('fd-odo-input');if(odoInp)odoInp.value=v.curr_odo||'';
   var ep=allActiveEpisodes[v.vin]||{};
+  // Odo: prefer vehicle_market, fall back to active listing episode miles
+  var bestOdo=v.curr_odo||ep.miles||null;
+  document.getElementById('fd-odo').textContent=bestOdo?Number(bestOdo).toLocaleString()+' mi':'—';
+  var odoInp=document.getElementById('fd-odo-input');if(odoInp)odoInp.value=bestOdo||'';
+  // Price: prefer active listing episode, fall back to vehicle_market
   var askInp=document.getElementById('fd-asking-input');
   var askDisp=document.getElementById('fd-asking-display');
-  var askPrice=ep.price||null;
+  var askPrice=ep.price||v.asking_price||null;
   if(askInp)askInp.value=askPrice||'';
   if(askDisp)askDisp.textContent=askPrice?'$'+Number(askPrice).toLocaleString():'—';
   document.getElementById('fd-last-sale-mi').textContent=v.last_sale_mi?Number(v.last_sale_mi).toLocaleString()+' mi':'—';
