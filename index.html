@@ -4124,33 +4124,68 @@ function showShareBanner(msg){
 
 async function enrichSingleListing(vin, url){
   if(!url){toast('No URL on record for this listing',true);return;}
-  // Open listing in new tab simultaneously
   window.open(url,'_blank','noopener');
-  toast('Fetching data…');
+  toast('Fetching listing data…');
   try{
     var parsed=await callParseListing(url);
-    if(!parsed||(!parsed.price&&!parsed.mileage&&!parsed.vin)){
-      toast('Could not extract data — site may block scrapers',true);
+    console.log('[enrich] parse-listing returned:', JSON.stringify(parsed));
+
+    if(!parsed||parsed.error){
+      toast('Parse failed: '+(parsed&&parsed.error?parsed.error:'no response'),true);
       return;
     }
-    // Update listing_history row
-    var updates={};
-    if(parsed.price)updates.price=parsed.price;
-    if(parsed.mileage)updates.miles=parsed.mileage;
-    if(parsed.exterior)updates.seller_name=parsed.dealer||null;
-    if(Object.keys(updates).length){
-      await db.from('listing_history').update(updates)
-        .eq('vin',vin)
-        .eq('link_status','Active')
-        .eq('vdp_url',url);
+
+    var gotPrice=parsed.price&&Number(parsed.price)>0;
+    var gotMiles=parsed.mileage&&Number(parsed.mileage)>0;
+    var gotVin=parsed.vin;
+
+    if(!gotPrice&&!gotMiles){
+      toast('Site returned no price or mileage — check console for raw response',true);
+      console.warn('[enrich] Raw parsed data:', parsed);
+      return;
     }
-    // Update vehicle_market
-    await callIngestVehicle(vin,url,parsed,'manual');
-    await loadAll();
-    toast((parsed.price?'$'+Number(parsed.price).toLocaleString():'')+(parsed.mileage?' · '+Number(parsed.mileage).toLocaleString()+' mi':'')+' ✓');
+
+    // Update listing_history — match on vin + Active status only (not url, which may vary)
+    var lhUpdates={};
+    if(gotPrice)lhUpdates.price=parsed.price;
+    if(gotMiles)lhUpdates.miles=parsed.mileage;
+    if(parsed.dealer)lhUpdates.seller_name=parsed.dealer;
+
+    var{error:lhErr}=await db.from('listing_history')
+      .update(lhUpdates)
+      .eq('vin',vin)
+      .eq('link_status','Active');
+    if(lhErr)console.warn('[enrich] listing_history update error:',lhErr);
+
+    // Update vehicle_market directly
+    var vmUpdates={vin:vin};
+    if(gotPrice){vmUpdates.asking_price=parsed.price;vmUpdates.curr_mkt_price=parsed.price;}
+    if(gotMiles)vmUpdates.curr_odo=parsed.mileage;
+    var{error:vmErr}=await db.from('vehicle_market').upsert(vmUpdates,{onConflict:'vin'});
+    if(vmErr)console.warn('[enrich] vehicle_market upsert error:',vmErr);
+
+    // Update in-memory allActiveEpisodes and allVehicles immediately
+    if(allActiveEpisodes[vin]){
+      if(gotPrice)allActiveEpisodes[vin].price=parsed.price;
+      if(gotMiles)allActiveEpisodes[vin].miles=parsed.mileage;
+    }
+    var mv=allVehicles.find(function(v){return v.vin===vin;});
+    if(mv){
+      if(gotPrice)mv.asking_price=parsed.price;
+      if(gotMiles)mv.curr_odo=parsed.mileage;
+    }
+
+    // Re-render dashboard cards without full reload
+    renderActiveListing();
+    renderDashboard();
+
+    var resultMsg=(gotPrice?'$'+Number(parsed.price).toLocaleString():'')
+      +(gotMiles?(gotPrice?' · ':'')+Number(parsed.mileage).toLocaleString()+' mi':'')
+      +' saved ✓';
+    toast(resultMsg);
   }catch(err){
     toast('Enrich error: '+err.message,true);
-    console.error('enrichSingleListing error:',err);
+    console.error('[enrich] exception:',err);
   }
 }
 
