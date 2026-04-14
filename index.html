@@ -2389,7 +2389,7 @@ async function openFleetDrawer(vin){
   if(askInp)askInp.value=askPrice||'';
   if(askDisp)askDisp.textContent=askPrice?'$'+Number(askPrice).toLocaleString():'—';
   document.getElementById('fd-last-sale-mi').textContent=v.last_sale_mi?Number(v.last_sale_mi).toLocaleString()+' mi':'—';
-  document.getElementById('fd-isc-mi').textContent=v.iseecars_est_mi?Number(v.iseecars_est_mi).toLocaleString()+' mi':'—';
+  var iscEl=document.getElementById('fd-isc-mi');if(iscEl)iscEl.textContent=v.iseecars_est_mi?Number(v.iseecars_est_mi).toLocaleString()+' mi':'—';
   document.getElementById('fd-proj-mi').textContent=v.proj_mi_jan28?Number(v.proj_mi_jan28).toLocaleString()+' mi':'—';
   document.getElementById('fd-sale').textContent=v.last_sale_year??'—';
   document.getElementById('fd-timeline').innerHTML=saleChainHTML(v.sale_history,false);
