@@ -518,6 +518,25 @@ td.num{font-family:var(--mono);text-align:right;}
 /* ── Active listing URL rows ── */
 .listing-url-row{display:flex;align-items:center;gap:6px;padding:6px 8px;border:1px solid var(--rule);border-radius:4px;background:#fff;margin-bottom:5px;}
 .listing-url-row.is-active{border-color:#9ee8bf;border-left:3px solid var(--green);background:#fafffc;}
+/* Unified episode rows */
+.ep-row{border:1px solid var(--rule);border-radius:5px;padding:9px 11px;margin-bottom:6px;background:#fff;transition:border-color .15s;}
+.ep-row.ep-active{border-left:3px solid var(--green);border-color:#9ee8bf;background:#fafffc;}
+.ep-row.ep-dead{opacity:.55;}
+.ep-top{display:flex;align-items:center;gap:7px;margin-bottom:4px;}
+.ep-platform{font-family:var(--mono);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:#fff;background:var(--s65);padding:2px 7px;border-radius:3px;flex-shrink:0;}
+.ep-live{font-family:var(--mono);font-size:9px;font-weight:600;color:var(--green);background:#edfaf3;border:1px solid #9ee8bf;padding:1px 6px;border-radius:3px;display:flex;align-items:center;gap:3px;flex-shrink:0;}
+.ep-link{flex:1;font-family:var(--mono);font-size:10px;color:var(--s65);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.ep-link:hover{text-decoration:underline;}
+.ep-no-url{flex:1;font-family:var(--mono);font-size:10px;color:var(--muted);font-style:italic;}
+.ep-meta{display:flex;gap:12px;font-family:var(--mono);font-size:10px;color:var(--muted);}
+.ep-meta-val{color:var(--ink);font-weight:500;}
+.ep-actions{display:flex;align-items:center;gap:3px;flex-shrink:0;}
+.ep-btn{background:none;border:none;cursor:pointer;color:var(--muted);font-size:12px;padding:1px 4px;border-radius:3px;transition:all .12s;line-height:1;}
+.ep-btn:hover{background:var(--surface);color:var(--ink);}
+.ep-btn.ep-del:hover{color:var(--accent);}
+.ep-status-toggle{font-family:var(--mono);font-size:9px;cursor:pointer;padding:2px 7px;border-radius:3px;border:1px solid var(--rule);background:var(--surface);color:var(--muted);transition:all .12s;}
+.ep-status-toggle:hover{border-color:var(--muted);}
+.ep-empty{font-family:var(--mono);font-size:11px;color:var(--muted);padding:10px 0 6px;}
 .listing-url-platform{font-family:var(--mono);font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#fff;background:var(--s65);padding:2px 7px;border-radius:3px;white-space:nowrap;flex-shrink:0;}
 .listing-url-live{font-family:var(--mono);font-size:9px;font-weight:600;color:var(--green);background:#edfaf3;border:1px solid #9ee8bf;padding:1px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0;display:flex;align-items:center;gap:3px;}
 .listing-url-live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pulse-dot 1.8s ease-in-out infinite;}
@@ -1267,9 +1286,12 @@ td.num{font-family:var(--mono);text-align:right;}
       <button class="ls-btn" id="ls-btn-silent" onclick="fdSetListingStatus('silent')"><span class="ls-dot-indicator" style="background:#aaa"></span>Silent</button>
     </div>
 
-    <!-- Active Listing URLs — above photo -->
-    <div class="section-head">Active Listing URLs</div>
-    <div id="fd-listing-urls" style="margin-bottom:10px"></div>
+    <!-- Unified Listing Episodes -->
+    <div class="section-head" style="display:flex;align-items:center;justify-content:space-between;">
+      <span>Listing Episodes</span>
+      <span id="fd-ep-summary" style="font-family:var(--mono);font-size:10px;color:var(--muted);font-weight:normal;"></span>
+    </div>
+    <div id="fd-episodes" style="margin-bottom:10px;"></div>
     <div style="display:flex;gap:6px;margin-bottom:16px;align-items:stretch">
       <input id="fd-new-url-input" type="url" placeholder="https://cargurus.com/listing/…"
         style="flex:1;border:1px solid var(--rule);border-radius:4px;padding:7px 10px;font-family:var(--mono);font-size:11px;background:#fff;color:var(--ink);outline:none"
@@ -1385,14 +1407,6 @@ td.num{font-family:var(--mono);text-align:right;}
     </div>
     <div class="section-head" id="fd-bat-section" style="display:none;">BaT History</div>
     <div id="fd-bat-content" style="margin-bottom:14px;display:none;"></div>
-    <div class="section-head">Listing History</div>
-    <div class="lh-summary" id="fd-lh-summary"></div>
-    <div style="overflow-x:auto;border:1px solid var(--rule);border-radius:4px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--rule)" id="fd-lh-wrap">
-      <table class="lh-table" id="fd-lh-table">
-        <thead><tr><th>Date</th><th>Price</th><th>Miles</th><th>Platform</th><th>Seller</th><th>State</th><th>Status</th><th>Link</th></tr></thead>
-        <tbody id="fd-lh-tbody"><tr><td colspan="8" class="lh-empty">Loading&hellip;</td></tr></tbody>
-      </table>
-    </div>
     <div class="section-head">Research Notes Log</div>
     <textarea class="vlog-input" id="fd-vlog-input" placeholder="Paste dealer notes, diagnosis, listing details, chat takeaways, URLs&hellip; Images: Ctrl+V to paste or attach below."></textarea>
     <div id="fd-vlog-img-wrap" style="display:none;margin-bottom:8px;align-items:center;gap:8px">
@@ -2370,8 +2384,7 @@ async function openFleetDrawer(vin){
   await loadDocSlots(vin);
   document.getElementById('fleet-overlay').classList.add('open');
   document.getElementById('fleet-drawer').classList.add('open');
-  loadListingHistory(vin);
-  fdLoadListingUrls(vin);
+  loadListingEpisodes(vin);
   // Reset and load vlog
   const vlogInput=document.getElementById('fd-vlog-input');
   if(vlogInput){vlogInput.value='';fdVlogSetupPaste(vlogInput);}
@@ -2406,36 +2419,150 @@ function replaceDoc(e,slotId){
   if(fi){fi.style.pointerEvents='auto';fi.click();}
 }
 
-async function loadListingHistory(vin){
-  const tbody=document.getElementById('fd-lh-tbody');
-  const summary=document.getElementById('fd-lh-summary');
-  tbody.innerHTML='<tr><td colspan="8" class="lh-empty">Loading&hellip;</td></tr>';
-  summary.innerHTML='';
+// ── Unified Listing Episodes ──────────────────────────────────────
+var fdEpisodesCache = [];
+
+async function loadListingEpisodes(vin){
+  const el=document.getElementById('fd-episodes');
+  const summary=document.getElementById('fd-ep-summary');
+  if(el) el.innerHTML='<div class="ep-empty">Loading…</div>';
+  if(summary) summary.textContent='';
   try{
-    const{data,error}=await db.from('listing_history').select('price,miles,first_seen,platform,seller_name,state,link_status,vdp_url').eq('vin',vin).order('first_seen',{ascending:false,nullsFirst:false}).limit(100);
+    const{data,error}=await db.from('listing_history')
+      .select('id,platform,vdp_url,price,miles,first_seen,last_seen,seller_name,state,link_status')
+      .eq('vin',vin)
+      .order('first_seen',{ascending:false,nullsFirst:false})
+      .limit(100);
     if(error)throw error;
-    if(!data||data.length===0){tbody.innerHTML='<tr><td colspan="8" class="lh-empty">No listing history found for this VIN</td></tr>';return;}
-    const active=data.filter(r=>r.link_status==='Active').length;
-    const dead=data.filter(r=>r.link_status==='Dead').length;
-    const unver=data.filter(r=>r.link_status==='Unverified').length;
-    const prices=data.filter(r=>r.price).map(r=>r.price);
-    const minP=prices.length?Math.min(...prices):null;
-    const maxP=prices.length?Math.max(...prices):null;
-    summary.innerHTML=[
-      `<span class="lh-sum-pill">${data.length} episodes</span>`,
-      active?`<span class="lh-sum-pill active">${active} active</span>`:'',
-      dead?`<span class="lh-sum-pill dead">${dead} dead</span>`:'',
-      unver?`<span class="lh-sum-pill">${unver} unverified</span>`:'',
-      minP?`<span class="lh-sum-pill">Low $${Number(minP).toLocaleString()}</span>`:'',
-      maxP?`<span class="lh-sum-pill">High $${Number(maxP).toLocaleString()}</span>`:'',
-    ].join('');
-    tbody.innerHTML=data.map(r=>{
-      const statusClass=r.link_status==='Active'?'lh-status-active':r.link_status==='Dead'?'lh-status-dead':'lh-status-unverified';
-      const urlCell=r.vdp_url?`<a class="lh-url-link" href="${r.vdp_url}" target="_blank" title="${r.vdp_url}">${(r.platform||r.vdp_url).substring(0,22)}</a>`:'&mdash;';
-      return`<tr><td>${r.first_seen?r.first_seen.substring(0,10):'&mdash;'}</td><td style="font-weight:500">${r.price?'$'+Number(r.price).toLocaleString():'&mdash;'}</td><td>${r.miles?Number(r.miles).toLocaleString()+' mi':'&mdash;'}</td><td>${(r.platform||'&mdash;').substring(0,18)}</td><td>${(r.seller_name||'&mdash;').substring(0,16)}</td><td>${r.state||'&mdash;'}</td><td><span class="${statusClass}">${r.link_status||'&mdash;'}</span></td><td>${urlCell}</td></tr>`;
-    }).join('');
-  }catch(err){tbody.innerHTML=`<tr><td colspan="8" class="lh-empty" style="color:var(--accent)">Error loading history: ${err.message}</td></tr>`;console.error('listing history error',err);}
+    fdEpisodesCache=data||[];
+    fdRenderEpisodes(vin);
+  }catch(err){
+    if(el)el.innerHTML='<div class="ep-empty" style="color:var(--accent)">Error: '+err.message+'</div>';
+    console.error('loadListingEpisodes error:',err);
+  }
 }
+
+function fdRenderEpisodes(vin){
+  const el=document.getElementById('fd-episodes');
+  const summary=document.getElementById('fd-ep-summary');
+  if(!el)return;
+  if(!fdEpisodesCache.length){
+    el.innerHTML='<div class="ep-empty">No listing episodes recorded yet.</div>';
+    if(summary)summary.textContent='';
+    return;
+  }
+  const rows=fdEpisodesCache;
+  const activeCount=rows.filter(r=>r.link_status==='Active').length;
+  const deadCount=rows.filter(r=>r.link_status==='Dead').length;
+  const prices=rows.filter(r=>r.price).map(r=>r.price);
+  const minP=prices.length?Math.min(...prices):null;
+  const maxP=prices.length?Math.max(...prices):null;
+  var summaryParts=[rows.length+' episodes'];
+  if(activeCount)summaryParts.push(activeCount+' live');
+  if(minP&&maxP&&minP!==maxP)summaryParts.push('$'+Number(minP).toLocaleString()+'–$'+Number(maxP).toLocaleString());
+  else if(minP)summaryParts.push('$'+Number(minP).toLocaleString());
+  if(summary)summary.textContent=summaryParts.join(' · ');
+  el.innerHTML=rows.map(function(r,i){
+    var isActive=r.link_status==='Active';
+    var isDead=r.link_status==='Dead';
+    var rowClass='ep-row'+(isActive?' ep-active':isDead?' ep-dead':'');
+    var platform=r.platform||'Unknown';
+    var liveChip=isActive?'<span class="ep-live"><span class="listing-url-live-dot"></span>LIVE</span>':'';
+    var urlPart=r.vdp_url
+      ?'<a class="ep-link" href="'+r.vdp_url+'" target="_blank" rel="noopener">'+r.vdp_url.replace(/^https?:\/\//,'').substring(0,48)+(r.vdp_url.length>58?'…':'')+'</a>'
+      :'<span class="ep-no-url">No URL recorded</span>';
+    var price=r.price?'$'+Number(r.price).toLocaleString():'';
+    var miles=r.miles?Number(r.miles).toLocaleString()+' mi':'';
+    var date=r.first_seen?r.first_seen.substring(0,10):'';
+    var state=r.state||'';
+    var metaParts=[date,price,miles,state].filter(Boolean);
+    var statusLabel=isActive?'Mark Dead':isDead?'Mark Active':'Mark Dead';
+    var nextStatus=isActive?'Dead':isDead?'Active':'Dead';
+    var editBtn=r.vdp_url
+      ?'<button class="ep-btn" data-idx="'+i+'" onclick="fdEpStartEdit(this)" title="Edit URL">✎</button>'
+      :'<button class="ep-btn" data-idx="'+i+'" onclick="fdEpStartEdit(this)" title="Add URL">+</button>';
+    return '<div class="'+rowClass+'" id="ep-row-'+i+'">'+
+      '<div class="ep-top">'+
+        '<span class="ep-platform">'+escHtml(platform)+'</span>'+
+        liveChip+
+        urlPart+
+        '<div class="ep-actions">'+
+          editBtn+
+          '<button class="ep-status-toggle" data-idx="'+i+'" data-status="'+nextStatus+'" data-vin="'+vin+'" onclick="fdEpToggleStatus(this)">'+statusLabel+'</button>'+
+          '<button class="ep-btn ep-del" data-idx="'+i+'" data-vin="'+vin+'" onclick="fdEpDelete(this)" title="Delete episode">×</button>'+
+        '</div>'+
+      '</div>'+
+      (metaParts.length?'<div class="ep-meta">'+metaParts.map(function(p){return'<span>'+escHtml(p)+'</span>';}).join('')+'</div>':'')+
+      '<div class="ep-edit-row" id="ep-edit-'+i+'" style="display:none;margin-top:6px;display:none;">'+
+        '<input class="ep-edit-input" id="ep-edit-input-'+i+'" type="url" value="'+escHtml(r.vdp_url||'')+'" placeholder="https://..." '+
+          'style="width:100%;border:1px solid var(--rule);border-radius:4px;padding:5px 8px;font-family:var(--mono);font-size:10px;outline:none;" '+
+          'data-idx2="'+i+'" data-vin2="'+vin+'" onkeydown="fdEpKeydown(event,this)">'+
+        '<div style="display:flex;gap:5px;margin-top:4px;">'+
+          '<button class="btn btn-accent" style="padding:3px 10px;font-size:10px;" data-idx="'+i+'" data-vin="'+vin+'" onclick="fdEpSaveBtn(this)">Save</button>'+
+          '<button class="btn" style="padding:3px 10px;font-size:10px;" onclick="fdEpCancelEdit('+i+')">Cancel</button>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+}
+
+function fdEpSaveBtn(btn){fdEpSaveUrl(btn.dataset.idx, btn.dataset.vin);}
+function fdEpKeydown(e,inp){
+  if(e.key==='Enter'){var i=inp.dataset.idx2;var vin=inp.dataset.vin2;fdEpSaveUrl(i,vin);}
+  if(e.key==='Escape'){fdEpCancelEdit(inp.dataset.idx2);}
+}
+
+function fdEpStartEdit(btn){
+  var i=btn.dataset.idx;
+  var editRow=document.getElementById('ep-edit-'+i);
+  if(editRow){editRow.style.display='block';var inp=document.getElementById('ep-edit-input-'+i);if(inp){inp.focus();inp.select();}}
+}
+function fdEpCancelEdit(i){
+  var editRow=document.getElementById('ep-edit-'+i);
+  if(editRow)editRow.style.display='none';
+}
+async function fdEpSaveUrl(i,vin){
+  var row=fdEpisodesCache[i];if(!row)return;
+  var inp=document.getElementById('ep-edit-input-'+i);
+  var newUrl=inp?inp.value.trim():'';
+  if(!newUrl){toast('URL cannot be empty',true);return;}
+  var{error}=await db.from('listing_history').update({vdp_url:newUrl}).eq('id',row.id);
+  if(error){toast('Save failed: '+error.message,true);return;}
+  row.vdp_url=newUrl;
+  fdRenderEpisodes(vin);
+  toast('URL saved ✓');
+}
+async function fdEpToggleStatus(btn){
+  var i=btn.dataset.idx;
+  var nextStatus=btn.dataset.status;
+  var vin=btn.dataset.vin;
+  var row=fdEpisodesCache[i];if(!row)return;
+  var{error}=await db.from('listing_history').update({link_status:nextStatus}).eq('id',row.id);
+  if(error){toast('Update failed: '+error.message,true);return;}
+  row.link_status=nextStatus;
+  // Refresh the header badge too
+  if(activeFD){
+    var hasActive=fdEpisodesCache.some(function(r){return r.link_status==='Active';});
+    var badge=document.getElementById('fd-active-badge');
+    if(badge)badge.style.display=hasActive?'flex':'none';
+  }
+  fdRenderEpisodes(vin);
+  toast(nextStatus==='Active'?'Marked live ✓':'Marked dead ✓');
+}
+async function fdEpDelete(btn){
+  var i=btn.dataset.idx;
+  var vin=btn.dataset.vin;
+  var row=fdEpisodesCache[i];if(!row)return;
+  var{error}=await db.from('listing_history').delete().eq('id',row.id);
+  if(error){toast('Delete failed: '+error.message,true);return;}
+  fdEpisodesCache.splice(i,1);
+  fdRenderEpisodes(vin);
+  toast('Episode removed ✓');
+}
+
+// ── Legacy stubs to avoid broken references ───────────────────────
+function fdRenderListingUrls(vin){fdRenderEpisodes(vin);}
+var fdListingUrlsCache=fdEpisodesCache;
 
 function closeFleetDrawer(){
   document.getElementById('fleet-overlay').classList.remove('open');
@@ -2573,7 +2700,7 @@ async function fdAddListingUrl(){
   const{error} = await db.from('listing_history').insert(row);
   if(error){ toast('Add failed: '+error.message,true); return; }
   // Reload from DB to get the actual id assigned by the sequence
-  await fdLoadListingUrls(activeFD.vin);
+  await loadListingEpisodes(activeFD.vin);
   document.getElementById('fd-new-url-input').value='';
   toast('Listing URL added \u2713');
 }
