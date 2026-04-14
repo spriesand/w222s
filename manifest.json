@@ -1,0 +1,47 @@
+{
+  "name": "V12 Pursuit",
+  "short_name": "V12 Pursuit",
+  "description": "W222 S65 AMG acquisition intelligence platform",
+  "start_url": "/w222s/?source=pwa",
+  "scope": "/w222s/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#0f0f0f",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://spriesand.github.io/w222s/assets/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://spriesand.github.io/w222s/assets/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "share_target": {
+    "action": "/w222s/",
+    "method": "GET",
+    "params": {
+      "title": "share_title",
+      "text": "share_text",
+      "url": "share_url"
+    }
+  },
+  "categories": ["utilities", "finance"],
+  "shortcuts": [
+    {
+      "name": "Fleet",
+      "url": "/w222s/?tab=fleet",
+      "description": "Open fleet table"
+    },
+    {
+      "name": "Add Vehicle",
+      "url": "/w222s/?action=add",
+      "description": "Add a new vehicle sighting"
+    }
+  ]
+}
