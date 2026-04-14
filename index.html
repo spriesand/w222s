@@ -1520,8 +1520,7 @@ function switchTab(t){
   document.getElementById('page-crm').classList.toggle('active',t==='crm');
   document.getElementById('page-notes').classList.toggle('active',t==='notes');
   document.getElementById('page-bookmarks').classList.toggle('active',t==='bookmarks');
-  if(t==='market'){mkt.classList.add('tab-panel-active');}
-  else{mkt.classList.remove('tab-panel-active');}
+
   if(t==='notes'){loadGNotes();}
   if(t==='bookmarks'){renderBookmarks();}
 }
