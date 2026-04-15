@@ -95,6 +95,22 @@ header{background:#fff;color:var(--ink);padding:0 28px;display:flex;align-items:
 .playbook-link:hover{background:var(--ink);color:#fff;border-color:var(--ink);}
 
 .tab-bar{background:#fff;border-bottom:1px solid var(--rule);display:flex;padding:0 28px;position:sticky;top:52px;z-index:99;}
+
+/* ── Target cohort strip ── */
+.dash-hero-label{font-family:var(--mono);font-size:9px;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;padding:20px 0 8px;}
+.dash-cohort-strip{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px;}
+.dcs-year{border:1px solid var(--rule);border-radius:8px;padding:14px 12px;cursor:pointer;transition:border-color .15s,box-shadow .15s;background:var(--surface);}
+.dcs-year:hover{border-color:var(--s65);box-shadow:0 2px 8px rgba(0,0,0,.06);}
+.dcs-year.active{border-color:var(--s65);border-width:2px;}
+.dcs-year.final{border-color:#b8860b;border-width:2px;}
+.dcs-yr{font-size:22px;font-weight:700;color:var(--ink);line-height:1;}
+.dcs-ct{font-family:var(--mono);font-size:11px;color:var(--s65);margin:4px 0 2px;}
+.dcs-tag{font-size:10px;color:var(--muted);}
+/* ── Service wall badge row in targeted cards ── */
+.tc-svc-row{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px;}
+.tc-svc-badge{font-size:9px;font-family:var(--mono);padding:2px 6px;border-radius:3px;border:1px solid var(--rule);}
+.tc-svc-badge.on{background:#edfaf3;color:#1a7a46;border-color:#9ee8bf;}
+.tc-svc-badge.off{background:#fdf2f2;color:#a33;border-color:#f5c0c0;}
 .tab{padding:14px 24px;font-family:var(--mono);font-size:12px;text-transform:uppercase;letter-spacing:.1em;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);transition:all .15s;user-select:none;}
 .tab:hover{color:var(--ink);}
 .tab.active{color:var(--ink);border-bottom-color:var(--accent);}
@@ -819,117 +835,118 @@ td.num{font-family:var(--mono);text-align:right;}
 <div class="page active" id="page-dashboard">
 <div class="dash-content">
 
-  <div class="dash-sec">Acquisition Targets</div>
-  <div class="tc-grid" id="tc-grid"></div>
+  <!-- ── TARGET COHORT HERO ── -->
 
-  <div class="dash-sec">Market Intelligence</div>
-  <div class="dash-pipeline">
-    <div class="dptile" onclick="dashGoFleet('targeted')">
-      <div class="dptile-bar dpt-blue"></div>
-      <div class="dptile-n" id="dp-targeted">—</div>
-      <div class="dptile-l">Targeted</div>
-      <div class="dptile-s">Active acquisition candidates</div>
-      <div class="dptile-tag">View all &rarr;</div>
+  <div class="dash-hero-label">Primary Acquisition Window</div>
+  <div class="dash-cohort-strip">
+    <div class="dcs-year active" onclick="dashGoYear(2018)">
+      <div class="dcs-yr">2018</div>
+      <div class="dcs-ct" id="dcs-ct-2018">— S65</div>
+      <div class="dcs-tag">Target cohort</div>
     </div>
-
-```
-<div class="dptile" onclick="dashGoFleet('active')">
-  <div class="dptile-bar dpt-red"></div>
-  <div class="dptile-n" id="dp-active">—</div>
-  <div class="dptile-l">Active Listings</div>
-  <div class="dptile-s">Currently for sale in market</div>
-  <div class="dptile-tag" style="color:var(--green);border-color:#9ee8bf;background:#edfaf3;">Live now</div>
-</div>
-<div class="dptile" onclick="dashGoFleet('ultra_rare')">
-  <div class="dptile-bar dpt-teal"></div>
-  <div class="dptile-n" id="dp-rare">—</div>
-  <div class="dptile-l">Ultra Rare</div>
-  <div class="dptile-s">3+ premium options &middot; ceramics &middot; fridge &middot; magic sky</div>
-  <div class="dptile-tag" style="color:var(--accent);border-color:#9bcdd6;background:#edf5f7;">Short list</div>
-</div>
-```
-
+    <div class="dcs-year active" onclick="dashGoYear(2019)">
+      <div class="dcs-yr">2019</div>
+      <div class="dcs-ct" id="dcs-ct-2019">— S65</div>
+      <div class="dcs-tag">Target cohort</div>
+    </div>
+    <div class="dcs-year final" onclick="dashGoYear(2020)">
+      <div class="dcs-yr">2020</div>
+      <div class="dcs-ct" id="dcs-ct-2020">— S65</div>
+      <div class="dcs-tag" style="color:#b8860b;">Final Edition</div>
+    </div>
   </div>
 
-  <div class="dash-sec" style="display:flex;align-items:center;justify-content:space-between;">
+  <!-- ── ACQUISITION TARGETS ── -->
+
+  <div class="dash-sec" style="display:flex;align-items:center;justify-content:space-between;margin-top:24px;">
+    <span>Acquisition Targets</span>
+    <span id="dp-targeted" style="font-family:var(--mono);font-size:11px;color:var(--muted);">—</span>
+  </div>
+  <div class="tc-grid" id="tc-grid"></div>
+
+  <!-- ── ACTIVE LISTINGS ── -->
+
+  <div class="dash-sec" style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;">
     <span>Active Listings</span>
     <div style="display:flex;align-items:center;gap:10px;">
       <span id="dash-active-count" style="font-family:var(--mono);font-size:10px;color:var(--green);font-weight:600;"></span>
-      <button onclick="enrichActiveListings()" style="font-family:var(--mono);font-size:9px;padding:2px 9px;border-radius:3px;border:1px solid var(--rule);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor='var(--muted)'" onmouseout="this.style.borderColor='var(--rule)'">&#9889; Enrich</button>
+      <button onclick="enrichActiveListings()" style="font-family:var(--mono);font-size:9px;padding:2px 9px;border-radius:3px;border:1px solid var(--rule);background:var(--surface);color:var(--muted);cursor:pointer;transition:all .15s;">&#9889; Enrich</button>
     </div>
   </div>
-  <div id="dash-active-listings" style="margin-bottom:18px;">
+  <div id="dash-active-listings" style="margin-bottom:24px;">
     <div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:12px 0;">Loading active listings&hellip;</div>
   </div>
 
-  <div class="dash-sec">By Model Year</div>
-  <div class="dash-years">
-    <div class="dyear" onclick="dashGoYear(2015)">
-      <div class="dyear-n">2015</div>
-      <div class="dyear-c">315 S65</div>
-      <div class="dyear-c" style="color:#bbb;">231 S600</div>
-      <div class="dyear-dots"><div class="dyd dyd-s65"></div><div class="dyd dyd-s600"></div></div>
+  <!-- ── MARKET PULSE ── -->
+
+  <div class="dash-sec" style="margin-top:4px;">Market Pulse</div>
+  <div class="dash-pipeline" style="margin-bottom:24px;">
+    <div class="dptile" onclick="dashGoFleet('ultra_rare')">
+      <div class="dptile-bar dpt-teal"></div>
+      <div class="dptile-n" id="dp-rare">—</div>
+      <div class="dptile-l">Ultra Rare</div>
+      <div class="dptile-s">3+ premium options</div>
+      <div class="dptile-tag" style="color:var(--accent);border-color:#9bcdd6;background:#edf5f7;">Short list</div>
     </div>
-    <div class="dyear" onclick="dashGoYear(2016)">
-      <div class="dyear-n">2016</div>
-      <div class="dyear-c">56 S65</div>
-      <div class="dyear-c" style="color:#bbb;">26 S600</div>
-      <div class="dyear-dots"><div class="dyd dyd-s65"></div><div class="dyd dyd-s600"></div></div>
-    </div>
-    <div class="dyear" onclick="dashGoYear(2017)">
-      <div class="dyear-n">2017</div>
-      <div class="dyear-c">27 S65</div>
-      <div class="dyear-c" style="color:#bbb;">29 S600</div>
-      <div class="dyear-k">Scored &#10003;</div>
-      <div class="dyear-dots"><div class="dyd dyd-s65"></div><div class="dyd dyd-s600"></div></div>
-    </div>
-    <div class="dyear" onclick="dashGoYear(2018)">
-      <div class="dyear-n">2018</div>
-      <div class="dyear-c">21 S65</div>
-      <div class="dyear-c" style="color:#bbb;">&mdash; S600</div>
-      <div class="dyear-dots"><div class="dyd dyd-s65"></div></div>
-    </div>
-    <div class="dyear" onclick="dashGoYear(2019)">
-      <div class="dyear-n">2019</div>
-      <div class="dyear-c">19 S65</div>
-      <div class="dyear-k" style="color:var(--accent);">Needs MC pull</div>
-      <div class="dyear-dots"><div class="dyd dyd-s65"></div></div>
-    </div>
-    <div class="dyear" onclick="dashGoYear(2020)">
-      <div class="dyear-n">2020</div>
-      <div class="dyear-c">3 S65</div>
-      <div class="dyear-k">Final Edition</div>
-      <div class="dyear-dots"><div class="dyd dyd-s65"></div></div>
+    <div class="dptile" onclick="dashGoFleet('active')">
+      <div class="dptile-bar dpt-red"></div>
+      <div class="dptile-n" id="dp-active">—</div>
+      <div class="dptile-l">For Sale Now</div>
+      <div class="dptile-s">Active market listings</div>
+      <div class="dptile-tag" style="color:var(--green);border-color:#9ee8bf;background:#edfaf3;">Live</div>
     </div>
   </div>
 
-  <!-- Factory Paint S65 accordion -->
+  <!-- ── REFERENCE UNIVERSE (collapsed) ── -->
 
-  <div class="dash-accordion" id="dash-paint-accordion">
-    <div class="dash-acc-header" onclick="toggleDashAccordion('paint')">
-      <span class="dash-acc-title" id="dash-paint-sec">Factory Paint &middot; S65 Universe</span>
-      <span class="dash-acc-arrow" id="dash-paint-arrow">&#9654;</span>
+  <div class="dash-accordion" id="dash-universe-accordion">
+    <div class="dash-acc-header" onclick="toggleDashAccordion('universe')">
+      <span class="dash-acc-title">Reference Universe &middot; 2015–2017</span>
+      <span class="dash-acc-arrow" id="dash-universe-arrow">&#9654;</span>
     </div>
-    <div class="dash-acc-body" id="dash-paint-body" style="display:none;">
-      <div class="dash-paint-sm" id="dash-paint-tiles">
-        <div class="dcolor-sm" style="background:#f5f4f0;"><div class="dcolor-sm-n" style="color:#bbb;">—</div><div class="dcolor-sm-l" style="color:#ccc;">Loading&hellip;</div></div>
+    <div class="dash-acc-body" id="dash-universe-body" style="display:none;">
+      <div class="dash-years" style="margin-top:12px;">
+        <div class="dyear" onclick="dashGoYear(2015)">
+          <div class="dyear-n">2015</div>
+          <div class="dyear-c">315 S65</div>
+          <div class="dyear-c" style="color:#bbb;">231 S600</div>
+          <div class="dyear-dots"><div class="dyd dyd-s65"></div><div class="dyd dyd-s600"></div></div>
+        </div>
+        <div class="dyear" onclick="dashGoYear(2016)">
+          <div class="dyear-n">2016</div>
+          <div class="dyear-c">56 S65</div>
+          <div class="dyear-c" style="color:#bbb;">26 S600</div>
+          <div class="dyear-dots"><div class="dyd dyd-s65"></div><div class="dyd dyd-s600"></div></div>
+        </div>
+        <div class="dyear" onclick="dashGoYear(2017)">
+          <div class="dyear-n">2017</div>
+          <div class="dyear-c">27 S65</div>
+          <div class="dyear-c" style="color:#bbb;">29 S600</div>
+          <div class="dyear-dots"><div class="dyd dyd-s65"></div><div class="dyd dyd-s600"></div></div>
+        </div>
       </div>
-    </div>
-  </div>
-
-  <div class="dash-sec">S600 Reference</div>
-  <div class="dash-s600">
-    <div class="ds600-header" onclick="toggleDS600()">
-      <span class="ds600-title">S600 &middot; 286 cars &middot; paint by color</span>
-      <div class="ds600-meta">
-        <span>2015&ndash;2017 &middot; data only</span>
-        <span id="ds600-arrow">&#9660;</span>
+      <!-- Factory Paint accordion -->
+      <div class="dash-accordion" id="dash-paint-accordion" style="margin-top:12px;">
+        <div class="dash-acc-header" onclick="toggleDashAccordion('paint')">
+          <span class="dash-acc-title" id="dash-paint-sec">Factory Paint &middot; S65</span>
+          <span class="dash-acc-arrow" id="dash-paint-arrow">&#9654;</span>
+        </div>
+        <div class="dash-acc-body" id="dash-paint-body" style="display:none;">
+          <div class="dash-paint-sm" id="dash-paint-tiles"></div>
+        </div>
       </div>
-    </div>
-    <div class="ds600-body" id="ds600-body">
-      <div class="ds600-divider"></div>
-      <div class="ds600-grid" id="ds600-grid">
-        <div class="ds600-row"><span class="ds600-name" style="color:#bbb;">Loading&hellip;</span></div>
+      <!-- S600 reference -->
+      <div class="dash-s600" style="margin-top:12px;">
+        <div class="ds600-header" onclick="toggleDS600()">
+          <span class="ds600-title">S600 &middot; 286 cars</span>
+          <div class="ds600-meta"><span>2015–2017 &middot; data only</span><span id="ds600-arrow">&#9660;</span></div>
+        </div>
+        <div class="ds600-body" id="ds600-body">
+          <div class="ds600-divider"></div>
+          <div class="ds600-grid" id="ds600-grid">
+            <div class="ds600-row"><span class="ds600-name" style="color:#bbb;">Loading&hellip;</span></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -1781,11 +1798,30 @@ function dashGoS600ByIndex(idx){
 
 
 function getServiceWallStatus(vin){
+  // Use confirmed_* boolean flags from vehicle_service
   var recs=(allServiceRecs||[]).filter(function(r){return r.vin===vin;});
   if(!recs.length)return 'unknown';
-  var withStatus=recs.filter(function(r){return r.major_service_status&&r.major_service_status!=='unknown';});
-  var pool=withStatus.length?withStatus:recs;
-  return pool.sort(function(a,b){return new Date(b.record_date||0)-new Date(a.record_date||0);})[0].major_service_status||'unknown';
+  // Merge all rows — any confirmed flag across any row counts
+  var trans=recs.some(function(r){return r.confirmed_transmission;});
+  var plugs=recs.some(function(r){return r.confirmed_spark_plugs;});
+  var coils=recs.some(function(r){return r.confirmed_ignition_coils;});
+  var brakes=recs.some(function(r){return r.confirmed_brake_service;});
+  var susp=recs.some(function(r){return r.confirmed_suspension;});
+  var confirmed=[trans,plugs,coils,brakes,susp];
+  var count=confirmed.filter(Boolean).length;
+  if(count===0)return 'not_done';
+  if(count===5)return 'confirmed';
+  return 'partial';
+}
+function getServiceWallDetail(vin){
+  var recs=(allServiceRecs||[]).filter(function(r){return r.vin===vin;});
+  return {
+    transmission: recs.some(function(r){return r.confirmed_transmission;}),
+    spark_plugs: recs.some(function(r){return r.confirmed_spark_plugs;}),
+    ignition_coils: recs.some(function(r){return r.confirmed_ignition_coils;}),
+    brake_service: recs.some(function(r){return r.confirmed_brake_service;}),
+    suspension: recs.some(function(r){return r.confirmed_suspension;})
+  };
 }
 
 function renderTargetedCards(){
@@ -1838,6 +1874,19 @@ function renderTargetedCards(){
       +'<div class="tc-stat"><div class="tc-sv" style="color:var(--accent)">'+odo+'</div><div class="tc-sl">Odometer</div></div>'
       +'<div class="tc-stat"><div class="tc-sv" style="color:var(--green)">'+ask+'</div><div class="tc-sl">Asking</div></div>'
       +'<div class="tc-stat"><div class="tc-sv" style="color:'+svcColor+';font-size:11px">'+svcLabel+'</div><div class="tc-sl">Svc Wall</div></div>'
+      +(function(){
+        var d=getServiceWallDetail(v.vin);
+        var badges=[
+          {k:'transmission',l:'Trans'},
+          {k:'spark_plugs',l:'Plugs'},
+          {k:'ignition_coils',l:'Coils'},
+          {k:'brake_service',l:'Brakes'},
+          {k:'suspension',l:'Susp'}
+        ];
+        return '<div class="tc-svc-row">'+badges.map(function(b){
+          return '<span class="tc-svc-badge '+(d[b.k]?'on':'off')+'">'+b.l+'</span>';
+        }).join('')+'</div>';
+      }())
       +'</div>'
       +(metaParts.length?'<div class="tc-meta">'+metaParts.join('<span class="tc-meta-dot"> · </span>')+'</div>':'')
       +'<div class="tc-actions">'
@@ -1886,7 +1935,14 @@ function renderDashboard(){
     return ct>=3;
   });
 
-  var dpT=document.getElementById('dp-targeted');if(dpT)dpT.textContent=targeted.length;
+  var dpT=document.getElementById('dp-targeted');if(dpT)dpT.textContent=targeted.length+' car'+(targeted.length!==1?'s':'');
+
+  // Cohort strip counts — 2018-2020 S65
+  [2018,2019,2020].forEach(function(yr){
+    var ct=allVehicles.filter(function(v){return v.year===yr&&['S65 AMG','S65','S65 AMG Final Edition'].includes(v.trim||'');}).length;
+    var el=document.getElementById('dcs-ct-'+yr);
+    if(el)el.textContent=ct+' S65';
+  });
   var dpA=document.getElementById('dp-active');if(dpA)dpA.textContent=active.length;
   var dpR=document.getElementById('dp-rare');if(dpR)dpR.textContent=ultraRare.length||'~12';
 
@@ -3330,7 +3386,7 @@ if(avData.curr_odo){
     odometer:avData.curr_odo?parseInt(avData.curr_odo):null,
     source:'App - Sighting',
     details:'Added via Add Vehicle'+(avData.total_owners?' | Owners: '+avData.total_owners:''),
-    major_service_status:'unknown'
+    details: null
   };
   var sR=await db.from('vehicle_service').insert(svcRow);
   if(sR.error)console.warn('vehicle_service insert (non-fatal):',sR.error.message);
@@ -3378,7 +3434,7 @@ if(!el) return;
 // Find latest service record for this VIN
 var svcRec = allServiceRecs.filter(function(r){ return r.vin===v.vin; })
 .sort(function(a,b){ return (b.record_date||’’).localeCompare(a.record_date||’’); })[0];
-el.value = (svcRec && svcRec.major_service_status) || ‘unknown’;
+el.value = getServiceWallStatus(activeFD.vin);
 }
 
 async function fdSetServiceStatus(val){
@@ -3389,17 +3445,17 @@ if(svcRecs.length === 0){
 var r = await db.from(‘vehicle_service’).insert({
 vin: activeFD.vin,
 record_date: new Date().toISOString().split(‘T’)[0],
-major_service_status: val,
+details: val,
 source: ‘App - Manual’
 });
 if(r.error){ toast(‘Save failed: ‘+r.error.message, true); return; }
-allServiceRecs.push({vin:activeFD.vin, major_service_status:val});
+allServiceRecs.push({vin:activeFD.vin, details:val});
 } else {
 // Update most recent record
 var latest = svcRecs.sort(function(a,b){ return (b.record_date||’’).localeCompare(a.record_date||’’); })[0];
-var r = await db.from(‘vehicle_service’).update({major_service_status:val}).eq(‘id’,latest.id);
+var r = await db.from(‘vehicle_service’).update({details:val}).eq(‘id’,latest.id);
 if(r.error){ toast(’Save failed: ’+r.error.message, true); return; }
-latest.major_service_status = val;
+latest.details = val;
 }
 var labels = {unknown:‘Unknown’,partial:‘Partial’,confirmed:‘Confirmed’,not_done:‘Not Done’};
 toast(‘Service status: ’ + (labels[val]||val) + ’ \u2713’);
