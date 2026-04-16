@@ -334,7 +334,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .pb-card{border-radius:var(--r);overflow:hidden;border:1px solid rgba(200,169,106,.2);background:#07090f;position:relative;transition:border-color .15s}
 .pb-card:hover{border-color:rgba(200,169,106,.5)}
 .pb-banner{height:160px;background:linear-gradient(160deg,#0a1018,#050810);position:relative;overflow:hidden;display:flex;align-items:flex-end}
-.pb-bg-img{position:absolute;inset:0;background:url(https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=75) center/cover;opacity:.2}
+.pb-bg-img{position:absolute;inset:0;background:radial-gradient(ellipse at top right,rgba(200,169,106,.08),transparent 60%);opacity:1}
 .pb-banner-ov{position:absolute;inset:0;background:linear-gradient(to top,#07090f 0%,transparent 65%)}
 .pb-banner-txt{position:relative;z-index:2;padding:14px 16px}
 .pb-eyebrow{font-family:var(--mono);font-size:7px;color:var(--gold);text-transform:uppercase;letter-spacing:.25em;margin-bottom:4px}
@@ -737,7 +737,7 @@ function flags(v,vm){
   if(vm&&vm.curr_odo&&vm.curr_odo>=70000&&vm.curr_odo<=100000)f.push({c:'fn',l:'GI Zone'});
   if(vm&&vm.total_owners===1)f.push({c:'fg',l:'Single Owner'});
   else if(vm&&vm.total_owners===2)f.push({c:'fg',l:'2 Owners'});
-  if(vm&&vm.salvage&&vm.salvage.toLowerCase()==='yes')f.push({c:'fr',l:'SALVAGE'});
+  if(vm&&(vm.salvage===true||(typeof vm.salvage==='string'&&vm.salvage.toLowerCase()==='yes')))f.push({c:'fr',l:'SALVAGE'});
   if(v.is_final_edition)f.push({c:'tg',l:'Final Edition'});
   if(v.last_title_state)f.push({c:'fd',l:v.last_title_state});
   return f.map(function(x){return '<span class="flag '+x.c+'">'+x.l+'</span>';}).join('');
@@ -852,7 +852,7 @@ function renderCompact(v,vm,lh){
 // ── RENDER TARGET CARD ────────────────────────────────────
 function targetRead(v,vm,lh){
   var r=[],h=[];
-  if(vm&&vm.salvage&&vm.salvage.toLowerCase()==='yes')return '<strong style="color:var(--red);">HARD DQ: Salvage title. Exit value permanently impaired under the collector thesis.</strong>';
+  if(vm&&(vm.salvage===true||(typeof vm.salvage==='string'&&vm.salvage.toLowerCase()==='yes')))return '<strong style="color:var(--red);">HARD DQ: Salvage title. Exit value permanently impaired under the collector thesis.</strong>';
   if(v.car_status==='target')r.push('within the 2017\u20132020 target cohort');
   if(vm&&vm.curr_odo&&vm.curr_odo>=70000&&vm.curr_odo<=100000)r.push('mileage inside the Golden Intersection band');
   if(vm&&vm.total_owners===1)r.push('single-owner history');
