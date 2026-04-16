@@ -1100,7 +1100,7 @@ function renderVideos(){
   if(!grid)return;
   grid.innerHTML=vids.map(function(v,i){
     var href=v.type==='yt'?'https://www.youtube.com/watch?v='+v.id:'https://www.youtube.com/results?search_query='+v.id;
-    var thumb=v.type==='yt'?'<img src="https://img.youtube.com/vi/'+v.id+'/hqdefault.jpg" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div class="vt-emoji" style="display:none;background:linear-gradient(135deg,#0d0508,#1a0510);">'+(v.icon||'&#127909;')+'</div>':'<div class="vt-emoji" style="background:linear-gradient(135deg,#0d0508,#1a0510);">'+(v.icon||'&#127909;')+'</div>';
+    var imgUrl='https://img.youtube.com/vi/'+v.id+'/hqdefault.jpg';var thumb=v.type==='yt'?'<img src="'+imgUrl+'" alt="" loading="lazy"><div class="vt-emoji" style="display:none;background:linear-gradient(135deg,#0d0508,#1a0510);">&#127909;</div>':'<div class="vt-emoji" style="background:linear-gradient(135deg,#0d0508,#1a0510);">&#127909;</div>';
     return '<a class="vc card" href="'+href+'" target="_blank" rel="noopener">'+
       '<div class="vt">'+thumb+'<div class="vt-ov"><div class="vplay">&#9654;</div></div></div>'+
       '<div class="vb"><div class="vc-ch">'+v.ch+'</div><div class="vc-title">'+v.title+'</div><div class="vc-desc">'+v.desc+'</div></div>'+
@@ -1108,6 +1108,7 @@ function renderVideos(){
   }).join('');
 }
 
+function closeVideoModal(){var m=document.getElementById('vm-modal');if(m)m.remove();}
 function openVideoManager(){
   var vids=getVideos();
   var rows=vids.map(function(v,i){
@@ -1129,7 +1130,7 @@ function openVideoManager(){
   modal.innerHTML='<div style="background:var(--panel);border:1px solid var(--line2);border-radius:14px;width:100%;max-width:560px;max-height:85vh;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px;">'+
     '<div style="display:flex;justify-content:space-between;align-items:center;">'+
       '<div style="font-family:var(--serif);font-size:20px;color:var(--ink);">Manage Videos</div>'+
-      '<button onclick="document.getElementById('vm-modal').remove()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;">&#x2715;</button>'+
+      '<button onclick="closeVideoModal()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;">&#x2715;</button>'+
     '</div>'+
     '<div style="font-family:var(--mono);font-size:9px;color:var(--muted);">For YouTube IDs: copy the code after ?v= in the URL. For searches: paste the search query.</div>'+
     rows+
