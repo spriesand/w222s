@@ -116,8 +116,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 
 /* Hero */
 .hero-img{height:230px;position:relative;background:linear-gradient(155deg,#0c1825,#040b12);overflow:hidden;flex-shrink:0}
-.hero-img img{width:100%;height:100%;object-fit:cover;opacity:.7;display:block}
-.hero-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,18,32,.95),transparent 45%)}
+.hero-img img{width:100%;height:100%;object-fit:cover;opacity:.92;display:block}
+.hero-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.72),transparent 48%)}
 .hero-pill{position:absolute;top:10px;right:11px;z-index:2;display:flex;align-items:center;gap:4px;background:rgba(7,9,15,.82);border:1px solid rgba(76,190,130,.22);border-radius:4px;padding:3px 8px;font-family:var(--mono);font-size:8px;color:var(--green)}
 .hero-dom{position:absolute;bottom:9px;left:13px;z-index:2;font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.5)}
 .hero-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:9px}
@@ -171,8 +171,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .lc{display:flex;flex-direction:column;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,var(--panel2),var(--panel));transition:border-color .15s}
 .lc:hover{border-color:var(--line2)}
 .lc-img{height:155px;position:relative;background:linear-gradient(155deg,#0c1825,#040b12);overflow:hidden;flex-shrink:0}
-.lc-img img{width:100%;height:100%;object-fit:cover;opacity:.7;display:block}
-.lc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,18,32,.88),transparent 50%)}
+.lc-img img{width:100%;height:100%;object-fit:cover;opacity:.92;display:block}
+.lc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.62),transparent 52%)}
 .lc-top{position:absolute;top:8px;left:8px;right:8px;z-index:2;display:flex;justify-content:space-between}
 .lc-active{position:absolute;bottom:8px;left:8px;z-index:2;display:flex;align-items:center;gap:3px;background:rgba(7,9,15,.82);border:1px solid rgba(76,190,130,.22);border-radius:3px;padding:2px 6px;font-family:var(--mono);font-size:8px;color:var(--green)}
 .lc-body{padding:10px 11px 12px;flex:1;display:flex;flex-direction:column;gap:7px}
@@ -191,8 +191,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .tgt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px}
 .tc{display:flex;flex-direction:column;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,var(--panel2),var(--panel));box-shadow:var(--sh)}
 .tc-img{height:210px;position:relative;background:linear-gradient(155deg,#0c1825,#040b12);overflow:hidden}
-.tc-img img{width:100%;height:100%;object-fit:cover;opacity:.7;display:block}
-.tc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,18,32,.92),transparent 45%)}
+.tc-img img{width:100%;height:100%;object-fit:cover;opacity:.92;display:block}
+.tc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.65),transparent 45%)}
 .tc-top{position:absolute;top:10px;left:11px;right:11px;z-index:2;display:flex;justify-content:space-between}
 .tc-active{position:absolute;bottom:10px;left:11px;z-index:2;display:flex;align-items:center;gap:4px;background:rgba(7,9,15,.82);border:1px solid rgba(76,190,130,.22);border-radius:4px;padding:3px 8px;font-family:var(--mono);font-size:8px;color:var(--green)}
 .tc-body{padding:14px 15px 15px;display:flex;flex-direction:column;gap:9px}
@@ -262,8 +262,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .vc{border-radius:var(--r);overflow:hidden;display:block;text-decoration:none;color:inherit;cursor:pointer;transition:transform .15s,box-shadow .15s}
 .vc:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(0,0,0,.5)}
 .vt{height:158px;position:relative;overflow:hidden;background:#0a0f18;border-bottom:1px solid var(--line)}
-.vt img{width:100%;height:100%;object-fit:cover;display:block;opacity:.58;transition:opacity .15s}
-.vc:hover .vt img{opacity:.72}
+.vt img{width:100%;height:100%;object-fit:cover;display:block;opacity:.92;transition:opacity .15s}
+.vc:hover .vt img{opacity:1}
 .vt-emoji{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:38px}
 .vt-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.65),transparent 55%)}
 .vplay{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.55);border:1.5px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;padding-left:2px}
@@ -553,32 +553,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 <!-- ═══ VIDEOS ═══ -->
 <div class="page" id="page-videos">
 <div class="pp">
-  <div class="sec"><span>Videos &mdash; Fuel the Hunt</span><span style="color:var(--muted);font-family:var(--mono);font-size:9px;">Opens YouTube</span></div>
-  <div class="vid-grid">
-    <a class="vc card" href="https://www.youtube.com/watch?v=aZ3U_w3fOqY" target="_blank" rel="noopener">
-      <div class="vt"><img src="https://img.youtube.com/vi/aZ3U_w3fOqY/hqdefault.jpg" alt="" loading="lazy"><div class="vt-ov"><div class="vplay">&#9654;</div></div></div>
-      <div class="vb"><div class="vc-ch">Engine &middot; Sound</div><div class="vc-title">V12 Biturbo Cold Start</div><div class="vc-desc">621 hp. Hand-assembled in Affalterbach. The defining sound.</div></div>
-    </a>
-    <a class="vc card" href="https://www.youtube.com/watch?v=Q2D9_04Tf20" target="_blank" rel="noopener">
-      <div class="vt"><img src="https://img.youtube.com/vi/Q2D9_04Tf20/hqdefault.jpg" alt="" loading="lazy"><div class="vt-ov"><div class="vplay">&#9654;</div></div></div>
-      <div class="vb"><div class="vc-ch">Review &middot; S65 AMG</div><div class="vc-title">The Last V12 S-Class</div><div class="vc-desc">Why the S65 remains emotionally unmatched among modern AMG products.</div></div>
-    </a>
-    <a class="vc card" href="https://www.youtube.com/watch?v=mI6z6kMreX0" target="_blank" rel="noopener">
-      <div class="vt"><img src="https://img.youtube.com/vi/mI6z6kMreX0/hqdefault.jpg" alt="" loading="lazy"><div class="vt-ov"><div class="vplay">&#9654;</div></div></div>
-      <div class="vb"><div class="vc-ch">Performance &middot; Autobahn</div><div class="vc-title">Top Speed Run</div><div class="vc-desc">No limiter. All twelve cylinders. What $225K of German engineering felt like.</div></div>
-    </a>
-    <a class="vc card" href="https://www.youtube.com/results?search_query=mercedes+s65+amg+exhaust+sound" target="_blank" rel="noopener">
-      <div class="vt"><div class="vt-emoji" style="background:linear-gradient(135deg,#0d0508,#1a0510);">&#127925;</div><div class="vt-ov"><div class="vplay">&#9654;</div></div></div>
-      <div class="vb"><div class="vc-ch">Sound &middot; Exhaust</div><div class="vc-title">S65 Exhaust Notes</div><div class="vc-desc">Sport exhaust and cold starts. The M279 V12 as an acoustic instrument.</div></div>
-    </a>
-    <a class="vc card" href="https://www.youtube.com/results?search_query=mercedes+s65+amg+future+collectible" target="_blank" rel="noopener">
-      <div class="vt"><div class="vt-emoji" style="background:linear-gradient(135deg,#050d1a,#0a1428);">&#11088;</div><div class="vt-ov"><div class="vplay">&#9654;</div></div></div>
-      <div class="vb"><div class="vc-ch">Collectibility &middot; Thesis</div><div class="vc-title">Future Collectible Case</div><div class="vc-desc">Why the last hand-built V12 AMG may appreciate once the floor is found.</div></div>
-    </a>
-    <a class="vc card" href="https://www.youtube.com/results?search_query=mercedes+s65+amg+ownership+long+term" target="_blank" rel="noopener">
-      <div class="vt"><div class="vt-emoji" style="background:linear-gradient(135deg,#14080a,#1a0c10);">&#128663;</div><div class="vt-ov"><div class="vplay">&#9654;</div></div></div>
-      <div class="vb"><div class="vc-ch">Ownership &middot; Long Term</div><div class="vc-title">Living With the S65</div><div class="vc-desc">Real owners on maintenance, reliability, and running costs.</div></div>
-    </a>
+  <div class="sec"><span>Videos &mdash; Fuel the Hunt</span><div style="display:flex;align-items:center;gap:8px;"><span style="color:var(--muted);font-family:var(--mono);font-size:9px;">Opens YouTube</span><button class="mbtn" onclick="openVideoManager()" style="font-size:11px;">&#9881; Manage</button></div></div>
+  <div class="vid-grid" id="vid-grid">
   </div>
 </div>
 </div>
@@ -1100,7 +1076,96 @@ function loadAll(){
   }).catch(function(e){console.error('Load error:',e);});
 }
 
+
+// ── VIDEO MANAGER ─────────────────────────────────────────
+var DEFAULT_VIDEOS = [
+  {id:'aZ3U_w3fOqY',ch:'Engine · Sound',title:'V12 Biturbo Cold Start',desc:'621 hp. Hand-assembled in Affalterbach. The defining sound.',type:'yt'},
+  {id:'Q2D9_04Tf20',ch:'Review · S65 AMG',title:'The Last V12 S-Class',desc:'Why the S65 remains emotionally unmatched among modern AMG products.',type:'yt'},
+  {id:'mI6z6kMreX0',ch:'Performance · Autobahn',title:'Top Speed Run',desc:'No limiter. All twelve cylinders. What $225K of German engineering felt like.',type:'yt'},
+  {id:'mercedes+s65+amg+exhaust+sound',ch:'Sound · Exhaust',title:'S65 Exhaust Notes',desc:'Sport exhaust and cold starts. The M279 V12 as an acoustic instrument.',type:'search',icon:'\u1F3B5'},
+  {id:'mercedes+s65+amg+future+collectible',ch:'Collectibility · Thesis',title:'Future Collectible Case',desc:'Why the last hand-built V12 AMG may appreciate once the floor is found.',type:'search',icon:'\u2B50'},
+  {id:'mercedes+s65+amg+ownership+long+term',ch:'Ownership · Long Term',title:'Living With the S65',desc:'Real owners on maintenance, reliability, and running costs.',type:'search',icon:'\u1F697'}
+];
+
+function getVideos(){
+  try{var s=localStorage.getItem('s65_videos');return s?JSON.parse(s):DEFAULT_VIDEOS;}catch(e){return DEFAULT_VIDEOS;}
+}
+function saveVideos(vids){
+  try{localStorage.setItem('s65_videos',JSON.stringify(vids));}catch(e){}
+}
+
+function renderVideos(){
+  var vids=getVideos();
+  var grid=document.getElementById('vid-grid');
+  if(!grid)return;
+  grid.innerHTML=vids.map(function(v,i){
+    var href=v.type==='yt'?'https://www.youtube.com/watch?v='+v.id:'https://www.youtube.com/results?search_query='+v.id;
+    var thumb=v.type==='yt'?'<img src="https://img.youtube.com/vi/'+v.id+'/hqdefault.jpg" alt="" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'"><div class="vt-emoji" style="display:none;background:linear-gradient(135deg,#0d0508,#1a0510);">'+(v.icon||'&#127909;')+'</div>':'<div class="vt-emoji" style="background:linear-gradient(135deg,#0d0508,#1a0510);">'+(v.icon||'&#127909;')+'</div>';
+    return '<a class="vc card" href="'+href+'" target="_blank" rel="noopener">'+
+      '<div class="vt">'+thumb+'<div class="vt-ov"><div class="vplay">&#9654;</div></div></div>'+
+      '<div class="vb"><div class="vc-ch">'+v.ch+'</div><div class="vc-title">'+v.title+'</div><div class="vc-desc">'+v.desc+'</div></div>'+
+    '</a>';
+  }).join('');
+}
+
+function openVideoManager(){
+  var vids=getVideos();
+  var rows=vids.map(function(v,i){
+    return '<div style="border:1px solid var(--line);border-radius:8px;padding:11px;display:flex;flex-direction:column;gap:7px;">'+
+      '<div style="font-family:var(--mono);font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;">Slot '+(i+1)+'</div>'+
+      '<input id="vm-ch-'+i+'" value="'+v.ch+'" placeholder="Channel label" style="background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:5px 8px;font-family:var(--mono);font-size:10px;color:var(--ink);width:100%;">'+
+      '<input id="vm-title-'+i+'" value="'+v.title+'" placeholder="Title" style="background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:5px 8px;font-family:var(--mono);font-size:10px;color:var(--ink);width:100%;">'+
+      '<input id="vm-id-'+i+'" value="'+v.id+'" placeholder="YouTube ID (e.g. aZ3U_w3fOqY) or search query" style="background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:5px 8px;font-family:var(--mono);font-size:10px;color:var(--ink);width:100%;">'+
+      '<div style="display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:9px;color:var(--muted);">'+
+        '<label><input type="radio" name="vm-type-'+i+'" value="yt" '+(v.type==='yt'?'checked':'')+' style="margin-right:4px;">YouTube ID</label>'+
+        '<label><input type="radio" name="vm-type-'+i+'" value="search" '+(v.type==='search'?'checked':'')+' style="margin-right:4px;">Search query</label>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+
+  var modal=document.createElement('div');
+  modal.id='vm-modal';
+  modal.style.cssText='position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:20px;';
+  modal.innerHTML='<div style="background:var(--panel);border:1px solid var(--line2);border-radius:14px;width:100%;max-width:560px;max-height:85vh;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:12px;">'+
+    '<div style="display:flex;justify-content:space-between;align-items:center;">'+
+      '<div style="font-family:var(--serif);font-size:20px;color:var(--ink);">Manage Videos</div>'+
+      '<button onclick="document.getElementById('vm-modal').remove()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;">&#x2715;</button>'+
+    '</div>'+
+    '<div style="font-family:var(--mono);font-size:9px;color:var(--muted);">For YouTube IDs: copy the code after ?v= in the URL. For searches: paste the search query.</div>'+
+    rows+
+    '<div style="display:flex;gap:8px;margin-top:4px;">'+
+      '<button onclick="vmSave()" style="flex:1;background:var(--blue);color:var(--bg);border:none;border-radius:7px;padding:10px;font-family:var(--mono);font-size:10px;cursor:pointer;font-weight:500;">Save &amp; Update</button>'+
+      '<button onclick="vmReset()" style="padding:10px 14px;background:none;border:1px solid var(--line2);color:var(--muted);border-radius:7px;font-family:var(--mono);font-size:9px;cursor:pointer;">Reset to Defaults</button>'+
+    '</div>'+
+  '</div>';
+  document.body.appendChild(modal);
+}
+
+function vmSave(){
+  var vids=getVideos();
+  for(var i=0;i<vids.length;i++){
+    var ch=document.getElementById('vm-ch-'+i);
+    var title=document.getElementById('vm-title-'+i);
+    var id=document.getElementById('vm-id-'+i);
+    var typeEl=document.querySelector('input[name="vm-type-'+i+'"]:checked');
+    if(ch)vids[i].ch=ch.value;
+    if(title)vids[i].title=title.value;
+    if(id)vids[i].id=id.value.trim();
+    if(typeEl)vids[i].type=typeEl.value;
+  }
+  saveVideos(vids);
+  document.getElementById('vm-modal').remove();
+  renderVideos();
+}
+
+function vmReset(){
+  localStorage.removeItem('s65_videos');
+  document.getElementById('vm-modal').remove();
+  renderVideos();
+}
+
 loadAll();
+renderVideos();
 </script>
 </body>
 </html>
