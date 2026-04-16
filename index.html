@@ -330,6 +330,22 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .lb-counter{font-family:var(--mono);font-size:10px;color:rgba(255,255,255,.5);min-width:60px;text-align:center}
 .gallery-upload-hint{font-family:var(--mono);font-size:9px;color:var(--dim);text-align:center;padding:40px;line-height:1.8}
 
+
+.pb-card{border-radius:var(--r);overflow:hidden;border:1px solid rgba(200,169,106,.2);background:#07090f;position:relative;transition:border-color .15s}
+.pb-card:hover{border-color:rgba(200,169,106,.5)}
+.pb-banner{height:160px;background:linear-gradient(160deg,#0a1018,#050810);position:relative;overflow:hidden;display:flex;align-items:flex-end}
+.pb-bg-img{position:absolute;inset:0;background:url(https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=75) center/cover;opacity:.2}
+.pb-banner-ov{position:absolute;inset:0;background:linear-gradient(to top,#07090f 0%,transparent 65%)}
+.pb-banner-txt{position:relative;z-index:2;padding:14px 16px}
+.pb-eyebrow{font-family:var(--mono);font-size:7px;color:var(--gold);text-transform:uppercase;letter-spacing:.25em;margin-bottom:4px}
+.pb-title{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--ink);line-height:1}
+.pb-subtitle{font-family:var(--serif);font-size:18px;font-style:italic;color:var(--gold2);line-height:1.2}
+.pb-body{padding:12px 16px 14px;display:flex;flex-direction:column;gap:8px}
+.pb-desc{font-size:12px;color:var(--ink2);line-height:1.5}
+.pb-tags{display:flex;gap:6px;flex-wrap:wrap}
+.pb-tag{font-family:var(--mono);font-size:8px;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--line);padding:2px 7px;border-radius:3px}
+.pb-cta{font-family:var(--mono);font-size:9px;color:var(--gold2);text-align:right}
+
 </style>
 </head>
 <body>
@@ -385,27 +401,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
       <div class="card" id="dash-hero" style="min-height:400px;"><div class="loading">Loading primary candidate&hellip;</div></div>
       <!-- Playbook feature card -->
       <a href="https://spriesand.github.io/w222playbook/" target="_blank" rel="noopener" style="text-decoration:none;display:block;">
-        <div style="border-radius:var(--r);overflow:hidden;border:1px solid rgba(200,169,106,.2);background:#07090f;position:relative;transition:border-color .15s;" onmouseover="this.style.borderColor='rgba(200,169,106,.5)'" onmouseout="this.style.borderColor='rgba(200,169,106,.2)'">
-          <div style="height:160px;background:linear-gradient(160deg,#0a1018 0%,#050810 100%);position:relative;overflow:hidden;display:flex;align-items:flex-end;justify-content:flex-start;">
-            <div style="position:absolute;inset:0;background:url(https://images.unsplash.com/photo-1517524285303-d6fc683dddf8?w=900&q=80) center/cover;opacity:.22;"></div>
-            <div style="position:absolute;inset:0;background:linear-gradient(to top,#07090f 0%,transparent 65%);"></div>
-            <div style="position:relative;z-index:2;padding:14px 16px;">
-              <div style="font-family:var(--mono);font-size:7px;color:var(--gold);text-transform:uppercase;letter-spacing:.25em;margin-bottom:4px;">V12 Stewardship Playbook &middot; W222 Platform</div>
-              <div style="font-family:var(--serif);font-size:26px;font-weight:700;color:var(--ink);line-height:1;">2017&ndash;2020</div>
-              <div style="font-family:var(--serif);font-size:18px;font-weight:400;font-style:italic;color:var(--gold2);line-height:1.2;">S600 &amp; S65 AMG</div>
-            </div>
-          </div>
-          <div style="padding:12px 16px 14px;display:flex;flex-direction:column;gap:8px;">
-            <div style="font-family:var(--sans);font-size:12px;color:var(--ink2);line-height:1.5;">The complete acquisition thesis &mdash; engine history, depreciation analysis, Golden Intersection methodology, and fleet intelligence.</div>
-            <div style="display:flex;gap:6px;flex-wrap:wrap;">
-              <span style="font-family:var(--mono);font-size:8px;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--line);padding:2px 7px;border-radius:3px;">M279 Engine</span>
-              <span style="font-family:var(--mono);font-size:8px;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--line);padding:2px 7px;border-radius:3px;">Depreciation Model</span>
-              <span style="font-family:var(--mono);font-size:8px;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--line);padding:2px 7px;border-radius:3px;">Golden Intersection</span>
-              <span style="font-family:var(--mono);font-size:8px;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--line);padding:2px 7px;border-radius:3px;">Fleet Intelligence</span>
-            </div>
-            <div style="font-family:var(--mono);font-size:9px;color:var(--gold2);text-align:right;">Read the Playbook &rarr;</div>
-          </div>
-        </div>
+<div class="pb-card"><div class="pb-banner"><div class="pb-bg-img"></div><div class="pb-banner-ov"></div><div class="pb-banner-txt"><div class="pb-eyebrow">V12 Stewardship Playbook &middot; W222 Platform</div><div class="pb-title">2017&ndash;2020</div><div class="pb-subtitle">S600 &amp; S65 AMG</div></div></div><div class="pb-body"><div class="pb-desc">The complete acquisition thesis &mdash; engine history, depreciation analysis, Golden Intersection methodology, and fleet intelligence.</div><div class="pb-tags"><span class="pb-tag">M279 Engine</span><span class="pb-tag">Depreciation Model</span><span class="pb-tag">Golden Intersection</span><span class="pb-tag">Fleet Intelligence</span></div><div class="pb-cta">Read the Playbook &rarr;</div></div></div>
       </a>
     </div>
     <div class="dash-col">
@@ -1105,7 +1101,7 @@ function loadAll(){
     var mkt={};mktRows.forEach(function(m){mkt[m.vin]=m;});
     var lhMap={};activeLH.forEach(function(l){if(!lhMap[l.vin]||(l.price&&!lhMap[l.vin].price))lhMap[l.vin]=l;});
     // Build URL map from ALL listing history (active + historical)
-    var urlMap={};allLH.forEach(function(l){if(l.vdp_url&&!urlMap[l.vin])urlMap[l.vin]=l;});
+    var urlMap={};recentLH.forEach(function(l){if(l.vdp_url&&!urlMap[l.vin])urlMap[l.vin]=l;});
     // Active listings override historical for URL
     activeLH.forEach(function(l){if(l.vdp_url)urlMap[l.vin]=l;});
     G.urlMap=urlMap;
@@ -1260,13 +1256,13 @@ function vmSave(){
     if(typeEl)vids[i].type=typeEl.value;
   }
   saveVideos(vids);
-  document.getElementById('vm-modal').remove();
+  closeVideoModal();
   renderVideos();
 }
 
 function vmReset(){
   localStorage.removeItem('s65_videos');
-  document.getElementById('vm-modal').remove();
+  closeVideoModal();
   renderVideos();
 }
 
