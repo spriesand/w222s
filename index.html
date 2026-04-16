@@ -99,11 +99,6 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .sec{font-family:var(--mono);font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.2em;padding-bottom:9px;margin-bottom:14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:5px}
 .loading{font-family:var(--mono);font-size:10px;color:var(--muted);padding:24px;text-align:center;letter-spacing:.08em}
 
-/* ── IMAGE PLACEHOLDER ── */
-.car-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;pointer-events:none}
-.cp-year{font-family:var(--serif);font-size:52px;font-weight:600;color:rgba(255,255,255,.07);line-height:1}
-.cp-trim{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.06);letter-spacing:.22em;text-transform:uppercase}
-
 /* ── WHAT CHANGED STRIP ── */
 .changed-strip{display:flex;gap:6px;flex-wrap:wrap;padding:9px 13px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;margin-bottom:14px}
 .ch-item{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;color:var(--muted)}
@@ -738,7 +733,6 @@ function ph(year,trim,vin){
     idx=Math.abs(h)%PLACEHOLDERS.length;
   }
   var img=PLACEHOLDERS[idx];
-  var displayTrim=(trim||'S65 AMG').replace(' AMG','');
   return '<img src="'+img+'" alt="'+(year||'')+' '+(trim||'')+'" style="width:100%;height:100%;object-fit:cover;opacity:.75;display:block;">';
 }
 
