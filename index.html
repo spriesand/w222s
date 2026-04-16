@@ -117,7 +117,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 /* Hero */
 .hero-img{height:230px;position:relative;background:linear-gradient(155deg,#0c1825,#040b12);overflow:hidden;flex-shrink:0}
 .hero-img img{width:100%;height:100%;object-fit:cover;opacity:.92;display:block}
-.hero-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.72),transparent 48%)}
+.hero-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.52),transparent 70%)}
 .hero-pill{position:absolute;top:10px;right:11px;z-index:2;display:flex;align-items:center;gap:4px;background:rgba(7,9,15,.82);border:1px solid rgba(76,190,130,.22);border-radius:4px;padding:3px 8px;font-family:var(--mono);font-size:8px;color:var(--green)}
 .hero-dom{position:absolute;bottom:9px;left:13px;z-index:2;font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.5)}
 .hero-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:9px}
@@ -172,7 +172,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .lc:hover{border-color:var(--line2)}
 .lc-img{height:155px;position:relative;background:linear-gradient(155deg,#0c1825,#040b12);overflow:hidden;flex-shrink:0}
 .lc-img img{width:100%;height:100%;object-fit:cover;opacity:.92;display:block}
-.lc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.62),transparent 52%)}
+.lc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.40),transparent 72%)}
 .lc-top{position:absolute;top:8px;left:8px;right:8px;z-index:2;display:flex;justify-content:space-between}
 .lc-active{position:absolute;bottom:8px;left:8px;z-index:2;display:flex;align-items:center;gap:3px;background:rgba(7,9,15,.82);border:1px solid rgba(76,190,130,.22);border-radius:3px;padding:2px 6px;font-family:var(--mono);font-size:8px;color:var(--green)}
 .lc-body{padding:10px 11px 12px;flex:1;display:flex;flex-direction:column;gap:7px}
@@ -192,7 +192,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .tc{display:flex;flex-direction:column;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,var(--panel2),var(--panel));box-shadow:var(--sh)}
 .tc-img{height:210px;position:relative;background:linear-gradient(155deg,#0c1825,#040b12);overflow:hidden}
 .tc-img img{width:100%;height:100%;object-fit:cover;opacity:.92;display:block}
-.tc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.65),transparent 45%)}
+.tc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.40),transparent 72%)}
 .tc-top{position:absolute;top:10px;left:11px;right:11px;z-index:2;display:flex;justify-content:space-between}
 .tc-active{position:absolute;bottom:10px;left:11px;z-index:2;display:flex;align-items:center;gap:4px;background:rgba(7,9,15,.82);border:1px solid rgba(76,190,130,.22);border-radius:4px;padding:3px 8px;font-family:var(--mono);font-size:8px;color:var(--green)}
 .tc-body{padding:14px 15px 15px;display:flex;flex-direction:column;gap:9px}
@@ -265,7 +265,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .vt img{width:100%;height:100%;object-fit:cover;display:block;opacity:.92;transition:opacity .15s}
 .vc:hover .vt img{opacity:1}
 .vt-emoji{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:38px}
-.vt-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.65),transparent 55%)}
+.vt-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.45),transparent 68%)}
 .vplay{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.55);border:1.5px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;padding-left:2px}
 .vc:hover .vplay{background:rgba(0,0,0,.72)}
 .vb{padding:10px 12px 13px;background:linear-gradient(160deg,var(--panel2),var(--panel))}
@@ -388,6 +388,23 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
           <div class="mini-sm">Last V12 S-Class &middot; 2015&ndash;2020</div>
         </div>
       </div>
+      <!-- Playbook feature card -->
+      <a href="https://spriesand.github.io/w222playbook/" target="_blank" rel="noopener" style="text-decoration:none;">
+        <div class="card" style="background:linear-gradient(155deg,#0e1a2e,#080e1a);border-color:rgba(200,169,106,.22);padding:16px;display:flex;flex-direction:column;gap:10px;transition:border-color .15s;" onmouseover="this.style.borderColor='rgba(200,169,106,.5)'" onmouseout="this.style.borderColor='rgba(200,169,106,.22)'">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <div style="font-family:var(--mono);font-size:8px;color:var(--gold);text-transform:uppercase;letter-spacing:.18em;">The Research</div>
+            <span style="font-family:var(--mono);font-size:9px;color:var(--gold2);">Read &rarr;</span>
+          </div>
+          <div style="font-family:var(--serif);font-size:22px;font-weight:600;color:var(--ink);line-height:1.1;">V12 Apex <em style="color:var(--gold);font-style:italic;">Playbook</em></div>
+          <div style="font-family:var(--sans);font-size:12px;color:var(--ink2);line-height:1.5;">The complete acquisition thesis &mdash; engine history, depreciation analysis, Golden Intersection methodology, and fleet data behind every decision.</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <span style="font-family:var(--mono);font-size:8px;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--line);padding:2px 7px;border-radius:3px;">M279 Engine</span>
+            <span style="font-family:var(--mono);font-size:8px;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--line);padding:2px 7px;border-radius:3px;">Depreciation Model</span>
+            <span style="font-family:var(--mono);font-size:8px;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--line);padding:2px 7px;border-radius:3px;">Golden Intersection</span>
+            <span style="font-family:var(--mono);font-size:8px;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--line);padding:2px 7px;border-radius:3px;">Fleet Intelligence</span>
+          </div>
+        </div>
+      </a>
       <!-- Paper note -->
       <div class="card paper">
         <div class="note-body">
@@ -583,7 +600,7 @@ var H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/js
 function q(ep){return fetch(SB+'/rest/v1/'+ep,{headers:H}).then(function(r){return r.json();});}
 
 // ── STATE ─────────────────────────────────────────────────
-var G={v:[],m:{},l:{},lhAll:[],svc:[]};
+var G={v:[],m:{},l:{},lhAll:[],svc:[],urlMap:{}};
 var mktFilter='all',mktSort='price';
 
 // ── COUNTDOWN ─────────────────────────────────────────────
@@ -643,6 +660,7 @@ function flags(v,vm){
   if(vm&&vm.curr_odo&&vm.curr_odo>=70000&&vm.curr_odo<=100000)f.push({c:'fn',l:'GI Zone'});
   if(vm&&vm.total_owners===1)f.push({c:'fg',l:'Single Owner'});
   else if(vm&&vm.total_owners===2)f.push({c:'fg',l:'2 Owners'});
+  if(vm&&vm.salvage&&vm.salvage.toLowerCase()==='yes')f.push({c:'fr',l:'SALVAGE'});
   if(v.is_final_edition)f.push({c:'tg',l:'Final Edition'});
   if(v.last_title_state)f.push({c:'fd',l:v.last_title_state});
   return f.map(function(x){return '<span class="flag '+x.c+'">'+x.l+'</span>';}).join('');
@@ -757,6 +775,7 @@ function renderCompact(v,vm,lh){
 // ── RENDER TARGET CARD ────────────────────────────────────
 function targetRead(v,vm,lh){
   var r=[],h=[];
+  if(vm&&vm.salvage&&vm.salvage.toLowerCase()==='yes')return '<strong style="color:var(--red);">HARD DQ: Salvage title. Exit value permanently impaired under the collector thesis.</strong>';
   if(v.car_status==='target')r.push('within the 2017\u20132020 target cohort');
   if(vm&&vm.curr_odo&&vm.curr_odo>=70000&&vm.curr_odo<=100000)r.push('mileage inside the Golden Intersection band');
   if(vm&&vm.total_owners===1)r.push('single-owner history');
@@ -819,7 +838,7 @@ function renderMkt(){
     return ((G.l[a.vin]&&G.l[a.vin].price)||999999)-((G.l[b.vin]&&G.l[b.vin].price)||999999);
   });
   var mg=document.getElementById('market-grid');
-  if(mg)mg.innerHTML=filtered.length?filtered.map(function(v){return renderCompact(v,G.m[v.vin],G.l[v.vin]);}).join(''):'<div class="loading">No listings match filter.</div>';
+  if(mg)mg.innerHTML=filtered.length?filtered.map(function(v){return renderCompact(v,G.m[v.vin],G.urlMap[v.vin]||G.l[v.vin]);}).join(''):'<div class="loading">No listings match filter.</div>';
 }
 
 // ── SCATTER CHART ─────────────────────────────────────────
@@ -995,7 +1014,7 @@ function loadAll(){
     q('vehicles?select=*&order=year.desc'),
     q('vehicle_market?select=*'),
     q('listing_history?select=*&link_status=eq.active&order=price.desc'),
-    q('listing_history?select=vin,price,miles,first_seen,last_seen,link_status&order=first_seen.desc&limit=500'),
+    q('listing_history?select=vin,price,miles,vdp_url,seller_name,state,first_seen,last_seen,link_status&order=last_seen.desc&limit=800'),
     q('vehicle_service?select=vin,major_service_status')
   ]).then(function(res){
     var vehicles=res[0]||[],mktRows=res[1]||[],activeLH=res[2]||[],recentLH=res[3]||[],svcRows=res[4]||[];
@@ -1004,6 +1023,11 @@ function loadAll(){
     // Build indexes
     var mkt={};mktRows.forEach(function(m){mkt[m.vin]=m;});
     var lhMap={};activeLH.forEach(function(l){if(!lhMap[l.vin]||(l.price&&!lhMap[l.vin].price))lhMap[l.vin]=l;});
+    // Build URL map from ALL listing history (active + historical)
+    var urlMap={};allLH.forEach(function(l){if(l.vdp_url&&!urlMap[l.vin])urlMap[l.vin]=l;});
+    // Active listings override historical for URL
+    activeLH.forEach(function(l){if(l.vdp_url)urlMap[l.vin]=l;});
+    G.urlMap=urlMap;
 
     G.v=vehicles;G.m=mkt;G.l=lhMap;G.lhAll=recentLH;G.svc=svcRows;
 
@@ -1047,7 +1071,7 @@ function loadAll(){
       return aA!==bA?aA-bA:(b.year||0)-(a.year||0);
     });
     var tg=document.getElementById('targets-grid');
-    if(tg)tg.innerHTML=sortedT.length?sortedT.slice(0,24).map(function(v){return renderTarget(v,mkt[v.vin],lhMap[v.vin]);}).join(''):'<div class="loading">No targets found.</div>';
+    if(tg)tg.innerHTML=sortedT.length?sortedT.map(function(v){return renderTarget(v,mkt[v.vin],G.urlMap[v.vin]||lhMap[v.vin]);}).join(''):'<div class="loading">No targets found.</div>';
 
     // Cohort bars
     var years=[2015,2016,2017,2018,2019,2020];
