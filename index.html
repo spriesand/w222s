@@ -3,261 +3,397 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>S65 Playbook &mdash; The Enthusiast Workshop</title>
+<title>S65 Playbook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=IBM+Plex+Mono:wght@300;400;500&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400;1,600&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#07090f;--bg2:#0b0e16;--panel:#0f1220;--panel2:#131725;--paper:#ede8df;--ink:#eef1f8;--ink2:#c8d0de;--muted:#8a94a8;--dim:#42485a;--line:rgba(255,255,255,.07);--line2:rgba(255,255,255,.13);--blue:#7aa7dc;--blue2:#a8c8f0;--teal:#00d4c8;--gold:#c8a96a;--gold2:#e8c88a;--green:#4cbe82;--red:#e05a5a;--amber:#c87840;--serif:"Cormorant Garamond",Georgia,serif;--sans:"Instrument Sans",system-ui,sans-serif;--mono:"IBM Plex Mono",monospace;--r:14px;--shadow:0 16px 40px rgba(0,0,0,.4)}
+:root {
+  --bg:#07090f; --panel:#0f1220; --panel2:#131725;
+  --ink:#eef1f8; --ink2:#c8d0de;
+  --muted:#9eabbe; --dim:#6b7585;
+  --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.15);
+  --blue:#7aa7dc; --blue2:#a8c8f0; --teal:#00d4c8;
+  --gold:#c8a96a; --gold2:#e8c88a;
+  --green:#4cbe82; --red:#e05a5a; --amber:#d4884a;
+  --serif:"Cormorant Garamond",Georgia,serif;
+  --sans:"Instrument Sans",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",monospace;
+  --r:13px; --sh:0 12px 32px rgba(0,0,0,.4);
+}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{background:var(--bg)}
-body{font-family:var(--sans);background:radial-gradient(ellipse 120% 60% at 50% -5%,rgba(122,167,220,.07),transparent 55%),linear-gradient(180deg,#05070d,#09090f);color:var(--ink);min-height:100vh;overflow-x:hidden}
-.masthead{border-bottom:1px solid var(--line);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:200;background:rgba(7,9,15,.94);backdrop-filter:blur(16px)}
-.brand-name{font-family:var(--serif);font-size:clamp(17px,2.5vw,24px);font-weight:600;line-height:1;color:var(--ink)}
+body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% -5%,rgba(122,167,220,.07),transparent 55%),#07090f;color:var(--ink);min-height:100vh;overflow-x:hidden}
+
+/* ── MASTHEAD ── */
+.mast{border-bottom:1px solid var(--line);padding:11px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:200;background:rgba(7,9,15,.95);backdrop-filter:blur(16px)}
+.brand-name{font-family:var(--serif);font-size:clamp(16px,2.5vw,23px);font-weight:600;color:var(--ink)}
 .brand-name em{font-style:italic;color:var(--gold)}
 .brand-sub{font-family:var(--mono);font-size:8px;color:var(--dim);letter-spacing:.2em;text-transform:uppercase;margin-top:2px}
-.masthead-mid{display:flex;align-items:center;gap:18px}
-.cd-strip{display:flex;align-items:center;gap:8px}
-.cd-unit{text-align:center}
-.cd-num{font-family:var(--mono);font-size:clamp(15px,2vw,20px);font-weight:500;color:var(--ink);line-height:1;display:block}
-.cd-lbl{font-family:var(--mono);font-size:7px;color:var(--dim);text-transform:uppercase;letter-spacing:.14em;display:block;margin-top:2px}
-.cd-sep{font-family:var(--mono);font-size:16px;color:var(--dim);padding-bottom:8px}
-.cd-sub{font-family:var(--mono);font-size:8px;color:var(--dim);text-align:center;line-height:1.7}
+.mast-mid{display:flex;align-items:center;gap:16px}
+.cd-strip{display:flex;align-items:center;gap:7px}
+.cd-u{text-align:center}
+.cd-n{font-family:var(--mono);font-size:clamp(14px,1.8vw,19px);font-weight:500;color:var(--ink);line-height:1;display:block}
+.cd-l{font-family:var(--mono);font-size:7px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;display:block;margin-top:2px}
+.cd-sep{font-family:var(--mono);font-size:15px;color:var(--dim);padding-bottom:8px}
+.cd-sub{font-family:var(--mono);font-size:8px;color:var(--dim);line-height:1.7}
 .cd-sub strong{color:var(--gold);font-weight:500}
-.masthead-right{display:flex;align-items:center;gap:8px}
-.live-badge{display:flex;align-items:center;gap:5px;background:rgba(76,190,130,.1);border:1px solid rgba(76,190,130,.22);border-radius:20px;padding:4px 10px;font-family:var(--mono);font-size:8px;color:var(--green);white-space:nowrap}
+.mast-r{display:flex;align-items:center;gap:8px}
+.live-badge{display:flex;align-items:center;gap:5px;background:rgba(76,190,130,.12);border:1px solid rgba(76,190,130,.25);border-radius:20px;padding:3px 9px;font-family:var(--mono);font-size:8px;color:var(--green);white-space:nowrap}
 .live-dot{width:5px;height:5px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:throb 2s ease-in-out infinite;flex-shrink:0}
 @keyframes throb{0%,100%{opacity:1}50%{opacity:.3}}
-.mast-btn{background:none;border:1px solid var(--line2);border-radius:7px;color:var(--muted);font-family:var(--mono);font-size:9px;padding:5px 11px;cursor:pointer;transition:all .15s;white-space:nowrap}
-.mast-btn:hover{border-color:var(--blue);color:var(--blue2)}
-.nav-tabs{display:flex;border-bottom:1px solid var(--line);padding:0 20px;background:rgba(7,9,15,.85);position:sticky;top:53px;z-index:190;overflow-x:auto;scrollbar-width:none}
+.mbtn{background:none;border:1px solid var(--line2);border-radius:7px;color:var(--muted);font-family:var(--mono);font-size:9px;padding:4px 10px;cursor:pointer;transition:all .15s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
+.mbtn:hover{border-color:var(--blue);color:var(--blue2)}
+
+/* ── DESKTOP NAV ── */
+.nav-tabs{display:flex;border-bottom:1px solid var(--line);padding:0 20px;background:rgba(7,9,15,.88);position:sticky;top:51px;z-index:190;overflow-x:auto;scrollbar-width:none}
 .nav-tabs::-webkit-scrollbar{display:none}
-.nav-tab{padding:9px 16px;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;user-select:none}
-.nav-tab:hover{color:var(--muted)}
-.nav-tab.active{color:var(--blue2);border-bottom-color:var(--blue)}
-.nav-pip{display:inline-flex;background:var(--green);color:var(--bg);font-size:8px;padding:1px 5px;border-radius:8px;margin-left:5px;vertical-align:middle;font-family:var(--mono)}
-.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:68px;background:rgba(7,9,15,.96);backdrop-filter:blur(20px);border-top:1px solid var(--line);z-index:300;padding-bottom:env(safe-area-inset-bottom)}
-.bnav-inner{display:flex;height:100%;align-items:stretch}
-.bnav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--dim);transition:color .15s;position:relative}
-.bnav-item.active{color:var(--blue2)}
-.bnav-item.active::before{content:'';position:absolute;top:0;left:25%;right:25%;height:1.5px;background:var(--blue);box-shadow:0 0 8px var(--blue);border-radius:0 0 3px 3px}
-.bnav-icon{font-size:18px;line-height:1}
-.bnav-lbl{font-family:var(--mono);font-size:8px;letter-spacing:.1em;text-transform:uppercase}
+.ntab{padding:9px 15px;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.13em;color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s;user-select:none}
+.ntab:hover{color:var(--muted)}
+.ntab.active{color:var(--blue2);border-bottom-color:var(--blue)}
+.npip{display:inline-flex;background:var(--green);color:var(--bg);font-size:8px;padding:1px 5px;border-radius:8px;margin-left:5px;vertical-align:middle;font-family:var(--mono)}
+
+/* ── MOBILE NAV ── */
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;height:64px;background:rgba(7,9,15,.97);backdrop-filter:blur(20px);border-top:1px solid var(--line);z-index:300;padding-bottom:env(safe-area-inset-bottom)}
+.bnav-row{display:flex;height:100%;align-items:stretch}
+.bi{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;color:var(--dim);transition:color .15s;position:relative}
+.bi.active{color:var(--blue2)}
+.bi.active::before{content:'';position:absolute;top:0;left:25%;right:25%;height:1.5px;background:var(--blue);box-shadow:0 0 8px var(--blue);border-radius:0 0 3px 3px}
+.bi-icon{font-size:17px;line-height:1}
+.bi-lbl{font-family:var(--mono);font-size:8px;letter-spacing:.08em;text-transform:uppercase}
+.more-drawer{position:fixed;bottom:64px;left:0;right:0;background:rgba(11,14,22,.97);backdrop-filter:blur(20px);border-top:1px solid var(--line);z-index:299;transform:translateY(100%);transition:transform .22s ease}
+.more-drawer.open{transform:translateY(0)}
+.mdr{display:flex;align-items:center;gap:12px;padding:12px 20px;cursor:pointer;color:var(--muted);transition:color .15s;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.1em}
+.mdr:hover{color:var(--blue2)}
+.mdr-icon{font-size:16px;width:22px;text-align:center}
+.more-ov{display:none;position:fixed;inset:0;z-index:298}
+.more-ov.open{display:block}
+
+/* ── PAGES ── */
 .page{display:none}
 .page.active{display:block}
-.page-pad{padding:20px;max-width:1400px;margin:0 auto;padding-bottom:40px}
-.card{position:relative;border-radius:var(--r);overflow:hidden;background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--line);box-shadow:var(--shadow)}
+.pp{padding:18px 20px 40px;max-width:1400px;margin:0 auto}
+
+/* ── CARDS ── */
+.card{border-radius:var(--r);overflow:hidden;background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--line);box-shadow:var(--sh)}
 .card.soft{background:linear-gradient(160deg,#131825,#0e1220)}
 .card.paper{background:linear-gradient(160deg,#f0ebe2,#e6dfd5);color:#1a2030;border-color:rgba(0,0,0,.08)}
-.tag{display:inline-flex;align-items:center;height:21px;padding:0 8px;border-radius:20px;font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line2);color:var(--ink2)}
-.tg{color:#ecd3a5;border-color:rgba(200,169,106,.28);background:rgba(200,169,106,.08)}
-.tb{color:#cfe1f5;border-color:rgba(122,167,220,.28);background:rgba(122,167,220,.08)}
-.tn{color:#a0e8c0;border-color:rgba(76,190,130,.28);background:rgba(76,190,130,.08)}
-.tr{color:#f5b0b0;border-color:rgba(224,90,90,.28);background:rgba(224,90,90,.08)}
-.ta{color:#f1c39f;border-color:rgba(200,120,64,.28);background:rgba(200,120,64,.08)}
-.sec{font-family:var(--mono);font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.2em;padding-bottom:9px;margin-bottom:14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
-.loading{font-family:var(--mono);font-size:10px;color:var(--dim);padding:20px;text-align:center;letter-spacing:.1em}
-.dash-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}
-.dash-left,.dash-right{display:flex;flex-direction:column;gap:16px}
-.hero-card{display:flex;flex-direction:column;min-height:460px}
-.hero-img{height:260px;flex-shrink:0;position:relative;background:linear-gradient(155deg,#0e1a28,#050c15);overflow:hidden}
-.hero-img img{width:100%;height:100%;object-fit:cover;opacity:.65;display:block}
-.hero-img-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,18,32,.9),transparent 50%)}
-.hero-ghost{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:72px;opacity:.08;color:#fff}
-.hero-badges{position:absolute;top:12px;left:12px;display:flex;gap:7px;z-index:2}
-.hero-active-pill{position:absolute;top:10px;right:12px;z-index:2;display:flex;align-items:center;gap:4px;background:rgba(7,9,15,.8);border:1px solid rgba(76,190,130,.2);border-radius:4px;padding:3px 8px;font-family:var(--mono);font-size:8px;color:var(--green)}
-.hero-body{padding:16px 18px 18px;flex:1;display:flex;flex-direction:column}
-.hero-kicker{font-family:var(--mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:5px}
-.hero-title{font-family:var(--serif);font-size:28px;font-weight:600;line-height:1.1;color:var(--ink);margin-bottom:3px}
-.hero-sub{font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:12px}
-.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin-bottom:12px}
-.hstat{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:8px;padding:8px}
-.hstat-v{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--ink);display:block}
-.hstat-l{font-family:var(--mono);font-size:7px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:2px}
-.hero-flags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:12px}
+
+/* ── TAGS ── */
+.tag{display:inline-flex;align-items:center;height:20px;padding:0 8px;border-radius:20px;font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;border:1px solid var(--line2);color:var(--ink2)}
+.tg{color:#ecd3a5;border-color:rgba(200,169,106,.3);background:rgba(200,169,106,.1)}
+.tb{color:#cfe1f5;border-color:rgba(122,167,220,.3);background:rgba(122,167,220,.1)}
+.tn{color:#a0e8c0;border-color:rgba(76,190,130,.3);background:rgba(76,190,130,.1)}
+.tr{color:#f5b0b0;border-color:rgba(224,90,90,.3);background:rgba(224,90,90,.1)}
+.ta{color:#f1c39f;border-color:rgba(200,120,64,.3);background:rgba(200,120,64,.1)}
+
+/* ── FLAGS ── */
 .flag{font-family:var(--mono);font-size:8px;padding:2px 7px;border-radius:3px}
-.fb{background:rgba(122,167,220,.1);color:var(--blue2);border:1px solid rgba(122,167,220,.2)}
-.fg{background:rgba(200,169,106,.1);color:var(--gold2);border:1px solid rgba(200,169,106,.2)}
-.fr{background:rgba(224,90,90,.1);color:var(--red);border:1px solid rgba(224,90,90,.2)}
-.fd{background:rgba(255,255,255,.04);color:var(--muted);border:1px solid var(--line)}
-.hero-actions{display:flex;gap:8px;margin-top:auto}
-.btn-g{padding:10px 13px;border:1px solid rgba(122,167,220,.25);color:var(--blue2);background:none;border-radius:8px;font-family:var(--mono);font-size:9px;cursor:pointer;white-space:nowrap;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center}
-.btn-g:hover{border-color:var(--blue2)}
-.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.kpi-tile{padding:14px 13px;display:flex;flex-direction:column;gap:3px}
-.kpi-num{font-family:var(--serif);font-size:34px;font-weight:600;line-height:1;display:block}
-.kpi-lbl{font-family:var(--mono);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;display:block}
-.kpi-trend{font-family:var(--mono);font-size:8px;display:block;margin-top:2px}
-.note-body{padding:22px 20px;display:flex;flex-direction:column;gap:10px;height:100%}
+.fb{background:rgba(122,167,220,.12);color:var(--blue2);border:1px solid rgba(122,167,220,.22)}
+.fg{background:rgba(200,169,106,.12);color:var(--gold2);border:1px solid rgba(200,169,106,.22)}
+.fr{background:rgba(224,90,90,.12);color:var(--red);border:1px solid rgba(224,90,90,.22)}
+.fd{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--line)}
+.fn{background:rgba(76,190,130,.12);color:var(--green);border:1px solid rgba(76,190,130,.22)}
+
+/* ── SEC LABEL ── */
+.sec{font-family:var(--mono);font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.2em;padding-bottom:9px;margin-bottom:14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:5px}
+.loading{font-family:var(--mono);font-size:10px;color:var(--muted);padding:24px;text-align:center;letter-spacing:.08em}
+
+/* ── IMAGE PLACEHOLDER ── */
+.car-placeholder{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;pointer-events:none}
+.cp-year{font-family:var(--serif);font-size:52px;font-weight:600;color:rgba(255,255,255,.07);line-height:1}
+.cp-trim{font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.06);letter-spacing:.22em;text-transform:uppercase}
+
+/* ── WHAT CHANGED STRIP ── */
+.changed-strip{display:flex;gap:6px;flex-wrap:wrap;padding:9px 13px;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;margin-bottom:14px}
+.ch-item{display:flex;align-items:center;gap:5px;font-family:var(--mono);font-size:9px;color:var(--muted)}
+.ch-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.ch-sep{color:var(--dim);padding:0 3px}
+
+/* ── DASHBOARD ── */
+.dash-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:14px}
+.dash-col{display:flex;flex-direction:column;gap:12px}
+
+/* Hero */
+.hero-img{height:230px;position:relative;background:linear-gradient(155deg,#0c1825,#040b12);overflow:hidden;flex-shrink:0}
+.hero-img img{width:100%;height:100%;object-fit:cover;opacity:.7;display:block}
+.hero-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,18,32,.95),transparent 45%)}
+.hero-pill{position:absolute;top:10px;right:11px;z-index:2;display:flex;align-items:center;gap:4px;background:rgba(7,9,15,.82);border:1px solid rgba(76,190,130,.22);border-radius:4px;padding:3px 8px;font-family:var(--mono);font-size:8px;color:var(--green)}
+.hero-dom{position:absolute;bottom:9px;left:13px;z-index:2;font-family:var(--mono);font-size:9px;color:rgba(255,255,255,.5)}
+.hero-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:9px}
+.hero-kicker{font-family:var(--mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.hero-title{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1.1;color:var(--ink)}
+.hero-sub{font-family:var(--mono);font-size:9px;color:var(--muted)}
+.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.hs{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:7px;padding:7px}
+.hs-v{font-family:var(--mono);font-size:12px;font-weight:500;display:block}
+.hs-l{font-family:var(--mono);font-size:7px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:2px}
+.hero-flags{display:flex;flex-wrap:wrap;gap:4px}
+.hero-intel{background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:8px;padding:11px 13px;display:flex;flex-direction:column;gap:7px}
+.hi-row{display:flex;gap:8px}
+.hi-lbl{font-family:var(--mono);font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;flex-shrink:0;min-width:76px;padding-top:2px}
+.hi-txt{font-family:var(--sans);font-size:12px;line-height:1.55;color:var(--ink2)}
+.hi-txt strong{color:var(--ink);font-weight:600}
+.btn-g{padding:8px 13px;border:1px solid rgba(122,167,220,.28);color:var(--blue2);background:none;border-radius:7px;font-family:var(--mono);font-size:9px;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center}
+.btn-g:hover{border-color:var(--blue2);background:rgba(122,167,220,.08)}
+
+/* KPIs */
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.kpi-tile{padding:12px 11px}
+.kpi-n{font-family:var(--serif);font-size:30px;font-weight:600;line-height:1;display:block}
+.kpi-l{font-family:var(--mono);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:3px}
+.kpi-t{font-family:var(--mono);font-size:8px;color:var(--dim);display:block;margin-top:2px}
+
+/* Mini */
+.mini-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mini-card{padding:13px;display:flex;flex-direction:column;justify-content:space-between;min-height:105px}
+.mini-big{font-family:var(--serif);font-size:32px;font-weight:600;line-height:.95;margin:4px 0 3px}
+.mini-desc{font-size:12px;color:var(--ink2);line-height:1.4}
+.mini-sm{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:4px}
+
+/* Paper note */
+.note-body{padding:18px;display:flex;flex-direction:column;gap:8px;height:100%}
 .note-meta{font-family:var(--mono);font-size:9px;color:#7a8090;text-transform:uppercase;letter-spacing:.1em}
-.note-text{font-family:var(--serif);font-size:20px;line-height:1.3;color:#1a2030;flex:1}
+.note-text{font-family:var(--serif);font-size:18px;line-height:1.35;color:#1a2030;flex:1}
 .note-text em{font-style:italic;color:#4a3820}
-.note-source{font-family:var(--mono);font-size:9px;color:#6a7080}
-.chart-inner{padding:14px 16px 10px}
-.chart-title{font-family:var(--serif);font-size:18px;color:var(--ink);margin-bottom:3px}
-.chart-sub{font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:10px}
-.mini-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.mini-card{padding:16px;display:flex;flex-direction:column;justify-content:space-between;min-height:115px}
-.mini-big{font-family:var(--serif);font-size:36px;font-weight:600;line-height:.95;margin:5px 0 4px}
-.mini-desc{font-size:12px;color:var(--ink2);line-height:1.45}
-.mini-small{font-family:var(--mono);font-size:9px;color:var(--muted);margin-top:5px}
-.market-grid,.targets-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px}
-.listing-card{display:flex;flex-direction:column}
-.lc-img{height:190px;position:relative;background:linear-gradient(155deg,#0e1a28,#050c15);overflow:hidden;flex-shrink:0}
+.note-src{font-family:var(--mono);font-size:9px;color:#6a7080}
+
+/* Chart */
+.chart-box{padding:12px 14px 9px}
+
+/* ── MARKET ── */
+.mkt-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.fbtn{font-family:var(--mono);font-size:9px;padding:5px 11px;border-radius:20px;border:1px solid var(--line2);color:var(--muted);background:none;cursor:pointer;transition:all .15s;white-space:nowrap}
+.fbtn:hover{border-color:var(--blue);color:var(--blue2)}
+.fbtn.active{background:var(--blue);color:var(--bg);border-color:var(--blue)}
+.fsep{color:var(--dim);font-family:var(--mono);font-size:9px}
+.mkt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px}
+.lc{display:flex;flex-direction:column;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,var(--panel2),var(--panel));transition:border-color .15s}
+.lc:hover{border-color:var(--line2)}
+.lc-img{height:155px;position:relative;background:linear-gradient(155deg,#0c1825,#040b12);overflow:hidden;flex-shrink:0}
 .lc-img img{width:100%;height:100%;object-fit:cover;opacity:.7;display:block}
-.lc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(15,18,32,.85),transparent 55%)}
-.lc-ghost{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:55px;opacity:.08;color:#fff}
-.lc-top{position:absolute;top:10px;left:10px;right:10px;z-index:2;display:flex;justify-content:space-between;align-items:flex-start}
-.lc-active{position:absolute;bottom:10px;left:10px;z-index:2;display:flex;align-items:center;gap:4px;background:rgba(7,9,15,.8);border:1px solid rgba(76,190,130,.2);border-radius:4px;padding:2px 7px;font-family:var(--mono);font-size:8px;color:var(--green)}
-.lc-body{padding:13px 14px 14px;flex:1;display:flex;flex-direction:column}
-.lc-model{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--ink);line-height:1.1;margin-bottom:2px}
-.lc-meta{font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:10px;line-height:1.6}
-.lc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-radius:7px;overflow:hidden;margin-bottom:10px}
-.lc-stat{background:var(--panel2);padding:7px}
-.lc-sv{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--ink);display:block}
-.lc-sl{font-family:var(--mono);font-size:7px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:2px}
-.lc-flags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:10px}
-.lc-btn{background:rgba(122,167,220,.1);border:1px solid rgba(122,167,220,.2);color:var(--blue2);font-family:var(--mono);font-size:9px;padding:8px;border-radius:7px;cursor:pointer;text-align:center;transition:all .15s;width:100%;display:block;text-decoration:none}
+.lc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,18,32,.88),transparent 50%)}
+.lc-top{position:absolute;top:8px;left:8px;right:8px;z-index:2;display:flex;justify-content:space-between}
+.lc-active{position:absolute;bottom:8px;left:8px;z-index:2;display:flex;align-items:center;gap:3px;background:rgba(7,9,15,.82);border:1px solid rgba(76,190,130,.22);border-radius:3px;padding:2px 6px;font-family:var(--mono);font-size:8px;color:var(--green)}
+.lc-body{padding:10px 11px 12px;flex:1;display:flex;flex-direction:column;gap:7px}
+.lc-title{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);line-height:1.1}
+.lc-meta{font-family:var(--mono);font-size:8px;color:var(--muted);line-height:1.6}
+.lc-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-top:1px solid var(--line)}
+.lc-price{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--green)}
+.lc-mi{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.lc-flags{display:flex;gap:3px;flex-wrap:wrap}
+.lc-btn{font-family:var(--mono);font-size:8px;padding:4px 9px;border-radius:5px;background:rgba(122,167,220,.1);border:1px solid rgba(122,167,220,.2);color:var(--blue2);text-decoration:none;display:inline-flex;align-items:center;transition:all .15s;white-space:nowrap}
 .lc-btn:hover{background:rgba(122,167,220,.18)}
-.target-badge{font-family:var(--mono);font-size:8px;padding:3px 9px;border-radius:12px;background:rgba(122,167,220,.1);color:var(--blue2);border:1px solid rgba(122,167,220,.2)}
-.ref-badge{font-family:var(--mono);font-size:8px;padding:3px 9px;border-radius:12px;background:rgba(255,255,255,.05);color:var(--muted);border:1px solid var(--line)}
-.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-.analytics-full{grid-column:span 2}
-.analytics-card{padding:18px}
-.analytics-title{font-family:var(--serif);font-size:20px;color:var(--ink);margin-bottom:3px}
-.analytics-sub{font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:14px}
-.kpi-4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-.k4{background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:10px;padding:14px 12px}
-.k4-num{font-family:var(--serif);font-size:30px;font-weight:600;line-height:1;display:block}
-.k4-lbl{font-family:var(--mono);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:4px}
-.k4-t{font-family:var(--mono);font-size:8px;display:block;margin-top:3px}
-.bar-chart{display:flex;flex-direction:column;gap:8px}
-.bc-row{display:flex;align-items:center;gap:9px}
-.bc-label{font-family:var(--mono);font-size:9px;color:var(--muted);min-width:110px;text-align:right}
-.bc-track{flex:1;height:18px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
-.bc-fill{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px}
+.tbadge{font-family:var(--mono);font-size:8px;padding:2px 7px;border-radius:10px;background:rgba(122,167,220,.1);color:var(--blue2);border:1px solid rgba(122,167,220,.2)}
+.rbadge{font-family:var(--mono);font-size:8px;padding:2px 7px;border-radius:10px;background:rgba(255,255,255,.05);color:var(--dim);border:1px solid var(--line)}
+
+/* ── TARGETS ── */
+.tgt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px}
+.tc{display:flex;flex-direction:column;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:linear-gradient(160deg,var(--panel2),var(--panel));box-shadow:var(--sh)}
+.tc-img{height:210px;position:relative;background:linear-gradient(155deg,#0c1825,#040b12);overflow:hidden}
+.tc-img img{width:100%;height:100%;object-fit:cover;opacity:.7;display:block}
+.tc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(13,18,32,.92),transparent 45%)}
+.tc-top{position:absolute;top:10px;left:11px;right:11px;z-index:2;display:flex;justify-content:space-between}
+.tc-active{position:absolute;bottom:10px;left:11px;z-index:2;display:flex;align-items:center;gap:4px;background:rgba(7,9,15,.82);border:1px solid rgba(76,190,130,.22);border-radius:4px;padding:3px 8px;font-family:var(--mono);font-size:8px;color:var(--green)}
+.tc-body{padding:14px 15px 15px;display:flex;flex-direction:column;gap:9px}
+.tc-title{font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink);line-height:1.1}
+.tc-sub{font-family:var(--mono);font-size:9px;color:var(--muted)}
+.tc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-radius:7px;overflow:hidden}
+.tc-stat{background:var(--panel2);padding:7px 8px}
+.tc-sv{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--ink);display:block}
+.tc-sl{font-family:var(--mono);font-size:7px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:2px}
+.tc-flags{display:flex;gap:4px;flex-wrap:wrap}
+.tc-read{background:rgba(255,255,255,.04);border-left:2px solid var(--blue);padding:9px 11px;border-radius:0 6px 6px 0}
+.tc-read-lbl{font-family:var(--mono);font-size:8px;color:var(--blue2);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
+.tc-read-txt{font-family:var(--sans);font-size:12px;line-height:1.55;color:var(--ink2)}
+.tc-read-txt strong{color:var(--ink)}
+.tc-btn{font-family:var(--mono);font-size:9px;padding:8px;border-radius:7px;background:rgba(122,167,220,.1);border:1px solid rgba(122,167,220,.2);color:var(--blue2);text-decoration:none;display:block;text-align:center;transition:all .15s}
+.tc-btn:hover{background:rgba(122,167,220,.18)}
+
+/* ── ANALYTICS ── */
+.an-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.an-full{grid-column:span 2}
+.an-card{padding:15px}
+.an-title{font-family:var(--serif);font-size:19px;color:var(--ink);margin-bottom:3px}
+.an-sub{font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:11px}
+.kpi4{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:12px}
+.k4{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:12px 11px}
+.k4-n{font-family:var(--serif);font-size:28px;font-weight:600;line-height:1;display:block}
+.k4-l{font-family:var(--mono);font-size:8px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:4px}
+.k4-t{font-family:var(--mono);font-size:8px;color:var(--dim);display:block;margin-top:2px}
+.bar-chart{display:flex;flex-direction:column;gap:7px}
+.bc-row{display:flex;align-items:center;gap:8px}
+.bc-lbl{font-family:var(--mono);font-size:9px;color:var(--muted);min-width:95px;text-align:right}
+.bc-track{flex:1;height:17px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+.bc-fill{height:100%;border-radius:3px;display:flex;align-items:center;justify-content:flex-end;padding-right:5px;min-width:24px}
 .bc-val{font-family:var(--mono);font-size:8px;font-weight:500}
-.cohort-bars{display:flex;gap:8px;align-items:flex-end;height:90px;margin-top:8px}
+.cohort-bars{display:flex;gap:7px;align-items:flex-end;height:88px;margin-top:8px}
 .cb-col{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1}
 .cb-bar{width:100%;border-radius:3px 3px 0 0;min-height:2px}
 .cb-year{font-family:var(--mono);font-size:8px;color:var(--dim)}
 .cb-ct{font-family:var(--mono);font-size:9px;color:var(--muted)}
-.news-layout{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;align-items:start}
-.news-col{display:flex;flex-direction:column;gap:10px}
-.news-card{display:flex;gap:12px;padding:13px;align-items:flex-start;text-decoration:none;color:inherit;transition:border-color .15s}
-.news-card:hover{border-color:var(--line2)}
-.news-thumb{width:72px;height:54px;border-radius:7px;flex-shrink:0;overflow:hidden;background:var(--panel2);border:1px solid var(--line)}
-.news-thumb img{width:100%;height:100%;object-fit:cover;display:block}
-.news-thumb-icon{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:22px}
-.news-source{font-family:var(--mono);font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
-.news-title{font-family:var(--serif);font-size:15px;line-height:1.3;color:var(--ink);margin-bottom:3px}
-.news-desc{font-family:var(--sans);font-size:11px;color:var(--muted);line-height:1.5}
-.cinema-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px}
-.vid-card{border-radius:var(--r);overflow:hidden;display:block;text-decoration:none;color:inherit;cursor:pointer;transition:transform .15s,box-shadow .15s}
-.vid-card:hover{transform:translateY(-3px);box-shadow:0 20px 48px rgba(0,0,0,.5)}
-.vid-thumb{height:170px;position:relative;overflow:hidden;background:#0a0f18;border-bottom:1px solid var(--line)}
-.vid-thumb img{width:100%;height:100%;object-fit:cover;display:block;opacity:.6;transition:opacity .15s}
-.vid-card:hover .vid-thumb img{opacity:.75}
-.vid-thumb-emoji{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:42px}
-.vid-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.65),transparent 55%);display:flex;align-items:center;justify-content:center}
-.vid-play{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,.55);border:1.5px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;padding-left:2px}
-.vid-card:hover .vid-play{background:rgba(0,0,0,.72)}
-.vid-body{padding:12px 14px 14px;background:linear-gradient(160deg,var(--panel2),var(--panel))}
-.vid-channel{font-family:var(--mono);font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:4px}
-.vid-title{font-family:var(--serif);font-size:17px;line-height:1.25;color:var(--ink);margin-bottom:4px}
-.vid-desc{font-size:11px;color:var(--muted);line-height:1.5}
-@media(max-width:900px){.masthead-mid{display:none}.dash-grid,.analytics-grid,.news-layout{grid-template-columns:1fr}.analytics-full{grid-column:span 1}.kpi-4,.kpi-row{grid-template-columns:repeat(2,1fr)}.hero-stats{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:640px){.nav-tabs{display:none}.bottom-nav{display:block}body{padding-bottom:68px}.page-pad{padding:12px 12px 20px}.hero-img{height:210px}.mini-row{grid-template-columns:1fr}.market-grid,.targets-grid,.cinema-grid{grid-template-columns:1fr}}
+
+/* ── NEWS ── */
+.news-ed{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:13px 15px;margin-bottom:14px}
+.ned-lbl{font-family:var(--mono);font-size:8px;color:var(--blue2);text-transform:uppercase;letter-spacing:.14em;margin-bottom:5px}
+.ned-txt{font-family:var(--serif);font-size:16px;line-height:1.55;color:var(--ink2)}
+.ned-txt strong{color:var(--ink)}
+.news-lay{display:grid;grid-template-columns:1.1fr 1fr;gap:14px;align-items:start}
+.news-col{display:flex;flex-direction:column;gap:8px}
+.ncol-lbl{font-family:var(--mono);font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.18em;padding-bottom:7px;border-bottom:1px solid var(--line);margin-bottom:2px}
+.ncard{display:flex;gap:10px;padding:11px;text-decoration:none;color:inherit;transition:border-color .15s;border-radius:var(--r);border:1px solid var(--line);background:linear-gradient(160deg,var(--panel2),var(--panel))}
+.ncard:hover{border-color:var(--line2)}
+.nthumb{width:64px;height:48px;border-radius:6px;flex-shrink:0;overflow:hidden;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:19px}
+.nthumb img{width:100%;height:100%;object-fit:cover;display:block}
+.nsrc{font-family:var(--mono);font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.ntitle{font-family:var(--serif);font-size:14px;line-height:1.3;color:var(--ink);margin-bottom:2px}
+.ndesc{font-size:11px;color:var(--muted);line-height:1.5}
+.ndate{font-family:var(--mono);font-size:8px;color:var(--dim);margin-top:3px}
+/* RSS live feed */
+.rss-col{display:flex;flex-direction:column;gap:8px}
+.rss-status{font-family:var(--mono);font-size:9px;color:var(--dim);padding:6px 0}
+.rss-archive-btn{font-family:var(--mono);font-size:9px;padding:5px 12px;border-radius:20px;border:1px solid var(--line2);color:var(--muted);background:none;cursor:pointer;transition:all .15s;margin-top:4px}
+.rss-archive-btn:hover{border-color:var(--blue);color:var(--blue2)}
+.rss-archive{display:none;flex-direction:column;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
+.rss-archive.open{display:flex}
+
+/* ── VIDEOS ── */
+.vid-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.vc{border-radius:var(--r);overflow:hidden;display:block;text-decoration:none;color:inherit;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.vc:hover{transform:translateY(-3px);box-shadow:0 18px 44px rgba(0,0,0,.5)}
+.vt{height:158px;position:relative;overflow:hidden;background:#0a0f18;border-bottom:1px solid var(--line)}
+.vt img{width:100%;height:100%;object-fit:cover;display:block;opacity:.58;transition:opacity .15s}
+.vc:hover .vt img{opacity:.72}
+.vt-emoji{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-size:38px}
+.vt-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.65),transparent 55%)}
+.vplay{position:absolute;top:50%;left:50%;transform:translate(-50%,-60%);width:40px;height:40px;border-radius:50%;background:rgba(0,0,0,.55);border:1.5px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;font-size:14px;color:#fff;padding-left:2px}
+.vc:hover .vplay{background:rgba(0,0,0,.72)}
+.vb{padding:10px 12px 13px;background:linear-gradient(160deg,var(--panel2),var(--panel))}
+.vc-ch{font-family:var(--mono);font-size:8px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
+.vc-title{font-family:var(--serif);font-size:16px;line-height:1.25;color:var(--ink);margin-bottom:3px}
+.vc-desc{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* ── SCATTER ── */
+.scatter-wrap{position:relative;width:100%}
+.scatter-wrap svg{width:100%;height:auto;display:block}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .mast-mid{display:none}
+  .dash-grid,.an-grid,.news-lay{grid-template-columns:1fr}
+  .an-full{grid-column:span 1}
+  .kpi4,.kpi-row{grid-template-columns:repeat(2,1fr)}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:640px){
+  .nav-tabs{display:none}
+  .bnav{display:block}
+  body{padding-bottom:64px}
+  .pp{padding:12px 12px 20px}
+  .mkt-grid,.vid-grid{grid-template-columns:1fr}
+  .tgt-grid{grid-template-columns:1fr}
+  .mini-row{grid-template-columns:1fr}
+  .news-lay{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 
-<header class="masthead">
+<!-- MASTHEAD -->
+<header class="mast">
   <div>
     <div class="brand-name">S65 <em>Playbook</em></div>
     <div class="brand-sub">The Enthusiast Workshop &middot; W222 &middot; M279 V12</div>
   </div>
-  <div class="masthead-mid">
+  <div class="mast-mid">
     <div class="cd-strip">
-      <div class="cd-unit"><span class="cd-num" id="cd-d">--</span><span class="cd-lbl">Days</span></div>
+      <div class="cd-u"><span class="cd-n" id="cd-d">--</span><span class="cd-l">Days</span></div>
       <span class="cd-sep">:</span>
-      <div class="cd-unit"><span class="cd-num" id="cd-h">--</span><span class="cd-lbl">Hrs</span></div>
+      <div class="cd-u"><span class="cd-n" id="cd-h">--</span><span class="cd-l">Hrs</span></div>
       <span class="cd-sep">:</span>
-      <div class="cd-unit"><span class="cd-num" id="cd-m">--</span><span class="cd-lbl">Min</span></div>
+      <div class="cd-u"><span class="cd-n" id="cd-m">--</span><span class="cd-l">Min</span></div>
       <span class="cd-sep">:</span>
-      <div class="cd-unit"><span class="cd-num" id="cd-s">--</span><span class="cd-lbl">Sec</span></div>
+      <div class="cd-u"><span class="cd-n" id="cd-s">--</span><span class="cd-l">Sec</span></div>
     </div>
     <div class="cd-sub">Target: <strong>Jan 2028</strong><br>&le;$40K &middot; 70K&ndash;100K mi</div>
   </div>
-  <div class="masthead-right">
+  <div class="mast-r">
     <div class="live-badge"><span class="live-dot"></span><span id="mast-count">--</span> VINs</div>
-    <button class="mast-btn" onclick="loadAll()">&#8635; Refresh</button>
-    <a class="mast-btn" href="https://spriesand.github.io/w222playbook/" target="_blank" rel="noopener">&#128214; Playbook</a>
+    <button class="mbtn" onclick="loadAll()">&#8635; Sync</button>
+    <a class="mbtn" href="https://spriesand.github.io/w222playbook/" target="_blank" rel="noopener">&#128214; Playbook</a>
   </div>
 </header>
 
+<!-- DESKTOP NAV -->
 <nav class="nav-tabs">
-  <div class="nav-tab active" onclick="showPage('dashboard',this)">Dashboard</div>
-  <div class="nav-tab" onclick="showPage('market',this)">The Market <span class="nav-pip" id="market-pip">--</span></div>
-  <div class="nav-tab" onclick="showPage('targets',this)">Targets</div>
-  <div class="nav-tab" onclick="showPage('analytics',this)">Analytics</div>
-  <div class="nav-tab" onclick="showPage('news',this)">News</div>
-  <div class="nav-tab" onclick="showPage('videos',this)">Videos</div>
+  <div class="ntab active" onclick="go('dashboard',this)">Dashboard</div>
+  <div class="ntab" onclick="go('market',this)">The Market <span class="npip" id="market-pip">--</span></div>
+  <div class="ntab" onclick="go('targets',this)">Targets</div>
+  <div class="ntab" onclick="go('analytics',this)">Analytics</div>
+  <div class="ntab" onclick="go('news',this);loadNews()">News</div>
+  <div class="ntab" onclick="go('videos',this)">Videos</div>
 </nav>
 
-<!-- DASHBOARD -->
+<!-- ═══ DASHBOARD ═══ -->
 <div class="page active" id="page-dashboard">
-<div class="page-pad">
-  <div class="sec" style="margin-bottom:16px;">
+<div class="pp">
+  <div class="sec" style="margin-bottom:12px;">
     <span id="dash-date">Loading...</span>
-    <span id="dash-summary" style="color:var(--green);font-family:var(--mono);font-size:9px;"></span>
+    <span id="dash-sum" style="color:var(--green);"></span>
+  </div>
+  <div class="changed-strip" id="changed-strip">
+    <span class="ch-item" style="color:var(--dim);">&#9679; Syncing market data&hellip;</span>
   </div>
   <div class="dash-grid">
-    <div class="dash-left">
-      <div class="card hero-card" id="dash-hero"><div class="loading">Loading primary candidate&hellip;</div></div>
+    <div class="dash-col">
+      <div class="card" id="dash-hero" style="min-height:400px;"><div class="loading">Loading primary candidate&hellip;</div></div>
     </div>
-    <div class="dash-right">
-      <div class="card soft chart-inner">
-        <p style="font-family:var(--serif);font-style:italic;font-size:15px;color:rgba(255,255,255,.8);margin-bottom:8px;">Market Update</p>
-        <div class="chart-title">Avg Asking Price &mdash; S65 AMG</div>
-        <div class="chart-sub">Bear trend &minus;13%/yr &middot; thesis intact</div>
-        <svg viewBox="0 0 520 160" width="100%" height="130" style="display:block;">
+    <div class="dash-col">
+      <!-- Market chart -->
+      <div class="card soft chart-box">
+        <p style="font-family:var(--serif);font-style:italic;font-size:14px;color:rgba(255,255,255,.85);margin-bottom:7px;">Market Update</p>
+        <div style="font-family:var(--serif);font-size:16px;color:var(--ink);margin-bottom:2px;">Avg Asking Price &mdash; S65 AMG</div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);margin-bottom:8px;">Bear trend &minus;13%/yr &middot; thesis intact</div>
+        <svg viewBox="0 0 480 145" width="100%" style="display:block;">
           <defs><linearGradient id="ag1" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#9dc2ec" stop-opacity=".22"/><stop offset="100%" stop-color="#9dc2ec" stop-opacity="0"/></linearGradient></defs>
-          <g stroke="rgba(255,255,255,.06)" stroke-width="1"><line x1="26" y1="15" x2="500" y2="15"/><line x1="26" y1="55" x2="500" y2="55"/><line x1="26" y1="95" x2="500" y2="95"/><line x1="26" y1="130" x2="500" y2="130"/></g>
-          <text x="22" y="19" text-anchor="end" fill="rgba(255,255,255,.22)" font-size="9" font-family="IBM Plex Mono">$60k</text>
-          <text x="22" y="59" text-anchor="end" fill="rgba(255,255,255,.22)" font-size="9" font-family="IBM Plex Mono">$55k</text>
-          <text x="22" y="99" text-anchor="end" fill="rgba(255,255,255,.22)" font-size="9" font-family="IBM Plex Mono">$50k</text>
-          <path d="M26 40 L104 54 L182 48 L260 65 L338 81 L416 76 L500 92 L500 130 L26 130 Z" fill="url(#ag1)"/>
-          <path d="M26 40 L104 54 L182 48 L260 65 L338 81 L416 76 L500 92" fill="none" stroke="#b8d4f3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <g fill="#d9e8f8"><circle cx="26" cy="40" r="3.5"/><circle cx="104" cy="54" r="3.5"/><circle cx="182" cy="48" r="3.5"/><circle cx="260" cy="65" r="3.5"/><circle cx="338" cy="81" r="3.5"/><circle cx="416" cy="76" r="3.5"/><circle cx="500" cy="92" r="4" fill="#c8a96a"/></g>
-          <g fill="rgba(255,255,255,.2)" font-size="9" font-family="IBM Plex Mono"><text x="26" y="148">Jan</text><text x="182" y="148" text-anchor="middle">Mar</text><text x="338" y="148" text-anchor="middle">May</text><text x="500" y="148" text-anchor="end" fill="rgba(200,169,106,.8)">Now</text></g>
+          <g stroke="rgba(255,255,255,.07)" stroke-width="1"><line x1="26" y1="13" x2="460" y2="13"/><line x1="26" y1="50" x2="460" y2="50"/><line x1="26" y1="87" x2="460" y2="87"/><line x1="26" y1="118" x2="460" y2="118"/></g>
+          <text x="22" y="17" text-anchor="end" fill="rgba(200,210,230,.45)" font-size="9" font-family="IBM Plex Mono">$60k</text>
+          <text x="22" y="54" text-anchor="end" fill="rgba(200,210,230,.45)" font-size="9" font-family="IBM Plex Mono">$55k</text>
+          <text x="22" y="91" text-anchor="end" fill="rgba(200,210,230,.45)" font-size="9" font-family="IBM Plex Mono">$50k</text>
+          <path d="M26 36 L98 50 L170 44 L242 61 L314 77 L386 72 L460 88 L460 118 L26 118 Z" fill="url(#ag1)"/>
+          <path d="M26 36 L98 50 L170 44 L242 61 L314 77 L386 72 L460 88" fill="none" stroke="#b8d4f3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <g fill="#d9e8f8"><circle cx="26" cy="36" r="3"/><circle cx="98" cy="50" r="3"/><circle cx="170" cy="44" r="3"/><circle cx="242" cy="61" r="3"/><circle cx="314" cy="77" r="3"/><circle cx="386" cy="72" r="3"/><circle cx="460" cy="88" r="3.5" fill="#c8a96a"/></g>
+          <g fill="rgba(200,210,230,.4)" font-size="9" font-family="IBM Plex Mono"><text x="26" y="135">Jan</text><text x="170" y="135" text-anchor="middle">Mar</text><text x="314" y="135" text-anchor="middle">May</text><text x="460" y="135" text-anchor="end" fill="rgba(200,169,106,.8)">Now</text></g>
         </svg>
-        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);text-align:right;margin-top:4px;">Avg ask: <span id="dash-avg-price" style="color:var(--gold2);">--</span></div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--muted);text-align:right;margin-top:3px;">Avg ask: <span id="dash-avg" style="color:var(--gold2);">--</span></div>
       </div>
+      <!-- KPIs -->
       <div class="kpi-row">
-        <div class="card kpi-tile"><span class="kpi-num" style="color:var(--green);" id="kpi-active">--</span><span class="kpi-lbl">Active Listings</span><span class="kpi-trend" style="color:var(--muted);">Live today</span></div>
-        <div class="card kpi-tile"><span class="kpi-num" style="color:var(--gold2);" id="kpi-targets">--</span><span class="kpi-lbl">Target Cars</span><span class="kpi-trend" style="color:var(--muted);">2017&ndash;2020 cohorts</span></div>
-        <div class="card kpi-tile"><span class="kpi-num" style="color:var(--blue2);" id="kpi-total">--</span><span class="kpi-lbl">Total VINs</span><span class="kpi-trend" style="color:var(--muted);">S65 + S600</span></div>
+        <div class="card kpi-tile"><span class="kpi-n" style="color:var(--green);" id="kpi-active">--</span><span class="kpi-l">Active Listings</span><span class="kpi-t">Live today</span></div>
+        <div class="card kpi-tile"><span class="kpi-n" style="color:var(--gold2);" id="kpi-targets">--</span><span class="kpi-l">Target Cars</span><span class="kpi-t">2017&ndash;2020 cohorts</span></div>
+        <div class="card kpi-tile"><span class="kpi-n" style="color:var(--blue2);" id="kpi-total">--</span><span class="kpi-l">Total VINs</span><span class="kpi-t">S65 + S600</span></div>
       </div>
+      <!-- Minis -->
       <div class="mini-row">
         <div class="card mini-card">
-          <div class="tag ta" style="width:fit-content;">Market Signal</div>
+          <div class="tag ta" style="width:fit-content;">GI Range</div>
           <div class="mini-big" style="color:var(--amber);" id="dash-gi">--</div>
-          <div class="mini-desc">Cars in Golden Intersection range</div>
-          <div class="mini-small">70K&ndash;100K mi band</div>
+          <div class="mini-desc">Cars in the Golden Intersection</div>
+          <div class="mini-sm">70K&ndash;100K mi band</div>
         </div>
         <div class="card mini-card">
-          <div class="tag tg" style="width:fit-content;">Thesis</div>
+          <div class="tag tg" style="width:fit-content;">Rarity</div>
           <div class="mini-big" style="color:var(--gold2);">~800</div>
-          <div class="mini-desc">US examples ever built</div>
-          <div class="mini-small">Last V12 S-Class &middot; M279 &middot; 2015&ndash;2020</div>
+          <div class="mini-desc">US examples ever produced</div>
+          <div class="mini-sm">Last V12 S-Class &middot; 2015&ndash;2020</div>
         </div>
       </div>
-      <div class="card paper" style="min-height:130px;">
+      <!-- Paper note -->
+      <div class="card paper">
         <div class="note-body">
           <div class="note-meta">The Thesis</div>
           <div class="note-text">Prior owners fund the costly service events. You arrive at the depreciation floor and <em>collect.</em></div>
-          <div class="note-source">W222 S65 AMG &middot; M279 Biturbo V12 &middot; 621 hp</div>
+          <div class="note-src">W222 S65 AMG &middot; M279 Biturbo V12 &middot; 621 hp</div>
         </div>
       </div>
     </div>
@@ -265,285 +401,324 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 120% 60% at 50% 
 </div>
 </div>
 
-<!-- THE MARKET -->
+<!-- ═══ THE MARKET ═══ -->
 <div class="page" id="page-market">
-<div class="page-pad">
+<div class="pp">
   <div class="sec">
-    <span>Active Listings &mdash; Full Market</span>
-    <span id="market-label" style="color:var(--green);font-family:var(--mono);font-size:9px;"></span>
+    <span>The Market &mdash; All Active Listings</span>
+    <span id="market-label" style="color:var(--green);"></span>
   </div>
-  <div class="market-grid" id="market-grid"><div class="loading">Loading&hellip;</div></div>
+  <div class="mkt-controls">
+    <button class="fbtn active" onclick="fMkt('all',this)">All</button>
+    <button class="fbtn" onclick="fMkt('target',this)">Targets Only</button>
+    <button class="fbtn" onclick="fMkt('reference',this)">Reference</button>
+    <span class="fsep">|</span>
+    <button class="fbtn" onclick="sMkt('price',this)">Price &#8593;</button>
+    <button class="fbtn" onclick="sMkt('miles',this)">Miles &#8593;</button>
+    <button class="fbtn" onclick="sMkt('year',this)">Year &#8595;</button>
+  </div>
+  <div class="mkt-grid" id="market-grid"><div class="loading">Loading&hellip;</div></div>
 </div>
 </div>
 
-<!-- TARGETS -->
+<!-- ═══ TARGETS ═══ -->
 <div class="page" id="page-targets">
-<div class="page-pad">
+<div class="pp">
   <div class="sec">
     <span>Targets &mdash; 2017&ndash;2020 S65 &amp; Ultra-Rare 2017 S600</span>
-    <span id="targets-label" style="color:var(--gold2);font-family:var(--mono);font-size:9px;"></span>
+    <span id="targets-label" style="color:var(--gold2);"></span>
   </div>
-  <div class="targets-grid" id="targets-grid"><div class="loading">Loading&hellip;</div></div>
+  <div class="tgt-grid" id="targets-grid"><div class="loading">Loading&hellip;</div></div>
 </div>
 </div>
 
-<!-- ANALYTICS -->
+<!-- ═══ ANALYTICS ═══ -->
 <div class="page" id="page-analytics">
-<div class="page-pad">
+<div class="pp">
   <div class="sec">Analytics &amp; Market Intelligence</div>
-  <div class="kpi-4" style="margin-bottom:14px;">
-    <div class="k4"><span class="k4-num" style="color:var(--blue2);" id="ak-total">--</span><span class="k4-lbl">Total VINs</span><span class="k4-t" style="color:var(--muted);" id="ak-split">loading</span></div>
-    <div class="k4"><span class="k4-num" style="color:var(--green);" id="ak-active">--</span><span class="k4-lbl">Active Listings</span><span class="k4-t" style="color:var(--green);">Live today</span></div>
-    <div class="k4"><span class="k4-num" style="color:var(--gold2);" id="ak-targets">--</span><span class="k4-lbl">Target Cars</span><span class="k4-t" style="color:var(--muted);">2017&ndash;2020</span></div>
-    <div class="k4"><span class="k4-num" style="color:var(--teal);" id="ak-gi">--</span><span class="k4-lbl">In GI Range</span><span class="k4-t" style="color:var(--muted);">70K&ndash;100K mi</span></div>
+  <div class="kpi4">
+    <div class="k4"><span class="k4-n" style="color:var(--blue2);" id="ak-total">--</span><span class="k4-l">Total VINs</span><span class="k4-t" id="ak-split">loading</span></div>
+    <div class="k4"><span class="k4-n" style="color:var(--green);" id="ak-active">--</span><span class="k4-l">Active Listings</span><span class="k4-t">Live today</span></div>
+    <div class="k4"><span class="k4-n" style="color:var(--gold2);" id="ak-targets">--</span><span class="k4-l">Target Cars</span><span class="k4-t">2017&ndash;2020</span></div>
+    <div class="k4"><span class="k4-n" style="color:var(--teal);" id="ak-gi">--</span><span class="k4-l">In GI Range</span><span class="k4-t">70K&ndash;100K mi</span></div>
   </div>
-  <div class="analytics-grid">
-    <div class="card analytics-full analytics-card">
-      <div class="analytics-title">The Depreciation Thesis</div>
-      <div class="analytics-sub">S65 AMG price trajectory 2020&ndash;2032 &middot; Bear trend &minus;13%/yr &middot; ~800 US examples</div>
-      <svg viewBox="0 0 700 200" width="100%" height="auto" style="display:block;">
+  <div class="an-grid">
+    <!-- Thesis chart -->
+    <div class="card an-full an-card">
+      <div class="an-title">The Depreciation Thesis</div>
+      <div class="an-sub">S65 AMG price trajectory 2020&ndash;2032 &middot; Bear trend &minus;13%/yr &middot; ~800 US examples</div>
+      <svg viewBox="0 0 660 188" width="100%" style="display:block;">
         <defs><linearGradient id="ag2" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#00d4c8" stop-opacity=".18"/><stop offset="100%" stop-color="#00d4c8" stop-opacity="0"/></linearGradient><filter id="gw"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-        <g stroke="rgba(255,255,255,.05)" stroke-width="1"><line x1="40" y1="15" x2="40" y2="165"/><line x1="40" y1="165" x2="680" y2="165"/><line x1="40" y1="53" x2="680" y2="53" stroke-dasharray="3,7"/><line x1="40" y1="88" x2="680" y2="88" stroke-dasharray="3,7"/><line x1="40" y1="123" x2="680" y2="123" stroke-dasharray="3,7"/></g>
-        <text x="35" y="57" fill="rgba(255,255,255,.2)" font-size="10" text-anchor="end" font-family="IBM Plex Mono">$80k</text>
-        <text x="35" y="92" fill="rgba(255,255,255,.2)" font-size="10" text-anchor="end" font-family="IBM Plex Mono">$60k</text>
-        <text x="35" y="127" fill="rgba(255,255,255,.2)" font-size="10" text-anchor="end" font-family="IBM Plex Mono">$40k</text>
-        <text x="40" y="180" fill="rgba(255,255,255,.2)" font-size="10" text-anchor="middle" font-family="IBM Plex Mono">2020</text>
-        <text x="150" y="180" fill="rgba(255,255,255,.2)" font-size="10" text-anchor="middle" font-family="IBM Plex Mono">2022</text>
-        <text x="260" y="180" fill="rgba(255,255,255,.2)" font-size="10" text-anchor="middle" font-family="IBM Plex Mono">2024</text>
-        <text x="370" y="180" fill="#7aa7dc" font-size="10" text-anchor="middle" font-family="IBM Plex Mono">2026</text>
-        <text x="480" y="180" fill="#c8a96a" font-size="10" text-anchor="middle" font-family="IBM Plex Mono">2028</text>
-        <text x="590" y="180" fill="rgba(255,255,255,.2)" font-size="10" text-anchor="middle" font-family="IBM Plex Mono">2030</text>
-        <rect x="425" y="110" width="110" height="28" fill="rgba(200,169,106,.07)" rx="3"/><rect x="425" y="110" width="110" height="28" fill="none" stroke="#c8a96a" stroke-width="1" stroke-dasharray="4,3" rx="3" opacity=".5"/>
-        <text x="480" y="106" fill="#c8a96a" font-size="8" text-anchor="middle" font-family="IBM Plex Mono" letter-spacing="1">WINDOW</text>
-        <line x1="40" x2="680" y1="123" y2="123" stroke="#c8a96a" stroke-width="1" stroke-dasharray="5,4" opacity=".35"/>
-        <text x="46" y="119" fill="#c8a96a" font-size="8" font-family="IBM Plex Mono" opacity=".7">$40k ceiling</text>
-        <line x1="370" y1="15" x2="370" y2="165" stroke="#7aa7dc" stroke-width="1" stroke-dasharray="2,5" opacity=".4"/>
-        <text x="374" y="28" fill="#7aa7dc" font-size="8" font-family="IBM Plex Mono">NOW</text>
-        <path d="M40,18 L95,36 L150,55 L205,73 L260,90 L315,104 L370,117 L425,126 L480,132 L535,136 L590,132 L680,123 L680,165 L40,165 Z" fill="url(#ag2)"/>
-        <path d="M40,18 L95,36 L150,55 L205,73 L260,90 L315,104 L370,117" fill="none" stroke="#00d4c8" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" filter="url(#gw)"/>
-        <path d="M370,117 L425,126 L480,132 L535,136 L590,132 L680,123" fill="none" stroke="#00d4c8" stroke-width="2" stroke-dasharray="6,4" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>
-        <circle cx="260" cy="90" r="4" fill="#c8a96a" opacity=".8"/><circle cx="315" cy="104" r="4" fill="#c8a96a" opacity=".8"/><circle cx="370" cy="117" r="5" fill="#7aa7dc" filter="url(#gw)"/>
-        <circle cx="480" cy="132" r="6" fill="none" stroke="#c8a96a" stroke-width="1.5" opacity=".8"/><circle cx="480" cy="132" r="2.5" fill="#c8a96a"/>
-        <text x="490" y="130" fill="#c8a96a" font-size="8" font-family="IBM Plex Mono">TARGET</text>
+        <g stroke="rgba(255,255,255,.06)" stroke-width="1"><line x1="40" y1="14" x2="40" y2="155"/><line x1="40" y1="155" x2="645" y2="155"/><line x1="40" y1="50" x2="645" y2="50" stroke-dasharray="3,7"/><line x1="40" y1="84" x2="645" y2="84" stroke-dasharray="3,7"/><line x1="40" y1="118" x2="645" y2="118" stroke-dasharray="3,7"/></g>
+        <g fill="rgba(200,210,230,.4)" font-size="9" font-family="IBM Plex Mono" text-anchor="end">
+          <text x="36" y="54">$80k</text><text x="36" y="88">$60k</text><text x="36" y="122">$40k</text>
+        </g>
+        <g fill="rgba(200,210,230,.4)" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">
+          <text x="40" y="170">2020</text><text x="145" y="170">2022</text><text x="250" y="170">2024</text>
+          <text x="355" y="170" fill="#7aa7dc">2026</text><text x="460" y="170" fill="#c8a96a">2028</text>
+          <text x="565" y="170">2030</text>
+        </g>
+        <rect x="410" y="106" width="105" height="27" fill="rgba(200,169,106,.08)" rx="3"/>
+        <rect x="410" y="106" width="105" height="27" fill="none" stroke="#c8a96a" stroke-width="1" stroke-dasharray="4,3" rx="3" opacity=".5"/>
+        <text x="462" y="102" fill="#c8a96a" font-size="8" text-anchor="middle" font-family="IBM Plex Mono">WINDOW</text>
+        <line x1="40" x2="645" y1="118" y2="118" stroke="#c8a96a" stroke-width="1" stroke-dasharray="5,4" opacity=".38"/>
+        <text x="46" y="114" fill="#c8a96a" font-size="8" font-family="IBM Plex Mono" opacity=".75">$40k ceiling</text>
+        <line x1="355" y1="14" x2="355" y2="155" stroke="#7aa7dc" stroke-width="1" stroke-dasharray="2,5" opacity=".4"/>
+        <text x="359" y="26" fill="#7aa7dc" font-size="8" font-family="IBM Plex Mono">NOW</text>
+        <path d="M40,17 L92,34 L145,52 L200,69 L250,85 L305,99 L355,111 L410,120 L460,126 L515,130 L565,126 L645,118 L645,155 L40,155 Z" fill="url(#ag2)"/>
+        <path d="M40,17 L92,34 L145,52 L200,69 L250,85 L305,99 L355,111" fill="none" stroke="#00d4c8" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" filter="url(#gw)"/>
+        <path d="M355,111 L410,120 L460,126 L515,130 L565,126 L645,118" fill="none" stroke="#00d4c8" stroke-width="2" stroke-dasharray="6,4" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>
+        <circle cx="250" cy="85" r="3.5" fill="#c8a96a" opacity=".8"/><circle cx="305" cy="99" r="3.5" fill="#c8a96a" opacity=".8"/>
+        <circle cx="355" cy="111" r="4.5" fill="#7aa7dc" filter="url(#gw)"/>
+        <circle cx="460" cy="126" r="5.5" fill="none" stroke="#c8a96a" stroke-width="1.5" opacity=".8"/><circle cx="460" cy="126" r="2.5" fill="#c8a96a"/>
+        <text x="470" y="124" fill="#c8a96a" font-size="8" font-family="IBM Plex Mono">TARGET</text>
       </svg>
     </div>
-    <div class="card analytics-card">
-      <div class="analytics-title">Cohort Distribution</div>
-      <div class="analytics-sub">S65 AMG by model year &mdash; live from database</div>
+    <!-- Scatter -->
+    <div class="card an-full an-card">
+      <div class="an-title">Opportunity Map &mdash; Price vs Mileage</div>
+      <div class="an-sub">Active listings plotted &middot; Strike zone: 70K&ndash;100K mi at $30K&ndash;$50K &middot; Ceiling $40K</div>
+      <div class="scatter-wrap" id="scatter-wrap"><div class="loading">Loading&hellip;</div></div>
+    </div>
+    <!-- Cohort -->
+    <div class="card an-card">
+      <div class="an-title">Cohort Distribution</div>
+      <div class="an-sub">S65 AMG by model year</div>
       <div class="cohort-bars" id="cohort-bars"><div class="loading" style="width:100%;">Loading&hellip;</div></div>
-      <div style="margin-top:8px;font-family:var(--mono);font-size:9px;color:var(--dim);"><span style="color:var(--teal);">&#9632;</span> Target &nbsp;<span style="color:var(--blue);">&#9632;</span> Reference &nbsp;<span style="color:var(--gold);">&#9632;</span> Final Edition</div>
+      <div style="margin-top:8px;font-family:var(--mono);font-size:9px;color:var(--dim);"><span style="color:var(--teal);">&#9632;</span> Target &nbsp;<span style="color:var(--blue);">&#9632;</span> Reference &nbsp;<span style="color:var(--gold);">&#9632;</span> Final Ed.</div>
     </div>
-    <div class="card analytics-card">
-      <div class="analytics-title">VMI Completeness</div>
-      <div class="analytics-sub">Documented service &middot; targeted fleet &middot; your negotiation lever</div>
+    <!-- VMI -->
+    <div class="card an-card">
+      <div class="an-title">VMI Completeness</div>
+      <div class="an-sub">Targeted fleet &middot; your negotiation lever</div>
       <div class="bar-chart" style="margin-top:8px;" id="vmi-bars"><div class="loading">Loading&hellip;</div></div>
-      <div style="margin-top:10px;padding:9px;background:rgba(224,90,90,.07);border:1px solid rgba(224,90,90,.2);border-radius:7px;font-family:var(--mono);font-size:9px;color:var(--red);line-height:1.6;">Most of the targeted fleet has no documented VMI service. This is your leverage.</div>
+      <div style="margin-top:9px;padding:8px;background:rgba(224,90,90,.08);border:1px solid rgba(224,90,90,.22);border-radius:7px;font-family:var(--mono);font-size:9px;color:var(--red);line-height:1.6;">Most of the targeted fleet has no documented VMI service. This is your leverage.</div>
     </div>
-    <div class="card analytics-card">
-      <div class="analytics-title">Build Option Rarity</div>
-      <div class="analytics-sub">% of S65 fleet with confirmed option</div>
+    <!-- Build rarity -->
+    <div class="card an-card">
+      <div class="an-title">Build Option Rarity</div>
+      <div class="an-sub">% of S65 fleet with confirmed option</div>
       <div class="bar-chart" style="margin-top:8px;">
-        <div class="bc-row"><span class="bc-label">Burmester</span><div class="bc-track"><div class="bc-fill" style="width:68%;background:rgba(122,167,220,.5);"><span class="bc-val" style="color:var(--ink2);">68%</span></div></div></div>
-        <div class="bc-row"><span class="bc-label">Night Vision</span><div class="bc-track"><div class="bc-fill" style="width:42%;background:rgba(122,167,220,.5);"><span class="bc-val" style="color:var(--ink2);">42%</span></div></div></div>
-        <div class="bc-row"><span class="bc-label">Magic Sky</span><div class="bc-track"><div class="bc-fill" style="width:28%;background:rgba(0,212,200,.5);"><span class="bc-val" style="color:var(--ink2);">28%</span></div></div></div>
-        <div class="bc-row"><span class="bc-label">Ceramic Brakes</span><div class="bc-track"><div class="bc-fill" style="width:22%;background:rgba(200,169,106,.6);"><span class="bc-val" style="color:var(--bg);">22%</span></div></div></div>
-        <div class="bc-row"><span class="bc-label">Refrigerator</span><div class="bc-track"><div class="bc-fill" style="width:16%;background:rgba(200,169,106,.6);"><span class="bc-val" style="color:var(--bg);">16%</span></div></div></div>
-        <div class="bc-row"><span class="bc-label">Exec Rear Seat</span><div class="bc-track"><div class="bc-fill" style="width:11%;background:rgba(200,169,106,.6);"><span class="bc-val" style="color:var(--bg);">11%</span></div></div></div>
-        <div class="bc-row"><span class="bc-label">designo</span><div class="bc-track"><div class="bc-fill" style="width:35%;background:rgba(179,136,255,.5);"><span class="bc-val" style="color:var(--ink2);">35%</span></div></div></div>
+        <div class="bc-row"><span class="bc-lbl">Burmester</span><div class="bc-track"><div class="bc-fill" style="width:68%;background:rgba(122,167,220,.5);"><span class="bc-val" style="color:var(--ink2);">68%</span></div></div></div>
+        <div class="bc-row"><span class="bc-lbl">Night Vision</span><div class="bc-track"><div class="bc-fill" style="width:42%;background:rgba(122,167,220,.5);"><span class="bc-val" style="color:var(--ink2);">42%</span></div></div></div>
+        <div class="bc-row"><span class="bc-lbl">Magic Sky</span><div class="bc-track"><div class="bc-fill" style="width:28%;background:rgba(0,212,200,.5);"><span class="bc-val" style="color:var(--ink2);">28%</span></div></div></div>
+        <div class="bc-row"><span class="bc-lbl">Ceramic Brakes</span><div class="bc-track"><div class="bc-fill" style="width:22%;background:rgba(200,169,106,.6);"><span class="bc-val" style="color:var(--bg);">22%</span></div></div></div>
+        <div class="bc-row"><span class="bc-lbl">Refrigerator</span><div class="bc-track"><div class="bc-fill" style="width:16%;background:rgba(200,169,106,.6);"><span class="bc-val" style="color:var(--bg);">16%</span></div></div></div>
+        <div class="bc-row"><span class="bc-lbl">designo</span><div class="bc-track"><div class="bc-fill" style="width:35%;background:rgba(179,136,255,.5);"><span class="bc-val" style="color:var(--ink2);">35%</span></div></div></div>
       </div>
     </div>
+    <!-- Mileage bands -->
+    <div class="card an-card">
+      <div class="an-title">Avg Ask by Mileage Band</div>
+      <div class="an-sub">Active listings &middot; GI band highlighted</div>
+      <div class="bar-chart" style="margin-top:8px;" id="mi-bands"><div class="loading">Loading&hellip;</div></div>
+    </div>
   </div>
 </div>
 </div>
 
-<!-- NEWS -->
+<!-- ═══ NEWS ═══ -->
 <div class="page" id="page-news">
-<div class="page-pad">
+<div class="pp">
   <div class="sec">News &amp; Intelligence</div>
-  <div class="news-layout">
+  <div class="news-ed">
+    <div class="ned-lbl">Why these matter this week</div>
+    <div class="ned-txt">The market continues its bear trend. <strong>BaT remains the most reliable price floor signal</strong> &mdash; recent auction results confirm the thesis is intact. MBWorld owners are reporting ignition coil failures clustering at 80K&ndash;95K miles, reinforcing your VMI leverage position. Hagerty has begun tracking the W222 S65 in their emerging collectible index.</div>
+  </div>
+  <div class="news-lay">
+    <!-- LEFT: Curated static links -->
     <div class="news-col">
-      <div style="font-family:var(--mono);font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.18em;padding-bottom:8px;border-bottom:1px solid var(--line);margin-bottom:4px;">Market &amp; Industry</div>
-      <a class="card news-card" href="https://www.bring-a-trailer.com/search/?s=mercedes+s65" target="_blank" rel="noopener">
-        <div class="news-thumb"><div class="news-thumb-icon" style="background:linear-gradient(135deg,#1a1200,#28200a);">&#128226;</div></div>
-        <div class="news-body"><div class="news-source">Bring a Trailer &middot; Live</div><div class="news-title">S65 AMG Recent BaT Auction Results</div><div class="news-desc">Monitor completed auction prices vs. asking market. Track the real transaction floor.</div></div>
-      </a>
-      <a class="card news-card" href="https://www.cargurus.com/Cars/l-Used-Mercedes-Benz-S65-AMG-d2266" target="_blank" rel="noopener">
-        <div class="news-thumb"><div class="news-thumb-icon" style="background:linear-gradient(135deg,#0a1408,#0c1a0a);">&#128202;</div></div>
-        <div class="news-body"><div class="news-source">CarGurus &middot; Price Analysis</div><div class="news-title">S65 AMG Market Pricing Intelligence</div><div class="news-desc">Algorithmic pricing data and dealer listing trends for the full S65 universe.</div></div>
-      </a>
-      <a class="card news-card" href="https://www.hagerty.com/media/car-values/" target="_blank" rel="noopener">
-        <div class="news-thumb"><div class="news-thumb-icon" style="background:linear-gradient(135deg,#050d1a,#0a1428);">&#11088;</div></div>
-        <div class="news-body"><div class="news-source">Hagerty &middot; Valuation</div><div class="news-title">Collectible Car Market Index</div><div class="news-desc">Modern exotic values and collector sentiment. The data behind the long-view thesis.</div></div>
-      </a>
-      <a class="card news-card" href="https://www.iseecars.com/used_cars-t3016-2015-mercedes-benz-s-class-s-65-amg-for-sale" target="_blank" rel="noopener">
-        <div class="news-thumb"><div class="news-thumb-icon" style="background:linear-gradient(135deg,#080d1a,#0a1225);">&#128269;</div></div>
-        <div class="news-body"><div class="news-source">iSeeCars &middot; Data</div><div class="news-title">S65 AMG Price vs Mileage Analysis</div><div class="news-desc">Days on market, price history, and fair market value across the fleet.</div></div>
-      </a>
-      <a class="card news-card" href="https://www.autotrader.com/mercedes-benz/s-65-amg" target="_blank" rel="noopener">
-        <div class="news-thumb"><div class="news-thumb-icon" style="background:linear-gradient(135deg,#0d0508,#1a0510);">&#128663;</div></div>
-        <div class="news-body"><div class="news-source">AutoTrader &middot; Live Inventory</div><div class="news-title">All S65 AMG Active Listings</div><div class="news-desc">Browse current US inventory. Filter by mileage to surface Golden Intersection candidates.</div></div>
-      </a>
+      <div class="ncol-lbl">Curated Sources</div>
+      <a class="ncard" href="https://www.bring-a-trailer.com/search/?s=mercedes+s65" target="_blank" rel="noopener"><div class="nthumb">&#128226;</div><div><div class="nsrc">Bring a Trailer</div><div class="ntitle">S65 AMG Auction Results</div><div class="ndesc">Completed auction prices &mdash; the real transaction floor.</div></div></a>
+      <a class="ncard" href="https://www.cargurus.com/Cars/l-Used-Mercedes-Benz-S65-AMG-d2266" target="_blank" rel="noopener"><div class="nthumb">&#128202;</div><div><div class="nsrc">CarGurus</div><div class="ntitle">S65 AMG Market Pricing</div><div class="ndesc">Algorithmic pricing and listing trends across the universe.</div></div></a>
+      <a class="ncard" href="https://www.hagerty.com/media/car-values/" target="_blank" rel="noopener"><div class="nthumb">&#11088;</div><div><div class="nsrc">Hagerty</div><div class="ntitle">Collectible Car Market Index</div><div class="ndesc">Collector sentiment and modern exotic value trends.</div></div></a>
+      <a class="ncard" href="https://www.mbworld.org/forums/s65-amg-v12-biturbo-278/" target="_blank" rel="noopener"><div class="nthumb">&#127942;</div><div><div class="nsrc">MBWorld Forums</div><div class="ntitle">S65 V12 Owner Community</div><div class="ndesc">M279 failure points, service intervals, and repair costs.</div></div></a>
+      <a class="ncard" href="https://www.reddit.com/r/mercedes_benz/search/?q=s65+amg" target="_blank" rel="noopener"><div class="nthumb">&#128172;</div><div><div class="nsrc">Reddit</div><div class="ntitle">S65 AMG Discussion</div><div class="ndesc">Owner reports and market observations from the community.</div></div></a>
+      <a class="ncard" href="https://mbdecoder.com" target="_blank" rel="noopener"><div class="nthumb">&#9881;</div><div><div class="nsrc">MBDecoder</div><div class="ntitle">Factory Build Data &amp; SA Codes</div><div class="ndesc">Ground truth production data. Confirm paint codes and options.</div></div></a>
     </div>
+    <!-- RIGHT: Live RSS feed -->
     <div class="news-col">
-      <div style="font-family:var(--mono);font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:.18em;padding-bottom:8px;border-bottom:1px solid var(--line);margin-bottom:4px;">Community &amp; Technical</div>
-      <a class="card news-card" href="https://www.mbworld.org/forums/s65-amg-v12-biturbo-278/" target="_blank" rel="noopener">
-        <div class="news-thumb"><div class="news-thumb-icon" style="background:linear-gradient(135deg,#14080a,#200a0c);">&#127942;</div></div>
-        <div class="news-body"><div class="news-source">MBWorld Forums</div><div class="news-title">S65 V12 Owner Community</div><div class="news-desc">Real owner experiences. Common failure points, service intervals, repair costs documented.</div></div>
-      </a>
-      <a class="card news-card" href="https://www.reddit.com/r/mercedes_benz/search/?q=s65+amg" target="_blank" rel="noopener">
-        <div class="news-thumb"><div class="news-thumb-icon" style="background:linear-gradient(135deg,#1a0a05,#280e08);">&#128172;</div></div>
-        <div class="news-body"><div class="news-source">Reddit &middot; r/mercedes_benz</div><div class="news-title">S65 AMG Discussion</div><div class="news-desc">Owner reports, service discoveries, and market observations from the community.</div></div>
-      </a>
-      <a class="card news-card" href="https://www.roadandtrack.com/car-culture/classic-cars/" target="_blank" rel="noopener">
-        <div class="news-thumb"><div class="news-thumb-icon" style="background:linear-gradient(135deg,#181408,#20180a);">&#128240;</div></div>
-        <div class="news-body"><div class="news-source">Road &amp; Track</div><div class="news-title">Which Modern Cars Become Collectibles?</div><div class="news-desc">The case for limited-production V12 AMG models as the last of a hand-built era.</div></div>
-      </a>
-      <a class="card news-card" href="https://mbdecoder.com" target="_blank" rel="noopener">
-        <div class="news-thumb"><div class="news-thumb-icon" style="background:linear-gradient(135deg,#050d1a,#0a1428);">&#9881;</div></div>
-        <div class="news-body"><div class="news-source">MBDecoder &middot; Build Data</div><div class="news-title">Factory Build Data &amp; SA Codes</div><div class="news-desc">Ground truth production data. Confirm paint codes, SA options, production numbers.</div></div>
-      </a>
-      <a class="card news-card" href="https://www.caranddriver.com/mercedes-benz/s-class" target="_blank" rel="noopener">
-        <div class="news-thumb"><div class="news-thumb-icon" style="background:linear-gradient(135deg,#0d1520,#0a0c18);">&#128196;</div></div>
-        <div class="news-body"><div class="news-source">Car and Driver</div><div class="news-title">W222 S-Class Buyer&#39;s Guide</div><div class="news-desc">Ownership costs, reliability data, and what to inspect when buying a pre-owned W222.</div></div>
-      </a>
+      <div class="ncol-lbl">
+        Live Feed &mdash; Google News
+        <button class="rss-archive-btn" id="archive-btn" onclick="toggleArchive()" style="margin-left:8px;display:none;">Show Archive</button>
+      </div>
+      <div class="rss-status" id="rss-status">Fetching latest news&hellip;</div>
+      <div class="rss-col" id="rss-live"></div>
+      <div class="rss-archive" id="rss-archive"></div>
     </div>
   </div>
 </div>
 </div>
 
-<!-- VIDEOS -->
+<!-- ═══ VIDEOS ═══ -->
 <div class="page" id="page-videos">
-<div class="page-pad">
+<div class="pp">
   <div class="sec"><span>Videos &mdash; Fuel the Hunt</span><span style="color:var(--muted);font-family:var(--mono);font-size:9px;">Opens YouTube</span></div>
-  <div class="cinema-grid">
-    <a class="card vid-card" href="https://www.youtube.com/watch?v=aZ3U_w3fOqY" target="_blank" rel="noopener">
-      <div class="vid-thumb"><img src="https://img.youtube.com/vi/aZ3U_w3fOqY/hqdefault.jpg" alt="" loading="lazy"><div class="vid-overlay"><div class="vid-play">&#9654;</div></div></div>
-      <div class="vid-body"><div class="vid-channel">Engine Sound &middot; M279</div><div class="vid-title">V12 Biturbo Cold Start</div><div class="vid-desc">621 hp. Hand-assembled in Affalterbach. The sound that defines the car.</div></div>
+  <div class="vid-grid">
+    <a class="vc card" href="https://www.youtube.com/watch?v=aZ3U_w3fOqY" target="_blank" rel="noopener">
+      <div class="vt"><img src="https://img.youtube.com/vi/aZ3U_w3fOqY/hqdefault.jpg" alt="" loading="lazy"><div class="vt-ov"><div class="vplay">&#9654;</div></div></div>
+      <div class="vb"><div class="vc-ch">Engine &middot; Sound</div><div class="vc-title">V12 Biturbo Cold Start</div><div class="vc-desc">621 hp. Hand-assembled in Affalterbach. The defining sound.</div></div>
     </a>
-    <a class="card vid-card" href="https://www.youtube.com/watch?v=Q2D9_04Tf20" target="_blank" rel="noopener">
-      <div class="vid-thumb"><img src="https://img.youtube.com/vi/Q2D9_04Tf20/hqdefault.jpg" alt="" loading="lazy"><div class="vid-overlay"><div class="vid-play">&#9654;</div></div></div>
-      <div class="vid-body"><div class="vid-channel">Full Review</div><div class="vid-title">The Last V12 S-Class</div><div class="vid-desc">Why the S65 remains emotionally unmatched among modern AMG products.</div></div>
+    <a class="vc card" href="https://www.youtube.com/watch?v=Q2D9_04Tf20" target="_blank" rel="noopener">
+      <div class="vt"><img src="https://img.youtube.com/vi/Q2D9_04Tf20/hqdefault.jpg" alt="" loading="lazy"><div class="vt-ov"><div class="vplay">&#9654;</div></div></div>
+      <div class="vb"><div class="vc-ch">Review &middot; S65 AMG</div><div class="vc-title">The Last V12 S-Class</div><div class="vc-desc">Why the S65 remains emotionally unmatched among modern AMG products.</div></div>
     </a>
-    <a class="card vid-card" href="https://www.youtube.com/watch?v=mI6z6kMreX0" target="_blank" rel="noopener">
-      <div class="vid-thumb"><img src="https://img.youtube.com/vi/mI6z6kMreX0/hqdefault.jpg" alt="" loading="lazy"><div class="vid-overlay"><div class="vid-play">&#9654;</div></div></div>
-      <div class="vid-body"><div class="vid-channel">Performance</div><div class="vid-title">Autobahn Top Speed Run</div><div class="vid-desc">No speed limiter. All twelve cylinders. What $225,000 of German engineering felt like.</div></div>
+    <a class="vc card" href="https://www.youtube.com/watch?v=mI6z6kMreX0" target="_blank" rel="noopener">
+      <div class="vt"><img src="https://img.youtube.com/vi/mI6z6kMreX0/hqdefault.jpg" alt="" loading="lazy"><div class="vt-ov"><div class="vplay">&#9654;</div></div></div>
+      <div class="vb"><div class="vc-ch">Performance &middot; Autobahn</div><div class="vc-title">Top Speed Run</div><div class="vc-desc">No limiter. All twelve cylinders. What $225K of German engineering felt like.</div></div>
     </a>
-    <a class="card vid-card" href="https://www.youtube.com/results?search_query=mercedes+s65+amg+w222+exhaust+sound" target="_blank" rel="noopener">
-      <div class="vid-thumb"><div class="vid-thumb-emoji" style="background:linear-gradient(135deg,#0d0508,#1a0510);">&#127925;</div><div class="vid-overlay"><div class="vid-play">&#9654;</div></div></div>
-      <div class="vid-body"><div class="vid-channel">Search &middot; Curated</div><div class="vid-title">S65 Exhaust Sounds</div><div class="vid-desc">Sport exhaust, cold starts, acceleration. The M279 V12 is an acoustic instrument.</div></div>
+    <a class="vc card" href="https://www.youtube.com/results?search_query=mercedes+s65+amg+exhaust+sound" target="_blank" rel="noopener">
+      <div class="vt"><div class="vt-emoji" style="background:linear-gradient(135deg,#0d0508,#1a0510);">&#127925;</div><div class="vt-ov"><div class="vplay">&#9654;</div></div></div>
+      <div class="vb"><div class="vc-ch">Sound &middot; Exhaust</div><div class="vc-title">S65 Exhaust Notes</div><div class="vc-desc">Sport exhaust and cold starts. The M279 V12 as an acoustic instrument.</div></div>
     </a>
-    <a class="card vid-card" href="https://www.youtube.com/results?search_query=mercedes+s65+amg+future+collectible+investment" target="_blank" rel="noopener">
-      <div class="vid-thumb"><div class="vid-thumb-emoji" style="background:linear-gradient(135deg,#050d1a,#0a1428);">&#11088;</div><div class="vid-overlay"><div class="vid-play">&#9654;</div></div></div>
-      <div class="vid-body"><div class="vid-channel">Search &middot; Thesis</div><div class="vid-title">S65 as a Future Collectible</div><div class="vid-desc">Why the last hand-built V12 AMG may appreciate once the depreciation floor is found.</div></div>
+    <a class="vc card" href="https://www.youtube.com/results?search_query=mercedes+s65+amg+future+collectible" target="_blank" rel="noopener">
+      <div class="vt"><div class="vt-emoji" style="background:linear-gradient(135deg,#050d1a,#0a1428);">&#11088;</div><div class="vt-ov"><div class="vplay">&#9654;</div></div></div>
+      <div class="vb"><div class="vc-ch">Collectibility &middot; Thesis</div><div class="vc-title">Future Collectible Case</div><div class="vc-desc">Why the last hand-built V12 AMG may appreciate once the floor is found.</div></div>
     </a>
-    <a class="card vid-card" href="https://www.youtube.com/results?search_query=mercedes+s65+amg+ownership+review+long+term" target="_blank" rel="noopener">
-      <div class="vid-thumb"><div class="vid-thumb-emoji" style="background:linear-gradient(135deg,#14080a,#1a0c10);">&#128663;</div><div class="vid-overlay"><div class="vid-play">&#9654;</div></div></div>
-      <div class="vid-body"><div class="vid-channel">Search &middot; Ownership</div><div class="vid-title">Long-Term Ownership Reports</div><div class="vid-desc">Real owners on maintenance, reliability, and what it costs to run the M279.</div></div>
+    <a class="vc card" href="https://www.youtube.com/results?search_query=mercedes+s65+amg+ownership+long+term" target="_blank" rel="noopener">
+      <div class="vt"><div class="vt-emoji" style="background:linear-gradient(135deg,#14080a,#1a0c10);">&#128663;</div><div class="vt-ov"><div class="vplay">&#9654;</div></div></div>
+      <div class="vb"><div class="vc-ch">Ownership &middot; Long Term</div><div class="vc-title">Living With the S65</div><div class="vc-desc">Real owners on maintenance, reliability, and running costs.</div></div>
     </a>
   </div>
 </div>
 </div>
 
 <!-- MOBILE NAV -->
-<nav class="bottom-nav">
-  <div class="bnav-inner">
-    <div class="bnav-item active" onclick="showPageM('dashboard',this)"><span class="bnav-icon">&#128202;</span><span class="bnav-lbl">Dashboard</span></div>
-    <div class="bnav-item" onclick="showPageM('market',this)"><span class="bnav-icon">&#128663;</span><span class="bnav-lbl">Market</span></div>
-    <div class="bnav-item" onclick="showPageM('targets',this)"><span class="bnav-icon">&#127919;</span><span class="bnav-lbl">Targets</span></div>
-    <div class="bnav-item" onclick="showPageM('analytics',this)"><span class="bnav-icon">&#128200;</span><span class="bnav-lbl">Analytics</span></div>
-    <div class="bnav-item" onclick="showPageM('news',this)"><span class="bnav-icon">&#128240;</span><span class="bnav-lbl">News</span></div>
-    <div class="bnav-item" onclick="showPageM('videos',this)"><span class="bnav-icon">&#127909;</span><span class="bnav-lbl">Videos</span></div>
+<nav class="bnav">
+  <div class="bnav-row">
+    <div class="bi active" onclick="go('dashboard',null);mGo(this)"><span class="bi-icon">&#128202;</span><span class="bi-lbl">Dashboard</span></div>
+    <div class="bi" onclick="go('market',null);mGo(this)"><span class="bi-icon">&#128663;</span><span class="bi-lbl">Market</span></div>
+    <div class="bi" onclick="go('targets',null);mGo(this)"><span class="bi-icon">&#127919;</span><span class="bi-lbl">Targets</span></div>
+    <div class="bi" onclick="toggleMore(this)"><span class="bi-icon">&#9776;</span><span class="bi-lbl">More</span></div>
   </div>
 </nav>
+<div class="more-drawer" id="more-drawer">
+  <div class="mdr" onclick="go('analytics',null);closeMore()"><span class="mdr-icon">&#128200;</span>Analytics</div>
+  <div class="mdr" onclick="go('news',null);loadNews();closeMore()"><span class="mdr-icon">&#128240;</span>News</div>
+  <div class="mdr" onclick="go('videos',null);closeMore()"><span class="mdr-icon">&#127909;</span>Videos</div>
+</div>
+<div class="more-ov" id="more-ov" onclick="closeMore()"></div>
 
 <script>
-var SB = 'https://kevwkxuloxxrevodsukg.supabase.co';
-var KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtldndreHVsb3h4cmV2b2RzdWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NjkwNTUsImV4cCI6MjA5MDQ0NTA1NX0.xU3Ii35aYSozwtznzD9ixHtO0swgYAGVS4FBaM3pN0M';
-var HDRS = {'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'};
+// ── CONFIG ────────────────────────────────────────────────
+var SB='https://kevwkxuloxxrevodsukg.supabase.co';
+var KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtldndreHVsb3h4cmV2b2RzdWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NjkwNTUsImV4cCI6MjA5MDQ0NTA1NX0.xU3Ii35aYSozwtznzD9ixHtO0swgYAGVS4FBaM3pN0M';
+var H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'};
+function q(ep){return fetch(SB+'/rest/v1/'+ep,{headers:H}).then(function(r){return r.json();});}
 
-function q(ep){ return fetch(SB+'/rest/v1/'+ep,{headers:HDRS}).then(function(r){return r.json();}); }
+// ── STATE ─────────────────────────────────────────────────
+var G={v:[],m:{},l:{},lhAll:[],svc:[]};
+var mktFilter='all',mktSort='price';
 
-// Countdown
+// ── COUNTDOWN ─────────────────────────────────────────────
 function tick(){
-  var d=new Date('2028-01-01T00:00:00')-new Date();
-  if(d<=0)return;
+  var diff=new Date('2028-01-01T00:00:00')-new Date();
+  if(diff<=0)return;
   function p(n){return String(Math.floor(n)).padStart(2,'0');}
-  var s=['cd-d','cd-h','cd-m','cd-s'];
-  var v=[Math.floor(d/86400000),Math.floor((d%86400000)/3600000),Math.floor((d%3600000)/60000),Math.floor((d%60000)/1000)];
-  s.forEach(function(id,i){var el=document.getElementById(id);if(el)el.textContent=i===0?v[i].toLocaleString():p(v[i]);});
+  [['cd-d',Math.floor(diff/86400000)],['cd-h',Math.floor((diff%86400000)/3600000)],['cd-m',Math.floor((diff%3600000)/60000)],['cd-s',Math.floor((diff%60000)/1000)]].forEach(function(x){
+    var el=document.getElementById(x[0]);if(el)el.textContent=x[0]==='cd-d'?x[1].toLocaleString():p(x[1]);
+  });
 }
 tick();setInterval(tick,1000);
 
 // Date label
 var dn=new Date();
-var dl=document.getElementById('dash-date');
-if(dl)dl.textContent=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dn.getDay()]+' Briefing \u2014 '+['January','February','March','April','May','June','July','August','September','October','November','December'][dn.getMonth()]+' '+dn.getDate()+', '+dn.getFullYear();
+var dlEl=document.getElementById('dash-date');
+if(dlEl)dlEl.textContent=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dn.getDay()]+' Briefing \u2014 '+['January','February','March','April','May','June','July','August','September','October','November','December'][dn.getMonth()]+' '+dn.getDate()+', '+dn.getFullYear();
 
-// Nav
+// ── PAGE NAV ──────────────────────────────────────────────
 var PAGES=['dashboard','market','targets','analytics','news','videos'];
-function showPage(k,tab){
+function go(k,tab){
   PAGES.forEach(function(p){var el=document.getElementById('page-'+p);if(el)el.classList.toggle('active',p===k);});
-  document.querySelectorAll('.nav-tab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.ntab').forEach(function(t){t.classList.remove('active');});
   if(tab)tab.classList.add('active');
   window.scrollTo(0,0);
 }
-function showPageM(k,item){
-  PAGES.forEach(function(p){var el=document.getElementById('page-'+p);if(el)el.classList.toggle('active',p===k);});
-  document.querySelectorAll('.bnav-item').forEach(function(i){i.classList.remove('active');});
+function mGo(item){
+  document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');});
   if(item)item.classList.add('active');
   window.scrollTo(0,0);
 }
+function toggleMore(btn){
+  var open=document.getElementById('more-drawer').classList.toggle('open');
+  document.getElementById('more-ov').classList.toggle('open',open);
+  if(btn)btn.classList.toggle('active',open);
+}
+function closeMore(){
+  document.getElementById('more-drawer').classList.remove('open');
+  document.getElementById('more-ov').classList.remove('open');
+}
 
-// Helpers
-function fP(n){if(!n&&n!==0)return '--';return '$'+Number(n).toLocaleString();}
-function fM(n){if(!n&&n!==0)return '--';return Number(n).toLocaleString()+' mi';}
-function fN(n){if(!n&&n!==0)return '--';return Number(n).toLocaleString();}
+// ── HELPERS ───────────────────────────────────────────────
+function fP(n){return n?'$'+Number(n).toLocaleString():'--';}
+function fM(n){return n?Number(n).toLocaleString()+' mi':'--';}
+function fN(n){return (n!==null&&n!==undefined)?Number(n).toLocaleString():'--';}
+function set(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
 
-function set(id,val){var el=document.getElementById(id);if(el)el.textContent=val;}
+// Image placeholder HTML
+function ph(year,trim){
+  return '<div class="car-placeholder"><div class="cp-year">'+(year||'--')+'</div><div class="cp-trim">'+(trim||'S65 AMG').replace(' AMG','')+'</div></div>';
+}
 
-function carFlags(v,vm){
+// Car flags
+function flags(v,vm){
   var f=[];
   if(v.car_status==='target')f.push({c:'fb',l:'Target'});
-  if(vm&&vm.curr_odo>=70000&&vm.curr_odo<=100000)f.push({c:'fb',l:'GI Zone'});
+  if(vm&&vm.curr_odo&&vm.curr_odo>=70000&&vm.curr_odo<=100000)f.push({c:'fn',l:'GI Zone'});
   if(vm&&vm.total_owners===1)f.push({c:'fg',l:'Single Owner'});
   else if(vm&&vm.total_owners===2)f.push({c:'fg',l:'2 Owners'});
   if(v.is_final_edition)f.push({c:'tg',l:'Final Edition'});
-  if(v.last_title_state)f.push({c:'fd',l:v.last_title_state+' Title'});
-  if(vm&&vm.accident_count===0)f.push({c:'fd',l:'No Accidents'});
+  if(v.last_title_state)f.push({c:'fd',l:v.last_title_state});
   return f.map(function(x){return '<span class="flag '+x.c+'">'+x.l+'</span>';}).join('');
 }
 
-function renderCard(v,vm,lh){
-  var price=lh?fP(lh.price):'--';
-  var miles=vm&&vm.curr_odo?fM(vm.curr_odo):(lh&&lh.miles?fM(lh.miles):'--');
-  var owners=vm?fN(vm.total_owners):'--';
-  var loc=(lh&&lh.state)?lh.state:(v.last_title_state||'--');
-  var url=lh&&lh.vdp_url?lh.vdp_url:'';
-  var active=v.listing_status==='active';
-  var badge=v.car_status==='target'?'<span class="target-badge">Target</span>':'<span class="ref-badge">Reference</span>';
-  return '<div class="card listing-card">'+
-    '<div class="lc-img">'+
-      '<div class="lc-ghost">&#128663;</div>'+
-      '<div class="lc-img-ov"></div>'+
-      '<div class="lc-top">'+badge+'</div>'+
-      (active?'<div class="lc-active"><span class="live-dot"></span>Active</div>':'')+
-    '</div>'+
-    '<div class="lc-body">'+
-      '<div class="lc-model">'+(v.year||'')+ ' '+(v.trim||'S65 AMG')+'</div>'+
-      '<div class="lc-meta">'+(v.exterior?v.exterior+' &middot; ':'')+loc+(lh&&lh.seller_name?' &middot; '+lh.seller_name:'')+'</div>'+
-      '<div class="lc-stats">'+
-        '<div class="lc-stat"><span class="lc-sv" style="color:var(--green);">'+price+'</span><span class="lc-sl">Ask</span></div>'+
-        '<div class="lc-stat"><span class="lc-sv">'+miles+'</span><span class="lc-sl">Miles</span></div>'+
-        '<div class="lc-stat"><span class="lc-sv">'+owners+'</span><span class="lc-sl">Owners</span></div>'+
-      '</div>'+
-      '<div class="lc-flags">'+carFlags(v,vm)+'</div>'+
-      (url?'<a class="lc-btn" href="'+url+'" target="_blank" rel="noopener">View Listing &#8599;</a>':'<div class="lc-btn" style="opacity:.4;cursor:default;">No Listing URL</div>')+
-    '</div>'+
-  '</div>';
+// ── WHAT CHANGED ─────────────────────────────────────────
+function buildChanged(lhRows){
+  var now=new Date(),week=7*24*60*60*1000;
+  var changes=[];
+  var newVINs=[...new Set(lhRows.filter(function(l){return l.link_status==='active'&&l.first_seen&&(now-new Date(l.first_seen))<week;}).map(function(l){return l.vin;}))];
+  var goneVINs=[...new Set(lhRows.filter(function(l){return l.link_status==='inactive'&&l.last_seen&&(now-new Date(l.last_seen))<week;}).map(function(l){return l.vin;}))];
+  var activePrices=lhRows.filter(function(l){return l.link_status==='active'&&l.price;}).map(function(l){return l.price;});
+  var avg=activePrices.length?Math.round(activePrices.reduce(function(a,b){return a+b;},0)/activePrices.length):null;
+  var giN=G.v.filter(function(v){var m=G.m[v.vin];return m&&m.curr_odo&&m.curr_odo>=70000&&m.curr_odo<=100000;}).length;
+
+  if(newVINs.length)changes.push({c:'var(--green)',t:newVINs.length+' new listing'+(newVINs.length>1?'s':'')+' entered market this week'});
+  else changes.push({c:'var(--dim)',t:'No new listings entered this week'});
+  if(goneVINs.length)changes.push({c:'var(--amber)',t:goneVINs.length+' listing'+(goneVINs.length>1?'s':'')+' went inactive recently'});
+  if(avg)changes.push({c:'var(--muted)',t:'Avg ask across active market: '+fP(avg)});
+  if(giN)changes.push({c:'var(--blue2)',t:giN+' VINs in the Golden Intersection range'});
+
+  var strip=document.getElementById('changed-strip');
+  if(strip)strip.innerHTML=changes.map(function(c,i){
+    return '<span class="ch-item"><span class="ch-dot" style="background:'+c.c+';"></span>'+c.t+'</span>'+(i<changes.length-1?'<span class="ch-sep">/</span>':'');
+  }).join('');
 }
 
+// ── HERO INTEL ────────────────────────────────────────────
+function heroIntel(v,vm,lh){
+  var why=[],unres=[],up=[],down=[];
+  if(vm&&vm.curr_odo&&vm.curr_odo>=70000&&vm.curr_odo<=100000)why.push('sits in the Golden Intersection mileage band');
+  if(vm&&vm.total_owners===1)why.push('single-owner history');
+  if(v.car_status==='target')why.push('within your target cohort');
+  if(v.last_title_state==='TX')why.push('Texas-titled \u2014 geographically convenient');
+  if(!lh||!lh.price)unres.push('asking price not confirmed');
+  unres.push('VMI service status not documented');
+  if(lh&&lh.dom&&lh.dom>30)unres.push(lh.dom+' days on market \u2014 reason not known');
+  up.push('VMI service confirmed via dealer records');
+  if(!lh||!lh.price)up.push('ask confirmed below $40K');
+  down.push('<strong>accident or title issue</strong>');down.push('<strong>odometer irregularity</strong>');
+  return [
+    {l:'Why Primary',t:why.length?'Primary because it '+why.join(', ')+'.':'Highest-scoring active target.'},
+    {l:'Unresolved',t:unres.join(' &middot; ')+'.'},
+    {l:'Would Upgrade',t:up.join(' &middot; ')+'.'},
+    {l:'Hard Pass If',t:down.join(' or ')+'.',}
+  ].map(function(b){return '<div class="hi-row"><span class="hi-lbl">'+b.l+'</span><span class="hi-txt">'+b.t+'</span></div>';}).join('');
+}
+
+// ── RENDER HERO ───────────────────────────────────────────
 function renderHero(v,vm,lh){
-  if(!v){document.getElementById('dash-hero').innerHTML='<div class="loading">No active listings found.</div>';return;}
+  var el=document.getElementById('dash-hero');
+  if(!v){el.innerHTML='<div class="loading">No active target listings found.</div>';return;}
   var price=lh?fP(lh.price):'TBD';
   var miles=vm&&vm.curr_odo?fM(vm.curr_odo):(lh&&lh.miles?fM(lh.miles):'--');
   var owners=vm?fN(vm.total_owners):'--';
@@ -551,145 +726,377 @@ function renderHero(v,vm,lh){
   var url=lh&&lh.vdp_url?lh.vdp_url:'';
   var seller=lh&&lh.seller_name?lh.seller_name:'';
   var loc=v.last_title_state||(lh&&lh.state)||'';
-  document.getElementById('dash-hero').innerHTML=
-    '<div class="hero-img">'+
-      '<div class="hero-ghost">&#128663;</div>'+
-      '<div class="hero-img-overlay"></div>'+
-      '<div class="hero-badges"><span class="tag tb">Primary Candidate</span></div>'+
-      '<div class="hero-active-pill"><span class="live-dot"></span>Active Listing</div>'+
+  var dom=lh&&lh.dom?lh.dom+' days listed':'Active listing';
+  el.innerHTML=
+    '<div class="hero-img">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
+      '<div class="hero-img-ov"></div>'+
+      '<div style="position:absolute;top:10px;left:11px;z-index:2;"><span class="tag tb">Primary Candidate</span></div>'+
+      '<div class="hero-pill"><span class="live-dot"></span>Active</div>'+
+      '<div class="hero-dom">'+dom+'</div>'+
     '</div>'+
     '<div class="hero-body">'+
-      '<div class="hero-kicker">Dashboard'+(loc?' &middot; '+loc:'')+(seller?' &middot; '+seller:'')+'</div>'+
+      '<div class="hero-kicker">'+(loc?loc+' &middot; ':'')+seller+'</div>'+
       '<div class="hero-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+'</div>'+
       '<div class="hero-sub">'+v.vin+(v.exterior?' &middot; '+v.exterior:'')+'</div>'+
       '<div class="hero-stats">'+
-        '<div class="hstat"><span class="hstat-v" style="color:var(--gold2);">'+price+'</span><span class="hstat-l">Ask</span></div>'+
-        '<div class="hstat"><span class="hstat-v" style="color:var(--blue2);">'+miles+'</span><span class="hstat-l">Miles</span></div>'+
-        '<div class="hstat"><span class="hstat-v" style="color:var(--green);">'+owners+'</span><span class="hstat-l">Owners</span></div>'+
-        '<div class="hstat"><span class="hstat-v">'+proj+'</span><span class="hstat-l">Proj. 2028</span></div>'+
+        '<div class="hs"><span class="hs-v" style="color:var(--gold2);">'+price+'</span><span class="hs-l">Ask</span></div>'+
+        '<div class="hs"><span class="hs-v" style="color:var(--blue2);">'+miles+'</span><span class="hs-l">Miles</span></div>'+
+        '<div class="hs"><span class="hs-v" style="color:var(--green);">'+owners+'</span><span class="hs-l">Owners</span></div>'+
+        '<div class="hs"><span class="hs-v">'+proj+'</span><span class="hs-l">Proj. 2028</span></div>'+
       '</div>'+
-      '<div class="hero-flags">'+carFlags(v,vm)+'</div>'+
-      '<div class="hero-actions">'+
-        (url?'<a class="btn-g" href="'+url+'" target="_blank" rel="noopener">View Listing &#8599;</a>':'')+
-      '</div>'+
+      '<div class="hero-flags">'+flags(v,vm)+'</div>'+
+      '<div class="hero-intel">'+heroIntel(v,vm,lh)+'</div>'+
+      (url?'<div><a class="btn-g" href="'+url+'" target="_blank" rel="noopener">View Listing &#8599;</a></div>':'')+
     '</div>';
 }
 
+// ── RENDER COMPACT CARD ───────────────────────────────────
+function renderCompact(v,vm,lh){
+  var price=lh?fP(lh.price):'--';
+  var miles=vm&&vm.curr_odo?fM(vm.curr_odo):(lh&&lh.miles?fM(lh.miles):'--');
+  var owners=vm?fN(vm.total_owners):'--';
+  var loc=(lh&&lh.state)?lh.state:(v.last_title_state||'--');
+  var url=lh&&lh.vdp_url?lh.vdp_url:'';
+  var active=v.listing_status==='active';
+  var badge=v.car_status==='target'?'<span class="tbadge">Target</span>':'<span class="rbadge">Ref</span>';
+  return '<div class="lc">'+
+    '<div class="lc-img">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
+      '<div class="lc-img-ov"></div>'+
+      '<div class="lc-top">'+badge+'</div>'+
+      (active?'<div class="lc-active"><span class="live-dot"></span>Active</div>':'')+
+    '</div>'+
+    '<div class="lc-body">'+
+      '<div class="lc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+'</div>'+
+      '<div class="lc-meta">'+(v.exterior?v.exterior+' &middot; ':'')+loc+(lh&&lh.seller_name?' &middot; '+lh.seller_name:'')+'</div>'+
+      '<div class="lc-flags">'+flags(v,vm)+'</div>'+
+      '<div class="lc-row">'+
+        '<span class="lc-price">'+price+'</span>'+
+        '<span class="lc-mi">'+miles+'</span>'+
+        (url?'<a class="lc-btn" href="'+url+'" target="_blank" rel="noopener">View &#8599;</a>':'<span class="lc-btn" style="opacity:.35;">No URL</span>')+
+      '</div>'+
+    '</div>'+
+  '</div>';
+}
+
+// ── RENDER TARGET CARD ────────────────────────────────────
+function targetRead(v,vm,lh){
+  var r=[],h=[];
+  if(v.car_status==='target')r.push('within the 2017\u20132020 target cohort');
+  if(vm&&vm.curr_odo&&vm.curr_odo>=70000&&vm.curr_odo<=100000)r.push('mileage inside the Golden Intersection band');
+  if(vm&&vm.total_owners===1)r.push('single-owner history');
+  if(!lh)h.push('not currently listed \u2014 watching for reentry');
+  else if(lh.price&&lh.price>40000)h.push('ask $'+Number(lh.price-40000).toLocaleString()+' above your ceiling');
+  return (r.length?'<strong>In range</strong> because it '+r.join(', ')+'.':'Within your target cohort.')+(h.length?' <strong>Held back</strong> by: '+h.join(' and ')+'.':'');
+}
+
+function renderTarget(v,vm,lh){
+  var price=lh?fP(lh.price):'Not listed';
+  var miles=vm&&vm.curr_odo?fM(vm.curr_odo):(lh&&lh.miles?fM(lh.miles):'--');
+  var owners=vm?fN(vm.total_owners):'--';
+  var loc=v.last_title_state||(lh&&lh.state)||'--';
+  var url=lh&&lh.vdp_url?lh.vdp_url:'';
+  var active=v.listing_status==='active';
+  return '<div class="tc">'+
+    '<div class="tc-img">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
+      '<div class="tc-img-ov"></div>'+
+      '<div class="tc-top"><span class="tag tb">Target</span>'+(v.is_final_edition?'<span class="tag tg">Final Edition</span>':'')+'</div>'+
+      (active?'<div class="tc-active"><span class="live-dot"></span>Active Listing</div>':'')+
+    '</div>'+
+    '<div class="tc-body">'+
+      '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+'</div>'+
+      '<div class="tc-sub">'+v.vin+(v.exterior?' &middot; '+v.exterior:'')+' &middot; '+loc+'</div>'+
+      '<div class="tc-stats">'+
+        '<div class="tc-stat"><span class="tc-sv" style="color:'+(lh&&lh.price&&lh.price<=40000?'var(--green)':'var(--gold2)')+';">'+price+'</span><span class="tc-sl">Ask</span></div>'+
+        '<div class="tc-stat"><span class="tc-sv">'+miles+'</span><span class="tc-sl">Miles</span></div>'+
+        '<div class="tc-stat"><span class="tc-sv">'+owners+'</span><span class="tc-sl">Owners</span></div>'+
+      '</div>'+
+      '<div class="tc-flags">'+flags(v,vm)+'</div>'+
+      '<div class="tc-read"><div class="tc-read-lbl">Strategic Read</div><div class="tc-read-txt">'+targetRead(v,vm,lh)+'</div></div>'+
+      (url?'<a class="tc-btn" href="'+url+'" target="_blank" rel="noopener">View Listing &#8599;</a>':'<div class="tc-btn" style="opacity:.35;cursor:default;">Not Currently Listed</div>')+
+    '</div>'+
+  '</div>';
+}
+
+// ── MARKET FILTER/SORT ────────────────────────────────────
+function fMkt(f,btn){
+  mktFilter=f;
+  document.querySelectorAll('.mkt-controls .fbtn').forEach(function(b){if(b.onclick&&String(b.onclick).indexOf('fMkt')>-1)b.classList.remove('active');});
+  if(btn)btn.classList.add('active');
+  renderMkt();
+}
+function sMkt(s,btn){
+  mktSort=s;
+  document.querySelectorAll('.mkt-controls .fbtn').forEach(function(b){if(b.onclick&&String(b.onclick).indexOf('sMkt')>-1)b.classList.remove('active');});
+  if(btn)btn.classList.add('active');
+  renderMkt();
+}
+function renderMkt(){
+  var active=G.v.filter(function(v){return G.l[v.vin];});
+  var filtered=active.filter(function(v){
+    if(mktFilter==='target')return v.car_status==='target';
+    if(mktFilter==='reference')return v.car_status==='reference';
+    return true;
+  });
+  filtered.sort(function(a,b){
+    if(mktSort==='miles'){var oa=(G.m[a.vin]&&G.m[a.vin].curr_odo)||999999;var ob=(G.m[b.vin]&&G.m[b.vin].curr_odo)||999999;return oa-ob;}
+    if(mktSort==='year')return (b.year||0)-(a.year||0);
+    return ((G.l[a.vin]&&G.l[a.vin].price)||999999)-((G.l[b.vin]&&G.l[b.vin].price)||999999);
+  });
+  var mg=document.getElementById('market-grid');
+  if(mg)mg.innerHTML=filtered.length?filtered.map(function(v){return renderCompact(v,G.m[v.vin],G.l[v.vin]);}).join(''):'<div class="loading">No listings match filter.</div>';
+}
+
+// ── SCATTER CHART ─────────────────────────────────────────
+function renderScatter(vehicles,market,listings){
+  var W=640,H=200,PL=44,PR=18,PT=14,PB=32;
+  function toX(mi){return PL+(mi/150000)*(W-PL-PR);}
+  function toY(px){return H-PB-((Math.min(px,130000)/130000))*(H-PT-PB);}
+  var gX1=toX(70000),gX2=toX(100000),gY1=toY(50000),gY2=toY(25000),cY=toY(40000);
+  var dots='';
+  vehicles.forEach(function(v){
+    var m=market[v.vin],lh=listings[v.vin];
+    if(!lh||!lh.price)return;
+    var mi=(m&&m.curr_odo)?m.curr_odo:(lh.miles||null);
+    if(!mi)return;
+    var cx=toX(mi),cy=toY(lh.price);
+    var inZone=(mi>=70000&&mi<=100000&&lh.price<=40000);
+    var col=inZone?'var(--gold2)':v.car_status==='target'?'var(--blue2)':'rgba(158,171,190,.45)';
+    dots+='<circle cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="5" fill="'+col+'" opacity=".88"><title>'+(v.year||'')+' '+(v.trim||'')+' | '+fP(lh.price)+' | '+fM(mi)+'</title></circle>';
+  });
+  var xL='',yL='';
+  [0,50000,100000,150000].forEach(function(m){xL+='<text x="'+toX(m).toFixed(0)+'" y="'+(H-PB+13)+'" text-anchor="middle" fill="rgba(200,210,230,.45)" font-size="9" font-family="IBM Plex Mono">'+(m/1000)+'k</text>';});
+  [0,40000,80000,120000].forEach(function(p){yL+='<text x="'+(PL-4)+'" y="'+(toY(p)+3).toFixed(0)+'" text-anchor="end" fill="rgba(200,210,230,.45)" font-size="9" font-family="IBM Plex Mono">$'+(p/1000)+'k</text>';});
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;display:block;">'+
+    '<g stroke="rgba(255,255,255,.06)" stroke-width="1"><line x1="'+PL+'" y1="'+PT+'" x2="'+PL+'" y2="'+(H-PB)+'"/><line x1="'+PL+'" y1="'+(H-PB)+'" x2="'+(W-PR)+'" y2="'+(H-PB)+'"/></g>'+
+    '<rect x="'+gX1.toFixed(0)+'" y="'+gY1.toFixed(0)+'" width="'+(gX2-gX1).toFixed(0)+'" height="'+(gY2-gY1).toFixed(0)+'" fill="rgba(200,169,106,.1)" rx="3"/>'+
+    '<rect x="'+gX1.toFixed(0)+'" y="'+gY1.toFixed(0)+'" width="'+(gX2-gX1).toFixed(0)+'" height="'+(gY2-gY1).toFixed(0)+'" fill="none" stroke="var(--gold)" stroke-width="1" stroke-dasharray="4,3" rx="3" opacity=".45"/>'+
+    '<text x="'+(gX1+4).toFixed(0)+'" y="'+(gY1-4).toFixed(0)+'" fill="var(--gold)" font-size="8" font-family="IBM Plex Mono" opacity=".7">STRIKE ZONE</text>'+
+    '<line x1="'+PL+'" y1="'+cY.toFixed(0)+'" x2="'+(W-PR)+'" y2="'+cY.toFixed(0)+'" stroke="var(--gold)" stroke-width="1" stroke-dasharray="4,3" opacity=".4"/>'+
+    '<text x="'+(PL+4)+'" y="'+(cY-3).toFixed(0)+'" fill="var(--gold)" font-size="8" font-family="IBM Plex Mono" opacity=".65">$40k ceiling</text>'+
+    '<line x1="'+gX1.toFixed(0)+'" y1="'+PT+'" x2="'+gX1.toFixed(0)+'" y2="'+(H-PB)+'" stroke="rgba(200,169,106,.14)" stroke-width="1"/>'+
+    '<line x1="'+gX2.toFixed(0)+'" y1="'+PT+'" x2="'+gX2.toFixed(0)+'" y2="'+(H-PB)+'" stroke="rgba(200,169,106,.14)" stroke-width="1"/>'+
+    xL+yL+dots+
+    '<circle cx="'+(PL+8)+'" cy="'+(H-PB+22)+'" r="4" fill="var(--gold2)"/><text x="'+(PL+16)+'" y="'+(H-PB+26)+'" fill="rgba(200,210,230,.5)" font-size="8" font-family="IBM Plex Mono">In strike zone</text>'+
+    '<circle cx="'+(PL+110)+'" cy="'+(H-PB+22)+'" r="4" fill="var(--blue2)"/><text x="'+(PL+118)+'" y="'+(H-PB+26)+'" fill="rgba(200,210,230,.5)" font-size="8" font-family="IBM Plex Mono">Target cohort</text>'+
+    '<circle cx="'+(PL+210)+'" cy="'+(H-PB+22)+'" r="4" fill="rgba(158,171,190,.45)"/><text x="'+(PL+218)+'" y="'+(H-PB+26)+'" fill="rgba(200,210,230,.5)" font-size="8" font-family="IBM Plex Mono">Reference</text>'+
+  '</svg>';
+  var sw=document.getElementById('scatter-wrap');if(sw)sw.innerHTML=svg;
+}
+
+// ── MILEAGE BANDS ─────────────────────────────────────────
+function renderMiBands(vehicles,market,listings){
+  var bands=[{l:'<50K mi',min:0,max:50000,p:[]},{l:'50K\u201370K',min:50000,max:70000,p:[]},{l:'70K\u2013100K',min:70000,max:100000,p:[]},{l:'100K+',min:100000,max:1e9,p:[]}];
+  vehicles.forEach(function(v){
+    var lh=listings[v.vin],m=market[v.vin];
+    if(!lh||!lh.price)return;
+    var mi=(m&&m.curr_odo)?m.curr_odo:(lh.miles||null);
+    if(!mi)return;
+    bands.forEach(function(b){if(mi>=b.min&&mi<b.max)b.p.push(lh.price);});
+  });
+  var maxA=0;
+  bands.forEach(function(b){b.avg=b.p.length?Math.round(b.p.reduce(function(a,c){return a+c;},0)/b.p.length):0;if(b.avg>maxA)maxA=b.avg;});
+  var el=document.getElementById('mi-bands');
+  if(!el)return;
+  if(!maxA){el.innerHTML='<div class="loading">Not enough data.</div>';return;}
+  el.innerHTML=bands.map(function(b){
+    var pct=Math.round(b.avg/maxA*100);
+    var isGI=b.min===70000;
+    return '<div class="bc-row"><span class="bc-lbl">'+b.l+'</span><div class="bc-track"><div class="bc-fill" style="width:'+Math.max(pct,4)+'%;background:'+(isGI?'var(--gold)':'rgba(122,167,220,.5)');+';"><span class="bc-val" style="color:'+(isGI?'var(--bg)':'var(--ink2)')+';">'+(b.avg?fP(b.avg):'--')+'</span></div></div></div>';
+  }).join('');
+  // Fix the string concat bug
+  el.innerHTML=bands.map(function(b){
+    var pct=Math.max(Math.round(b.avg/maxA*100),4);
+    var isGI=b.min===70000;
+    var bg=isGI?'var(--gold)':'rgba(122,167,220,.5)';
+    var vc=isGI?'var(--bg)':'var(--ink2)';
+    return '<div class="bc-row"><span class="bc-lbl">'+b.l+'</span><div class="bc-track"><div class="bc-fill" style="width:'+pct+'%;background:'+bg+';"><span class="bc-val" style="color:'+vc+';">'+(b.avg?fP(b.avg):'--')+'</span></div></div></div>';
+  }).join('');
+}
+
+// ── RSS NEWS ─────────────────────────────────────────────
+var RSS_PROXY='https://corsproxy.io/?';
+var RSS_QUERIES=['mercedes+s65+amg','mercedes+amg+v12+collectible'];
+var newsLoaded=false;
+
+function nCard(a,fromArchive){
+  var d=a.pubDate?new Date(a.pubDate):null;
+  var ago=d?Math.round((new Date()-d)/86400000):null;
+  var dateStr=ago!==null?(ago===0?'Today':(ago===1?'Yesterday':ago+' days ago')):'';
+  return '<a class="ncard" href="'+a.link+'" target="_blank" rel="noopener">'+'<div class="nthumb">&#128240;</div>'+
+    '<div><div class="nsrc">'+a.source+(fromArchive?' &middot; archive':'')+'</div><div class="ntitle">'+a.title+'</div><div class="ndesc">'+a.description.slice(0,100)+'&hellip;</div>'+(dateStr?'<div class="ndate">'+dateStr+'</div>':'')+'</div></a>';
+}
+
+function loadNews(){
+  if(newsLoaded)return;
+  newsLoaded=true;
+  var CACHE_KEY='s65_news_cache',TIME_KEY='s65_news_time',ARCH_KEY='s65_news_archive';
+  var SIX_H=6*60*60*1000;
+  var cached=null,cacheTime=null;
+  try{cached=localStorage.getItem(CACHE_KEY);cacheTime=parseInt(localStorage.getItem(TIME_KEY)||'0');}catch(e){}
+
+  function showArticles(articles,fromFresh){
+    var liveEl=document.getElementById('rss-live');
+    var statusEl=document.getElementById('rss-status');
+    var archBtn=document.getElementById('archive-btn');
+    if(!liveEl)return;
+    if(articles.length){
+      liveEl.innerHTML=articles.slice(0,8).map(function(a){return nCard(a,false);}).join('');
+      if(statusEl)statusEl.textContent=fromFresh?'Updated just now':'Showing cached results';
+    } else {
+      liveEl.innerHTML='<div class="loading">No results found.</div>';
+    }
+    // Archive
+    try{
+      var arch=JSON.parse(localStorage.getItem(ARCH_KEY)||'[]');
+      var live=new Set(articles.map(function(a){return a.link;}));
+      var archOnly=arch.filter(function(a){return !live.has(a.link);});
+      if(archOnly.length){
+        if(archBtn)archBtn.style.display='inline-block';
+        var archEl=document.getElementById('rss-archive');
+        if(archEl)archEl.innerHTML=archOnly.slice(0,20).map(function(a){return nCard(a,true);}).join('');
+      }
+    }catch(e){}
+  }
+
+  // Use cache if fresh
+  if(cached&&cacheTime&&(Date.now()-cacheTime)<SIX_H){
+    try{showArticles(JSON.parse(cached),false);}catch(e){}
+    return;
+  }
+
+  // Fetch from RSS
+  var url=RSS_PROXY+encodeURIComponent('https://news.google.com/rss/search?q='+RSS_QUERIES[0]+'&hl=en-US&gl=US&ceid=US:en');
+  var statusEl=document.getElementById('rss-status');
+  if(statusEl)statusEl.textContent='Fetching latest news\u2026';
+
+  fetch(url).then(function(r){return r.text();}).then(function(xml){
+    var parser=new DOMParser();
+    var doc=parser.parseFromString(xml,'text/xml');
+    var items=doc.querySelectorAll('item');
+    var articles=[];
+    items.forEach(function(item){
+      var t=(item.querySelector('title')||{}).textContent||'';
+      var l=(item.querySelector('link')||{}).textContent||'';
+      var d=(item.querySelector('pubDate')||{}).textContent||'';
+      var desc=(item.querySelector('description')||{}).textContent||'';
+      var src=(item.querySelector('source')||{}).textContent||'Google News';
+      // Strip HTML from description
+      desc=desc.replace(/<[^>]+>/g,'').trim();
+      if(t&&l)articles.push({title:t,link:l,pubDate:d,description:desc,source:src});
+    });
+    // Save to cache and archive
+    try{
+      var arch=JSON.parse(localStorage.getItem(ARCH_KEY)||'[]');
+      var newLinks=new Set(articles.map(function(a){return a.link;}));
+      var merged=articles.slice();
+      arch.forEach(function(a){if(!newLinks.has(a.link))merged.push(a);});
+      localStorage.setItem(CACHE_KEY,JSON.stringify(articles));
+      localStorage.setItem(TIME_KEY,Date.now().toString());
+      localStorage.setItem(ARCH_KEY,JSON.stringify(merged.slice(0,100)));
+    }catch(e){}
+    showArticles(articles,true);
+  }).catch(function(e){
+    console.error('RSS error:',e);
+    if(cached){try{showArticles(JSON.parse(cached),false);}catch(ex){}}
+    else{var s=document.getElementById('rss-status');if(s)s.textContent='Could not load feed. Showing curated sources.';}
+  });
+}
+
+function toggleArchive(){
+  var el=document.getElementById('rss-archive');
+  var btn=document.getElementById('archive-btn');
+  if(!el||!btn)return;
+  var open=el.classList.toggle('open');
+  btn.textContent=open?'Hide Archive':'Show Archive';
+}
+
+// ── LOAD ALL DATA ─────────────────────────────────────────
 function loadAll(){
+  var strip=document.getElementById('changed-strip');
+  if(strip)strip.innerHTML='<span class="ch-item" style="color:var(--dim);">&#9679; Syncing&hellip;</span>';
+
   Promise.all([
     q('vehicles?select=*&order=year.desc'),
     q('vehicle_market?select=*'),
     q('listing_history?select=*&link_status=eq.active&order=price.desc'),
+    q('listing_history?select=vin,price,miles,first_seen,last_seen,link_status&order=first_seen.desc&limit=500'),
     q('vehicle_service?select=vin,major_service_status')
   ]).then(function(res){
-    var vehicles=res[0]||[];
-    var mktRows=res[1]||[];
-    var lhRows=res[2]||[];
-    var svcRows=res[3]||[];
+    var vehicles=res[0]||[],mktRows=res[1]||[],activeLH=res[2]||[],recentLH=res[3]||[],svcRows=res[4]||[];
+    if(!Array.isArray(vehicles))return;
 
-    if(!Array.isArray(vehicles)){console.error('vehicles',vehicles);return;}
+    // Build indexes
+    var mkt={};mktRows.forEach(function(m){mkt[m.vin]=m;});
+    var lhMap={};activeLH.forEach(function(l){if(!lhMap[l.vin]||(l.price&&!lhMap[l.vin].price))lhMap[l.vin]=l;});
 
-    // Index
-    var mkt={};
-    mktRows.forEach(function(m){mkt[m.vin]=m;});
+    G.v=vehicles;G.m=mkt;G.l=lhMap;G.lhAll=recentLH;G.svc=svcRows;
 
-    // Dedup listings by VIN - prefer rows with price
-    var lhMap={};
-    lhRows.forEach(function(l){
-      var v=l.vin;
-      if(!lhMap[v]||(l.price&&!lhMap[v].price))lhMap[v]=l;
-    });
-
-    // Active vehicles (have active listing)
     var activeV=vehicles.filter(function(v){return lhMap[v.vin];});
     var targetV=vehicles.filter(function(v){return v.car_status==='target';});
-
-    // Counts
-    var total=vehicles.length;
     var s65n=vehicles.filter(function(v){return v.trim&&v.trim.indexOf('S65')>=0;}).length;
     var s600n=vehicles.filter(function(v){return v.trim&&v.trim.indexOf('S600')>=0;}).length;
-    var activeN=Object.keys(lhMap).length;
-    var targetN=targetV.length;
     var giN=vehicles.filter(function(v){var m=mkt[v.vin];return m&&m.curr_odo&&m.curr_odo>=70000&&m.curr_odo<=100000;}).length;
-
-    // Avg price
-    var prices=lhRows.filter(function(l){return l.price;}).map(function(l){return l.price;});
+    var prices=activeLH.filter(function(l){return l.price;}).map(function(l){return l.price;});
     var avg=prices.length?Math.round(prices.reduce(function(a,b){return a+b;},0)/prices.length):null;
 
-    // Set UI
-    set('mast-count',fN(total));
-    set('kpi-active',fN(activeN));
-    set('kpi-targets',fN(targetN));
-    set('kpi-total',fN(total));
-    set('dash-gi',fN(giN));
-    set('dash-avg-price',avg?fP(avg):'--');
-    set('dash-summary',activeN+' active listings \u00b7 market trending down');
-    set('market-pip',activeN);
-    set('market-label',activeN+' live \u00b7 updated today');
-    set('targets-label',fN(targetN)+' tracked \u00b7 '+activeV.filter(function(v){return v.car_status==='target';}).length+' currently active');
-    set('ak-total',fN(total));
-    set('ak-active',fN(activeN));
-    set('ak-targets',fN(targetN));
-    set('ak-gi',fN(giN));
-    set('ak-split',fN(s65n)+' S65 \u00b7 '+fN(s600n)+' S600');
+    // KPIs
+    set('mast-count',Number(vehicles.length).toLocaleString());
+    set('kpi-active',Object.keys(lhMap).length);
+    set('kpi-targets',targetV.length);
+    set('kpi-total',Number(vehicles.length).toLocaleString());
+    set('dash-gi',giN);
+    set('dash-avg',avg?fP(avg):'--');
+    set('dash-sum',Object.keys(lhMap).length+' active listings \u00b7 market trending down');
+    set('market-pip',Object.keys(lhMap).length);
+    set('market-label',Object.keys(lhMap).length+' live \u00b7 updated today');
+    set('targets-label',targetV.length+' tracked \u00b7 '+activeV.filter(function(v){return v.car_status==='target';}).length+' active');
+    set('ak-total',Number(vehicles.length).toLocaleString());
+    set('ak-active',Object.keys(lhMap).length);
+    set('ak-targets',targetV.length);
+    set('ak-gi',giN);
+    set('ak-split',s65n+' S65 \u00b7 '+s600n+' S600');
+
+    buildChanged(recentLH);
 
     // Hero
     var hero=activeV.find(function(v){return v.car_status==='target';})||activeV[0];
     renderHero(hero,hero?mkt[hero.vin]:null,hero?lhMap[hero.vin]:null);
 
-    // Market grid - all active sorted price asc
-    var sortedA=activeV.slice().sort(function(a,b){
-      var pa=lhMap[a.vin]?(lhMap[a.vin].price||999999):999999;
-      var pb=lhMap[b.vin]?(lhMap[b.vin].price||999999):999999;
-      return pa-pb;
-    });
-    var mg=document.getElementById('market-grid');
-    if(mg)mg.innerHTML=sortedA.length?sortedA.map(function(v){return renderCard(v,mkt[v.vin],lhMap[v.vin]);}).join(''):'<div class="loading">No active listings found.</div>';
+    // Market
+    renderMkt();
 
-    // Targets grid - active first then by year desc
+    // Targets
     var sortedT=targetV.slice().sort(function(a,b){
-      var aA=lhMap[a.vin]?0:1;
-      var bA=lhMap[b.vin]?0:1;
-      if(aA!==bA)return aA-bA;
-      return (b.year||0)-(a.year||0);
+      var aA=lhMap[a.vin]?0:1,bA=lhMap[b.vin]?0:1;
+      return aA!==bA?aA-bA:(b.year||0)-(a.year||0);
     });
     var tg=document.getElementById('targets-grid');
-    if(tg)tg.innerHTML=sortedT.length?sortedT.slice(0,30).map(function(v){return renderCard(v,mkt[v.vin],lhMap[v.vin]);}).join(''):'<div class="loading">No targets found.</div>';
+    if(tg)tg.innerHTML=sortedT.length?sortedT.slice(0,24).map(function(v){return renderTarget(v,mkt[v.vin],lhMap[v.vin]);}).join(''):'<div class="loading">No targets found.</div>';
 
     // Cohort bars
     var years=[2015,2016,2017,2018,2019,2020];
-    var ycounts=years.map(function(y){
-      var s65=vehicles.filter(function(v){return v.year===y&&v.trim&&v.trim.indexOf('S65')>=0;}).length;
-      var s600=vehicles.filter(function(v){return v.year===y&&v.trim&&v.trim.indexOf('S600')>=0;}).length;
-      return{y:y,total:s65+s600};
-    });
+    var ycounts=years.map(function(y){return{y:y,total:vehicles.filter(function(v){return v.year===y&&v.trim&&v.trim.indexOf('S65')>=0;}).length};});
     var maxY=Math.max.apply(null,ycounts.map(function(c){return c.total;}))||1;
     var cbEl=document.getElementById('cohort-bars');
     if(cbEl)cbEl.innerHTML=ycounts.map(function(c){
       var pct=Math.round(c.total/maxY*100);
-      var color=c.y===2020?'var(--gold)':(c.y>=2017?'var(--teal)':'var(--blue)');
-      return '<div class="cb-col"><div style="flex:1;display:flex;align-items:flex-end;width:100%;"><div class="cb-bar" style="width:100%;height:'+pct+'%;background:'+color+';"></div></div><div class="cb-year">'+c.y+'</div><div class="cb-ct">'+(c.total||'--')+'</div></div>';
+      var col=c.y===2020?'var(--gold)':c.y>=2017?'var(--teal)':'var(--blue)';
+      return '<div class="cb-col"><div style="flex:1;display:flex;align-items:flex-end;width:100%;"><div class="cb-bar" style="width:100%;height:'+pct+'%;background:'+col+';"></div></div><div class="cb-year">'+c.y+'</div><div class="cb-ct">'+(c.total||'--')+'</div></div>';
     }).join('');
 
-    // VMI bars
-    var targetVINs={};
-    targetV.forEach(function(v){targetVINs[v.vin]=true;});
-    var tTotal=targetV.length||1;
-    var confirmed=0,partial=0;
-    svcRows.forEach(function(s){
-      if(!targetVINs[s.vin])return;
-      if(s.major_service_status==='confirmed')confirmed++;
-      else if(s.major_service_status==='partial')partial++;
-    });
-    var cp=Math.round(confirmed/tTotal*100);
-    var pp=Math.round(partial/tTotal*100);
-    var up=100-cp-pp;
+    // VMI
+    var tvins={};targetV.forEach(function(v){tvins[v.vin]=true;});
+    var tTotal=targetV.length||1,conf=0,part=0;
+    svcRows.forEach(function(s){if(!tvins[s.vin])return;if(s.major_service_status==='confirmed')conf++;else if(s.major_service_status==='partial')part++;});
+    var cp=Math.round(conf/tTotal*100),pp=Math.round(part/tTotal*100),up=Math.max(0,100-cp-pp);
     var vmiEl=document.getElementById('vmi-bars');
     if(vmiEl)vmiEl.innerHTML=
-      '<div class="bc-row"><span class="bc-label">Confirmed</span><div class="bc-track"><div class="bc-fill" style="width:'+cp+'%;background:var(--green);"><span class="bc-val" style="color:var(--bg);">'+cp+'%</span></div></div></div>'+
-      '<div class="bc-row"><span class="bc-label">Partial</span><div class="bc-track"><div class="bc-fill" style="width:'+pp+'%;background:var(--teal);"><span class="bc-val" style="color:var(--bg);">'+pp+'%</span></div></div></div>'+
-      '<div class="bc-row"><span class="bc-label">Unknown/None</span><div class="bc-track"><div class="bc-fill" style="width:'+up+'%;background:var(--red);"><span class="bc-val" style="color:#fff;">'+up+'%</span></div></div></div>';
+      '<div class="bc-row"><span class="bc-lbl">Confirmed</span><div class="bc-track"><div class="bc-fill" style="width:'+Math.max(cp,3)+'%;background:var(--green);"><span class="bc-val" style="color:var(--bg);">'+cp+'%</span></div></div></div>'+
+      '<div class="bc-row"><span class="bc-lbl">Partial</span><div class="bc-track"><div class="bc-fill" style="width:'+Math.max(pp,3)+'%;background:var(--teal);"><span class="bc-val" style="color:var(--bg);">'+pp+'%</span></div></div></div>'+
+      '<div class="bc-row"><span class="bc-lbl">Unknown / None</span><div class="bc-track"><div class="bc-fill" style="width:'+Math.max(up,3)+'%;background:var(--red);"><span class="bc-val" style="color:#fff;">'+up+'%</span></div></div></div>';
 
+    renderScatter(vehicles,mkt,lhMap);
+    renderMiBands(vehicles,mkt,lhMap);
   }).catch(function(e){console.error('Load error:',e);});
 }
 
