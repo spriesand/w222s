@@ -1939,7 +1939,7 @@ function renderDashboard(){
 
   // Cohort strip counts — 2018-2020 S65
   [2018,2019,2020].forEach(function(yr){
-    var ct=allVehicles.filter(function(v){return v.year===yr&&['S65 AMG','S65','S65 AMG Final Edition'].includes(v.trim||'');}).length;
+    var ct=allVehicles.filter(function(v){return Number(v.year)===yr&&['S65 AMG','S65','S65 AMG Final Edition'].includes(v.trim||'');}).length;
     var el=document.getElementById('dcs-ct-'+yr);
     if(el)el.textContent=ct+' S65';
   });
@@ -3336,7 +3336,7 @@ else if(avStage===2){avCollectStage2();if(!avValidate2())return;avStage=3;}
 else if(avStage===3){avSaveVehicle();return;}
 renderAVStage();
 }
-function avBack(){if(avStage>1){avStage–;renderAVStage();}}
+function avBack(){if(avStage>1){avStage--;renderAVStage();}}
 
 async function avSaveVehicle(){
 var saveBtn=document.getElementById(‘av-btn-next’);
@@ -3385,8 +3385,7 @@ if(avData.curr_odo){
     record_date:new Date().toISOString().split('T')[0],
     odometer:avData.curr_odo?parseInt(avData.curr_odo):null,
     source:'App - Sighting',
-    details:'Added via Add Vehicle'+(avData.total_owners?' | Owners: '+avData.total_owners:''),
-    details: null
+    details:'Added via Add Vehicle'+(avData.total_owners?' | Owners: '+avData.total_owners:'')
   };
   var sR=await db.from('vehicle_service').insert(svcRow);
   if(sR.error)console.warn('vehicle_service insert (non-fatal):',sR.error.message);
@@ -3667,7 +3666,7 @@ function autoLink(s){return s.replace(/(https?://[^\s<>”]+)/g,’<a href="$1" 
 function dataURLtoBlob(dataUrl){
 const arr=dataUrl.split(’,’),mime=arr[0].match(/:(.*?);/)[1];
 const bstr=atob(arr[1]);let n=bstr.length;const u8=new Uint8Array(n);
-while(n–)u8[n]=bstr.charCodeAt(n);
+while(n--)u8[n]=bstr.charCodeAt(n);
 return new Blob([u8],{type:mime});
 }
 function openLightbox(src){
@@ -3769,7 +3768,7 @@ const note={body,tag:tag||null,image_url,created_at:new Date().toISOString()};
 try{
 throw new Error(‘Notes feature temporarily unavailable’);
 }catch(e){
-note.*lid=’loc*’+Date.now();
+note._lid='loc_'+Date.now();
 allGNotes.unshift(note);
 try{localStorage.setItem(‘v12_gnotes’,JSON.stringify(allGNotes.slice(0,300)));}catch{}
 }
@@ -3831,7 +3830,7 @@ function renderBookmarks(){
 const wrap=document.getElementById(‘bm-grid-wrap’);
 if(!wrap)return;
 const bms=bmActiveFilter===‘all’?allBookmarks:allBookmarks.filter(b=>b.category===bmActiveFilter);
-const cats=[…new Set(bms.map(b=>b.category||‘Other’))];
+const cats=[...new Set(bms.map(b=>b.category||‘Other’))];
 wrap.innerHTML=cats.map(cat=>{
 const items=bms.filter(b=>(b.category||‘Other’)===cat);
 return`<div style="margin-bottom:20px"> <div class="bm-cat-head">${cat}</div> <div class="bm-grid">${items.map(b=>{ const bid=b.id||b._lid; return`<div style="display:flex;align-items:stretch;gap:0;border:1px solid var(--rule);border-radius:6px;overflow:hidden;background:#fff;transition:box-shadow .15s" onmouseover="this.style.boxShadow='0 3px 12px rgba(0,0,0,.09)'" onmouseout="this.style.boxShadow=''">
@@ -3853,7 +3852,7 @@ const bm={label,url,category:cat,created_at:new Date().toISOString()};
 try{
 throw new Error(‘Bookmarks feature temporarily unavailable’);
 }catch(e){
-bm.*lid=’loc*’+Date.now();
+bm._lid='loc_'+Date.now();
 allBookmarks.push(bm);
 try{localStorage.setItem(‘v12_bookmarks’,JSON.stringify(allBookmarks));}catch{}
 }
@@ -3939,7 +3938,7 @@ var banner=document.getElementById(‘share-detection-banner’);
 if(!banner){
 banner=document.createElement(‘div’);
 banner.id=‘share-detection-banner’;
-banner.style.cssText=‘position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;background:var(–ink);color:#fff;padding:14px 20px;border-radius:8px;font-family:var(–mono);font-size:12px;box-shadow:0 4px 20px rgba(0,0,0,.3);max-width:360px;text-align:center;line-height:1.5;’;
+banner.style.cssText=‘position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:9999;background:var(--ink);color:#fff;padding:14px 20px;border-radius:8px;font-family:var(--mono);font-size:12px;box-shadow:0 4px 20px rgba(0,0,0,.3);max-width:360px;text-align:center;line-height:1.5;’;
 document.body.appendChild(banner);
 }
 banner.innerHTML=msg;
