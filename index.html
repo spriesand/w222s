@@ -725,9 +725,21 @@ function fM(n){return n?Number(n).toLocaleString()+' mi':'--';}
 function fN(n){return (n!==null&&n!==undefined)?Number(n).toLocaleString():'--';}
 function set(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
 
-// Image placeholder HTML
-function ph(year,trim){
-  return '<div class="car-placeholder"><div class="cp-year">'+(year||'--')+'</div><div class="cp-trim">'+(trim||'S65 AMG').replace(' AMG','')+'</div></div>';
+// Image placeholder HTML - rotates brand images from gallery, keyed by VIN for consistency
+var PLACEHOLDERS=[
+  'https://kevwkxuloxxrevodsukg.supabase.co/storage/v1/object/public/v12-apex-documents/gallery/17C142_072.jpg',
+  'https://kevwkxuloxxrevodsukg.supabase.co/storage/v1/object/public/v12-apex-documents/gallery/17C142_074.jpg',
+  'https://kevwkxuloxxrevodsukg.supabase.co/storage/v1/object/public/v12-apex-documents/gallery/17C142_081.jpg'
+];
+function ph(year,trim,vin){
+  var idx=0;
+  if(vin){
+    var h=0;for(var i=0;i<vin.length;i++)h=(h*31+vin.charCodeAt(i))|0;
+    idx=Math.abs(h)%PLACEHOLDERS.length;
+  }
+  var img=PLACEHOLDERS[idx];
+  var displayTrim=(trim||'S65 AMG').replace(' AMG','');
+  return '<img src="'+img+'" alt="'+(year||'')+' '+(trim||'')+'" style="width:100%;height:100%;object-fit:cover;opacity:.55;display:block;"><div class="car-placeholder" style="background:linear-gradient(to top,rgba(7,9,15,.75),rgba(7,9,15,.25) 50%,rgba(7,9,15,.55));"><div class="cp-year" style="color:rgba(255,255,255,.92);font-size:48px;text-shadow:0 2px 10px rgba(0,0,0,.8);">'+(year||'--')+'</div><div class="cp-trim" style="color:rgba(255,255,255,.75);text-shadow:0 1px 4px rgba(0,0,0,.9);">'+displayTrim+'</div></div>';
 }
 
 // Car flags
