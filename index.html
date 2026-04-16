@@ -3662,7 +3662,7 @@ else setView('focus');
 
 // ── Utility ──
 function escHtml(s){return(s||'').replace(/&/g,'&').replace(/</g,'<').replace(/>/g,'>').replace(/"/g,'"');}
-function autoLink(s){return s.replace(/(https?://[^\s<>"]+)/g,'<a href="$1" target="_blank" rel="noopener" style="color:var(--s65);text-decoration:underline">$1</a>');}
+function autoLink(s){return s.replace(/(https?:\/\/[^\s<>"]+)/g,'<a href="$1" target="_blank" rel="noopener" style="color:var(--s65);text-decoration:underline">$1</a>');}
 function dataURLtoBlob(dataUrl){
 const arr=dataUrl.split(','),mime=arr[0].match(/:(.*?);/)[1];
 const bstr=atob(arr[1]);let n=bstr.length;const u8=new Uint8Array(n);
