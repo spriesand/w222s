@@ -848,7 +848,7 @@ function renderCompact(v,vm,lh){
       '<div class="lc-row">'+
         '<span class="lc-price">'+price+'</span>'+
         '<span class="lc-mi">'+miles+'</span>'+
-        (url?'<a class="lc-btn" href="'+url+'" target="_blank" rel="noopener">View &#8599;</a>':'<span class="lc-btn" style="opacity:.35;">No URL</span>')+
+        (active&&url?'<a class="lc-btn" href="'+url+'" target="_blank" rel="noopener">View &#8599;</a>':'')+
       '</div>'+
     '</div>'+
   '</div>';
@@ -888,7 +888,7 @@ function renderTarget(v,vm,lh){
         '<div class="tc-stat"><span class="tc-sv">'+owners+'</span><span class="tc-sl">Owners</span></div>'+
       '</div>'+
       '<div class="tc-flags">'+flags(v,vm)+'</div>'+
-      (url?'<a class="tc-btn" href="'+url+'" target="_blank" rel="noopener">View Listing &#8599;</a>':'<div class="tc-btn" style="opacity:.35;cursor:default;">Not Currently Listed</div>')+
+      (active&&url?'<a class="tc-btn" href="'+url+'" target="_blank" rel="noopener">View Listing &#8599;</a>':'')+
     '</div>'+
   '</div>';
 }
