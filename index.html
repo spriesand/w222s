@@ -124,11 +124,6 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .hs-v{font-family:var(--mono);font-size:12px;font-weight:500;display:block}
 .hs-l{font-family:var(--mono);font-size:7px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:2px}
 .hero-flags{display:flex;flex-wrap:wrap;gap:4px}
-.hero-intel{background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:8px;padding:11px 13px;display:flex;flex-direction:column;gap:7px}
-.hi-row{display:flex;gap:8px}
-.hi-lbl{font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;flex-shrink:0;min-width:76px;padding-top:2px}
-.hi-txt{font-family:var(--sans);font-size:12px;line-height:1.55;color:var(--ink2)}
-.hi-txt strong{color:var(--ink);font-weight:600}
 .btn-g{padding:8px 13px;border:1px solid rgba(122,167,220,.28);color:var(--blue2);background:none;border-radius:7px;font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center}
 .btn-g:hover{border-color:var(--blue2);background:rgba(122,167,220,.08)}
 
@@ -341,6 +336,25 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .pb-tag{font-family:var(--mono);font-size:11px;color:var(--dim);background:rgba(255,255,255,.04);border:1px solid var(--line);padding:2px 7px;border-radius:3px}
 .pb-cta{font-family:var(--mono);font-size:12px;color:var(--gold2);text-align:right}
 
+
+/* ── CARD FLIP ── */
+.flip-wrap{perspective:1200px;width:100%}
+.flip-inner{position:relative;transition:transform .5s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
+.flip-inner.flipped{transform:rotateY(180deg)}
+.flip-front,.flip-back{-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.flip-inner{display:grid}
+.flip-front,.flip-back{grid-area:1/1}
+.flip-back{transform:rotateY(180deg);overflow-y:auto;background:linear-gradient(160deg,var(--panel2),var(--panel));border-radius:var(--r);min-height:320px}
+.flip-btn{font-family:var(--mono);font-size:11px;padding:4px 9px;border-radius:5px;background:rgba(255,255,255,.06);border:1px solid var(--line2);color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
+.flip-btn:hover{border-color:var(--blue);color:var(--blue2)}
+.lh-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px}
+.lh-table th{color:var(--dim);text-transform:uppercase;letter-spacing:.1em;padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;font-weight:400}
+.lh-table td{padding:5px 8px;border-bottom:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.lh-table tr:last-child td{border-bottom:none}
+.lh-active-row td{color:var(--green)}
+.lh-back-header{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line)}
+.lh-back-title{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
+.lh-empty{font-family:var(--mono);font-size:12px;color:var(--dim);padding:20px;text-align:center}
 </style>
 </head>
 <body>
@@ -771,24 +785,6 @@ function buildChanged(lhRows){
   }).join('');
 }
 
-// ── HERO INTEL ────────────────────────────────────────────
-function heroIntel(v,vm,lh){
-  var why=[],unres=[],up=[],down=[];
-  if(vm&&vm.curr_odo&&vm.curr_odo>=70000&&vm.curr_odo<=100000)why.push('sits in the Golden Intersection mileage band');
-  if(vm&&vm.total_owners===1)why.push('single-owner history');
-  if(v.car_status==='target')why.push('within your target cohort');
-  if(v.last_title_state==='TX')why.push('Texas-titled \u2014 geographically convenient');
-  if(!lh||!lh.price)unres.push('asking price not confirmed');
-  unres.push('VMI service status not documented');
-  if(lh&&lh.dom&&lh.dom>30)unres.push(lh.dom+' days on market \u2014 reason not known');
-  up.push('VMI service confirmed via dealer records');
-  if(!lh||!lh.price)up.push('ask confirmed below $40K');
-  down.push('<strong>accident or title issue</strong>');down.push('<strong>odometer irregularity</strong>');
-  return [
-    {l:'Why Primary',t:why.length?'Primary because it '+why.join(', ')+'.':'Highest-scoring active target.'},
-    {l:'Unresolved',t:unres.join(' &middot; ')+'.'},
-    {l:'Would Upgrade',t:up.join(' &middot; ')+'.'},
-    {l:'Hard Pass If',t:down.join(' or ')+'.',}
   ].map(function(b){return '<div class="hi-row"><span class="hi-lbl">'+b.l+'</span><span class="hi-txt">'+b.t+'</span></div>';}).join('');
 }
 
@@ -835,7 +831,8 @@ function renderCompact(v,vm,lh){
   var url=lh&&lh.vdp_url?lh.vdp_url:'';
   var active=v.listing_status==='active';
   var badge=v.car_status==='target'?'<span class="tbadge">Target</span>':'<span class="rbadge">Ref</span>';
-  return '<div class="lc">'+
+  var backHtml=lhBack(v.vin);
+  return '<div class="flip-wrap"><div class="flip-inner"><div class="flip-front"><div class="lc">'+
     '<div class="lc-img">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
       '<div class="lc-img-ov"></div>'+
       '<div class="lc-top">'+badge+'</div>'+
@@ -850,8 +847,12 @@ function renderCompact(v,vm,lh){
         '<span class="lc-mi">'+miles+'</span>'+
         (active&&url?'<a class="lc-btn" href="'+url+'" target="_blank" rel="noopener">View &#8599;</a>':'')+
       '</div>'+
-    '</div>'+
-  '</div>';
+    '<div style="padding:6px 11px 10px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;">'+
+    '<button class="flip-btn" onclick="flipCard(this)">&#128202; History</button>'+
+  '</div>'+
+  '</div></div>'+
+  '<div class="flip-back">'+backHtml+'</div>'+
+  '</div></div>';
 }
 
 // ── RENDER TARGET CARD ────────────────────────────────────
@@ -873,7 +874,8 @@ function renderTarget(v,vm,lh){
   var loc=v.last_title_state||(lh&&lh.state)||'--';
   var url=lh&&lh.vdp_url?lh.vdp_url:'';
   var active=v.listing_status==='active';
-  return '<div class="tc">'+
+  var backHtml=lhBack(v.vin);
+  return '<div class="flip-wrap"><div class="flip-inner"><div class="flip-front"><div class="tc">'+
     '<div class="tc-img">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
       '<div class="tc-img-ov"></div>'+
       '<div class="tc-top"><span class="tag tb">Target</span>'+(v.is_final_edition?'<span class="tag tg">Final Edition</span>':'')+'</div>'+
@@ -889,8 +891,12 @@ function renderTarget(v,vm,lh){
       '</div>'+
       '<div class="tc-flags">'+flags(v,vm)+'</div>'+ (function(){   var d=G.docs[v.vin]||{};   var cfUrl=d.carfax||'https://www.carfax.com/VehicleHistory/p/Report.cfx?vin='+v.vin;   var acUrl=d.autocheck||'https://www.autocheck.com/vehiclehistory/?vin='+v.vin;   var isUrl=d.iseecars||'https://www.iseecars.com/vin#vin='+v.vin;   var gcUrl=d.goodcar||'https://www.goodcar.com/us/vin-check/'+v.vin;   var prUrl=d.public_record||'https://www.publicrecords.us/vehicle/'+v.vin;   var wsUrl=d.window_sticker||'https://www.mbusa.com/content/dam/mb-nafta/us/owners/window-sticker/'+v.vin+'.pdf';   var hasSB=function(u){return u&&u.indexOf('supabase')>-1;};   return '<div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px;">'+     '<a href="'+cfUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.carfax)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.carfax)?'✓ ':'')+' CARFAX</a>'+     '<a href="'+acUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.autocheck)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.autocheck)?'✓ ':'')+' AutoCheck</a>'+     '<a href="'+isUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.iseecars)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.iseecars)?'✓ ':'')+' iSeeCars</a>'+     '<a href="'+gcUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.goodcar)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.goodcar)?'✓ ':'')+' GoodCar</a>'+     '<a href="'+prUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.public_record)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.public_record)?'✓ ':'')+' PubRec</a>'+     '<a href="'+wsUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.window_sticker)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.window_sticker)?'✓ ':'')+' Sticker</a>'+   '</div>'; })()+
       (active&&url?'<a class="tc-btn" href="'+url+'" target="_blank" rel="noopener">View Listing &#8599;</a>':'')+
-    '</div>'+
-  '</div>';
+    '<div style="padding:6px 15px 10px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;">'+
+    '<button class="flip-btn" onclick="flipCard(this)">&#128202; History</button>'+
+  '</div>'+
+  '</div></div>'+
+  '<div class="flip-back">'+backHtml+'</div>'+
+  '</div></div>';
 }
 
 // ── MARKET FILTER/SORT ────────────────────────────────────
@@ -974,12 +980,6 @@ function renderMiBands(vehicles,market,listings){
   var el=document.getElementById('mi-bands');
   if(!el)return;
   if(!maxA){el.innerHTML='<div class="loading">Not enough data.</div>';return;}
-  el.innerHTML=bands.map(function(b){
-    var pct=Math.round(b.avg/maxA*100);
-    var isGI=b.min===70000;
-    return '<div class="bc-row"><span class="bc-lbl">'+b.l+'</span><div class="bc-track"><div class="bc-fill" style="width:'+Math.max(pct,4)+'%;background:'+(isGI?'var(--gold)':'rgba(122,167,220,.5)');+';"><span class="bc-val" style="color:'+(isGI?'var(--bg)':'var(--ink2)')+';">'+(b.avg?fP(b.avg):'--')+'</span></div></div></div>';
-  }).join('');
-  // Fix the string concat bug
   el.innerHTML=bands.map(function(b){
     var pct=Math.max(Math.round(b.avg/maxA*100),4);
     var isGI=b.min===70000;
@@ -1086,16 +1086,57 @@ function toggleArchive(){
   btn.textContent=open?'Hide Archive':'Show Archive';
 }
 
+
+// ── CARD FLIP ─────────────────────────────────────────────
+function flipCard(btn){
+  var inner=btn.closest('.flip-wrap').querySelector('.flip-inner');
+  inner.classList.toggle('flipped');
+}
+
+function lhBack(vin){
+  var rows=(G.lhAll||[]).filter(function(l){return l.vin===vin;});
+  rows.sort(function(a,b){
+    if(a.link_status==='active'&&b.link_status!=='active')return -1;
+    if(b.link_status==='active'&&a.link_status!=='active')return 1;
+    var da=a.last_seen?new Date(a.last_seen):new Date(0);
+    var db=b.last_seen?new Date(b.last_seen):new Date(0);
+    return db-da;
+  });
+  var header='<div class="lh-back-header">'+
+    '<span class="lh-back-title">&#128202; Listing History &middot; '+vin.slice(-6)+'</span>'+
+    '<button class="flip-btn" onclick="flipCard(this)">&#8630; Back</button>'+
+  '</div>';
+  if(!rows.length)return header+'<div class="lh-empty">No listing history on file.</div>';
+  var tbl='<table class="lh-table"><thead><tr>'+
+    '<th>Platform</th><th>Price</th><th>Miles</th><th>First Seen</th><th>Last Seen</th><th>Status</th>'+
+  '</tr></thead><tbody>';
+  rows.forEach(function(l){
+    var isActive=l.link_status==='active';
+    var price=l.price?'$'+Number(l.price).toLocaleString():'--';
+    var miles=l.miles?Number(l.miles).toLocaleString()+' mi':'--';
+    var first=l.first_seen?l.first_seen.slice(0,10):'--';
+    var last=l.last_seen?l.last_seen.slice(0,10):'--';
+    var plat=l.platform||l.source||l.seller_name||'--';
+    var status=isActive?'<span style="color:var(--green);">&#9679; Active</span>':'<span style="color:var(--dim);">Inactive</span>';
+    tbl+='<tr'+(isActive?' class="lh-active-row"':'')+'>'+
+      '<td>'+plat+'</td><td>'+price+'</td><td>'+miles+'</td>'+
+      '<td>'+first+'</td><td>'+last+'</td><td>'+status+'</td>'+
+    '</tr>';
+  });
+  tbl+='</tbody></table>';
+  return header+tbl;
+}
+
 // ── LOAD ALL DATA ─────────────────────────────────────────
 function loadAll(){
   var strip=document.getElementById('changed-strip');
   if(strip)strip.innerHTML='<span class="ch-item" style="color:var(--dim);">&#9679; Syncing&hellip;</span>';
 
   Promise.all([
-    q('vehicles?select=*&order=year.desc'),
+    q('vehicles?select=*&order=year.desc&limit=2000'),
     q('vehicle_market?select=*'),
     q('listing_history?select=*&link_status=eq.active&order=price.desc'),
-    q('listing_history?select=vin,price,miles,vdp_url,seller_name,state,first_seen,last_seen,link_status&order=last_seen.desc&limit=800'),
+    q('listing_history?select=vin,price,miles,vdp_url,seller_name,state,source,platform,first_seen,last_seen,link_status&order=last_seen.desc&limit=3000'),
     q('vehicle_service?select=vin,major_service_status'),q('documents?select=vin,doc_type,storage_url')
   ]).then(function(res){
     var vehicles=res[0]||[],mktRows=res[1]||[],activeLH=res[2]||[],recentLH=res[3]||[],svcRows=res[4]||[],docRows=res[5]||[];
