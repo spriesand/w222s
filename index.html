@@ -546,16 +546,20 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <!-- Cohort -->
     <div class="card an-card">
       <div class="an-title">Cohort Distribution</div>
-      <div class="an-sub">S65 AMG by model year</div>
+      <div class="an-sub">S65 AMG vs S600 by model year</div>
       <div class="cohort-bars" id="cohort-bars"><div class="loading" style="width:100%;">Loading&hellip;</div></div>
-      <div style="margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--dim);"><span style="color:var(--teal);">&#9632;</span> Target &nbsp;<span style="color:var(--blue);">&#9632;</span> Reference &nbsp;<span style="color:var(--gold);">&#9632;</span> Final Ed.</div>
+      <div style="margin-top:8px;font-family:var(--mono);font-size:12px;color:var(--dim);">
+        <span style="color:var(--teal);">&#9632;</span> S65 Target &nbsp;
+        <span style="color:var(--blue);">&#9632;</span> S65 Ref &nbsp;
+        <span style="color:var(--gold);">&#9632;</span> S65 Final Ed. &nbsp;
+        <span style="color:rgba(179,136,255,.8);">&#9632;</span> S600
+      </div>
     </div>
-    <!-- VMI -->
+    <!-- Geographic -->
     <div class="card an-card">
-      <div class="an-title">VMI Completeness</div>
-      <div class="an-sub">Targeted fleet &middot; your negotiation lever</div>
-      <div class="bar-chart" style="margin-top:8px;" id="vmi-bars"><div class="loading">Loading&hellip;</div></div>
-      <div style="margin-top:9px;padding:8px;background:rgba(224,90,90,.08);border:1px solid rgba(224,90,90,.22);border-radius:7px;font-family:var(--mono);font-size:12px;color:var(--red);line-height:1.6;">Most of the targeted fleet has no documented VMI service. This is your leverage.</div>
+      <div class="an-title">Geographic Distribution</div>
+      <div class="an-sub">VINs by title state &middot; top 12 states</div>
+      <div class="bar-chart" style="margin-top:8px;" id="geo-bars"><div class="loading">Loading&hellip;</div></div>
     </div>
     <!-- Build rarity -->
     <div class="card an-card">
@@ -576,6 +580,28 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
       <div class="an-sub">Active listings &middot; GI band highlighted</div>
       <div class="bar-chart" style="margin-top:8px;" id="mi-bands"><div class="loading">Loading&hellip;</div></div>
     </div>
+
+    <!-- Color Distribution -->
+    <div class="card an-full an-card">
+      <div class="an-title">Exterior Color Distribution</div>
+      <div class="an-sub">S65 fleet &middot; normalized color data</div>
+      <div id="color-bars" style="margin-top:8px;display:flex;flex-direction:column;gap:7px;"><div class="loading">Loading&hellip;</div></div>
+    </div>
+
+    <!-- Days on Market -->
+    <div class="card an-card">
+      <div class="an-title">Days on Market</div>
+      <div class="an-sub">Active listings &middot; 30+ days = negotiation leverage</div>
+      <div id="dom-table" style="margin-top:8px;"><div class="loading">Loading&hellip;</div></div>
+    </div>
+
+    <!-- Price Drop Tracker -->
+    <div class="card an-card">
+      <div class="an-title">Price Drop Tracker</div>
+      <div class="an-sub">VINs with confirmed ask reductions in listing history</div>
+      <div id="price-drop-table" style="margin-top:8px;"><div class="loading">Loading&hellip;</div></div>
+    </div>
+
   </div>
 </div>
 </div>
@@ -1127,6 +1153,124 @@ function lhBack(vin){
   return tbl;
 }
 
+
+// ── COLOR DISTRIBUTION ────────────────────────────────────
+function renderColorBars(vehicles){
+  var COLOR_SWATCHES={
+    'Black':'#1a1a1a',
+    'Diamond White':'#f0ede8',
+    'Iridium Silver':'#9ba5ad',
+    'Alanite Grey Matte':'#6b6f72',
+    'Mocha Black':'#2e1f15',
+    'Lunar Blue':'#1e3a5f',
+    'Anthracite Blue':'#1c2b3a',
+    'Selenite Grey':'#7a8186',
+    'Cavansite Blue':'#1b3d6e'
+  };
+  var counts={};
+  vehicles.forEach(function(v){
+    if(v.exterior&&v.exterior.length>1)counts[v.exterior]=(counts[v.exterior]||0)+1;
+  });
+  var arr=Object.keys(counts).map(function(c){return{c:c,n:counts[c]};});
+  arr.sort(function(a,b){return b.n-a.n;});
+  var maxC=arr.length?arr[0].n:1;
+  var el=document.getElementById('color-bars');
+  if(!el)return;
+  el.innerHTML=arr.map(function(d){
+    var pct=Math.round(d.n/maxC*100);
+    var sw=COLOR_SWATCHES[d.c]||'#555';
+    var isLight=d.c==='Diamond White';
+    return '<div class="bc-row">'+
+      '<div style="display:flex;align-items:center;gap:6px;min-width:160px;justify-content:flex-end;">'+
+        '<span style="font-family:var(--mono);font-size:12px;color:var(--muted);">'+d.c+'</span>'+
+        '<div style="width:13px;height:13px;border-radius:50%;background:'+sw+';border:1px solid rgba(255,255,255,.18);flex-shrink:0;"></div>'+
+      '</div>'+
+      '<div class="bc-track"><div class="bc-fill" style="width:'+Math.max(pct,3)+'%;background:'+sw+';border:1px solid rgba(255,255,255,.1);">'+
+        '<span class="bc-val" style="color:'+(isLight?'#333':'var(--ink2)')+';">'+d.n+'</span>'+
+      '</div></div>'+
+    '</div>';
+  }).join('');
+}
+
+// ── DAYS ON MARKET ────────────────────────────────────────
+function renderDOMTable(lhRows){
+  var el=document.getElementById('dom-table');
+  if(!el)return;
+  var actives=lhRows.filter(function(l){return l.link_status==='active'&&l.first_seen;});
+  if(!actives.length){el.innerHTML='<div class="lh-empty">No active listings with date data.</div>';return;}
+  var now=new Date();
+  var rows=actives.map(function(l){
+    var days=Math.round((now-new Date(l.first_seen))/86400000);
+    return {vin:l.vin,seller:l.seller_name||'--',price:l.price,days:days};
+  });
+  // Dedupe by VIN, keep longest DOM
+  var seen={};
+  rows=rows.filter(function(r){if(seen[r.vin]&&seen[r.vin]>=r.days)return false;seen[r.vin]=r.days;return true;});
+  rows.sort(function(a,b){return b.days-a.days;});
+  var tbl='<table class="lh-table"><thead><tr>'+
+    '<th>VIN</th><th>Seller</th><th>Ask</th><th>Days Listed</th><th>Signal</th>'+
+  '</tr></thead><tbody>';
+  rows.forEach(function(r){
+    var flag=r.days>=60?'<span style="color:var(--green);font-weight:500;">Strong lever</span>':
+             r.days>=30?'<span style="color:var(--amber);">Leverage</span>':
+             '<span style="color:var(--dim);">Watch</span>';
+    tbl+='<tr>'+
+      '<td style="font-family:var(--mono);font-size:10px;">'+r.vin.slice(-8)+'</td>'+
+      '<td>'+r.seller+'</td>'+
+      '<td>'+(r.price?'$'+Number(r.price).toLocaleString():'--')+'</td>'+
+      '<td style="color:'+(r.days>=30?'var(--gold2)':'var(--muted)')+';">'+r.days+' days</td>'+
+      '<td>'+flag+'</td>'+
+    '</tr>';
+  });
+  tbl+='</tbody></table>';
+  el.innerHTML=tbl;
+}
+
+// ── PRICE DROP TRACKER ────────────────────────────────────
+function renderPriceDrops(vehicles,lhRows){
+  var el=document.getElementById('price-drop-table');
+  if(!el)return;
+  // Group all rows by VIN, find VINs with multiple price points
+  var byVin={};
+  lhRows.forEach(function(l){
+    if(!l.price)return;
+    if(!byVin[l.vin])byVin[l.vin]=[];
+    byVin[l.vin].push({price:l.price,date:l.first_seen||l.last_seen});
+  });
+  var drops=[];
+  Object.keys(byVin).forEach(function(vin){
+    var entries=byVin[vin].filter(function(e){return e.date;});
+    entries.sort(function(a,b){return new Date(a.date)-new Date(b.date);});
+    if(entries.length<2)return;
+    var first=entries[0].price,last=entries[entries.length-1].price;
+    if(last<first){
+      var drop=first-last;
+      var pct=Math.round(drop/first*100);
+      var v=vehicles.find(function(x){return x.vin===vin;});
+      drops.push({vin:vin,year:v?v.year:'--',trim:v?v.trim:'--',first:first,last:last,drop:drop,pct:pct});
+    }
+  });
+  if(!drops.length){
+    el.innerHTML='<div class="lh-empty">No confirmed price reductions in listing history.</div>';
+    return;
+  }
+  drops.sort(function(a,b){return b.drop-a.drop;});
+  var tbl='<table class="lh-table"><thead><tr>'+
+    '<th>Year</th><th>VIN</th><th>Original Ask</th><th>Current Ask</th><th>Drop</th>'+
+  '</tr></thead><tbody>';
+  drops.forEach(function(d){
+    tbl+='<tr>'+
+      '<td>'+d.year+'</td>'+
+      '<td style="font-family:var(--mono);font-size:10px;">'+d.vin.slice(-8)+'</td>'+
+      '<td style="color:var(--muted);">$'+Number(d.first).toLocaleString()+'</td>'+
+      '<td style="color:var(--green);">$'+Number(d.last).toLocaleString()+'</td>'+
+      '<td><span style="color:var(--green);font-weight:500;">↓$'+Number(d.drop).toLocaleString()+' ('+d.pct+'%)</span></td>'+
+    '</tr>';
+  });
+  tbl+='</tbody></table>';
+  el.innerHTML=tbl;
+}
+
 // ── LOAD ALL DATA ─────────────────────────────────────────
 function loadAll(){
   var strip=document.getElementById('changed-strip');
@@ -1196,30 +1340,63 @@ function loadAll(){
     var tg=document.getElementById('targets-grid');
     if(tg)tg.innerHTML=sortedT.length?sortedT.map(function(v){return renderTarget(v,mkt[v.vin],G.urlMap[v.vin]||lhMap[v.vin]);}).join(''):'<div class="loading">No targets found.</div>';
 
-    // Cohort bars
+    // Cohort bars — S65 + S600 grouped by year
     var years=[2015,2016,2017,2018,2019,2020];
-    var ycounts=years.map(function(y){return{y:y,total:vehicles.filter(function(v){return v.year===y&&v.trim&&v.trim.indexOf('S65')>=0;}).length};});
-    var maxY=Math.max.apply(null,ycounts.map(function(c){return c.total;}))||1;
+    var cohortData=years.map(function(y){
+      var s65=vehicles.filter(function(v){return v.year===y&&v.trim&&v.trim.indexOf('S65')>=0;}).length;
+      var s600=vehicles.filter(function(v){return v.year===y&&v.trim&&v.trim.indexOf('S600')>=0;}).length;
+      return {y:y,s65:s65,s600:s600};
+    });
+    var maxY=Math.max.apply(null,cohortData.map(function(c){return Math.max(c.s65,c.s600);}));
+    maxY=maxY||1;
     var cbEl=document.getElementById('cohort-bars');
-    if(cbEl)cbEl.innerHTML=ycounts.map(function(c){
-      var pct=Math.round(c.total/maxY*100);
-      var col=c.y===2020?'var(--gold)':c.y>=2017?'var(--teal)':'var(--blue)';
-      return '<div class="cb-col"><div style="flex:1;display:flex;align-items:flex-end;width:100%;"><div class="cb-bar" style="width:100%;height:'+pct+'%;background:'+col+';"></div></div><div class="cb-year">'+c.y+'</div><div class="cb-ct">'+(c.total||'--')+'</div></div>';
+    if(cbEl)cbEl.innerHTML=cohortData.map(function(c){
+      var p65=Math.round(c.s65/maxY*100);
+      var p600=Math.round(c.s600/maxY*100);
+      var col65=c.y===2020?'var(--gold)':c.y>=2017?'var(--teal)':'var(--blue)';
+      return '<div class="cb-col">'+
+        '<div style="flex:1;display:flex;align-items:flex-end;gap:2px;width:100%;">'+
+          '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">'+
+            '<div style="font-family:var(--mono);font-size:9px;color:var(--dim);">'+c.s65+'</div>'+
+            '<div class="cb-bar" style="width:100%;height:'+p65+'px;min-height:'+(c.s65?3:0)+'px;background:'+col65+';max-height:72px;"></div>'+
+          '</div>'+
+          '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;">'+
+            '<div style="font-family:var(--mono);font-size:9px;color:var(--dim);">'+(c.s600||'')+'</div>'+
+            '<div class="cb-bar" style="width:100%;height:'+p600+'px;min-height:'+(c.s600?3:0)+'px;background:rgba(179,136,255,.65);max-height:72px;"></div>'+
+          '</div>'+
+        '</div>'+
+        '<div class="cb-year">'+c.y+'</div>'+
+      '</div>';
     }).join('');
 
-    // VMI
-    var tvins={};targetV.forEach(function(v){tvins[v.vin]=true;});
-    var tTotal=targetV.length||1,conf=0,part=0;
-    svcRows.forEach(function(s){if(!tvins[s.vin])return;if(s.major_service_status==='confirmed')conf++;else if(s.major_service_status==='partial')part++;});
-    var cp=Math.round(conf/tTotal*100),pp=Math.round(part/tTotal*100),up=Math.max(0,100-cp-pp);
-    var vmiEl=document.getElementById('vmi-bars');
-    if(vmiEl)vmiEl.innerHTML=
-      '<div class="bc-row"><span class="bc-lbl">Confirmed</span><div class="bc-track"><div class="bc-fill" style="width:'+Math.max(cp,3)+'%;background:var(--green);"><span class="bc-val" style="color:var(--bg);">'+cp+'%</span></div></div></div>'+
-      '<div class="bc-row"><span class="bc-lbl">Partial</span><div class="bc-track"><div class="bc-fill" style="width:'+Math.max(pp,3)+'%;background:var(--teal);"><span class="bc-val" style="color:var(--bg);">'+pp+'%</span></div></div></div>'+
-      '<div class="bc-row"><span class="bc-lbl">Unknown / None</span><div class="bc-track"><div class="bc-fill" style="width:'+Math.max(up,3)+'%;background:var(--red);"><span class="bc-val" style="color:#fff;">'+up+'%</span></div></div></div>';
+    // Geographic distribution
+    var stateCounts={};
+    vehicles.forEach(function(v){
+      var st=v.last_title_state;
+      if(st&&st.length===2)stateCounts[st]=(stateCounts[st]||0)+1;
+    });
+    var stateArr=Object.keys(stateCounts).map(function(st){return{st:st,n:stateCounts[st]};});
+    stateArr.sort(function(a,b){return b.n-a.n;});
+    var top=stateArr.slice(0,12);
+    var maxSt=top.length?top[0].n:1;
+    var geoEl=document.getElementById('geo-bars');
+    if(geoEl)geoEl.innerHTML=top.map(function(d){
+      var pct=Math.round(d.n/maxSt*100);
+      var isTX=d.st==='TX';
+      var bg=isTX?'var(--gold)':'rgba(122,167,220,.45)';
+      return '<div class="bc-row">'+
+        '<span class="bc-lbl" style="min-width:36px;text-align:right;color:'+(isTX?'var(--gold2)':'var(--muted)')+';">'+d.st+'</span>'+
+        '<div class="bc-track"><div class="bc-fill" style="width:'+Math.max(pct,3)+'%;background:'+bg+';">'+
+          '<span class="bc-val" style="color:'+(isTX?'var(--bg)':'var(--ink2)')+';">'+d.n+'</span>'+
+        '</div></div>'+
+      '</div>';
+    }).join('');
 
     renderScatter(vehicles,mkt,lhMap);
     renderMiBands(vehicles,mkt,lhMap);
+    renderColorBars(vehicles);
+    renderDOMTable(recentLH);
+    renderPriceDrops(vehicles,recentLH);
   }).catch(function(e){console.error('Load error:',e);});
 }
 
