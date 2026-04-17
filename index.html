@@ -822,7 +822,6 @@ function renderHero(v,vm,lh){
         '<div class="hs"><span class="hs-v">'+proj+'</span><span class="hs-l">Proj. 2028</span></div>'+
       '</div>'+
       '<div class="hero-flags">'+flags(v,vm)+'</div>'+
-      '<div class="hero-intel">'+heroIntel(v,vm,lh)+'</div>'+
       (url?'<div><a class="btn-g" href="'+url+'" target="_blank" rel="noopener">View Listing &#8599;</a></div>':'')+
     '</div>';
 }
@@ -889,7 +888,6 @@ function renderTarget(v,vm,lh){
         '<div class="tc-stat"><span class="tc-sv">'+owners+'</span><span class="tc-sl">Owners</span></div>'+
       '</div>'+
       '<div class="tc-flags">'+flags(v,vm)+'</div>'+
-      '<div class="tc-read"><div class="tc-read-lbl">Strategic Read</div><div class="tc-read-txt">'+targetRead(v,vm,lh)+'</div></div>'+
       (url?'<a class="tc-btn" href="'+url+'" target="_blank" rel="noopener">View Listing &#8599;</a>':'<div class="tc-btn" style="opacity:.35;cursor:default;">Not Currently Listed</div>')+
     '</div>'+
   '</div>';
