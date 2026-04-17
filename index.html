@@ -337,24 +337,22 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .pb-cta{font-family:var(--mono);font-size:12px;color:var(--gold2);text-align:right}
 
 
-/* ── CARD FLIP ── */
-.flip-wrap{perspective:1200px;width:100%}
-.flip-inner{position:relative;transition:transform .5s cubic-bezier(.4,0,.2,1);transform-style:preserve-3d}
-.flip-inner.flipped{transform:rotateY(180deg)}
-.flip-front,.flip-back{-webkit-backface-visibility:hidden;backface-visibility:hidden}
-.flip-inner{display:grid}
-.flip-front,.flip-back{grid-area:1/1}
-.flip-back{transform:rotateY(180deg);overflow-y:auto;background:linear-gradient(160deg,var(--panel2),var(--panel));border-radius:var(--r);min-height:320px}
-.flip-btn{font-family:var(--mono);font-size:11px;padding:4px 9px;border-radius:5px;background:rgba(255,255,255,.06);border:1px solid var(--line2);color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
-.flip-btn:hover{border-color:var(--blue);color:var(--blue2)}
+/* ── HISTORY SLIDE ── */
+.hs-wrap{position:relative;overflow:hidden}
+.hs-img-panel{transition:transform .35s ease,opacity .35s ease}
+.hs-hist-panel{position:absolute;inset:0;background:var(--panel2);transform:translateY(100%);transition:transform .35s ease;overflow-y:auto;display:flex;flex-direction:column}
+.hs-wrap.open .hs-img-panel{transform:translateY(-100%);opacity:0;pointer-events:none}
+.hs-wrap.open .hs-hist-panel{transform:translateY(0)}
+.hs-toggle{position:absolute;bottom:8px;right:9px;z-index:5;width:26px;height:26px;border-radius:50%;background:rgba(7,9,15,.75);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s;line-height:1}
+.hs-toggle:hover{background:rgba(7,9,15,.95)}
+.lh-back-header{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px solid var(--line);flex-shrink:0}
+.lh-back-title{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
 .lh-table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px}
-.lh-table th{color:var(--dim);text-transform:uppercase;letter-spacing:.1em;padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;font-weight:400}
-.lh-table td{padding:5px 8px;border-bottom:1px solid var(--line);color:var(--ink2);vertical-align:top}
+.lh-table th{color:var(--dim);text-transform:uppercase;letter-spacing:.08em;padding:5px 7px;border-bottom:1px solid var(--line);text-align:left;font-weight:400;white-space:nowrap}
+.lh-table td{padding:4px 7px;border-bottom:1px solid var(--line);color:var(--ink2);vertical-align:top}
 .lh-table tr:last-child td{border-bottom:none}
 .lh-active-row td{color:var(--green)}
-.lh-back-header{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid var(--line)}
-.lh-back-title{font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
-.lh-empty{font-family:var(--mono);font-size:12px;color:var(--dim);padding:20px;text-align:center}
+.lh-empty{font-family:var(--mono);font-size:12px;color:var(--dim);padding:18px;text-align:center}
 </style>
 </head>
 <body>
@@ -829,12 +827,18 @@ function renderCompact(v,vm,lh){
   var url=lh&&lh.vdp_url?lh.vdp_url:'';
   var active=v.listing_status==='active';
   var badge=v.car_status==='target'?'<span class="tbadge">Target</span>':'<span class="rbadge">Ref</span>';
-  var backHtml=lhBack(v.vin);
-  return '<div class="flip-wrap"><div class="flip-inner"><div class="flip-front"><div class="lc">'+
-    '<div class="lc-img">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
+  return '<div class="lc">'+
+    '<div class="lc-img hs-wrap">'+
+    '<div class="hs-img-panel" style="position:relative;height:100%;">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
       '<div class="lc-img-ov"></div>'+
       '<div class="lc-top">'+badge+'</div>'+
       (active?'<div class="lc-active"><span class="live-dot"></span>Active</div>':'')+
+    '</div>'+
+    '<div class="hs-hist-panel">'+
+      '<div class="lh-back-header"><span class="lh-back-title">&#128202; History &middot; '+v.vin.slice(-6)+'</span></div>'+
+      lhBack(v.vin)+
+    '</div>'+
+    '<button class="hs-toggle" onclick="toggleHistory(this)">&#9650;</button>'+
     '</div>'+
     '<div class="lc-body">'+
       '<div class="lc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+'</div>'+
@@ -845,12 +849,8 @@ function renderCompact(v,vm,lh){
         '<span class="lc-mi">'+miles+'</span>'+
         (active&&url?'<a class="lc-btn" href="'+url+'" target="_blank" rel="noopener">View &#8599;</a>':'')+
       '</div>'+
-    '<div style="padding:6px 11px 10px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;">'+
-    '<button class="flip-btn" onclick="flipCard(this)">&#128202; History</button>'+
-  '</div>'+
-  '</div></div>'+
-  '<div class="flip-back">'+backHtml+'</div>'+
-  '</div></div>';
+    '</div>'+
+  '</div>';
 }
 
 // ── RENDER TARGET CARD ────────────────────────────────────
@@ -872,12 +872,19 @@ function renderTarget(v,vm,lh){
   var loc=v.last_title_state||(lh&&lh.state)||'--';
   var url=lh&&lh.vdp_url?lh.vdp_url:'';
   var active=v.listing_status==='active';
-  var backHtml=lhBack(v.vin);
-  return '<div class="flip-wrap"><div class="flip-inner"><div class="flip-front"><div class="tc">'+
-    '<div class="tc-img">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
+  return '<div class="tc">'+
+    '<div class="tc-img hs-wrap">'+
+    '<div class="hs-img-panel" style="position:relative;height:100%;">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
       '<div class="tc-img-ov"></div>'+
-      '<div class="tc-top"><span class="tag tb">Target</span>'+(v.is_final_edition?'<span class="tag tg">Final Edition</span>':'')+'</div>'+
+      '<div class="tc-top"><span class="tag tb">Target</span>'+(v.is_final_edition?'<span class="tag tg">Final Edition</span>':'')+
+      '</div>'+
       (active?'<div class="tc-active"><span class="live-dot"></span>Active Listing</div>':'')+
+    '</div>'+
+    '<div class="hs-hist-panel">'+
+      '<div class="lh-back-header"><span class="lh-back-title">&#128202; History &middot; '+v.vin.slice(-6)+'</span></div>'+
+      lhBack(v.vin)+
+    '</div>'+
+    '<button class="hs-toggle" onclick="toggleHistory(this)">&#9650;</button>'+
     '</div>'+
     '<div class="tc-body">'+
       '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+'</div>'+
@@ -889,12 +896,8 @@ function renderTarget(v,vm,lh){
       '</div>'+
       '<div class="tc-flags">'+flags(v,vm)+'</div>'+ (function(){   var d=G.docs[v.vin]||{};   var cfUrl=d.carfax||'https://www.carfax.com/VehicleHistory/p/Report.cfx?vin='+v.vin;   var acUrl=d.autocheck||'https://www.autocheck.com/vehiclehistory/?vin='+v.vin;   var isUrl=d.iseecars||'https://www.iseecars.com/vin#vin='+v.vin;   var gcUrl=d.goodcar||'https://www.goodcar.com/us/vin-check/'+v.vin;   var prUrl=d.public_record||'https://www.publicrecords.us/vehicle/'+v.vin;   var wsUrl=d.window_sticker||'https://www.mbusa.com/content/dam/mb-nafta/us/owners/window-sticker/'+v.vin+'.pdf';   var hasSB=function(u){return u&&u.indexOf('supabase')>-1;};   return '<div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px;">'+     '<a href="'+cfUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.carfax)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.carfax)?'✓ ':'')+' CARFAX</a>'+     '<a href="'+acUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.autocheck)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.autocheck)?'✓ ':'')+' AutoCheck</a>'+     '<a href="'+isUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.iseecars)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.iseecars)?'✓ ':'')+' iSeeCars</a>'+     '<a href="'+gcUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.goodcar)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.goodcar)?'✓ ':'')+' GoodCar</a>'+     '<a href="'+prUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.public_record)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.public_record)?'✓ ':'')+' PubRec</a>'+     '<a href="'+wsUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.window_sticker)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.window_sticker)?'✓ ':'')+' Sticker</a>'+   '</div>'; })()+
       (active&&url?'<a class="tc-btn" href="'+url+'" target="_blank" rel="noopener">View Listing &#8599;</a>':'')+
-    '<div style="padding:6px 15px 10px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;">'+
-    '<button class="flip-btn" onclick="flipCard(this)">&#128202; History</button>'+
-  '</div>'+
-  '</div></div>'+
-  '<div class="flip-back">'+backHtml+'</div>'+
-  '</div></div>';
+    '</div>'+
+  '</div>';
 }
 
 // ── MARKET FILTER/SORT ────────────────────────────────────
@@ -978,6 +981,7 @@ function renderMiBands(vehicles,market,listings){
   var el=document.getElementById('mi-bands');
   if(!el)return;
   if(!maxA){el.innerHTML='<div class="loading">Not enough data.</div>';return;}
+    // Fix the string concat bug
   el.innerHTML=bands.map(function(b){
     var pct=Math.max(Math.round(b.avg/maxA*100),4);
     var isGI=b.min===70000;
@@ -1085,10 +1089,12 @@ function toggleArchive(){
 }
 
 
-// ── CARD FLIP ─────────────────────────────────────────────
-function flipCard(btn){
-  var inner=btn.closest('.flip-wrap').querySelector('.flip-inner');
-  inner.classList.toggle('flipped');
+// ── HISTORY SLIDE ──────────────────────────────────────────
+function toggleHistory(btn){
+  var wrap=btn.closest('.hs-wrap');
+  var opening=!wrap.classList.contains('open');
+  wrap.classList.toggle('open', opening);
+  btn.textContent=opening?'▼':'▲';
 }
 
 function lhBack(vin){
@@ -1100,13 +1106,9 @@ function lhBack(vin){
     var db=b.last_seen?new Date(b.last_seen):new Date(0);
     return db-da;
   });
-  var header='<div class="lh-back-header">'+
-    '<span class="lh-back-title">&#128202; Listing History &middot; '+vin.slice(-6)+'</span>'+
-    '<button class="flip-btn" onclick="flipCard(this)">&#8630; Back</button>'+
-  '</div>';
-  if(!rows.length)return header+'<div class="lh-empty">No listing history on file.</div>';
+  if(!rows.length)return '<div class="lh-empty">No listing history on file.</div>';
   var tbl='<table class="lh-table"><thead><tr>'+
-    '<th>Platform</th><th>Price</th><th>Miles</th><th>First Seen</th><th>Last Seen</th><th>Status</th>'+
+    '<th>Seller</th><th>Price</th><th>Miles</th><th>First</th><th>Last</th><th>Status</th>'+
   '</tr></thead><tbody>';
   rows.forEach(function(l){
     var isActive=l.link_status==='active';
@@ -1114,15 +1116,15 @@ function lhBack(vin){
     var miles=l.miles?Number(l.miles).toLocaleString()+' mi':'--';
     var first=l.first_seen?l.first_seen.slice(0,10):'--';
     var last=l.last_seen?l.last_seen.slice(0,10):'--';
-    var plat=l.seller_name||'--';
-    var status=isActive?'<span style="color:var(--green);">&#9679; Active</span>':'<span style="color:var(--dim);">Inactive</span>';
+    var seller=l.seller_name||'--';
+    var status=isActive?'<span style="color:var(--green);">&#9679;</span>':'<span style="color:var(--dim);">&#9675;</span>';
     tbl+='<tr'+(isActive?' class="lh-active-row"':'')+'>'+
-      '<td>'+plat+'</td><td>'+price+'</td><td>'+miles+'</td>'+
+      '<td>'+seller+'</td><td>'+price+'</td><td>'+miles+'</td>'+
       '<td>'+first+'</td><td>'+last+'</td><td>'+status+'</td>'+
     '</tr>';
   });
   tbl+='</tbody></table>';
-  return header+tbl;
+  return tbl;
 }
 
 // ── LOAD ALL DATA ─────────────────────────────────────────
