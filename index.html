@@ -672,7 +672,7 @@ var H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/js
 function q(ep){return fetch(SB+'/rest/v1/'+ep,{headers:H}).then(function(r){return r.json();});}
 
 // ── STATE ─────────────────────────────────────────────────
-var G={v:[],m:{},l:{},lhAll:[],svc:[],urlMap:{}};
+var G={v:[],m:{},l:{},lhAll:[],svc:[],urlMap:{},docs:{}};
 var mktFilter='all',mktSort='price';
 
 // ── COUNTDOWN ─────────────────────────────────────────────
@@ -887,7 +887,7 @@ function renderTarget(v,vm,lh){
         '<div class="tc-stat"><span class="tc-sv">'+miles+'</span><span class="tc-sl">Miles</span></div>'+
         '<div class="tc-stat"><span class="tc-sv">'+owners+'</span><span class="tc-sl">Owners</span></div>'+
       '</div>'+
-      '<div class="tc-flags">'+flags(v,vm)+'</div>'+ '<div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px;">'+   '<a href="https://www.carfax.com/VehicleHistory/p/Report.cfx?vin='+v.vin+'" target="_blank" rel="noopener" class="lc-btn">CARFAX</a>'+   '<a href="https://www.autocheck.com/vehiclehistory/?vin='+v.vin+'" target="_blank" rel="noopener" class="lc-btn">AutoCheck</a>'+   '<a href="https://www.iseecars.com/vin#vin='+v.vin+'" target="_blank" rel="noopener" class="lc-btn">iSeeCars</a>'+   '<a href="https://www.goodcar.com/us/vin-check/'+v.vin+'" target="_blank" rel="noopener" class="lc-btn">GoodCar</a>'+   '<a href="https://www.publicrecords.us/vehicle/'+v.vin+'" target="_blank" rel="noopener" class="lc-btn">PublicRecords</a>'+   '<a href="https://www.mbusa.com/content/dam/mb-nafta/us/owners/window-sticker/'+v.vin+'.pdf" target="_blank" rel="noopener" class="lc-btn">Sticker</a>'+ '</div>'+
+      '<div class="tc-flags">'+flags(v,vm)+'</div>'+ (function(){   var d=G.docs[v.vin]||{};   var cfUrl=d.carfax||'https://www.carfax.com/VehicleHistory/p/Report.cfx?vin='+v.vin;   var acUrl=d.autocheck||'https://www.autocheck.com/vehiclehistory/?vin='+v.vin;   var isUrl=d.iseecars||'https://www.iseecars.com/vin#vin='+v.vin;   var gcUrl=d.goodcar||'https://www.goodcar.com/us/vin-check/'+v.vin;   var prUrl=d.public_record||'https://www.publicrecords.us/vehicle/'+v.vin;   var wsUrl=d.window_sticker||'https://www.mbusa.com/content/dam/mb-nafta/us/owners/window-sticker/'+v.vin+'.pdf';   var hasSB=function(u){return u&&u.indexOf('supabase')>-1;};   return '<div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px;">'+     '<a href="'+cfUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.carfax)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.carfax)?'✓ ':'')+' CARFAX</a>'+     '<a href="'+acUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.autocheck)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.autocheck)?'✓ ':'')+' AutoCheck</a>'+     '<a href="'+isUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.iseecars)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.iseecars)?'✓ ':'')+' iSeeCars</a>'+     '<a href="'+gcUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.goodcar)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.goodcar)?'✓ ':'')+' GoodCar</a>'+     '<a href="'+prUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.public_record)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.public_record)?'✓ ':'')+' PubRec</a>'+     '<a href="'+wsUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.window_sticker)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.window_sticker)?'✓ ':'')+' Sticker</a>'+   '</div>'; })()+''+
       (active&&url?'<a class="tc-btn" href="'+url+'" target="_blank" rel="noopener">View Listing &#8599;</a>':'')+
     '</div>'+
   '</div>';
@@ -1096,9 +1096,10 @@ function loadAll(){
     q('vehicle_market?select=*'),
     q('listing_history?select=*&link_status=eq.active&order=price.desc'),
     q('listing_history?select=vin,price,miles,vdp_url,seller_name,state,first_seen,last_seen,link_status&order=last_seen.desc&limit=800'),
-    q('vehicle_service?select=vin,major_service_status')
+    q('vehicle_service?select=vin,major_service_status'),q('documents?select=vin,doc_type,storage_url')
   ]).then(function(res){
-    var vehicles=res[0]||[],mktRows=res[1]||[],activeLH=res[2]||[],recentLH=res[3]||[],svcRows=res[4]||[];
+    var vehicles=res[0]||[],mktRows=res[1]||[],activeLH=res[2]||[],recentLH=res[3]||[],svcRows=res[4]||[],docRows=res[5]||[];
+    var docs={};docRows.forEach(function(d){if(!docs[d.vin])docs[d.vin]={};docs[d.vin][d.doc_type]=d.storage_url;});G.docs=docs;
     if(!Array.isArray(vehicles))return;
 
     // Build indexes
