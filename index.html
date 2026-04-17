@@ -1116,7 +1116,7 @@ function lhBack(vin){
     var miles=l.miles?Number(l.miles).toLocaleString()+' mi':'--';
     var first=l.first_seen?l.first_seen.slice(0,10):'--';
     var last=l.last_seen?l.last_seen.slice(0,10):'--';
-    var plat=l.platform||l.source||l.seller_name||'--';
+    var plat=l.seller_name||'--';
     var status=isActive?'<span style="color:var(--green);">&#9679; Active</span>':'<span style="color:var(--dim);">Inactive</span>';
     tbl+='<tr'+(isActive?' class="lh-active-row"':'')+'>'+
       '<td>'+plat+'</td><td>'+price+'</td><td>'+miles+'</td>'+
@@ -1136,7 +1136,7 @@ function loadAll(){
     q('vehicles?select=*&order=year.desc&limit=2000'),
     q('vehicle_market?select=*'),
     q('listing_history?select=*&link_status=eq.active&order=price.desc'),
-    q('listing_history?select=vin,price,miles,vdp_url,seller_name,state,source,platform,first_seen,last_seen,link_status&order=last_seen.desc&limit=3000'),
+    q('listing_history?select=vin,price,miles,vdp_url,seller_name,state,first_seen,last_seen,link_status&order=last_seen.desc&limit=3000'),
     q('vehicle_service?select=vin,major_service_status'),q('documents?select=vin,doc_type,storage_url')
   ]).then(function(res){
     var vehicles=res[0]||[],mktRows=res[1]||[],activeLH=res[2]||[],recentLH=res[3]||[],svcRows=res[4]||[],docRows=res[5]||[];
