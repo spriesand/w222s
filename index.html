@@ -353,6 +353,65 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .lh-table tr:last-child td{border-bottom:none}
 .lh-active-row td{color:var(--green)}
 .lh-empty{font-family:var(--mono);font-size:12px;color:var(--dim);padding:18px;text-align:center}
+
+/* ── NOTES DRAWER ─────────────────────────────────────── */
+.notes-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:399;opacity:0;pointer-events:none;transition:opacity .2s}
+.notes-ov.open{opacity:1;pointer-events:auto}
+.notes-drawer{position:fixed;top:0;right:0;bottom:0;width:420px;max-width:100vw;background:linear-gradient(160deg,var(--panel2),var(--panel));border-left:1px solid var(--line);z-index:400;transform:translateX(100%);transition:transform .25s ease;display:flex;flex-direction:column;box-shadow:-12px 0 40px rgba(0,0,0,.5)}
+.notes-drawer.open{transform:translateX(0)}
+.notes-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--panel2);flex-shrink:0}
+.notes-head-t{font-size:13px;font-weight:600;letter-spacing:.5px}
+.notes-head-v{font-size:11px;color:var(--dim);font-family:var(--mono);margin-top:2px}
+.notes-close{background:transparent;border:none;color:var(--muted);font-size:28px;cursor:pointer;padding:0 8px;line-height:1}
+.notes-close:hover{color:#fff}
+.notes-body{flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px;min-height:0}
+.notes-empty{color:var(--dim);font-size:12px;text-align:center;padding:30px 0;font-style:italic}
+.note-item{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:rgba(255,255,255,.02)}
+.note-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.note-head time{font-size:10px;color:var(--dim);font-family:var(--mono);letter-spacing:.3px}
+.note-del{background:transparent;border:none;color:var(--dim);font-size:18px;cursor:pointer;padding:0 4px;line-height:1;opacity:.5}
+.note-del:hover{color:var(--red);opacity:1}
+.note-body-txt{font-size:12px;line-height:1.5;color:#d8d8e0;white-space:pre-wrap;word-wrap:break-word;overflow-wrap:break-word}
+.note-body-txt a{color:var(--gold2);text-decoration:underline;word-break:break-all}
+.note-img{width:100%;max-height:400px;object-fit:contain;border-radius:6px;margin-top:8px;display:block;background:#000;cursor:zoom-in}
+.notes-compose{padding:12px 14px;border-top:1px solid var(--line);background:var(--panel2);flex-shrink:0}
+.notes-compose textarea{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px;color:#e8e8f0;font-family:inherit;font-size:12px;padding:10px;resize:vertical;min-height:70px;box-sizing:border-box}
+.notes-compose textarea:focus{outline:none;border-color:var(--gold2)}
+.notes-compose-row{display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap}
+.notes-file{flex:1;min-width:0}
+.notes-file input{display:none}
+.notes-file label{cursor:pointer;color:var(--muted);padding:6px 10px;border:1px dashed var(--line);border-radius:6px;font-size:11px;display:inline-block;transition:all .15s}
+.notes-file label:hover{color:#fff;border-color:var(--gold2)}
+.notes-file-name{margin-left:6px;color:var(--gold2);font-size:10px;font-family:var(--mono);word-break:break-all}
+.notes-save{background:var(--gold2);color:#000;border:none;padding:8px 18px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.3px}
+.notes-save:disabled{opacity:.4;cursor:wait}
+.notes-save:hover:not(:disabled){background:#e0c060}
+
+/* Notes trigger button on cards */
+.notes-btn{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:11px;padding:4px 9px;border-radius:14px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;z-index:5;font-family:inherit;line-height:1}
+.notes-btn:hover{background:rgba(0,0,0,.9);border-color:var(--gold2)}
+.notes-btn-count{background:var(--gold2);color:#000;font-weight:700;border-radius:8px;padding:1px 5px;font-size:10px;min-width:10px;text-align:center;line-height:1.2}
+
+/* Price delta + relist chips */
+.price-delta-inline{display:inline-flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.price-prev{text-decoration:line-through;color:var(--dim);font-size:.72em;opacity:.7}
+.price-drop{color:var(--green)}
+.price-up{color:var(--amber)}
+.pd-tag{font-size:.62em;padding:2px 5px;border-radius:3px;font-weight:700;letter-spacing:.3px;white-space:nowrap}
+.pd-tag.drop{background:rgba(76,190,130,.15);color:var(--green)}
+.pd-tag.up{background:rgba(230,160,50,.15);color:var(--amber)}
+.lst-chip{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:10px;margin-left:4px;vertical-align:middle;white-space:nowrap}
+.lst-chip.relisted{background:rgba(230,160,50,.18);color:var(--amber);border:1px solid rgba(230,160,50,.35)}
+.lst-chip.new-listing{background:rgba(76,190,130,.15);color:var(--green);border:1px solid rgba(76,190,130,.35)}
+.lst-chip.recent-active{background:rgba(100,150,230,.15);color:var(--blue2);border:1px solid rgba(100,150,230,.35)}
+
+/* Mobile takeover */
+@media (max-width:768px){
+  .notes-drawer{width:100vw;border-left:none;box-shadow:none}
+  .notes-btn{font-size:10px;padding:3px 7px;top:8px;right:8px}
+}
+/* Hero-specific: nudge notes button below the Active pill */
+.hero-img .notes-btn{top:44px;right:11px}
 </style>
 </head>
 <body>
@@ -702,12 +761,272 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 </div>
 <div class="more-ov" id="more-ov" onclick="closeMore()"></div>
 
+<!-- NOTES DRAWER -->
+<div class="notes-ov" id="notes-ov" onclick="closeNotes()"></div>
+<div class="notes-drawer" id="notes-drawer" role="dialog" aria-label="Vehicle notes">
+  <div class="notes-head">
+    <div>
+      <div class="notes-head-t">&#128221; Notes</div>
+      <div class="notes-head-v" id="notes-head-v">&mdash;</div>
+    </div>
+    <button class="notes-close" onclick="closeNotes()" aria-label="Close">&times;</button>
+  </div>
+  <div class="notes-body" id="notes-body"><div class="notes-empty">No notes yet.</div></div>
+  <div class="notes-compose">
+    <textarea id="notes-textarea" placeholder="Add a note. Paste URLs or screenshots. Shift+Enter for newline, Cmd/Ctrl+Enter to save." onpaste="notesPaste(event)" onkeydown="notesKeydown(event)"></textarea>
+    <div class="notes-compose-row">
+      <div class="notes-file">
+        <input type="file" id="notes-file-input" accept="image/*" onchange="notesFileChange()">
+        <label for="notes-file-input">&#128247; Attach image</label>
+        <span class="notes-file-name" id="notes-file-name"></span>
+      </div>
+      <button class="notes-save" id="notes-save-btn" onclick="notesSave()">Save</button>
+    </div>
+  </div>
+</div>
+
 <script>
 // ── CONFIG ────────────────────────────────────────────────
 var SB='https://kevwkxuloxxrevodsukg.supabase.co';
 var KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtldndreHVsb3h4cmV2b2RzdWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NjkwNTUsImV4cCI6MjA5MDQ0NTA1NX0.xU3Ii35aYSozwtznzD9ixHtO0swgYAGVS4FBaM3pN0M';
 var H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'};
 function q(ep){return fetch(SB+'/rest/v1/'+ep,{headers:H}).then(function(r){return r.json();});}
+
+// Write helper (POST/PATCH) — returns parsed JSON or null
+function qw(ep,method,body){
+  return fetch(SB+'/rest/v1/'+ep,{
+    method:method,
+    headers:Object.assign({},H,{'Prefer':'return=representation'}),
+    body:body?JSON.stringify(body):null
+  }).then(function(r){
+    if(!r.ok)return r.text().then(function(t){return Promise.reject(r.status+' '+t);});
+    if(r.status===204)return null;
+    return r.json();
+  });
+}
+
+// Upload to Supabase storage bucket — returns public URL
+function qs(path,file){
+  return fetch(SB+'/storage/v1/object/v12-apex-documents/'+path,{
+    method:'POST',
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':file.type||'image/png','x-upsert':'true'},
+    body:file
+  }).then(function(r){
+    if(!r.ok)return r.text().then(function(t){return Promise.reject(r.status+' '+t);});
+    return SB+'/storage/v1/object/public/v12-apex-documents/'+path;
+  });
+}
+
+// HTML escape + auto-linkify
+function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function linkify(s){return esc(s).replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');}
+
+// ── PRICE DELTA (CarGurus-style) ──────────────────────────
+// Compares current active row to most recent prior SAME-SELLER row with a different price
+function priceDelta(vin,cur){
+  if(!cur||!cur.price)return null;
+  var rows=(G.lhAll||[]).filter(function(l){
+    return l.vin===vin && l.seller_name===cur.seller_name && l.id!==cur.id && l.price;
+  });
+  rows.sort(function(a,b){
+    var da=a.first_seen?new Date(a.first_seen):new Date(0);
+    var db=b.first_seen?new Date(b.first_seen):new Date(0);
+    return db-da;
+  });
+  for(var i=0;i<rows.length;i++){
+    if(rows[i].price!==cur.price){
+      return {prev:rows[i].price,curr:cur.price,delta:cur.price-rows[i].price};
+    }
+  }
+  return null;
+}
+
+function renderPriceWithDelta(cur,cls,extraStyle){
+  cls=cls||'lc-price';
+  var style=extraStyle?' style="'+extraStyle+'"':'';
+  if(!cur||!cur.price)return '<span class="'+cls+'"'+style+'>--</span>';
+  var d=priceDelta(cur.vin,cur);
+  if(!d)return '<span class="'+cls+'"'+style+'>'+fP(cur.price)+'</span>';
+  var drop=d.delta<0;
+  var dirCls=drop?'price-drop':'price-up';
+  var tag=drop?'drop':'up';
+  var arrow=drop?'&#9660;':'&#9650;';
+  var pct=Math.abs(d.delta/d.prev*100).toFixed(1);
+  return '<span class="price-delta-inline">'+
+    '<span class="price-prev">'+fP(d.prev)+'</span>'+
+    '<span class="'+cls+' '+dirCls+'"'+style+'>'+fP(d.curr)+'</span>'+
+    '<span class="pd-tag '+tag+'">'+arrow+' '+fP(Math.abs(d.delta))+' ('+pct+'%)</span>'+
+  '</span>';
+}
+
+// ── RELIST CHIP ───────────────────────────────────────────
+// Same-seller with >30d gap → Relisted. Different seller with prior <90d → New Listing + Recently Active.
+function relistChip(vin,cur){
+  if(!cur)return '';
+  var vinRows=(G.lhAll||[]).filter(function(l){return l.vin===vin && l.id!==cur.id;});
+  if(!vinRows.length)return '';
+  var curFirst=cur.first_seen?new Date(cur.first_seen):new Date();
+  var priorSame=vinRows.filter(function(l){return l.seller_name===cur.seller_name && (l.link_status==='inactive'||l.confirmed_dead);});
+  var gapped=priorSame.some(function(l){
+    var ls=l.last_seen?new Date(l.last_seen):new Date(0);
+    return (curFirst-ls) > 30*86400000;
+  });
+  if(gapped)return '<span class="lst-chip relisted">Relisted</span>';
+  var priorOther=vinRows.filter(function(l){return l.seller_name && l.seller_name!==cur.seller_name && (l.link_status==='inactive'||l.confirmed_dead);});
+  if(priorOther.length){
+    var now=new Date();
+    var recent=priorOther.some(function(l){
+      var ls=l.last_seen?new Date(l.last_seen):new Date(0);
+      return (now-ls) < 90*86400000;
+    });
+    return '<span class="lst-chip new-listing">New Listing</span>'+
+      (recent?'<span class="lst-chip recent-active">Recently Active</span>':'');
+  }
+  return '';
+}
+
+// ── NOTES MODULE ──────────────────────────────────────────
+var NS={vin:null,pendingFile:null,saving:false};
+
+function notesBtn(vin){
+  var n=(G.notesByVin&&G.notesByVin[vin])||[];
+  var cnt=n.length;
+  return '<button class="notes-btn" onclick="event.stopPropagation();openNotes(\''+vin+'\')" title="View notes">'+
+    '&#128221;'+(cnt?'<span class="notes-btn-count">'+cnt+'</span>':'')+
+  '</button>';
+}
+
+function openNotes(vin){
+  NS.vin=vin;NS.pendingFile=null;
+  document.getElementById('notes-head-v').textContent=vin;
+  document.getElementById('notes-file-name').textContent='';
+  document.getElementById('notes-file-input').value='';
+  document.getElementById('notes-textarea').value='';
+  document.getElementById('notes-drawer').classList.add('open');
+  document.getElementById('notes-ov').classList.add('open');
+  renderNotes();
+  // Refetch latest for this VIN in case of stale
+  q('vehicle_notes?select=*&vin=eq.'+vin+'&deleted_at=is.null&order=created_at.desc').then(function(rows){
+    if(Array.isArray(rows)){
+      G.notesByVin=G.notesByVin||{};
+      G.notesByVin[vin]=rows;
+      renderNotes();
+    }
+  });
+}
+
+function closeNotes(){
+  document.getElementById('notes-drawer').classList.remove('open');
+  document.getElementById('notes-ov').classList.remove('open');
+  NS.vin=null;NS.pendingFile=null;
+}
+
+function renderNotes(){
+  var el=document.getElementById('notes-body');
+  if(!NS.vin){el.innerHTML='';return;}
+  var rows=(G.notesByVin&&G.notesByVin[NS.vin])||[];
+  if(!rows.length){el.innerHTML='<div class="notes-empty">No notes for this VIN yet.<br>Add the first one below.</div>';return;}
+  el.innerHTML=rows.map(function(n){
+    var d=new Date(n.created_at);
+    var ds=d.toLocaleDateString([],{year:'numeric',month:'short',day:'numeric'})+' \u00b7 '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+    var body=n.body?'<div class="note-body-txt">'+linkify(n.body)+'</div>':'';
+    var img=n.image_url?'<a href="'+esc(n.image_url)+'" target="_blank" rel="noopener"><img class="note-img" src="'+esc(n.image_url)+'" alt=""></a>':'';
+    return '<article class="note-item">'+
+      '<div class="note-head"><time>'+ds+'</time>'+
+      '<button class="note-del" onclick="noteDelete(\''+n.id+'\')" title="Delete note">&times;</button></div>'+
+      body+img+
+    '</article>';
+  }).join('');
+}
+
+function notesFileChange(){
+  var f=document.getElementById('notes-file-input').files[0];
+  NS.pendingFile=f||null;
+  document.getElementById('notes-file-name').textContent=f?f.name:'';
+}
+
+function notesPaste(e){
+  var items=e.clipboardData&&e.clipboardData.items;
+  if(!items)return;
+  for(var i=0;i<items.length;i++){
+    if(items[i].type.indexOf('image/')===0){
+      var file=items[i].getAsFile();
+      if(file){
+        NS.pendingFile=file;
+        document.getElementById('notes-file-name').textContent='(pasted) '+(file.name||'image.png');
+        e.preventDefault();
+        return;
+      }
+    }
+  }
+}
+
+function notesKeydown(e){
+  if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();notesSave();}
+}
+
+function notesSave(){
+  if(NS.saving||!NS.vin)return;
+  var body=document.getElementById('notes-textarea').value.trim();
+  if(!body&&!NS.pendingFile){return;}
+  NS.saving=true;
+  var btn=document.getElementById('notes-save-btn');btn.disabled=true;btn.textContent='Saving\u2026';
+  var vin=NS.vin;
+  var uploadP;
+  if(NS.pendingFile){
+    var mime=NS.pendingFile.type||'image/png';
+    var ext={'image/png':'png','image/jpeg':'jpg','image/jpg':'jpg','image/gif':'gif','image/webp':'webp','image/heic':'heic','image/heif':'heif'}[mime.toLowerCase()]||'png';
+    uploadP=qs('vehicle_notes/'+vin+'_'+Date.now()+'.'+ext,NS.pendingFile);
+  }else{
+    uploadP=Promise.resolve(null);
+  }
+  uploadP.then(function(imgUrl){
+    return qw('vehicle_notes','POST',{vin:vin,body:body||null,image_url:imgUrl});
+  }).then(function(rows){
+    var row=Array.isArray(rows)?rows[0]:rows;
+    G.notesByVin=G.notesByVin||{};
+    G.notesByVin[vin]=G.notesByVin[vin]||[];
+    if(row)G.notesByVin[vin].unshift(row);
+    // Reset compose
+    document.getElementById('notes-textarea').value='';
+    document.getElementById('notes-file-input').value='';
+    document.getElementById('notes-file-name').textContent='';
+    NS.pendingFile=null;
+    renderNotes();
+    // Update card badges in place
+    updateNotesBadges(vin);
+  }).catch(function(err){
+    alert('Save failed: '+err);
+  }).then(function(){
+    NS.saving=false;btn.disabled=false;btn.textContent='Save';
+  });
+}
+
+function noteDelete(id){
+  if(!confirm('Delete this note? (soft-delete, recoverable)'))return;
+  qw('vehicle_notes?id=eq.'+id,'PATCH',{deleted_at:new Date().toISOString()}).then(function(){
+    var vin=NS.vin;
+    if(G.notesByVin&&G.notesByVin[vin]){
+      G.notesByVin[vin]=G.notesByVin[vin].filter(function(n){return n.id!==id;});
+    }
+    renderNotes();
+    updateNotesBadges(vin);
+  }).catch(function(err){alert('Delete failed: '+err);});
+}
+
+function updateNotesBadges(vin){
+  var cnt=(G.notesByVin&&G.notesByVin[vin]||[]).length;
+  document.querySelectorAll('.notes-btn[onclick*="\''+vin+'\'"]').forEach(function(btn){
+    var existing=btn.querySelector('.notes-btn-count');
+    if(cnt===0){if(existing)existing.remove();}
+    else if(existing){existing.textContent=cnt;}
+    else{
+      var sp=document.createElement('span');
+      sp.className='notes-btn-count';sp.textContent=cnt;
+      btn.appendChild(sp);
+    }
+  });
+}
 
 // ── STATE ─────────────────────────────────────────────────
 var G={v:[],m:{},l:{},lhAll:[],svc:[],urlMap:{},docs:{}};
@@ -782,6 +1101,7 @@ function flags(v,vm){
   if(vm&&vm.total_owners===1)f.push({c:'fg',l:'Single Owner'});
   else if(vm&&vm.total_owners===2)f.push({c:'fg',l:'2 Owners'});
   if(vm&&(vm.salvage===true||(typeof vm.salvage==='string'&&vm.salvage.toLowerCase()==='yes')))f.push({c:'fr',l:'SALVAGE'});
+  if(vm&&(vm.theft_recovery===true||(typeof vm.theft_recovery==='string'&&vm.theft_recovery.toLowerCase()==='yes')))f.push({c:'fr',l:'THEFT'});
   if(v.is_final_edition)f.push({c:'tg',l:'Final Edition'});
   if(v.last_title_state)f.push({c:'fd',l:v.last_title_state});
   return f.map(function(x){return '<span class="flag '+x.c+'">'+x.l+'</span>';}).join('');
@@ -814,7 +1134,9 @@ function buildChanged(lhRows){
 function renderHero(v,vm,lh){
   var el=document.getElementById('dash-hero');
   if(!v){el.innerHTML='<div class="loading">No active target listings found.</div>';return;}
-  var price=lh?fP(lh.price):'TBD';
+  var priceHTML=lh
+    ? renderPriceWithDelta(lh,'hs-v','color:var(--gold2);')
+    : '<span class="hs-v" style="color:var(--gold2);">TBD</span>';
   var miles=vm&&vm.curr_odo?fM(vm.curr_odo):(lh&&lh.miles?fM(lh.miles):'--');
   var owners=vm?fN(vm.total_owners):'--';
   var proj=v.miles_projected_jan28?fM(v.miles_projected_jan28):'--';
@@ -822,19 +1144,21 @@ function renderHero(v,vm,lh){
   var seller=lh&&lh.seller_name?lh.seller_name:'';
   var loc=v.last_title_state||(lh&&lh.state)||'';
   var dom=lh&&lh.dom?lh.dom+' days listed':'Active listing';
+  var chip=lh?relistChip(v.vin,lh):'';
   el.innerHTML=
     '<div class="hero-img">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
       '<div class="hero-img-ov"></div>'+
       '<div style="position:absolute;top:10px;left:11px;z-index:2;"><span class="tag tb">Primary Candidate</span></div>'+
+      notesBtn(v.vin)+
       '<div class="hero-pill"><span class="live-dot"></span>Active</div>'+
       '<div class="hero-dom">'+dom+'</div>'+
     '</div>'+
     '<div class="hero-body">'+
       '<div class="hero-kicker">'+(loc?loc+' &middot; ':'')+seller+'</div>'+
-      '<div class="hero-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+'</div>'+
+      '<div class="hero-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
       '<div class="hero-sub">'+v.vin+(v.exterior?' &middot; '+v.exterior:'')+'</div>'+
       '<div class="hero-stats">'+
-        '<div class="hs"><span class="hs-v" style="color:var(--gold2);">'+price+'</span><span class="hs-l">Ask</span></div>'+
+        '<div class="hs">'+priceHTML+'<span class="hs-l">Ask</span></div>'+
         '<div class="hs"><span class="hs-v" style="color:var(--blue2);">'+miles+'</span><span class="hs-l">Miles</span></div>'+
         '<div class="hs"><span class="hs-v" style="color:var(--green);">'+owners+'</span><span class="hs-l">Owners</span></div>'+
         '<div class="hs"><span class="hs-v">'+proj+'</span><span class="hs-l">Proj. 2028</span></div>'+
@@ -846,18 +1170,20 @@ function renderHero(v,vm,lh){
 
 // ── RENDER COMPACT CARD ───────────────────────────────────
 function renderCompact(v,vm,lh){
-  var price=lh?fP(lh.price):'--';
+  var priceHTML=lh?renderPriceWithDelta(lh):'<span class="lc-price">--</span>';
   var miles=vm&&vm.curr_odo?fM(vm.curr_odo):(lh&&lh.miles?fM(lh.miles):'--');
   var owners=vm?fN(vm.total_owners):'--';
   var loc=(lh&&lh.state)?lh.state:(v.last_title_state||'--');
   var url=lh&&lh.vdp_url?lh.vdp_url:'';
   var active=v.listing_status==='active';
   var badge=v.car_status==='target'?'<span class="tbadge">Target</span>':'<span class="rbadge">Ref</span>';
+  var chip=active?relistChip(v.vin,lh):'';
   return '<div class="lc">'+
     '<div class="lc-img hs-wrap">'+
     '<div class="hs-img-panel" style="position:relative;height:100%;">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
       '<div class="lc-img-ov"></div>'+
       '<div class="lc-top">'+badge+'</div>'+
+      notesBtn(v.vin)+
       (active?'<div class="lc-active"><span class="live-dot"></span>Active</div>':'')+
     '</div>'+
     '<div class="hs-hist-panel">'+
@@ -867,11 +1193,11 @@ function renderCompact(v,vm,lh){
     '<button class="hs-toggle" onclick="toggleHistory(this)">&#9650;</button>'+
     '</div>'+
     '<div class="lc-body">'+
-      '<div class="lc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+'</div>'+
+      '<div class="lc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
       '<div class="lc-meta">'+(v.exterior?v.exterior+' &middot; ':'')+loc+(lh&&lh.seller_name?' &middot; '+lh.seller_name:'')+'</div>'+
       '<div class="lc-flags">'+flags(v,vm)+'</div>'+ (function(){var d=G.docs[v.vin]||{};var hasSB=function(u){return u&&u.indexOf('supabase')>-1;};return '<div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px;">'+'<a href="'+(d.carfax||'https://www.carfax.com/VehicleHistory/p/Report.cfx?vin='+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.carfax)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.carfax)?'✓ ':'')+' CARFAX</a>'+'<a href="'+(d.autocheck||'https://www.autocheck.com/vehiclehistory/?vin='+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.autocheck)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.autocheck)?'✓ ':'')+' AutoCheck</a>'+'<a href="'+(d.iseecars||'https://www.iseecars.com/vin#vin='+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.iseecars)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.iseecars)?'✓ ':'')+' iSeeCars</a>'+'<a href="'+(d.goodcar||'https://www.goodcar.com/us/vin-check/'+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.goodcar)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.goodcar)?'✓ ':'')+' GoodCar</a>'+'<a href="'+(d.public_record||'https://www.publicrecords.us/vehicle/'+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.public_record)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.public_record)?'✓ ':'')+' PubRec</a>'+'<a href="'+(d.window_sticker||'https://www.mbusa.com/content/dam/mb-nafta/us/owners/window-sticker/'+v.vin+'.pdf')+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.window_sticker)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.window_sticker)?'✓ ':'')+' Sticker</a>'+'</div>';})()+
       '<div class="lc-row">'+
-        '<span class="lc-price">'+price+'</span>'+
+        priceHTML+
         '<span class="lc-mi">'+miles+'</span>'+
         (active&&url?'<a class="lc-btn" href="'+url+'" target="_blank" rel="noopener">View &#8599;</a>':'')+
       '</div>'+
@@ -883,6 +1209,7 @@ function renderCompact(v,vm,lh){
 function targetRead(v,vm,lh){
   var r=[],h=[];
   if(vm&&(vm.salvage===true||(typeof vm.salvage==='string'&&vm.salvage.toLowerCase()==='yes')))return '<strong style="color:var(--red);">HARD DQ: Salvage title. Exit value permanently impaired under the collector thesis.</strong>';
+  if(vm&&(vm.theft_recovery===true||(typeof vm.theft_recovery==='string'&&vm.theft_recovery.toLowerCase()==='yes')))return '<strong style="color:var(--red);">HARD DQ: Theft recovery. Exit value permanently impaired under the collector thesis.</strong>';
   if(v.car_status==='target')r.push('within the 2017\u20132020 target cohort');
   if(vm&&vm.curr_odo&&vm.curr_odo>=70000&&vm.curr_odo<=100000)r.push('mileage inside the Golden Intersection band');
   if(vm&&vm.total_owners===1)r.push('single-owner history');
@@ -892,18 +1219,23 @@ function targetRead(v,vm,lh){
 }
 
 function renderTarget(v,vm,lh){
-  var price=lh?fP(lh.price):'Not listed';
   var miles=vm&&vm.curr_odo?fM(vm.curr_odo):(lh&&lh.miles?fM(lh.miles):'--');
   var owners=vm?fN(vm.total_owners):'--';
   var loc=v.last_title_state||(lh&&lh.state)||'--';
   var url=lh&&lh.vdp_url?lh.vdp_url:'';
   var active=v.listing_status==='active';
+  var chip=active?relistChip(v.vin,lh):'';
+  var priceColor=lh&&lh.price&&lh.price<=40000?'var(--green)':'var(--gold2)';
+  var priceHTML=lh
+    ? renderPriceWithDelta(lh,'tc-sv','color:'+priceColor+';')
+    : '<span class="tc-sv" style="color:'+priceColor+';">Not listed</span>';
   return '<div class="tc">'+
     '<div class="tc-img hs-wrap">'+
     '<div class="hs-img-panel" style="position:relative;height:100%;">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
       '<div class="tc-img-ov"></div>'+
       '<div class="tc-top"><span class="tag tb">Target</span>'+(v.is_final_edition?'<span class="tag tg">Final Edition</span>':'')+
       '</div>'+
+      notesBtn(v.vin)+
       (active?'<div class="tc-active"><span class="live-dot"></span>Active Listing</div>':'')+
     '</div>'+
     '<div class="hs-hist-panel">'+
@@ -913,10 +1245,10 @@ function renderTarget(v,vm,lh){
     '<button class="hs-toggle" onclick="toggleHistory(this)">&#9650;</button>'+
     '</div>'+
     '<div class="tc-body">'+
-      '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+'</div>'+
+      '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
       '<div class="tc-sub">'+v.vin+(v.exterior?' &middot; '+v.exterior:'')+' &middot; '+loc+'</div>'+
       '<div class="tc-stats">'+
-        '<div class="tc-stat"><span class="tc-sv" style="color:'+(lh&&lh.price&&lh.price<=40000?'var(--green)':'var(--gold2)')+';">'+price+'</span><span class="tc-sl">Ask</span></div>'+
+        '<div class="tc-stat">'+priceHTML+'<span class="tc-sl">Ask</span></div>'+
         '<div class="tc-stat"><span class="tc-sv">'+miles+'</span><span class="tc-sl">Miles</span></div>'+
         '<div class="tc-stat"><span class="tc-sv">'+owners+'</span><span class="tc-sl">Owners</span></div>'+
       '</div>'+
@@ -1279,12 +1611,15 @@ function loadAll(){
   Promise.all([
     q('vehicles?select=*&order=year.desc&limit=2000'),
     q('vehicle_market?select=*'),
-    q('listing_history?select=*&link_status=eq.active&order=price.desc'),
-    q('listing_history?select=vin,price,miles,vdp_url,seller_name,state,first_seen,last_seen,link_status&order=last_seen.desc&limit=3000'),
-    q('vehicle_service?select=vin,major_service_status'),q('documents?select=vin,doc_type,storage_url')
+    q('listing_history?select=*&link_status=eq.active&order=last_seen.desc'),
+    q('listing_history?select=id,vin,price,miles,vdp_url,seller_name,state,first_seen,last_seen,link_status,confirmed_dead&order=last_seen.desc&limit=5000'),
+    q('vehicle_service?select=vin,major_service_status'),q('documents?select=vin,doc_type,storage_url'),
+    q('vehicle_notes?select=*&deleted_at=is.null&order=created_at.desc')
   ]).then(function(res){
-    var vehicles=res[0]||[],mktRows=res[1]||[],activeLH=res[2]||[],recentLH=res[3]||[],svcRows=res[4]||[],docRows=res[5]||[];
+    var vehicles=res[0]||[],mktRows=res[1]||[],activeLH=res[2]||[],recentLH=res[3]||[],svcRows=res[4]||[],docRows=res[5]||[],noteRows=res[6]||[];
     var docs={};docRows.forEach(function(d){if(!docs[d.vin])docs[d.vin]={};docs[d.vin][d.doc_type]=d.storage_url;});G.docs=docs;
+    // Build notes index (already ordered DESC by created_at)
+    var notesByVin={};noteRows.forEach(function(n){if(!notesByVin[n.vin])notesByVin[n.vin]=[];notesByVin[n.vin].push(n);});G.notesByVin=notesByVin;
     if(!Array.isArray(vehicles))return;
 
     // Build indexes
