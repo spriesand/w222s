@@ -387,10 +387,12 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .notes-save:disabled{opacity:.4;cursor:wait}
 .notes-save:hover:not(:disabled){background:#e0c060}
 
-/* Notes trigger button on cards */
-.notes-btn{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.72);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.15);color:#fff;font-size:11px;padding:4px 9px;border-radius:14px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;z-index:5;font-family:inherit;line-height:1}
-.notes-btn:hover{background:rgba(0,0,0,.9);border-color:var(--gold2)}
-.notes-btn-count{background:var(--gold2);color:#000;font-weight:700;border-radius:8px;padding:1px 5px;font-size:10px;min-width:10px;text-align:center;line-height:1.2}
+/* Notes pill (below image, in body area) */
+.notes-pill-row{display:flex;justify-content:flex-end;align-items:center;padding:8px 12px 0;gap:6px}
+.notes-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);padding:3px 10px;border-radius:12px;font-size:11px;cursor:pointer;font-family:inherit;transition:all .15s;line-height:1.4}
+.notes-pill:hover{background:rgba(255,255,255,.08);border-color:var(--gold2);color:#fff}
+.notes-pill.has-notes{color:var(--gold2);border-color:rgba(200,175,85,.35);background:rgba(200,175,85,.08)}
+.notes-pill-count{font-weight:700}
 
 /* Price delta + relist chips */
 .price-delta-inline{display:inline-flex;align-items:baseline;gap:6px;flex-wrap:wrap}
@@ -405,13 +407,41 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .lst-chip.new-listing{background:rgba(76,190,130,.15);color:var(--green);border:1px solid rgba(76,190,130,.35)}
 .lst-chip.recent-active{background:rgba(100,150,230,.15);color:var(--blue2);border:1px solid rgba(100,150,230,.35)}
 
+/* Price edit pencil button */
+.price-edit{background:transparent;border:none;color:var(--dim);cursor:pointer;padding:2px 5px;font-size:11px;margin-left:2px;border-radius:4px;line-height:1;vertical-align:middle;transition:all .15s}
+.price-edit:hover{color:var(--gold2);background:rgba(200,175,85,.1)}
+
+/* Price edit modal */
+.price-modal-ov{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:499;opacity:0;pointer-events:none;transition:opacity .2s}
+.price-modal-ov.open{opacity:1;pointer-events:auto}
+.price-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,calc(-50% + 20px));width:380px;max-width:calc(100vw - 32px);background:linear-gradient(160deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:12px;z-index:500;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.price-modal.open{opacity:1;pointer-events:auto;transform:translate(-50%,-50%)}
+.pe-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.pe-title{font-size:13px;font-weight:600;letter-spacing:.5px}
+.pe-vin{font-size:11px;color:var(--dim);font-family:var(--mono);margin-top:2px}
+.pe-close{background:transparent;border:none;color:var(--muted);font-size:26px;cursor:pointer;padding:0 4px;line-height:1}
+.pe-close:hover{color:#fff}
+.pe-body{padding:16px}
+.pe-cur{font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:14px;padding:9px 11px;background:rgba(255,255,255,.03);border-radius:6px;border:1px solid var(--line)}
+.pe-cur strong{color:var(--ink)}
+.pe-body label{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:12px 0 4px}
+.pe-body input{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;box-sizing:border-box}
+.pe-body input:focus{outline:none;border-color:var(--gold2)}
+.pe-note{font-size:10px;color:var(--dim);margin-top:12px;line-height:1.4;font-style:italic}
+.pe-err{font-size:11px;color:var(--red);margin-top:10px;display:none}
+.pe-err.show{display:block}
+.pe-foot{padding:12px 16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:8px;background:rgba(0,0,0,.2)}
+.pe-cancel{background:transparent;border:1px solid var(--line);color:var(--muted);padding:8px 14px;border-radius:6px;font-size:12px;cursor:pointer;font-family:inherit}
+.pe-cancel:hover{color:#fff;border-color:var(--muted)}
+.pe-save{background:var(--gold2);color:#000;border:none;padding:8px 16px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit}
+.pe-save:disabled{opacity:.4;cursor:wait}
+.pe-save:hover:not(:disabled){background:#e0c060}
+
 /* Mobile takeover */
 @media (max-width:768px){
   .notes-drawer{width:100vw;border-left:none;box-shadow:none}
-  .notes-btn{font-size:10px;padding:3px 7px;top:8px;right:8px}
+  .price-modal{width:calc(100vw - 20px)}
 }
-/* Hero-specific: nudge notes button below the Active pill */
-.hero-img .notes-btn{top:44px;right:11px}
 </style>
 </head>
 <body>
@@ -785,6 +815,31 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   </div>
 </div>
 
+<!-- PRICE EDIT MODAL -->
+<div class="price-modal-ov" id="pe-ov" onclick="closePriceEdit()"></div>
+<div class="price-modal" id="pe-modal" role="dialog" aria-label="Update listing price">
+  <div class="pe-head">
+    <div>
+      <div class="pe-title">&#9998; Update Listing Price</div>
+      <div class="pe-vin" id="pe-vin">&mdash;</div>
+    </div>
+    <button class="pe-close" onclick="closePriceEdit()" aria-label="Close">&times;</button>
+  </div>
+  <div class="pe-body">
+    <div class="pe-cur">Current: <strong id="pe-cur-price">&mdash;</strong> &middot; <span id="pe-cur-miles">&mdash;</span> mi &middot; <span id="pe-cur-seller">&mdash;</span></div>
+    <label for="pe-price">New price (USD)</label>
+    <input type="number" id="pe-price" min="1" step="1" placeholder="e.g. 109995" onkeydown="peKey(event)">
+    <label for="pe-miles">New miles (optional)</label>
+    <input type="number" id="pe-miles" min="0" step="1" placeholder="Leave blank to keep current" onkeydown="peKey(event)">
+    <div class="pe-note">Closes the current active row as inactive (last_seen = today) and inserts a new active row with the new price. The prior price becomes the strikethrough on the card.</div>
+    <div class="pe-err" id="pe-err"></div>
+  </div>
+  <div class="pe-foot">
+    <button class="pe-cancel" onclick="closePriceEdit()">Cancel</button>
+    <button class="pe-save" id="pe-save-btn" onclick="savePriceChange()">Save change</button>
+  </div>
+</div>
+
 <script>
 // ── CONFIG ────────────────────────────────────────────────
 var SB='https://kevwkxuloxxrevodsukg.supabase.co';
@@ -888,12 +943,15 @@ function relistChip(vin,cur){
 // ── NOTES MODULE ──────────────────────────────────────────
 var NS={vin:null,pendingFile:null,saving:false};
 
-function notesBtn(vin){
+function notesPillInner(cnt){
+  if(!cnt)return '&#128221; Add note';
+  return '&#128221; <span class="notes-pill-count">'+cnt+'</span> '+(cnt===1?'note':'notes');
+}
+function notesPill(vin){
   var n=(G.notesByVin&&G.notesByVin[vin])||[];
   var cnt=n.length;
-  return '<button class="notes-btn" onclick="event.stopPropagation();openNotes(\''+vin+'\')" title="View notes">'+
-    '&#128221;'+(cnt?'<span class="notes-btn-count">'+cnt+'</span>':'')+
-  '</button>';
+  var cls=cnt?'notes-pill has-notes':'notes-pill';
+  return '<div class="notes-pill-row"><button class="'+cls+'" data-vin="'+vin+'" onclick="event.stopPropagation();openNotes(\''+vin+'\')">'+notesPillInner(cnt)+'</button></div>';
 }
 
 function openNotes(vin){
@@ -1016,16 +1074,81 @@ function noteDelete(id){
 
 function updateNotesBadges(vin){
   var cnt=(G.notesByVin&&G.notesByVin[vin]||[]).length;
-  document.querySelectorAll('.notes-btn[onclick*="\''+vin+'\'"]').forEach(function(btn){
-    var existing=btn.querySelector('.notes-btn-count');
-    if(cnt===0){if(existing)existing.remove();}
-    else if(existing){existing.textContent=cnt;}
-    else{
-      var sp=document.createElement('span');
-      sp.className='notes-btn-count';sp.textContent=cnt;
-      btn.appendChild(sp);
-    }
+  document.querySelectorAll('.notes-pill[data-vin="'+vin+'"]').forEach(function(btn){
+    btn.innerHTML=notesPillInner(cnt);
+    btn.className=cnt?'notes-pill has-notes':'notes-pill';
   });
+}
+
+// ── PRICE EDIT MODULE ─────────────────────────────────────
+var PE={vin:null,cur:null,saving:false};
+
+function priceEditBtn(vin,active){
+  if(!active)return '';
+  return '<button class="price-edit" data-vin="'+vin+'" onclick="event.stopPropagation();openPriceEdit(\''+vin+'\')" title="Update listing price">&#9998;</button>';
+}
+
+function openPriceEdit(vin){
+  var lh=G.l&&G.l[vin];
+  if(!lh){alert('No active listing found for '+vin);return;}
+  PE.vin=vin;PE.cur=lh;PE.saving=false;
+  document.getElementById('pe-vin').textContent=vin;
+  document.getElementById('pe-cur-price').textContent=lh.price?fP(lh.price):'—';
+  document.getElementById('pe-cur-miles').textContent=lh.miles?Number(lh.miles).toLocaleString():'—';
+  document.getElementById('pe-cur-seller').textContent=lh.seller_name||'—';
+  document.getElementById('pe-price').value='';
+  document.getElementById('pe-miles').value='';
+  document.getElementById('pe-err').classList.remove('show');
+  document.getElementById('pe-err').textContent='';
+  var btn=document.getElementById('pe-save-btn');btn.disabled=false;btn.textContent='Save change';
+  document.getElementById('pe-modal').classList.add('open');
+  document.getElementById('pe-ov').classList.add('open');
+  setTimeout(function(){document.getElementById('pe-price').focus();},220);
+}
+
+function closePriceEdit(){
+  document.getElementById('pe-modal').classList.remove('open');
+  document.getElementById('pe-ov').classList.remove('open');
+  PE.vin=null;PE.cur=null;
+}
+
+function peKey(e){
+  if(e.key==='Enter'){e.preventDefault();savePriceChange();}
+  else if(e.key==='Escape'){closePriceEdit();}
+}
+
+function peErr(msg){
+  var el=document.getElementById('pe-err');
+  el.textContent=msg;el.classList.add('show');
+}
+
+function savePriceChange(){
+  if(PE.saving||!PE.vin||!PE.cur)return;
+  var priceStr=document.getElementById('pe-price').value.trim();
+  var milesStr=document.getElementById('pe-miles').value.trim();
+  var newPrice=parseInt(priceStr,10);
+  if(!newPrice||newPrice<=0){peErr('Enter a valid price greater than 0.');return;}
+  var newMiles=null;
+  if(milesStr){
+    newMiles=parseInt(milesStr,10);
+    if(isNaN(newMiles)||newMiles<0){peErr('Miles must be a non-negative number.');return;}
+    if(PE.cur.miles && newMiles<PE.cur.miles){peErr('New miles ('+newMiles.toLocaleString()+') are less than current ('+PE.cur.miles.toLocaleString()+'). Mileage should not go down.');return;}
+  }
+  if(newPrice===PE.cur.price && (newMiles===null||newMiles===PE.cur.miles)){
+    peErr('No change from current values.');return;
+  }
+  PE.saving=true;
+  var btn=document.getElementById('pe-save-btn');btn.disabled=true;btn.textContent='Saving\u2026';
+  document.getElementById('pe-err').classList.remove('show');
+  qw('rpc/change_listing_price','POST',{p_vin:PE.vin,p_new_price:newPrice,p_new_miles:newMiles})
+    .then(function(){
+      closePriceEdit();
+      loadAll();
+    })
+    .catch(function(err){
+      peErr('Save failed: '+err);
+      PE.saving=false;btn.disabled=false;btn.textContent='Save change';
+    });
 }
 
 // ── STATE ─────────────────────────────────────────────────
@@ -1149,16 +1272,16 @@ function renderHero(v,vm,lh){
     '<div class="hero-img">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
       '<div class="hero-img-ov"></div>'+
       '<div style="position:absolute;top:10px;left:11px;z-index:2;"><span class="tag tb">Primary Candidate</span></div>'+
-      notesBtn(v.vin)+
       '<div class="hero-pill"><span class="live-dot"></span>Active</div>'+
       '<div class="hero-dom">'+dom+'</div>'+
     '</div>'+
     '<div class="hero-body">'+
+      notesPill(v.vin)+
       '<div class="hero-kicker">'+(loc?loc+' &middot; ':'')+seller+'</div>'+
       '<div class="hero-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
       '<div class="hero-sub">'+v.vin+(v.exterior?' &middot; '+v.exterior:'')+'</div>'+
       '<div class="hero-stats">'+
-        '<div class="hs">'+priceHTML+'<span class="hs-l">Ask</span></div>'+
+        '<div class="hs">'+priceHTML+priceEditBtn(v.vin,!!lh)+'<span class="hs-l">Ask</span></div>'+
         '<div class="hs"><span class="hs-v" style="color:var(--blue2);">'+miles+'</span><span class="hs-l">Miles</span></div>'+
         '<div class="hs"><span class="hs-v" style="color:var(--green);">'+owners+'</span><span class="hs-l">Owners</span></div>'+
         '<div class="hs"><span class="hs-v">'+proj+'</span><span class="hs-l">Proj. 2028</span></div>'+
@@ -1183,7 +1306,6 @@ function renderCompact(v,vm,lh){
     '<div class="hs-img-panel" style="position:relative;height:100%;">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
       '<div class="lc-img-ov"></div>'+
       '<div class="lc-top">'+badge+'</div>'+
-      notesBtn(v.vin)+
       (active?'<div class="lc-active"><span class="live-dot"></span>Active</div>':'')+
     '</div>'+
     '<div class="hs-hist-panel">'+
@@ -1193,11 +1315,12 @@ function renderCompact(v,vm,lh){
     '<button class="hs-toggle" onclick="toggleHistory(this)">&#9650;</button>'+
     '</div>'+
     '<div class="lc-body">'+
+      notesPill(v.vin)+
       '<div class="lc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
       '<div class="lc-meta">'+(v.exterior?v.exterior+' &middot; ':'')+loc+(lh&&lh.seller_name?' &middot; '+lh.seller_name:'')+'</div>'+
       '<div class="lc-flags">'+flags(v,vm)+'</div>'+ (function(){var d=G.docs[v.vin]||{};var hasSB=function(u){return u&&u.indexOf('supabase')>-1;};return '<div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px;">'+'<a href="'+(d.carfax||'https://www.carfax.com/VehicleHistory/p/Report.cfx?vin='+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.carfax)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.carfax)?'✓ ':'')+' CARFAX</a>'+'<a href="'+(d.autocheck||'https://www.autocheck.com/vehiclehistory/?vin='+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.autocheck)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.autocheck)?'✓ ':'')+' AutoCheck</a>'+'<a href="'+(d.iseecars||'https://www.iseecars.com/vin#vin='+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.iseecars)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.iseecars)?'✓ ':'')+' iSeeCars</a>'+'<a href="'+(d.goodcar||'https://www.goodcar.com/us/vin-check/'+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.goodcar)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.goodcar)?'✓ ':'')+' GoodCar</a>'+'<a href="'+(d.public_record||'https://www.publicrecords.us/vehicle/'+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.public_record)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.public_record)?'✓ ':'')+' PubRec</a>'+'<a href="'+(d.window_sticker||'https://www.mbusa.com/content/dam/mb-nafta/us/owners/window-sticker/'+v.vin+'.pdf')+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.window_sticker)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.window_sticker)?'✓ ':'')+' Sticker</a>'+'</div>';})()+
       '<div class="lc-row">'+
-        priceHTML+
+        priceHTML+priceEditBtn(v.vin,active)+
         '<span class="lc-mi">'+miles+'</span>'+
         (active&&url?'<a class="lc-btn" href="'+url+'" target="_blank" rel="noopener">View &#8599;</a>':'')+
       '</div>'+
@@ -1235,7 +1358,6 @@ function renderTarget(v,vm,lh){
       '<div class="tc-img-ov"></div>'+
       '<div class="tc-top"><span class="tag tb">Target</span>'+(v.is_final_edition?'<span class="tag tg">Final Edition</span>':'')+
       '</div>'+
-      notesBtn(v.vin)+
       (active?'<div class="tc-active"><span class="live-dot"></span>Active Listing</div>':'')+
     '</div>'+
     '<div class="hs-hist-panel">'+
@@ -1245,10 +1367,11 @@ function renderTarget(v,vm,lh){
     '<button class="hs-toggle" onclick="toggleHistory(this)">&#9650;</button>'+
     '</div>'+
     '<div class="tc-body">'+
+      notesPill(v.vin)+
       '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
       '<div class="tc-sub">'+v.vin+(v.exterior?' &middot; '+v.exterior:'')+' &middot; '+loc+'</div>'+
       '<div class="tc-stats">'+
-        '<div class="tc-stat">'+priceHTML+'<span class="tc-sl">Ask</span></div>'+
+        '<div class="tc-stat">'+priceHTML+priceEditBtn(v.vin,active)+'<span class="tc-sl">Ask</span></div>'+
         '<div class="tc-stat"><span class="tc-sv">'+miles+'</span><span class="tc-sl">Miles</span></div>'+
         '<div class="tc-stat"><span class="tc-sv">'+owners+'</span><span class="tc-sl">Owners</span></div>'+
       '</div>'+
