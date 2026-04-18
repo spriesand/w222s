@@ -387,9 +387,10 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .notes-save:disabled{opacity:.4;cursor:wait}
 .notes-save:hover:not(:disabled){background:#e0c060}
 
-/* Notes pill (below image, in body area) */
-.notes-pill-row{display:flex;justify-content:flex-end;align-items:center;padding:8px 12px 0;gap:6px}
-.notes-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);padding:3px 10px;border-radius:12px;font-size:11px;cursor:pointer;font-family:inherit;transition:all .15s;line-height:1.4}
+/* Notes pill (inline with card title) */
+.title-row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.title-row .lc-title,.title-row .tc-title,.title-row .hero-title{flex:1;min-width:0}
+.notes-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);padding:3px 10px;border-radius:12px;font-size:11px;cursor:pointer;font-family:inherit;transition:all .15s;line-height:1.4;flex-shrink:0;white-space:nowrap}
 .notes-pill:hover{background:rgba(255,255,255,.08);border-color:var(--gold2);color:#fff}
 .notes-pill.has-notes{color:var(--gold2);border-color:rgba(200,175,85,.35);background:rgba(200,175,85,.08)}
 .notes-pill-count{font-weight:700}
@@ -951,7 +952,7 @@ function notesPill(vin){
   var n=(G.notesByVin&&G.notesByVin[vin])||[];
   var cnt=n.length;
   var cls=cnt?'notes-pill has-notes':'notes-pill';
-  return '<div class="notes-pill-row"><button class="'+cls+'" data-vin="'+vin+'" onclick="event.stopPropagation();openNotes(\''+vin+'\')">'+notesPillInner(cnt)+'</button></div>';
+  return '<button class="'+cls+'" data-vin="'+vin+'" onclick="event.stopPropagation();openNotes(\''+vin+'\')">'+notesPillInner(cnt)+'</button>';
 }
 
 function openNotes(vin){
@@ -1276,9 +1277,11 @@ function renderHero(v,vm,lh){
       '<div class="hero-dom">'+dom+'</div>'+
     '</div>'+
     '<div class="hero-body">'+
-      notesPill(v.vin)+
       '<div class="hero-kicker">'+(loc?loc+' &middot; ':'')+seller+'</div>'+
-      '<div class="hero-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
+      '<div class="title-row">'+
+        '<div class="hero-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
+        notesPill(v.vin)+
+      '</div>'+
       '<div class="hero-sub">'+v.vin+(v.exterior?' &middot; '+v.exterior:'')+'</div>'+
       '<div class="hero-stats">'+
         '<div class="hs">'+priceHTML+priceEditBtn(v.vin,!!lh)+'<span class="hs-l">Ask</span></div>'+
@@ -1315,8 +1318,10 @@ function renderCompact(v,vm,lh){
     '<button class="hs-toggle" onclick="toggleHistory(this)">&#9650;</button>'+
     '</div>'+
     '<div class="lc-body">'+
-      notesPill(v.vin)+
-      '<div class="lc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
+      '<div class="title-row">'+
+        '<div class="lc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
+        notesPill(v.vin)+
+      '</div>'+
       '<div class="lc-meta">'+(v.exterior?v.exterior+' &middot; ':'')+loc+(lh&&lh.seller_name?' &middot; '+lh.seller_name:'')+'</div>'+
       '<div class="lc-flags">'+flags(v,vm)+'</div>'+ (function(){var d=G.docs[v.vin]||{};var hasSB=function(u){return u&&u.indexOf('supabase')>-1;};return '<div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px;">'+'<a href="'+(d.carfax||'https://www.carfax.com/VehicleHistory/p/Report.cfx?vin='+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.carfax)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.carfax)?'✓ ':'')+' CARFAX</a>'+'<a href="'+(d.autocheck||'https://www.autocheck.com/vehiclehistory/?vin='+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.autocheck)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.autocheck)?'✓ ':'')+' AutoCheck</a>'+'<a href="'+(d.iseecars||'https://www.iseecars.com/vin#vin='+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.iseecars)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.iseecars)?'✓ ':'')+' iSeeCars</a>'+'<a href="'+(d.goodcar||'https://www.goodcar.com/us/vin-check/'+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.goodcar)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.goodcar)?'✓ ':'')+' GoodCar</a>'+'<a href="'+(d.public_record||'https://www.publicrecords.us/vehicle/'+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.public_record)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.public_record)?'✓ ':'')+' PubRec</a>'+'<a href="'+(d.window_sticker||'https://www.mbusa.com/content/dam/mb-nafta/us/owners/window-sticker/'+v.vin+'.pdf')+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.window_sticker)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.window_sticker)?'✓ ':'')+' Sticker</a>'+'</div>';})()+
       '<div class="lc-row">'+
@@ -1367,8 +1372,10 @@ function renderTarget(v,vm,lh){
     '<button class="hs-toggle" onclick="toggleHistory(this)">&#9650;</button>'+
     '</div>'+
     '<div class="tc-body">'+
-      notesPill(v.vin)+
-      '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
+      '<div class="title-row">'+
+        '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
+        notesPill(v.vin)+
+      '</div>'+
       '<div class="tc-sub">'+v.vin+(v.exterior?' &middot; '+v.exterior:'')+' &middot; '+loc+'</div>'+
       '<div class="tc-stats">'+
         '<div class="tc-stat">'+priceHTML+priceEditBtn(v.vin,active)+'<span class="tc-sl">Ask</span></div>'+
