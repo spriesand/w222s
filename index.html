@@ -1865,7 +1865,7 @@ function loadAll(){
     set('ak-gi',giN);
     set('ak-split',s65n+' S65 \u00b7 '+s600n+' S600');
 
-    buildChanged(recentLH);
+    buildChanged(allLH);
 
     // Hero
     var hero=activeV.find(function(v){return v.car_status==='target';})||activeV[0];
@@ -1937,9 +1937,15 @@ function loadAll(){
     renderScatter(vehicles,mkt,lhMap);
     renderMiBands(vehicles,mkt,lhMap);
     renderColorBars(vehicles);
-    renderDOMTable(recentLH);
-    renderPriceDrops(vehicles,recentLH);
-  }).catch(function(e){console.error('Load error:',e);});
+    renderDOMTable(allLH);
+    renderPriceDrops(vehicles,allLH);
+  }).catch(function(e){
+    console.error('Load error:',e);
+    var strip=document.getElementById('changed-strip');
+    if(strip)strip.innerHTML='<span class="ch-item" style="color:var(--red);">&#9888; Load failed — '+(e&&e.message?e.message:String(e))+' (check console)</span>';
+    var hero=document.getElementById('dash-hero');
+    if(hero&&hero.querySelector('.loading'))hero.innerHTML='<div class="loading" style="color:var(--red);">Load failed. See console for details.</div>';
+  });
 }
 
 
