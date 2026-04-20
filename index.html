@@ -1848,7 +1848,7 @@ function loadAll(){
   Promise.all([
     q('vehicles?select=*&order=year.desc&limit=2000'),
     q('vehicle_market?select=*'),
-    q('listing_history?select=id,vin,price,miles,seller_name,seller_type,city,state,platform,first_seen,last_seen,dom&order=last_seen.desc&limit=5000'),
+    q('listing_history?select=id,vin,price,miles,seller_name,seller_type,city,state,platform,first_seen,last_seen,dom&order=last_seen.desc,id.desc&limit=5000'),
     q('vehicle_build?select=vin,paint_name,upholstery_name,production_date,has_burmester,has_night_vision,has_magic_sky,has_ceramic_brakes,has_refrigerator,has_designo,has_abc_suspension,has_carbon_pkg,has_rear_entertainment,has_chauffeur_pkg,has_executive_rear_seat,has_keyless_go'),
     q('documents?select=vin,doc_type,storage_url'),
     q('vehicle_notes?select=*&deleted_at=is.null&order=created_at.desc')
