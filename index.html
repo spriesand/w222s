@@ -153,6 +153,9 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 
 /* ── MARKET ── */
 .mkt-controls{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.mkt-search{background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:20px;color:var(--ink);font-family:var(--mono);font-size:12px;padding:5px 12px;width:220px;outline:none;transition:border-color .15s}
+.mkt-search:focus{border-color:var(--blue)}
+.mkt-search::placeholder{color:var(--dim)}
 .fbtn{font-family:var(--mono);font-size:12px;padding:5px 11px;border-radius:20px;border:1px solid var(--line2);color:var(--muted);background:none;cursor:pointer;transition:all .15s;white-space:nowrap}
 .fbtn:hover{border-color:var(--blue);color:var(--blue2)}
 .fbtn.active{background:var(--blue);color:var(--bg);border-color:var(--blue)}
@@ -571,6 +574,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <span id="market-label" style="color:var(--green);"></span>
   </div>
   <div class="mkt-controls">
+    <input class="mkt-search" id="mkt-search" type="text" placeholder="&#128269; Search VIN, color, state, seller&hellip;" oninput="renderMkt()" autocomplete="off" autocorrect="off" spellcheck="false">
+    <span class="fsep">|</span>
     <button class="fbtn active" onclick="fMkt('all',this)">All</button>
     <button class="fbtn" onclick="fMkt('target',this)">Targets Only</button>
     <button class="fbtn" onclick="fMkt('reference',this)">Reference</button>
@@ -1464,11 +1469,30 @@ function sMkt(s,btn){
 }
 function renderMkt(){
   var active=G.v.filter(function(v){return G.l[v.vin];});
+  var q=(document.getElementById('mkt-search')||{}).value;
+  q=q?q.trim().toLowerCase():'';
   var filtered=active.filter(function(v){
     if(mktFilter==='target')return v.car_status==='target';
     if(mktFilter==='reference')return v.car_status==='reference';
     return true;
   });
+  if(q){
+    filtered=filtered.filter(function(v){
+      var lh=G.l[v.vin]||{};
+      var b=G.build&&G.build[v.vin]||{};
+      var haystack=[
+        v.vin,
+        v.last_title_state,
+        String(v.year||''),
+        v.trim,
+        lh.seller_name,
+        lh.state,
+        lh.city,
+        b.paint_name?formatColor(b.paint_name):''
+      ].join(' ').toLowerCase();
+      return haystack.indexOf(q)>-1;
+    });
+  }
   filtered.sort(function(a,b){
     if(mktSort==='miles'){var oa=(G.m[a.vin]&&G.m[a.vin].curr_odo)||999999;var ob=(G.m[b.vin]&&G.m[b.vin].curr_odo)||999999;return oa-ob;}
     if(mktSort==='year')return (b.year||0)-(a.year||0);
