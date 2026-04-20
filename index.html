@@ -574,8 +574,6 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <span id="market-label" style="color:var(--green);"></span>
   </div>
   <div class="mkt-controls">
-    <input class="mkt-search" id="mkt-search" type="text" placeholder="&#128269; Search VIN, color, state, seller&hellip;" oninput="renderMkt()" autocomplete="off" autocorrect="off" spellcheck="false">
-    <span class="fsep">|</span>
     <button class="fbtn active" onclick="fMkt('all',this)">All</button>
     <button class="fbtn" onclick="fMkt('target',this)">Targets Only</button>
     <button class="fbtn" onclick="fMkt('reference',this)">Reference</button>
@@ -594,6 +592,9 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   <div class="sec">
     <span>Targets &mdash; 2017&ndash;2020 S65 &amp; Ultra-Rare 2017 S600</span>
     <span id="targets-label" style="color:var(--gold2);"></span>
+  </div>
+  <div class="mkt-controls" style="margin-bottom:12px;">
+    <input class="mkt-search" id="tgt-search" type="text" placeholder="&#128269; Search VIN, color, state, seller&hellip;" oninput="renderTargets()" autocomplete="off" autocorrect="off" spellcheck="false">
   </div>
   <div class="tgt-grid" id="targets-grid"><div class="loading">Loading&hellip;</div></div>
 </div>
@@ -1469,17 +1470,29 @@ function sMkt(s,btn){
 }
 function renderMkt(){
   var active=G.v.filter(function(v){return G.l[v.vin];});
-  var q=(document.getElementById('mkt-search')||{}).value;
-  q=q?q.trim().toLowerCase():'';
   var filtered=active.filter(function(v){
     if(mktFilter==='target')return v.car_status==='target';
     if(mktFilter==='reference')return v.car_status==='reference';
     return true;
   });
+  filtered.sort(function(a,b){
+    if(mktSort==='miles'){var oa=(G.m[a.vin]&&G.m[a.vin].curr_odo)||999999;var ob=(G.m[b.vin]&&G.m[b.vin].curr_odo)||999999;return oa-ob;}
+    if(mktSort==='year')return (b.year||0)-(a.year||0);
+    return ((G.l[a.vin]&&G.l[a.vin].price)||999999)-((G.l[b.vin]&&G.l[b.vin].price)||999999);
+  });
+  var mg=document.getElementById('market-grid');
+  if(mg)mg.innerHTML=filtered.length?filtered.map(function(v){return renderCompact(v,G.m[v.vin],G.urlMap[v.vin]||G.l[v.vin]);}).join(''):'<div class="loading">No listings match filter.</div>';
+}
+
+// ── RENDER TARGETS ────────────────────────────────────────
+function renderTargets(){
+  var q=(document.getElementById('tgt-search')||{}).value;
+  q=q?q.trim().toLowerCase():'';
+  var list=G.sortedT||[];
   if(q){
-    filtered=filtered.filter(function(v){
+    list=list.filter(function(v){
       var lh=G.l[v.vin]||{};
-      var b=G.build&&G.build[v.vin]||{};
+      var b=(G.build&&G.build[v.vin])||{};
       var haystack=[
         v.vin,
         v.last_title_state,
@@ -1493,13 +1506,10 @@ function renderMkt(){
       return haystack.indexOf(q)>-1;
     });
   }
-  filtered.sort(function(a,b){
-    if(mktSort==='miles'){var oa=(G.m[a.vin]&&G.m[a.vin].curr_odo)||999999;var ob=(G.m[b.vin]&&G.m[b.vin].curr_odo)||999999;return oa-ob;}
-    if(mktSort==='year')return (b.year||0)-(a.year||0);
-    return ((G.l[a.vin]&&G.l[a.vin].price)||999999)-((G.l[b.vin]&&G.l[b.vin].price)||999999);
-  });
-  var mg=document.getElementById('market-grid');
-  if(mg)mg.innerHTML=filtered.length?filtered.map(function(v){return renderCompact(v,G.m[v.vin],G.urlMap[v.vin]||G.l[v.vin]);}).join(''):'<div class="loading">No listings match filter.</div>';
+  var tg=document.getElementById('targets-grid');
+  if(tg)tg.innerHTML=list.length
+    ?list.map(function(v){return renderTarget(v,G.m[v.vin],G.l[v.vin]);}).join('')
+    :'<div class="loading">No targets match.</div>';
 }
 
 // ── SCATTER CHART ─────────────────────────────────────────
@@ -1905,8 +1915,8 @@ function loadAll(){
       var aA=lhMap[a.vin]?0:1,bA=lhMap[b.vin]?0:1;
       return aA!==bA?aA-bA:(b.year||0)-(a.year||0);
     });
-    var tg=document.getElementById('targets-grid');
-    if(tg)tg.innerHTML=sortedT.length?sortedT.map(function(v){return renderTarget(v,mkt[v.vin],G.urlMap[v.vin]||lhMap[v.vin]);}).join(''):'<div class="loading">No targets found.</div>';
+    G.sortedT=sortedT;
+    renderTargets();
 
     // Cohort bars — S65 + S600 grouped by year
     var years=[2015,2016,2017,2018,2019,2020];
