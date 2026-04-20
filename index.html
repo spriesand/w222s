@@ -156,6 +156,12 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .mkt-search{background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:20px;color:var(--ink);font-family:var(--mono);font-size:12px;padding:5px 12px;width:220px;outline:none;transition:border-color .15s}
 .mkt-search:focus{border-color:var(--blue)}
 .mkt-search::placeholder{color:var(--dim)}
+.tgt-filter-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.tgt-filter-lbl{font-family:var(--mono);font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;align-self:center;white-space:nowrap;margin-right:2px}
+.fchip{background:rgba(255,255,255,.03);border:1px solid var(--line);color:var(--muted);font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.07em;padding:3px 9px;border-radius:12px;cursor:pointer;transition:all .15s;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
+.fchip:hover{border-color:var(--blue2);color:var(--ink)}
+.fchip.active{background:rgba(122,167,220,.15);border-color:var(--blue2);color:var(--blue2)}
+.fchip.active-equip{background:rgba(0,212,200,.12);border-color:var(--teal);color:var(--teal)}
 .fbtn{font-family:var(--mono);font-size:12px;padding:5px 11px;border-radius:20px;border:1px solid var(--line2);color:var(--muted);background:none;cursor:pointer;transition:all .15s;white-space:nowrap}
 .fbtn:hover{border-color:var(--blue);color:var(--blue2)}
 .fbtn.active{background:var(--blue);color:var(--bg);border-color:var(--blue)}
@@ -595,6 +601,23 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   </div>
   <div class="mkt-controls" style="margin-bottom:12px;">
     <input class="mkt-search" id="tgt-search" type="text" placeholder="&#128269; Search VIN, color, state, seller&hellip;" oninput="renderTargets()" autocomplete="off" autocorrect="off" spellcheck="false">
+  </div>
+  <div class="tgt-filter-row" id="tgt-ext-row" style="display:none;">
+    <span class="tgt-filter-lbl">Ext</span>
+    <div id="tgt-ext-chips" style="display:flex;flex-wrap:wrap;gap:5px;"></div>
+  </div>
+  <div class="tgt-filter-row" id="tgt-int-row" style="display:none;">
+    <span class="tgt-filter-lbl">Int</span>
+    <div id="tgt-int-chips" style="display:flex;flex-wrap:wrap;gap:5px;"></div>
+  </div>
+  <div class="tgt-filter-row">
+    <span class="tgt-filter-lbl">Equip</span>
+    <button class="fchip" data-equip="has_burmester" onclick="toggleEquipChip(this)">Burmester</button>
+    <button class="fchip" data-equip="has_night_vision" onclick="toggleEquipChip(this)">Night Vision</button>
+    <button class="fchip" data-equip="has_magic_sky" onclick="toggleEquipChip(this)">Magic Sky</button>
+    <button class="fchip" data-equip="has_ceramic_brakes" onclick="toggleEquipChip(this)">Ceramic Brakes</button>
+    <button class="fchip" data-equip="has_designo" onclick="toggleEquipChip(this)">designo</button>
+    <button class="fchip" data-equip="has_refrigerator" onclick="toggleEquipChip(this)">Refrigerator</button>
   </div>
   <div class="tgt-grid" id="targets-grid"><div class="loading">Loading&hellip;</div></div>
 </div>
@@ -1485,10 +1508,59 @@ function renderMkt(){
 }
 
 // ── RENDER TARGETS ────────────────────────────────────────
+// ── TARGET FILTERS ────────────────────────────────────────
+var TF={ext:'',int:'',equip:[]};
+
+function buildTgtFilters(){
+  var targets=G.sortedT||[];
+  // Collect unique ext/int colors from target VINs only
+  var exts={},ints={};
+  targets.forEach(function(v){
+    var b=(G.build&&G.build[v.vin])||{};
+    if(b.paint_name){var c=formatColor(b.paint_name);if(c)exts[c]=true;}
+    if(b.upholstery_name){var u=formatColor(b.upholstery_name);if(u)ints[u]=true;}
+  });
+  var extKeys=Object.keys(exts).sort();
+  var intKeys=Object.keys(ints).sort();
+  var extRow=document.getElementById('tgt-ext-row');
+  var intRow=document.getElementById('tgt-int-row');
+  var extEl=document.getElementById('tgt-ext-chips');
+  var intEl=document.getElementById('tgt-int-chips');
+  if(extEl&&extKeys.length){
+    extEl.innerHTML=extKeys.map(function(c){
+      return '<button class="fchip'+(TF.ext===c?' active':'')+'" onclick="toggleColorChip(this,\'ext\')">'+c+'</button>';
+    }).join('');
+    if(extRow)extRow.style.display='flex';
+  }
+  if(intEl&&intKeys.length){
+    intEl.innerHTML=intKeys.map(function(c){
+      return '<button class="fchip'+(TF.int===c?' active':'')+'" onclick="toggleColorChip(this,\'int\')">'+c+'</button>';
+    }).join('');
+    if(intRow)intRow.style.display='flex';
+  }
+}
+
+function toggleColorChip(btn,type){
+  var val=btn.textContent.trim();
+  if(TF[type]===val){TF[type]='';}else{TF[type]=val;}
+  // Re-render chips to update active state
+  buildTgtFilters();
+  renderTargets();
+}
+
+function toggleEquipChip(btn){
+  var key=btn.getAttribute('data-equip');
+  var idx=TF.equip.indexOf(key);
+  if(idx>-1){TF.equip.splice(idx,1);btn.classList.remove('active-equip');}
+  else{TF.equip.push(key);btn.classList.add('active-equip');}
+  renderTargets();
+}
+
 function renderTargets(){
   var q=(document.getElementById('tgt-search')||{}).value;
   q=q?q.trim().toLowerCase():'';
   var list=G.sortedT||[];
+  // Text search
   if(q){
     list=list.filter(function(v){
       var lh=G.l[v.vin]||{};
@@ -1501,9 +1573,31 @@ function renderTargets(){
         lh.seller_name,
         lh.state,
         lh.city,
-        b.paint_name?formatColor(b.paint_name):''
+        b.paint_name?formatColor(b.paint_name):'',
+        b.upholstery_name?formatColor(b.upholstery_name):''
       ].join(' ').toLowerCase();
       return haystack.indexOf(q)>-1;
+    });
+  }
+  // Exterior color filter
+  if(TF.ext){
+    list=list.filter(function(v){
+      var b=(G.build&&G.build[v.vin])||{};
+      return b.paint_name&&formatColor(b.paint_name)===TF.ext;
+    });
+  }
+  // Interior color filter
+  if(TF.int){
+    list=list.filter(function(v){
+      var b=(G.build&&G.build[v.vin])||{};
+      return b.upholstery_name&&formatColor(b.upholstery_name)===TF.int;
+    });
+  }
+  // Equipment filters (AND logic — must have all selected)
+  if(TF.equip.length){
+    list=list.filter(function(v){
+      var b=(G.build&&G.build[v.vin])||{};
+      return TF.equip.every(function(k){return b[k]===true;});
     });
   }
   var tg=document.getElementById('targets-grid');
@@ -1848,7 +1942,7 @@ function loadAll(){
   Promise.all([
     q('vehicles?select=*&order=year.desc&limit=2000'),
     q('vehicle_market?select=*'),
-    q('listing_history?select=id,vin,price,miles,seller_name,seller_type,city,state,platform,first_seen,last_seen,dom&order=last_seen.desc,id.desc&limit=5000'),
+    q('listing_history?select=id,vin,price,miles,seller_name,seller_type,city,state,platform,first_seen,last_seen,dom&order=last_seen.desc&limit=5000'),
     q('vehicle_build?select=vin,paint_name,upholstery_name,production_date,has_burmester,has_night_vision,has_magic_sky,has_ceramic_brakes,has_refrigerator,has_designo,has_abc_suspension,has_carbon_pkg,has_rear_entertainment,has_chauffeur_pkg,has_executive_rear_seat,has_keyless_go'),
     q('documents?select=vin,doc_type,storage_url'),
     q('vehicle_notes?select=*&deleted_at=is.null&order=created_at.desc')
@@ -1916,6 +2010,7 @@ function loadAll(){
       return aA!==bA?aA-bA:(b.year||0)-(a.year||0);
     });
     G.sortedT=sortedT;
+    buildTgtFilters();
     renderTargets();
 
     // Cohort bars — S65 + S600 grouped by year
