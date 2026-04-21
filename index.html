@@ -581,7 +581,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
       </div>
       <!-- Mini gallery carousel -->
       <div class="card" style="overflow:hidden;position:relative;height:160px;" id="dash-gallery-wrap">
-        <div id="dash-gallery-track" style="display:flex;height:100%;transition:transform .5s cubic-bezier(.25,.46,.45,.94);overflow:hidden;">
+        <div id="dash-gallery-track" style="display:flex;height:100%;transition:transform .5s cubic-bezier(.25,.46,.45,.94);">
           <div class="loading" style="min-width:100%;display:flex;align-items:center;justify-content:center;">Loading gallery&hellip;</div>
         </div>
         <button onclick="dashCarouselPrev()" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#8592;</button>
@@ -863,6 +863,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   <div class="mdr" onclick="go('news',null);loadNews();closeMore()"><span class="mdr-icon">&#128240;</span>News</div>
   <div class="mdr" onclick="go('videos',null);closeMore()"><span class="mdr-icon">&#127909;</span>Videos</div>
   <div class="mdr" onclick="go('gallery',null);loadGallery();closeMore()"><span class="mdr-icon">&#128247;</span>Gallery</div>
+  <div class="mdr" onclick="go('resources',null);loadResources();closeMore()"><span class="mdr-icon">&#128196;</span>Resources</div>
 </div>
 <div class="more-ov" id="more-ov" onclick="closeMore()"></div>
 
@@ -1417,11 +1418,11 @@ function renderDashListings(){
 var dashCarIdx=0;
 var dashCarTimer=null;
 function buildDashCarousel(images){
+  var wrap=document.getElementById('dash-gallery-wrap');
   var track=document.getElementById('dash-gallery-track');
   if(!track||!images.length)return;
-  var featured=images.slice(0,Math.min(8,images.length));
-  track.innerHTML=featured.map(function(url){
-    return '<div style="flex:0 0 100%;height:160px;position:relative;overflow:hidden;">'+
+  track.innerHTML=images.map(function(url){
+    return '<div style="flex:0 0 100%;width:100%;height:160px;position:relative;flex-shrink:0;">'+
       '<img src="'+url+'" style="width:100%;height:100%;object-fit:cover;display:block;opacity:.92;">'+
       '<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(5,8,16,.6),transparent 50%)"></div>'+
       '<div style="position:absolute;bottom:8px;left:12px;font-family:var(--serif);font-size:13px;color:var(--ink);">W222 &mdash; S65 &amp; S600</div>'+
@@ -1430,18 +1431,18 @@ function buildDashCarousel(images){
   dashCarIdx=0;
   if(dashCarTimer)clearInterval(dashCarTimer);
   dashCarTimer=setInterval(function(){
-    dashCarIdx=(dashCarIdx+1)%featured.length;
+    dashCarIdx=(dashCarIdx+1)%images.length;
     track.style.transform='translateX(-'+dashCarIdx+'00%)';
   },4000);
 }
 function dashCarouselPrev(){
-  var featured=Math.min(8,galleryImages.length);if(!featured)return;
-  dashCarIdx=(dashCarIdx-1+featured)%featured;
+  var total=galleryImages.length;if(!total)return;
+  dashCarIdx=(dashCarIdx-1+total)%total;
   var t=document.getElementById('dash-gallery-track');if(t)t.style.transform='translateX(-'+dashCarIdx+'00%)';
 }
 function dashCarouselNext(){
-  var featured=Math.min(8,galleryImages.length);if(!featured)return;
-  dashCarIdx=(dashCarIdx+1)%featured;
+  var total=galleryImages.length;if(!total)return;
+  dashCarIdx=(dashCarIdx+1)%total;
   var t=document.getElementById('dash-gallery-track');if(t)t.style.transform='translateX(-'+dashCarIdx+'00%)';
 }
 
