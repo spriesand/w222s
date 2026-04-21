@@ -994,6 +994,18 @@ function qw(ep,method,body){
   });
 }
 
+// Insert-ignore helper — POST with ON CONFLICT DO NOTHING
+function qign(table,body){
+  return fetch(SB+'/rest/v1/'+table,{
+    method:'POST',
+    headers:Object.assign({},H,{'Prefer':'resolution=ignore-duplicates,return=representation'}),
+    body:JSON.stringify(body)
+  }).then(function(r){
+    if(!r.ok)return r.text().then(function(t){return Promise.reject(r.status+' '+t);});
+    return null;
+  });
+}
+
 // Upsert helper — POST with ON CONFLICT merge
 function qups(table,body){
   return fetch(SB+'/rest/v1/'+table,{
@@ -2521,7 +2533,7 @@ function saveNewListing(){
     return qups('vehicle_build',{vin:vin});
   })
   .then(function(){
-    return qw('odometer_readings','POST',{
+    return qign('odometer_readings',{
       vin:vin,reading_date:today,odometer:miles,source:'listing'
     });
   })
