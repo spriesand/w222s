@@ -2494,7 +2494,15 @@ function saveNewListing(){
   if(vin.length!==17){alErr('Invalid VIN.');return;}
   if(!year){alErr('Year is required.');return;}
   if(!price){alErr('Price is required.');return;}
-  if(miles===null){alErr('Miles is required.');return;}
+  if(miles===null){alErr('Miles is required.');return;}var summary='Confirm new listing:\n\n'+
+    'VIN: '+vin+'\n'+
+    'Year/Trim: '+year+' '+trim+'\n'+
+    'Price: $'+price.toLocaleString()+'\n'+
+    'Miles: '+miles.toLocaleString()+'\n'+
+    'Seller: '+(seller||'--')+' · '+(platform||'--')+'\n'+
+    'Location: '+(city||'--')+', '+(state||'--')+'\n'+
+    'Owners: '+(owners||'--')+' · Accidents: '+(accidents!==null?accidents:'--');
+  if(!confirm(summary))return;
   var cohort=alCohort(year,trim,isFE);
   var carStatus=alCarStatus(year,trim,isTgt);
   var today=new Date().toISOString().slice(0,10);
