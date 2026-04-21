@@ -1517,7 +1517,15 @@ function renderCompact(v,vm,lh){
         '<span class="lc-mi">'+miles+'</span>'+
 
       '</div>'+
-      (v.listing_url?'<a href="'+v.listing_url+'" target="_blank" rel="noopener" class="lc-btn" style="width:100%;justify-content:center;padding:6px 9px;">&#9654; View Listing</a>':'')+
+      '<div style="display:flex;gap:6px;align-items:center;">'+
+        (v.listing_url?'<a href="'+v.listing_url+'" target="_blank" rel="noopener" class="lc-btn" style="flex:1;justify-content:center;padding:6px 9px;">&#9654; View Listing</a>':'<span style="flex:1;"></span>')+
+        '<button class="price-edit" onclick="openUrlEdit(\''+v.vin+'\',this)" title="Edit listing URL">&#9998;</button>'+
+      '</div>'+
+      '<div class="url-edit-row" id="url-edit-'+v.vin+'" style="display:none;gap:5px;align-items:center;">'+
+        '<input type="text" class="url-edit-input" id="url-input-'+v.vin+'" placeholder="https://..." value="'+esc(v.listing_url||'')+'" style="flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:6px;color:var(--ink);font-family:var(--mono);font-size:11px;padding:6px 8px;outline:none;">'+
+        '<button class="lc-btn" onclick="saveListingUrl(\''+v.vin+'\')" style="flex:none;padding:5px 10px;">Save</button>'+
+        '<button class="lc-btn" onclick="cancelUrlEdit(\''+v.vin+'\')" style="flex:none;padding:5px 8px;opacity:.6;">&#x2715;</button>'+
+      '</div>'+
     '</div>'+
   '</div>';
 }
@@ -1702,11 +1710,12 @@ function saveListingUrl(vin){
   var url=inp.value.trim();
   qw('vehicles?vin=eq.'+vin,'PATCH',{listing_url:url||null})
     .then(function(){
-      // Update local state
       var v=G.v.find(function(x){return x.vin===vin;});
       if(v)v.listing_url=url||null;
       cancelUrlEdit(vin);
       renderTargets();
+      renderMkt();
+      renderDashListings();
     })
     .catch(function(err){alert('Save failed: '+err);});
 }
