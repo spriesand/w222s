@@ -162,6 +162,16 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .fchip:hover{border-color:var(--blue2);color:var(--ink)}
 .fchip.active{background:rgba(122,167,220,.15);border-color:var(--blue2);color:var(--blue2)}
 .fchip.active-equip{background:rgba(0,212,200,.12);border-color:var(--teal);color:var(--teal)}
+.filter-toggle{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:20px;color:var(--muted);font-family:var(--mono);font-size:12px;padding:5px 13px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.filter-toggle:hover{border-color:var(--blue);color:var(--blue2)}
+.filter-toggle.has-filters{border-color:var(--blue2);color:var(--blue2);background:rgba(122,167,220,.1)}
+.filter-badge{background:var(--blue);color:var(--bg);font-size:10px;font-weight:700;padding:1px 5px;border-radius:8px;line-height:1.4}
+.filter-panel{background:rgba(13,18,32,.97);border:1px solid var(--line2);border-radius:10px;padding:12px 14px;margin-bottom:10px;display:none;flex-direction:column;gap:10px}
+.filter-panel.open{display:flex}
+.tc-demote{background:transparent;border:1px solid rgba(224,90,90,.25);color:var(--red);font-family:var(--mono);font-size:11px;padding:6px;border-radius:7px;cursor:pointer;transition:all .15s;text-align:center;opacity:.6}
+.tc-demote:hover{opacity:1;background:rgba(224,90,90,.1);border-color:var(--red)}
+.url-edit-row{display:flex;margin-top:2px;}
+.url-edit-input:focus{border-color:var(--blue2);}
 .fbtn{font-family:var(--mono);font-size:12px;padding:5px 11px;border-radius:20px;border:1px solid var(--line2);color:var(--muted);background:none;cursor:pointer;transition:all .15s;white-space:nowrap}
 .fbtn:hover{border-color:var(--blue);color:var(--blue2)}
 .fbtn.active{background:var(--blue);color:var(--bg);border-color:var(--blue)}
@@ -499,6 +509,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   <div class="ntab" onclick="go('news',this);loadNews()">News</div>
   <div class="ntab" onclick="go('videos',this)">Videos</div>
   <div class="ntab" onclick="go('gallery',this);loadGallery()">Gallery</div>
+  <div class="ntab" onclick="go('resources',this);loadResources()">Resources</div>
 </nav>
 
 <!-- ═══ DASHBOARD ═══ -->
@@ -513,7 +524,16 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   </div>
   <div class="dash-grid">
     <div class="dash-col">
-      <div class="card" id="dash-hero" style="min-height:400px;"><div class="loading">Loading primary candidate&hellip;</div></div>
+      <!-- Active listings strip -->
+      <div class="card soft" style="overflow:hidden;">
+        <div style="padding:10px 14px 8px;display:flex;align-items:center;justify-content:space-between;">
+          <span style="font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.15em;">Active Listings</span>
+          <span id="dash-listing-count" style="font-family:var(--mono);font-size:11px;color:var(--muted);"></span>
+        </div>
+        <div id="dash-listings-strip" style="display:flex;gap:10px;overflow-x:auto;padding:0 14px 14px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent;">
+          <div class="loading">Loading&hellip;</div>
+        </div>
+      </div>
       <!-- Playbook feature card -->
       <a href="https://spriesand.github.io/w222playbook/" target="_blank" rel="noopener" style="text-decoration:none;display:block;">
 <div class="pb-card"><div class="pb-banner"><div class="pb-bg-img"></div><div class="pb-banner-ov"></div><div class="pb-banner-txt"><div class="pb-eyebrow">V12 Stewardship Playbook &middot; W222 Platform</div><div class="pb-title">2017&ndash;2020</div><div class="pb-subtitle">S600 &amp; S65 AMG</div></div></div><div class="pb-body"><div class="pb-desc">The complete acquisition thesis &mdash; engine history, depreciation analysis, Golden Intersection methodology, and fleet intelligence.</div><div class="pb-tags"><span class="pb-tag">M279 Engine</span><span class="pb-tag">Depreciation Model</span><span class="pb-tag">Golden Intersection</span><span class="pb-tag">Fleet Intelligence</span></div><div class="pb-cta">Read the Playbook &rarr;</div></div></div>
@@ -559,13 +579,13 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
           <div class="mini-sm">Last V12 S-Class &middot; 2015&ndash;2020</div>
         </div>
       </div>
-      <!-- Paper note -->
-      <div class="card paper">
-        <div class="note-body">
-          <div class="note-meta">The Thesis</div>
-          <div class="note-text">Prior owners fund the costly service events. You arrive at the depreciation floor and <em>collect.</em></div>
-          <div class="note-src">W222 S65 AMG &middot; M279 Biturbo V12 &middot; 621 hp</div>
+      <!-- Mini gallery carousel -->
+      <div class="card" style="overflow:hidden;position:relative;min-height:160px;" id="dash-gallery-wrap">
+        <div id="dash-gallery-track" style="display:flex;transition:transform .5s cubic-bezier(.25,.46,.45,.94);">
+          <div class="loading" style="min-width:100%;">Loading gallery&hellip;</div>
         </div>
+        <button onclick="dashCarouselPrev()" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#8592;</button>
+        <button onclick="dashCarouselNext()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#8594;</button>
       </div>
     </div>
   </div>
@@ -599,25 +619,28 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <span>Targets &mdash; 2017&ndash;2020 S65 &amp; Ultra-Rare 2017 S600</span>
     <span id="targets-label" style="color:var(--gold2);"></span>
   </div>
-  <div class="mkt-controls" style="margin-bottom:12px;">
+  <div class="mkt-controls" style="margin-bottom:10px;align-items:center;">
     <input class="mkt-search" id="tgt-search" type="text" placeholder="&#128269; Search VIN, color, state, seller&hellip;" oninput="renderTargets()" autocomplete="off" autocorrect="off" spellcheck="false">
+    <button class="filter-toggle" id="tgt-filter-btn" onclick="toggleFilterPanel()">&#9881; Filters <span class="filter-badge" id="tgt-filter-badge" style="display:none;"></span></button>
   </div>
-  <div class="tgt-filter-row" id="tgt-ext-row" style="display:none;">
-    <span class="tgt-filter-lbl">Ext</span>
-    <div id="tgt-ext-chips" style="display:flex;flex-wrap:wrap;gap:5px;"></div>
-  </div>
-  <div class="tgt-filter-row" id="tgt-int-row" style="display:none;">
-    <span class="tgt-filter-lbl">Int</span>
-    <div id="tgt-int-chips" style="display:flex;flex-wrap:wrap;gap:5px;"></div>
-  </div>
-  <div class="tgt-filter-row">
-    <span class="tgt-filter-lbl">Equip</span>
-    <button class="fchip" data-equip="has_burmester" onclick="toggleEquipChip(this)">Burmester</button>
-    <button class="fchip" data-equip="has_night_vision" onclick="toggleEquipChip(this)">Night Vision</button>
-    <button class="fchip" data-equip="has_magic_sky" onclick="toggleEquipChip(this)">Magic Sky</button>
-    <button class="fchip" data-equip="has_ceramic_brakes" onclick="toggleEquipChip(this)">Ceramic Brakes</button>
-    <button class="fchip" data-equip="has_designo" onclick="toggleEquipChip(this)">designo</button>
-    <button class="fchip" data-equip="has_refrigerator" onclick="toggleEquipChip(this)">Refrigerator</button>
+  <div class="filter-panel" id="tgt-filter-panel">
+    <div class="tgt-filter-row" id="tgt-ext-row" style="display:none;border-bottom:none;margin:0;padding:0;">
+      <span class="tgt-filter-lbl">Ext</span>
+      <div id="tgt-ext-chips" style="display:flex;flex-wrap:wrap;gap:5px;"></div>
+    </div>
+    <div class="tgt-filter-row" id="tgt-int-row" style="display:none;border-bottom:none;margin:0;padding:0;">
+      <span class="tgt-filter-lbl">Int</span>
+      <div id="tgt-int-chips" style="display:flex;flex-wrap:wrap;gap:5px;"></div>
+    </div>
+    <div class="tgt-filter-row" style="border-bottom:none;margin:0;padding:0;">
+      <span class="tgt-filter-lbl">Equip</span>
+      <button class="fchip" data-equip="has_burmester" onclick="toggleEquipChip(this)">Burmester</button>
+      <button class="fchip" data-equip="has_night_vision" onclick="toggleEquipChip(this)">Night Vision</button>
+      <button class="fchip" data-equip="has_magic_sky" onclick="toggleEquipChip(this)">Magic Sky</button>
+      <button class="fchip" data-equip="has_ceramic_brakes" onclick="toggleEquipChip(this)">Ceramic Brakes</button>
+      <button class="fchip" data-equip="has_designo" onclick="toggleEquipChip(this)">designo</button>
+      <button class="fchip" data-equip="has_refrigerator" onclick="toggleEquipChip(this)">Refrigerator</button>
+    </div>
   </div>
   <div class="tgt-grid" id="targets-grid"><div class="loading">Loading&hellip;</div></div>
 </div>
@@ -811,6 +834,19 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <span class="lb-counter" id="lb-counter"></span>
     <button class="lb-btn" onclick="lbNext()">&#8594;</button>
   </div>
+</div>
+
+<!-- ═══ RESOURCES ═══ -->
+<div class="page" id="page-resources">
+<div class="pp">
+  <div class="sec">
+    <span>Resources &mdash; Brochures &amp; Manuals</span>
+    <span id="resources-label" style="color:var(--muted);"></span>
+  </div>
+  <div id="resources-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;">
+    <div class="loading">Loading&hellip;</div>
+  </div>
+</div>
 </div>
 
 <!-- MOBILE NAV -->
@@ -1263,7 +1299,7 @@ var dlEl=document.getElementById('dash-date');
 if(dlEl)dlEl.textContent=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dn.getDay()]+' Briefing \u2014 '+['January','February','March','April','May','June','July','August','September','October','November','December'][dn.getMonth()]+' '+dn.getDate()+', '+dn.getFullYear();
 
 // ── PAGE NAV ──────────────────────────────────────────────
-var PAGES=['dashboard','market','targets','analytics','news','videos','gallery'];
+var PAGES=['dashboard','market','targets','analytics','news','videos','gallery','resources'];
 function go(k,tab){
   PAGES.forEach(function(p){var el=document.getElementById('page-'+p);if(el)el.classList.toggle('active',p===k);});
   document.querySelectorAll('.ntab').forEach(function(t){t.classList.remove('active');});
@@ -1346,43 +1382,105 @@ function buildChanged(lhRows){
 }
 
 
-// ── RENDER HERO ───────────────────────────────────────────
-function renderHero(v,vm,lh){
-  var el=document.getElementById('dash-hero');
-  if(!v){el.innerHTML='<div class="loading">No active target listings found.</div>';return;}
-  var priceHTML=lh
-    ? renderPriceWithDelta(lh,'hs-v','color:var(--gold2);')
-    : '<span class="hs-v" style="color:var(--gold2);">TBD</span>';
-  var miles=vm&&vm.curr_odo?fM(vm.curr_odo):(lh&&lh.miles?fM(lh.miles):'--');
-  var owners=vm?fN(vm.total_owners):'--';
-  var proj=v.miles_projected_jan28?fM(v.miles_projected_jan28):'--';
-  var seller=lh&&lh.seller_name?lh.seller_name:'';
-  var loc=v.last_title_state||(lh&&lh.state)||'';
-  var dom=lh&&lh.dom?lh.dom+' days listed':'Active listing';
-  var chip=lh?relistChip(v.vin,lh):'';
-  el.innerHTML=
-    '<div class="hero-img">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
-      '<div class="hero-img-ov"></div>'+
-      '<div style="position:absolute;top:10px;left:11px;z-index:2;"><span class="tag tb">Primary Candidate</span></div>'+
-      '<div class="hero-pill"><span class="live-dot"></span>Active</div>'+
-      '<div class="hero-dom">'+dom+'</div>'+
-    '</div>'+
-    '<div class="hero-body">'+
-      '<div class="hero-kicker">'+(loc?loc+' &middot; ':'')+seller+'</div>'+
-      '<div class="title-row">'+
-        '<div class="hero-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
-        notesPill(v.vin)+
+// ── RENDER DASH LISTINGS STRIP ────────────────────────────
+function renderDashListings(){
+  var el=document.getElementById('dash-listings-strip');
+  if(!el)return;
+  var active=G.v.filter(function(v){return G.l[v.vin];});
+  active.sort(function(a,b){return (b.year||0)-(a.year||0);});
+  set('dash-listing-count',active.length+' active');
+  if(!active.length){el.innerHTML='<div class="loading">No active listings.</div>';return;}
+  el.innerHTML=active.map(function(v){
+    var lh=G.l[v.vin];
+    var vm=G.m[v.vin];
+    var miles=vm&&vm.curr_odo?fM(vm.curr_odo):(lh&&lh.miles?fM(lh.miles):'--');
+    var price=lh&&lh.price?fP(lh.price):'--';
+    var isTarget=v.car_status==='target';
+    var img=v.image_url?v.image_url:PLACEHOLDERS[Math.abs((function(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return h;})(v.vin))%PLACEHOLDERS.length];
+    return '<div style="flex:0 0 160px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--panel2);display:flex;flex-direction:column;">'+
+      '<div style="height:100px;position:relative;overflow:hidden;flex-shrink:0;">'+
+        '<img src="'+img+'" style="width:100%;height:100%;object-fit:cover;opacity:.88;display:block;">'+
+        '<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.5),transparent 60%)"></div>'+
+        (isTarget?'<span style="position:absolute;top:5px;left:5px;font-family:var(--mono);font-size:9px;background:rgba(122,167,220,.18);border:1px solid rgba(122,167,220,.3);color:var(--blue2);padding:1px 5px;border-radius:3px;">Target</span>':'')+
       '</div>'+
-      '<div class="hero-sub">'+v.vin+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?' &middot; '+formatColor(b.paint_name):'';})()+'</div>'+
-      '<div class="hero-stats">'+
-        '<div class="hs">'+priceHTML+priceEditBtn(v.vin,!!lh)+'<span class="hs-l">Ask</span></div>'+
-        '<div class="hs"><span class="hs-v" style="color:var(--blue2);">'+miles+'</span><span class="hs-l">Miles</span></div>'+
-        '<div class="hs"><span class="hs-v" style="color:var(--green);">'+owners+'</span><span class="hs-l">Owners</span></div>'+
-        '<div class="hs"><span class="hs-v">'+proj+'</span><span class="hs-l">Proj. 2028</span></div>'+
+      '<div style="padding:7px 8px;display:flex;flex-direction:column;gap:3px;flex:1;">'+
+        '<div style="font-family:var(--serif);font-size:13px;font-weight:600;color:var(--ink);line-height:1.1;">'+(v.year||'')+' '+(v.trim&&v.trim.indexOf('S65')>=0?'S65':'S600')+'</div>'+
+        '<div style="font-family:var(--mono);font-size:11px;color:var(--green);">'+price+'</div>'+
+        '<div style="font-family:var(--mono);font-size:10px;color:var(--muted);">'+miles+'</div>'+
+        (v.listing_url?'<a href="'+v.listing_url+'" target="_blank" rel="noopener" style="margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--blue2);text-decoration:none;display:inline-flex;align-items:center;gap:3px;">&#9654; View</a>':'')+
       '</div>'+
-      '<div class="hero-flags">'+flags(v,vm)+'</div>'+ (function(){var d=G.docs[v.vin]||{};var hasSB=function(u){return u&&u.indexOf('supabase')>-1;};return '<div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px;">'+'<a href="'+(d.carfax||'https://www.carfax.com/VehicleHistory/p/Report.cfx?vin='+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.carfax)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.carfax)?'✓ ':'')+' CARFAX</a>'+'<a href="'+(d.autocheck||'https://www.autocheck.com/vehiclehistory/?vin='+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.autocheck)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.autocheck)?'✓ ':'')+' AutoCheck</a>'+'<a href="'+(d.iseecars||'https://www.iseecars.com/vin#vin='+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.iseecars)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.iseecars)?'✓ ':'')+' iSeeCars</a>'+'<a href="'+(d.goodcar||'https://www.goodcar.com/us/vin-check/'+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.goodcar)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.goodcar)?'✓ ':'')+' GoodCar</a>'+'<a href="'+(d.public_record||'https://www.publicrecords.us/vehicle/'+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.public_record)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.public_record)?'✓ ':'')+' PubRec</a>'+'<a href="'+(d.window_sticker||'https://www.mbusa.com/content/dam/mb-nafta/us/owners/window-sticker/'+v.vin+'.pdf')+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.window_sticker)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.window_sticker)?'✓ ':'')+' Sticker</a>'+'</div>';})()+
-      (v.listing_url?'<a href="'+v.listing_url+'" target="_blank" rel="noopener" class="btn-g" style="margin-top:4px;width:fit-content;">&#9654; View Listing</a>':'')+
     '</div>';
+  }).join('');
+}
+
+// ── DASH GALLERY CAROUSEL ─────────────────────────────────
+var dashCarIdx=0;
+var dashCarTimer=null;
+function buildDashCarousel(images){
+  var track=document.getElementById('dash-gallery-track');
+  if(!track||!images.length)return;
+  var featured=images.slice(0,Math.min(8,images.length));
+  track.innerHTML=featured.map(function(url){
+    return '<div style="flex:0 0 100%;height:160px;position:relative;overflow:hidden;">'+
+      '<img src="'+url+'" style="width:100%;height:100%;object-fit:cover;display:block;opacity:.92;">'+
+      '<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(5,8,16,.6),transparent 50%)"></div>'+
+      '<div style="position:absolute;bottom:8px;left:12px;font-family:var(--serif);font-size:13px;color:var(--ink);">W222 &mdash; S65 &amp; S600</div>'+
+    '</div>';
+  }).join('');
+  dashCarIdx=0;
+  if(dashCarTimer)clearInterval(dashCarTimer);
+  dashCarTimer=setInterval(function(){
+    dashCarIdx=(dashCarIdx+1)%featured.length;
+    track.style.transform='translateX(-'+dashCarIdx+'00%)';
+  },4000);
+}
+function dashCarouselPrev(){
+  var featured=Math.min(8,galleryImages.length);if(!featured)return;
+  dashCarIdx=(dashCarIdx-1+featured)%featured;
+  var t=document.getElementById('dash-gallery-track');if(t)t.style.transform='translateX(-'+dashCarIdx+'00%)';
+}
+function dashCarouselNext(){
+  var featured=Math.min(8,galleryImages.length);if(!featured)return;
+  dashCarIdx=(dashCarIdx+1)%featured;
+  var t=document.getElementById('dash-gallery-track');if(t)t.style.transform='translateX(-'+dashCarIdx+'00%)';
+}
+
+// ── RESOURCES ─────────────────────────────────────────────
+var resourcesLoaded=false;
+function loadResources(){
+  if(resourcesLoaded)return;
+  resourcesLoaded=true;
+  q('resources?select=*&order=year.asc,title.asc').then(function(rows){
+    var el=document.getElementById('resources-grid');
+    if(!el)return;
+    if(!rows||!rows.length){
+      el.innerHTML='<div class="loading">No resources yet. Add PDFs to the resources table.</div>';
+      set('resources-label','0 documents');
+      return;
+    }
+    set('resources-label',rows.length+' documents');
+    var cats={};
+    rows.forEach(function(r){
+      var c=r.category||'other';
+      if(!cats[c])cats[c]=[];
+      cats[c].push(r);
+    });
+    el.innerHTML=Object.keys(cats).map(function(cat){
+      var items=cats[cat].map(function(r){
+        return '<a href="'+esc(r.storage_url)+'" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:8px;border:1px solid var(--line);background:var(--panel2);text-decoration:none;color:inherit;transition:border-color .15s;" onmouseover="this.style.borderColor=\'var(--line2)\'" onmouseout="this.style.borderColor=\'var(--line)\'">'+
+          '<div style="font-size:22px;flex-shrink:0;">&#128196;</div>'+
+          '<div>'+
+            '<div style="font-family:var(--serif);font-size:15px;color:var(--ink);">'+(r.year?r.year+' — ':'')+esc(r.title)+'</div>'+
+            '<div style="font-family:var(--mono);font-size:11px;color:var(--muted);margin-top:2px;">PDF &middot; Click to open</div>'+
+          '</div>'+
+        '</a>';
+      }).join('');
+      return '<div style="grid-column:1/-1;font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.18em;padding-bottom:7px;border-bottom:1px solid var(--line);margin-bottom:4px;">'+cat+'</div>'+items;
+    }).join('');
+  }).catch(function(e){
+    var el=document.getElementById('resources-grid');
+    if(el)el.innerHTML='<div class="loading" style="color:var(--red);">Load failed.</div>';
+  });
 }
 
 // ── RENDER COMPACT CARD ───────────────────────────────────
@@ -1473,7 +1571,16 @@ function renderTarget(v,vm,lh){
         '<div class="tc-stat"><span class="tc-sv">'+owners+'</span><span class="tc-sl">Owners</span></div>'+
       '</div>'+
       '<div class="tc-flags">'+flags(v,vm)+'</div>'+ (function(){   var d=G.docs[v.vin]||{};   var cfUrl=d.carfax||'https://www.carfax.com/VehicleHistory/p/Report.cfx?vin='+v.vin;   var acUrl=d.autocheck||'https://www.autocheck.com/vehiclehistory/?vin='+v.vin;   var isUrl=d.iseecars||'https://www.iseecars.com/vin#vin='+v.vin;   var gcUrl=d.goodcar||'https://www.goodcar.com/us/vin-check/'+v.vin;   var prUrl=d.public_record||'https://www.publicrecords.us/vehicle/'+v.vin;   var wsUrl=d.window_sticker||'https://www.mbusa.com/content/dam/mb-nafta/us/owners/window-sticker/'+v.vin+'.pdf';   var hasSB=function(u){return u&&u.indexOf('supabase')>-1;};   return '<div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px;">'+     '<a href="'+cfUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.carfax)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.carfax)?'✓ ':'')+' CARFAX</a>'+     '<a href="'+acUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.autocheck)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.autocheck)?'✓ ':'')+' AutoCheck</a>'+     '<a href="'+isUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.iseecars)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.iseecars)?'✓ ':'')+' iSeeCars</a>'+     '<a href="'+gcUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.goodcar)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.goodcar)?'✓ ':'')+' GoodCar</a>'+     '<a href="'+prUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.public_record)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.public_record)?'✓ ':'')+' PubRec</a>'+     '<a href="'+wsUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.window_sticker)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.window_sticker)?'✓ ':'')+' Sticker</a>'+   '</div>'; })()+
-      (v.listing_url?'<a href="'+v.listing_url+'" target="_blank" rel="noopener" class="tc-btn">&#9654; View Listing</a>':(active?'<span class="tc-btn" style="opacity:.5;cursor:default;">&#9679; Active</span>':''))+
+      '<div style="display:flex;gap:6px;align-items:stretch;">'+
+        (v.listing_url?'<a href="'+v.listing_url+'" target="_blank" rel="noopener" class="tc-btn" style="flex:1;">&#9654; View Listing</a>':(active?'<span class="tc-btn" style="flex:1;opacity:.5;cursor:default;">&#9679; Active</span>':'<span style="flex:1;"></span>'))+
+        '<button class="tc-btn" style="flex:none;padding:8px 10px;" onclick="openUrlEdit(\''+v.vin+'\',this)" title="Edit listing URL">&#9998;</button>'+
+      '</div>'+
+      '<div class="url-edit-row" id="url-edit-'+v.vin+'" style="display:none;gap:5px;align-items:center;">'+
+        '<input type="text" class="url-edit-input" id="url-input-'+v.vin+'" placeholder="https://..." value="'+esc(v.listing_url||'')+'" style="flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:6px;color:var(--ink);font-family:var(--mono);font-size:11px;padding:6px 8px;outline:none;">'+
+        '<button class="lc-btn" onclick="saveListingUrl(\''+v.vin+'\')" style="flex:none;padding:5px 10px;">Save</button>'+
+        '<button class="lc-btn" onclick="cancelUrlEdit(\''+v.vin+'\')" style="flex:none;padding:5px 8px;opacity:.6;">✕</button>'+
+      '</div>'+
+      '<button class="tc-demote" onclick="demoteTarget(\''+v.vin+'\')">&#8595; Move to Reference</button>'+
     '</div>'+
   '</div>';
 }
@@ -1511,9 +1618,30 @@ function renderMkt(){
 // ── TARGET FILTERS ────────────────────────────────────────
 var TF={ext:'',int:'',equip:[]};
 
+function toggleFilterPanel(){
+  var panel=document.getElementById('tgt-filter-panel');
+  var btn=document.getElementById('tgt-filter-btn');
+  if(!panel)return;
+  var open=panel.classList.toggle('open');
+  if(btn)btn.textContent='';
+  if(btn){
+    var badge=document.getElementById('tgt-filter-badge');
+    btn.innerHTML='&#9881; Filters '+(badge?badge.outerHTML:'');
+    if(open)btn.innerHTML='&#9881; Filters &#9650; '+(badge?badge.outerHTML:'');
+    else btn.innerHTML='&#9881; Filters &#9660; '+(badge?badge.outerHTML:'');
+  }
+}
+
+function updateFilterBadge(){
+  var count=(TF.ext?1:0)+(TF.int?1:0)+TF.equip.length;
+  var badge=document.getElementById('tgt-filter-badge');
+  var btn=document.getElementById('tgt-filter-btn');
+  if(badge){badge.textContent=count;badge.style.display=count?'inline':'none';}
+  if(btn)btn.classList.toggle('has-filters',count>0);
+}
+
 function buildTgtFilters(){
   var targets=G.sortedT||[];
-  // Collect unique ext/int colors from target VINs only
   var exts={},ints={};
   targets.forEach(function(v){
     var b=(G.build&&G.build[v.vin])||{};
@@ -1542,9 +1670,9 @@ function buildTgtFilters(){
 
 function toggleColorChip(btn,type){
   var val=btn.textContent.trim();
-  if(TF[type]===val){TF[type]='';}else{TF[type]=val;}
-  // Re-render chips to update active state
+  TF[type]=(TF[type]===val)?'':val;
   buildTgtFilters();
+  updateFilterBadge();
   renderTargets();
 }
 
@@ -1553,47 +1681,79 @@ function toggleEquipChip(btn){
   var idx=TF.equip.indexOf(key);
   if(idx>-1){TF.equip.splice(idx,1);btn.classList.remove('active-equip');}
   else{TF.equip.push(key);btn.classList.add('active-equip');}
+  updateFilterBadge();
   renderTargets();
+}
+
+function openUrlEdit(vin,btn){
+  var row=document.getElementById('url-edit-'+vin);
+  if(!row)return;
+  row.style.display='flex';
+  var inp=document.getElementById('url-input-'+vin);
+  if(inp){inp.focus();inp.select();}
+}
+function cancelUrlEdit(vin){
+  var row=document.getElementById('url-edit-'+vin);
+  if(row)row.style.display='none';
+}
+function saveListingUrl(vin){
+  var inp=document.getElementById('url-input-'+vin);
+  if(!inp)return;
+  var url=inp.value.trim();
+  qw('vehicles?vin=eq.'+vin,'PATCH',{listing_url:url||null})
+    .then(function(){
+      // Update local state
+      var v=G.v.find(function(x){return x.vin===vin;});
+      if(v)v.listing_url=url||null;
+      cancelUrlEdit(vin);
+      renderTargets();
+    })
+    .catch(function(err){alert('Save failed: '+err);});
+}
+
+function demoteTarget(vin){
+  if(!confirm('Move '+vin+' to Reference? This will set car_status=reference and listing_status=inactive.'))return;
+  qw('vehicles?vin=eq.'+vin,'PATCH',{car_status:'reference',listing_status:'inactive'})
+    .then(function(){
+      // Update local state so card disappears immediately
+      var v=G.v.find(function(x){return x.vin===vin;});
+      if(v){v.car_status='reference';v.listing_status='inactive';}
+      G.sortedT=(G.sortedT||[]).filter(function(x){return x.vin!==vin;});
+      buildTgtFilters();
+      renderTargets();
+    })
+    .catch(function(err){alert('Demote failed: '+err);});
 }
 
 function renderTargets(){
   var q=(document.getElementById('tgt-search')||{}).value;
   q=q?q.trim().toLowerCase():'';
   var list=G.sortedT||[];
-  // Text search
   if(q){
     list=list.filter(function(v){
       var lh=G.l[v.vin]||{};
       var b=(G.build&&G.build[v.vin])||{};
       var haystack=[
-        v.vin,
-        v.last_title_state,
-        String(v.year||''),
-        v.trim,
-        lh.seller_name,
-        lh.state,
-        lh.city,
+        v.vin,v.last_title_state,String(v.year||''),v.trim,
+        lh.seller_name,lh.state,lh.city,
         b.paint_name?formatColor(b.paint_name):'',
         b.upholstery_name?formatColor(b.upholstery_name):''
       ].join(' ').toLowerCase();
       return haystack.indexOf(q)>-1;
     });
   }
-  // Exterior color filter
   if(TF.ext){
     list=list.filter(function(v){
       var b=(G.build&&G.build[v.vin])||{};
       return b.paint_name&&formatColor(b.paint_name)===TF.ext;
     });
   }
-  // Interior color filter
   if(TF.int){
     list=list.filter(function(v){
       var b=(G.build&&G.build[v.vin])||{};
       return b.upholstery_name&&formatColor(b.upholstery_name)===TF.int;
     });
   }
-  // Equipment filters (AND logic — must have all selected)
   if(TF.equip.length){
     list=list.filter(function(v){
       var b=(G.build&&G.build[v.vin])||{};
@@ -1997,9 +2157,25 @@ function loadAll(){
 
     buildChanged(allLH);
 
-    // Hero
-    var hero=activeV.find(function(v){return v.car_status==='target';})||activeV[0];
-    renderHero(hero,hero?mkt[hero.vin]:null,hero?lhMap[hero.vin]:null);
+    // Dashboard listings strip
+    renderDashListings();
+
+    // Gallery images for dash carousel (eager load)
+    if(!galleryLoaded){
+      fetch(SB+'/storage/v1/object/list/v12-apex-documents',{
+        method:'POST',
+        headers:Object.assign({'Content-Type':'application/json'},H),
+        body:JSON.stringify({prefix:'gallery/',limit:200,offset:0,sortBy:{column:'name',order:'asc'}})
+      }).then(function(r){return r.json();}).then(function(files){
+        if(!Array.isArray(files))return;
+        galleryImages=files
+          .filter(function(f){return f.name&&/\.(jpg|jpeg|png|webp|gif)$/i.test(f.name);})
+          .map(function(f){return SB+'/storage/v1/object/public/v12-apex-documents/gallery/'+encodeURIComponent(f.name);});
+        buildDashCarousel(galleryImages);
+      }).catch(function(){});
+    } else {
+      buildDashCarousel(galleryImages);
+    }
 
     // Market
     renderMkt();
@@ -2074,8 +2250,6 @@ function loadAll(){
     console.error('Load error:',e);
     var strip=document.getElementById('changed-strip');
     if(strip)strip.innerHTML='<span class="ch-item" style="color:var(--red);">&#9888; Load failed — '+(e&&e.message?e.message:String(e))+' (check console)</span>';
-    var hero=document.getElementById('dash-hero');
-    if(hero&&hero.querySelector('.loading'))hero.innerHTML='<div class="loading" style="color:var(--red);">Load failed. See console for details.</div>';
   });
 }
 
