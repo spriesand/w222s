@@ -1394,8 +1394,8 @@ function buildDashCarousel(images){
   var track=document.getElementById('dash-gallery-track');
   if(!track||!images.length)return;
   track.innerHTML=images.map(function(url){
-    return '<div style="flex:0 0 100%;width:100%;height:160px;position:relative;flex-shrink:0;">'+
-      '<img src="'+url+'" style="width:100%;height:100%;object-fit:cover;display:block;opacity:.92;">'+
+    return '<div style="flex:0 0 100%;width:100%;height:160px;position:relative;flex-shrink:0;overflow:hidden;">'+
+      '<img src="'+url+'" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;opacity:.92;">'+
       '<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(5,8,16,.6),transparent 50%)"></div>'+
       '<div style="position:absolute;bottom:8px;left:12px;font-family:var(--serif);font-size:13px;color:var(--ink);">W222 &mdash; S65 &amp; S600</div>'+
     '</div>';
@@ -2321,8 +2321,12 @@ function loadAll(){
         galleryImages=files
           .filter(function(f){return f.name&&/\.(jpg|jpeg|png|webp|gif)$/i.test(f.name);})
           .map(function(f){return SB+'/storage/v1/object/public/v12-apex-documents/gallery/'+encodeURIComponent(f.name);});
+        if(galleryImages.length){
+          galleryLoaded=true;
+          set('gallery-count',galleryImages.length+' photos');
+        }
         buildDashCarousel(galleryImages);
-      }).catch(function(){});
+      }).catch(function(e){console.error('Gallery eager load error:',e);});
     } else {
       buildDashCarousel(galleryImages);
     }
