@@ -110,20 +110,6 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .dash-col{display:flex;flex-direction:column;gap:12px;min-height:0;min-width:0}
 
 /* Hero */
-.hero-img{height:230px;position:relative;background:linear-gradient(155deg,#0c1825,#040b12);overflow:hidden;flex-shrink:0}
-.hero-img img{width:100%;height:100%;object-fit:cover;opacity:.92;display:block}
-.hero-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.52),transparent 70%)}
-.hero-pill{position:absolute;top:10px;right:11px;z-index:2;display:flex;align-items:center;gap:4px;background:rgba(7,9,15,.82);border:1px solid rgba(76,190,130,.22);border-radius:4px;padding:3px 8px;font-family:var(--mono);font-size:11px;color:var(--green)}
-.hero-dom{position:absolute;bottom:9px;left:13px;z-index:2;font-family:var(--mono);font-size:12px;color:rgba(255,255,255,.5)}
-.hero-body{padding:14px 16px 16px;display:flex;flex-direction:column;gap:9px}
-.hero-kicker{font-family:var(--mono);font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em}
-.hero-title{font-family:var(--serif);font-size:26px;font-weight:600;line-height:1.1;color:var(--ink)}
-.hero-sub{font-family:var(--mono);font-size:12px;color:var(--muted)}
-.hero-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.hs{background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:7px;padding:7px}
-.hs-v{font-family:var(--mono);font-size:12px;font-weight:500;display:block}
-.hs-l{font-family:var(--mono);font-size:7px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:2px}
-.hero-flags{display:flex;flex-wrap:wrap;gap:4px}
 .btn-g{padding:8px 13px;border:1px solid rgba(122,167,220,.28);color:var(--blue2);background:none;border-radius:7px;font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center}
 .btn-g:hover{border-color:var(--blue2);background:rgba(122,167,220,.08)}
 
@@ -292,7 +278,6 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   .dash-grid,.an-grid,.news-lay{grid-template-columns:1fr}
   .an-full{grid-column:span 1}
   .kpi4,.kpi-row{grid-template-columns:repeat(2,1fr)}
-  .hero-stats{grid-template-columns:repeat(2,1fr)}
 }
 @media(max-width:640px){
   .nav-tabs{display:none}
@@ -657,44 +642,58 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <div class="k4"><span class="k4-n" style="color:var(--teal);" id="ak-gi">--</span><span class="k4-l">In GI Range</span><span class="k4-t">70K&ndash;100K mi</span></div>
   </div>
   <div class="an-grid">
-    <!-- Thesis chart -->
+
+    <!-- 1. Price History — Full Width -->
     <div class="card an-full an-card">
-      <div class="an-title">The Depreciation Thesis</div>
-      <div class="an-sub">S65 AMG price trajectory 2020&ndash;2032 &middot; Bear trend &minus;13%/yr &middot; ~800 US examples</div>
-      <svg viewBox="0 0 660 188" width="100%" style="display:block;">
-        <defs><linearGradient id="ag2" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#00d4c8" stop-opacity=".18"/><stop offset="100%" stop-color="#00d4c8" stop-opacity="0"/></linearGradient><filter id="gw"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-        <g stroke="rgba(255,255,255,.06)" stroke-width="1"><line x1="40" y1="14" x2="40" y2="155"/><line x1="40" y1="155" x2="645" y2="155"/><line x1="40" y1="50" x2="645" y2="50" stroke-dasharray="3,7"/><line x1="40" y1="84" x2="645" y2="84" stroke-dasharray="3,7"/><line x1="40" y1="118" x2="645" y2="118" stroke-dasharray="3,7"/></g>
-        <g fill="rgba(200,210,230,.4)" font-size="9" font-family="IBM Plex Mono" text-anchor="end">
-          <text x="36" y="54">$80k</text><text x="36" y="88">$60k</text><text x="36" y="122">$40k</text>
-        </g>
-        <g fill="rgba(200,210,230,.4)" font-size="9" font-family="IBM Plex Mono" text-anchor="middle">
-          <text x="40" y="170">2020</text><text x="145" y="170">2022</text><text x="250" y="170">2024</text>
-          <text x="355" y="170" fill="#7aa7dc">2026</text><text x="460" y="170" fill="#c8a96a">2028</text>
-          <text x="565" y="170">2030</text>
-        </g>
-        <rect x="410" y="106" width="105" height="27" fill="rgba(200,169,106,.08)" rx="3"/>
-        <rect x="410" y="106" width="105" height="27" fill="none" stroke="#c8a96a" stroke-width="1" stroke-dasharray="4,3" rx="3" opacity=".5"/>
-        <text x="462" y="102" fill="#c8a96a" font-size="8" text-anchor="middle" font-family="IBM Plex Mono">WINDOW</text>
-        <line x1="40" x2="645" y1="118" y2="118" stroke="#c8a96a" stroke-width="1" stroke-dasharray="5,4" opacity=".38"/>
-        <text x="46" y="114" fill="#c8a96a" font-size="8" font-family="IBM Plex Mono" opacity=".75">$40k ceiling</text>
-        <line x1="355" y1="14" x2="355" y2="155" stroke="#7aa7dc" stroke-width="1" stroke-dasharray="2,5" opacity=".4"/>
-        <text x="359" y="26" fill="#7aa7dc" font-size="8" font-family="IBM Plex Mono">NOW</text>
-        <path d="M40,17 L92,34 L145,52 L200,69 L250,85 L305,99 L355,111 L410,120 L460,126 L515,130 L565,126 L645,118 L645,155 L40,155 Z" fill="url(#ag2)"/>
-        <path d="M40,17 L92,34 L145,52 L200,69 L250,85 L305,99 L355,111" fill="none" stroke="#00d4c8" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round" filter="url(#gw)"/>
-        <path d="M355,111 L410,120 L460,126 L515,130 L565,126 L645,118" fill="none" stroke="#00d4c8" stroke-width="2" stroke-dasharray="6,4" stroke-linejoin="round" stroke-linecap="round" opacity=".55"/>
-        <circle cx="250" cy="85" r="3.5" fill="#c8a96a" opacity=".8"/><circle cx="305" cy="99" r="3.5" fill="#c8a96a" opacity=".8"/>
-        <circle cx="355" cy="111" r="4.5" fill="#7aa7dc" filter="url(#gw)"/>
-        <circle cx="460" cy="126" r="5.5" fill="none" stroke="#c8a96a" stroke-width="1.5" opacity=".8"/><circle cx="460" cy="126" r="2.5" fill="#c8a96a"/>
-        <text x="470" y="124" fill="#c8a96a" font-size="8" font-family="IBM Plex Mono">TARGET</text>
-      </svg>
+      <div class="an-title">Price History &mdash; Avg Ask by Month</div>
+      <div class="an-sub">Computed from 1,600+ listing records &middot; 2014&ndash;present &middot; Bear trend &minus;13%/yr</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;" id="ph-filter-row">
+        <button class="fchip active" data-cohort="all" onclick="setPHFilter(this)">All</button>
+        <button class="fchip" data-cohort="S65" onclick="setPHFilter(this)">S65 Only</button>
+        <button class="fchip" data-cohort="S600" onclick="setPHFilter(this)">S600 Only</button>
+      </div>
+      <div id="price-history-chart" style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><div class="loading">Loading&hellip;</div></div>
     </div>
-    <!-- Scatter -->
+
+    <!-- 2. Cohort Intelligence Table — Full Width -->
+    <div class="card an-full an-card">
+      <div class="an-title">Cohort Intelligence</div>
+      <div class="an-sub">Per-cohort market summary &middot; live from fleet and listing data</div>
+      <div id="cohort-table" style="margin-top:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;"><div class="loading">Loading&hellip;</div></div>
+    </div>
+
+    <!-- 3. Opportunity Map — Full Width -->
     <div class="card an-full an-card">
       <div class="an-title">Opportunity Map &mdash; Price vs Mileage</div>
-      <div class="an-sub">Active listings plotted &middot; Strike zone: 70K&ndash;100K mi at $30K&ndash;$50K &middot; Ceiling $40K</div>
+      <div class="an-sub">Active listings &middot; Strike zone: 70K&ndash;100K mi at $30K&ndash;$50K &middot; Ceiling $40K</div>
       <div class="scatter-wrap" id="scatter-wrap"><div class="loading">Loading&hellip;</div></div>
     </div>
-    <!-- Cohort -->
+
+    <!-- 4. Market Depth + Mileage Bands -->
+    <div class="card an-card">
+      <div class="an-title">Days on Market</div>
+      <div class="an-sub">Active target listings &middot; 30+ days = negotiation leverage</div>
+      <div id="dom-table" style="margin-top:8px;"><div class="loading">Loading&hellip;</div></div>
+    </div>
+    <div class="card an-card">
+      <div class="an-title">Avg Ask by Mileage Band</div>
+      <div class="an-sub">Active listings &middot; GI band highlighted</div>
+      <div class="bar-chart" style="margin-top:8px;" id="mi-bands"><div class="loading">Loading&hellip;</div></div>
+    </div>
+
+    <!-- 5. Build Intelligence -->
+    <div class="card an-card">
+      <div class="an-title">Build Option Rarity</div>
+      <div class="an-sub">S65 fleet &middot; confirmed from factory build records</div>
+      <div class="bar-chart" style="margin-top:8px;" id="build-rarity-bars"><div class="loading">Loading&hellip;</div></div>
+    </div>
+    <div class="card an-card">
+      <div class="an-title">Production Timeline</div>
+      <div class="an-sub">W222 S65 build dates by month &middot; factory records</div>
+      <div id="production-chart" style="margin-top:8px;"><div class="loading">Loading&hellip;</div></div>
+    </div>
+
+    <!-- 6. Fleet Composition -->
     <div class="card an-card">
       <div class="an-title">Cohort Distribution</div>
       <div class="an-sub">S65 AMG vs S600 by model year</div>
@@ -706,50 +705,23 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
         <span style="color:rgba(179,136,255,.8);">&#9632;</span> S600
       </div>
     </div>
-    <!-- Geographic -->
     <div class="card an-card">
       <div class="an-title">Geographic Distribution</div>
       <div class="an-sub">VINs by title state &middot; top 12 states</div>
       <div class="bar-chart" style="margin-top:8px;" id="geo-bars"><div class="loading">Loading&hellip;</div></div>
     </div>
-    <!-- Build rarity -->
-    <div class="card an-card">
-      <div class="an-title">Build Option Rarity</div>
-      <div class="an-sub">% of S65 fleet with confirmed option</div>
-      <div class="bar-chart" style="margin-top:8px;">
-        <div class="bc-row"><span class="bc-lbl">Burmester</span><div class="bc-track"><div class="bc-fill" style="width:68%;background:rgba(122,167,220,.5);"><span class="bc-val" style="color:var(--ink2);">68%</span></div></div></div>
-        <div class="bc-row"><span class="bc-lbl">Night Vision</span><div class="bc-track"><div class="bc-fill" style="width:42%;background:rgba(122,167,220,.5);"><span class="bc-val" style="color:var(--ink2);">42%</span></div></div></div>
-        <div class="bc-row"><span class="bc-lbl">Magic Sky</span><div class="bc-track"><div class="bc-fill" style="width:28%;background:rgba(0,212,200,.5);"><span class="bc-val" style="color:var(--ink2);">28%</span></div></div></div>
-        <div class="bc-row"><span class="bc-lbl">Ceramic Brakes</span><div class="bc-track"><div class="bc-fill" style="width:22%;background:rgba(200,169,106,.6);"><span class="bc-val" style="color:var(--bg);">22%</span></div></div></div>
-        <div class="bc-row"><span class="bc-lbl">Refrigerator</span><div class="bc-track"><div class="bc-fill" style="width:16%;background:rgba(200,169,106,.6);"><span class="bc-val" style="color:var(--bg);">16%</span></div></div></div>
-        <div class="bc-row"><span class="bc-lbl">designo</span><div class="bc-track"><div class="bc-fill" style="width:35%;background:rgba(179,136,255,.5);"><span class="bc-val" style="color:var(--ink2);">35%</span></div></div></div>
-      </div>
-    </div>
-    <!-- Mileage bands -->
-    <div class="card an-card">
-      <div class="an-title">Avg Ask by Mileage Band</div>
-      <div class="an-sub">Active listings &middot; GI band highlighted</div>
-      <div class="bar-chart" style="margin-top:8px;" id="mi-bands"><div class="loading">Loading&hellip;</div></div>
-    </div>
 
-    <!-- Color Distribution -->
+    <!-- 7. Color Distribution — Full Width -->
     <div class="card an-full an-card">
       <div class="an-title">Exterior Color Distribution</div>
-      <div class="an-sub">S65 fleet &middot; normalized color data</div>
+      <div class="an-sub">S65 fleet &middot; normalized from build records</div>
       <div id="color-bars" style="margin-top:8px;display:flex;flex-direction:column;gap:7px;"><div class="loading">Loading&hellip;</div></div>
     </div>
 
-    <!-- Days on Market -->
-    <div class="card an-card">
-      <div class="an-title">Days on Market</div>
-      <div class="an-sub">Active listings &middot; 30+ days = negotiation leverage</div>
-      <div id="dom-table" style="margin-top:8px;"><div class="loading">Loading&hellip;</div></div>
-    </div>
-
-    <!-- Price Drop Tracker -->
-    <div class="card an-card">
+    <!-- 8. Price Drop Tracker — Full Width -->
+    <div class="card an-full an-card">
       <div class="an-title">Price Drop Tracker</div>
-      <div class="an-sub">VINs with confirmed ask reductions in listing history</div>
+      <div class="an-sub">Target VINs with confirmed ask reductions in listing history</div>
       <div id="price-drop-table" style="margin-top:8px;"><div class="loading">Loading&hellip;</div></div>
     </div>
 
@@ -1280,7 +1252,7 @@ function savePriceChange(){
 }
 
 // ── STATE ─────────────────────────────────────────────────
-var G={v:[],m:{},l:{},lhAll:[],svc:[],urlMap:{},docs:{}};
+var G={v:[],m:{},l:{},lhAll:[],docs:{}};
 var mktFilter='all',mktSort='price';
 
 // ── COUNTDOWN ─────────────────────────────────────────────
@@ -1532,18 +1504,6 @@ function renderCompact(v,vm,lh){
 }
 
 // ── RENDER TARGET CARD ────────────────────────────────────
-function targetRead(v,vm,lh){
-  var r=[],h=[];
-  if(vm&&(vm.salvage===true||(typeof vm.salvage==='string'&&vm.salvage.toLowerCase()==='yes')))return '<strong style="color:var(--red);">HARD DQ: Salvage title. Exit value permanently impaired under the collector thesis.</strong>';
-  if(vm&&(vm.theft_recovery===true||(typeof vm.theft_recovery==='string'&&vm.theft_recovery.toLowerCase()==='yes')))return '<strong style="color:var(--red);">HARD DQ: Theft recovery. Exit value permanently impaired under the collector thesis.</strong>';
-  if(v.car_status==='target')r.push('within the 2017\u20132020 target cohort');
-  if(vm&&vm.curr_odo&&vm.curr_odo>=70000&&vm.curr_odo<=100000)r.push('mileage inside the Golden Intersection band');
-  if(vm&&vm.total_owners===1)r.push('single-owner history');
-  if(!lh)h.push('not currently listed \u2014 watching for reentry');
-  else if(lh.price&&lh.price>40000)h.push('ask $'+Number(lh.price-40000).toLocaleString()+' above your ceiling');
-  return (r.length?'<strong>In range</strong> because it '+r.join(', ')+'.':'Within your target cohort.')+(h.length?' <strong>Held back</strong> by: '+h.join(' and ')+'.':'');
-}
-
 function renderTarget(v,vm,lh){
   var miles=vm&&vm.curr_odo?fM(vm.curr_odo):(lh&&lh.miles?fM(lh.miles):'--');
   var owners=vm?fN(vm.total_owners):'--';
@@ -1620,7 +1580,7 @@ function renderMkt(){
     return ((G.l[a.vin]&&G.l[a.vin].price)||999999)-((G.l[b.vin]&&G.l[b.vin].price)||999999);
   });
   var mg=document.getElementById('market-grid');
-  if(mg)mg.innerHTML=filtered.length?filtered.map(function(v){return renderCompact(v,G.m[v.vin],G.urlMap[v.vin]||G.l[v.vin]);}).join(''):'<div class="loading">No listings match filter.</div>';
+  if(mg)mg.innerHTML=filtered.length?filtered.map(function(v){return renderCompact(v,G.m[v.vin],G.l[v.vin]);}).join(''):'<div class="loading">No listings match filter.</div>';
 }
 
 // ── RENDER TARGETS ────────────────────────────────────────
@@ -1776,6 +1736,187 @@ function renderTargets(){
     :'<div class="loading">No targets match.</div>';
 }
 
+// ── PRICE HISTORY ─────────────────────────────────────────
+var PHFilter='all';
+function setPHFilter(btn){
+  PHFilter=btn.getAttribute('data-cohort');
+  document.querySelectorAll('#ph-filter-row .fchip').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  renderPriceHistory();
+}
+function renderPriceHistory(){
+  var el=document.getElementById('price-history-chart');
+  if(!el)return;
+  var vinTrim={};
+  (G.v||[]).forEach(function(v){vinTrim[v.vin]=v.trim||'';});
+  var rows=(G.lhAll||[]).filter(function(l){
+    if(!l.first_seen||!l.price)return false;
+    if(PHFilter==='S65')return vinTrim[l.vin]&&vinTrim[l.vin].indexOf('S65')>=0;
+    if(PHFilter==='S600')return vinTrim[l.vin]&&vinTrim[l.vin].indexOf('S600')>=0;
+    return true;
+  });
+  var byMonth={};
+  rows.forEach(function(l){
+    var d=new Date(l.first_seen);
+    var key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+    if(!byMonth[key])byMonth[key]=[];
+    byMonth[key].push(l.price);
+  });
+  var months=Object.keys(byMonth).sort();
+  if(!months.length){el.innerHTML='<div class="loading">Not enough data.</div>';return;}
+  var points=months.map(function(m){
+    var prices=byMonth[m];
+    return {m:m,avg:Math.round(prices.reduce(function(a,b){return a+b;},0)/prices.length),n:prices.length};
+  });
+  var W=700,H=210,PL=52,PR=20,PT=15,PB=38;
+  var maxP=Math.max.apply(null,points.map(function(p){return p.avg;}));
+  maxP=Math.ceil(maxP/50000)*50000;
+  var minP=30000;
+  function toX(i){return PL+(i/(points.length-1||1))*(W-PL-PR);}
+  function toY(p){return H-PB-((Math.min(p,maxP)-minP)/(maxP-minP))*(H-PT-PB);}
+  var gridPrices=[];
+  for(var gp=50000;gp<=maxP;gp+=50000)gridPrices.push(gp);
+  var gridLines=gridPrices.map(function(p){
+    var y=toY(p).toFixed(1);
+    return '<line x1="'+PL+'" y1="'+y+'" x2="'+(W-PR)+'" y2="'+y+'" stroke="rgba(255,255,255,.06)" stroke-width="1"/>'+
+           '<text x="'+(PL-4)+'" y="'+(parseFloat(y)+3).toFixed(0)+'" text-anchor="end" fill="rgba(200,210,230,.4)" font-size="9" font-family="IBM Plex Mono">$'+(p/1000)+'k</text>';
+  }).join('');
+  var ceilY=toY(40000).toFixed(1);
+  var pathPts=points.map(function(p,i){return (i===0?'M':'L')+toX(i).toFixed(1)+','+toY(p.avg).toFixed(1);}).join(' ');
+  var lastX=toX(points.length-1).toFixed(1);
+  var firstX=toX(0).toFixed(1);
+  var areaD=pathPts+' L'+lastX+','+(H-PB)+' L'+firstX+','+(H-PB)+' Z';
+  var seenYears={};
+  var xLabels=points.map(function(p,i){
+    var yr=p.m.split('-')[0];
+    if(seenYears[yr])return '';
+    seenYears[yr]=true;
+    return '<text x="'+toX(i).toFixed(0)+'" y="'+(H-PB+14)+'" text-anchor="middle" fill="rgba(200,210,230,.4)" font-size="9" font-family="IBM Plex Mono">'+yr+'</text>';
+  }).join('');
+  var covidIdx=points.findIndex(function(p){return p.m==='2020-04'||p.m==='2020-03';});
+  var covidAnnot='';
+  if(covidIdx>=0){
+    var cx=toX(covidIdx).toFixed(1),cy=toY(points[covidIdx].avg).toFixed(1);
+    covidAnnot='<circle cx="'+cx+'" cy="'+cy+'" r="3.5" fill="var(--amber)" opacity=".85"/>'+
+      '<text x="'+(parseFloat(cx)+5)+'" y="'+(parseFloat(cy)-3)+'" fill="var(--amber)" font-size="8" font-family="IBM Plex Mono" opacity=".8">COVID</text>';
+  }
+  var nowX=toX(points.length-1).toFixed(0);
+  el.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block;">'+
+    '<defs><linearGradient id="ph-grad" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="var(--teal)" stop-opacity=".2"/><stop offset="100%" stop-color="var(--teal)" stop-opacity="0"/></linearGradient></defs>'+
+    gridLines+
+    '<line x1="'+PL+'" y1="'+ceilY+'" x2="'+(W-PR)+'" y2="'+ceilY+'" stroke="var(--gold)" stroke-width="1" stroke-dasharray="4,3" opacity=".5"/>'+
+    '<text x="'+(PL+4)+'" y="'+(parseFloat(ceilY)-3)+'" fill="var(--gold)" font-size="8" font-family="IBM Plex Mono" opacity=".75">$40k ceiling</text>'+
+    '<path d="'+areaD+'" fill="url(#ph-grad)"/>'+
+    '<path d="'+pathPts+'" fill="none" stroke="var(--teal)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>'+
+    '<line x1="'+nowX+'" y1="'+PT+'" x2="'+nowX+'" y2="'+(H-PB)+'" stroke="var(--blue)" stroke-width="1" stroke-dasharray="2,5" opacity=".5"/>'+
+    '<text x="'+(parseFloat(nowX)+3)+'" y="'+(PT+9)+'" fill="var(--blue2)" font-size="8" font-family="IBM Plex Mono">NOW</text>'+
+    covidAnnot+xLabels+
+  '</svg>'+
+  '<div style="font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:4px;">'+points.length+' months of data &middot; peak $'+Math.max.apply(null,points.map(function(p){return p.avg;})).toLocaleString()+' &middot; current avg $'+points[points.length-1].avg.toLocaleString()+'</div>';
+}
+
+// ── COHORT INTELLIGENCE TABLE ─────────────────────────────
+function renderCohortTable(vehicles,market,listings){
+  var el=document.getElementById('cohort-table');
+  if(!el)return;
+  var cohorts=['2015_S65','2015_S600','2016_S65','2016_S600','2017_S65','2017_S600','2018_S65','2019_S65','2020_S65','2020_S65_FE'];
+  var TARGET_COHORTS=['2017_S65','2017_S600','2018_S65','2019_S65','2020_S65','2020_S65_FE'];
+  var rows=cohorts.map(function(c){
+    var members=vehicles.filter(function(v){return v.cohort===c;});
+    if(!members.length)return null;
+    var active=members.filter(function(v){return listings[v.vin];});
+    var prices=active.map(function(v){return listings[v.vin].price;}).filter(Boolean);
+    var avgPrice=prices.length?Math.round(prices.reduce(function(a,b){return a+b;},0)/prices.length):null;
+    var odos=members.map(function(v){return market[v.vin]&&market[v.vin].curr_odo;}).filter(Boolean);
+    var avgMiles=odos.length?Math.round(odos.reduce(function(a,b){return a+b;},0)/odos.length):null;
+    var gi=members.filter(function(v){var m=market[v.vin];return m&&m.curr_odo>=70000&&m.curr_odo<=100000;}).length;
+    var isTarget=TARGET_COHORTS.indexOf(c)>=0;
+    return {cohort:c,count:members.length,active:active.length,avgPrice:avgPrice,avgMiles:avgMiles,gi:gi,isTarget:isTarget};
+  }).filter(Boolean);
+  var tbl='<table class="lh-table"><thead><tr>'+
+    '<th>Cohort</th><th>Fleet</th><th>Active</th><th>Avg Ask</th><th>Avg Miles</th><th>In GI</th><th>Status</th>'+
+  '</tr></thead><tbody>';
+  rows.forEach(function(r){
+    tbl+='<tr'+(r.isTarget?' style="color:var(--blue2);"':'')+'>'+
+      '<td style="font-family:var(--mono);font-size:11px;">'+r.cohort+'</td>'+
+      '<td>'+r.count+'</td>'+
+      '<td>'+(r.active?'<span style="color:var(--green);">'+r.active+'</span>':'<span style="color:var(--dim);">0</span>')+'</td>'+
+      '<td>'+(r.avgPrice?'$'+r.avgPrice.toLocaleString():'<span style="color:var(--dim);">--</span>')+'</td>'+
+      '<td>'+(r.avgMiles?r.avgMiles.toLocaleString()+' mi':'<span style="color:var(--dim);">--</span>')+'</td>'+
+      '<td>'+(r.gi?'<span style="color:var(--gold2);">'+r.gi+'</span>':'<span style="color:var(--dim);">0</span>')+'</td>'+
+      '<td>'+(r.isTarget?'<span class="flag fb" style="font-size:9px;">Target</span>':'<span class="flag fd" style="font-size:9px;">Ref</span>')+'</td>'+
+    '</tr>';
+  });
+  tbl+='</tbody></table>';
+  el.innerHTML=tbl;
+}
+
+// ── BUILD OPTION RARITY (LIVE) ────────────────────────────
+function renderBuildRarity(vehicles){
+  var el=document.getElementById('build-rarity-bars');
+  if(!el)return;
+  var s65=vehicles.filter(function(v){return v.trim&&v.trim.indexOf('S65')>=0;});
+  var withBuild=s65.filter(function(v){return G.build&&G.build[v.vin];});
+  var n=withBuild.length;
+  if(!n){el.innerHTML='<div class="loading">No build data.</div>';return;}
+  var opts=[
+    {l:'Burmester',k:'has_burmester',c:'rgba(122,167,220,.55)'},
+    {l:'Night Vision',k:'has_night_vision',c:'rgba(122,167,220,.55)'},
+    {l:'designo',k:'has_designo',c:'rgba(179,136,255,.55)'},
+    {l:'Magic Sky',k:'has_magic_sky',c:'rgba(0,212,200,.5)'},
+    {l:'Ceramic Brakes',k:'has_ceramic_brakes',c:'rgba(200,169,106,.6)'},
+    {l:'Refrigerator',k:'has_refrigerator',c:'rgba(200,169,106,.5)'},
+    {l:'Carbon Package',k:'has_carbon_pkg',c:'rgba(200,169,106,.45)'},
+    {l:'Rear Entertainment',k:'has_rear_entertainment',c:'rgba(122,167,220,.4)'},
+    {l:'Chauffeur Pkg',k:'has_chauffeur_pkg',c:'rgba(122,167,220,.4)'},
+    {l:'Executive Rear',k:'has_executive_rear_seat',c:'rgba(122,167,220,.4)'},
+    {l:'ABC Suspension',k:'has_abc_suspension',c:'rgba(76,190,130,.45)'},
+  ];
+  var data=opts.map(function(o){
+    var cnt=withBuild.filter(function(v){return G.build[v.vin][o.k]===true;}).length;
+    return {l:o.l,c:o.c,cnt:cnt,pct:Math.round(cnt/n*100)};
+  }).filter(function(o){return o.cnt>0;});
+  data.sort(function(a,b){return b.cnt-a.cnt;});
+  el.innerHTML='<div style="font-family:var(--mono);font-size:11px;color:var(--dim);margin-bottom:8px;">Based on '+n+' of '+s65.length+' S65s with confirmed factory build data</div>'+
+  data.map(function(d){
+    return '<div class="bc-row"><span class="bc-lbl">'+d.l+'</span>'+
+      '<div class="bc-track"><div class="bc-fill" style="width:'+Math.max(d.pct,3)+'%;background:'+d.c+';">'+
+        '<span class="bc-val" style="color:var(--ink2);">'+d.pct+'% ('+d.cnt+')</span>'+
+      '</div></div></div>';
+  }).join('');
+}
+
+// ── PRODUCTION TIMELINE ───────────────────────────────────
+function renderProductionTimeline(vehicles){
+  var el=document.getElementById('production-chart');
+  if(!el)return;
+  var byMonth={};
+  vehicles.forEach(function(v){
+    var b=G.build&&G.build[v.vin];
+    if(!b||!b.production_date)return;
+    var d=new Date(b.production_date);
+    if(isNaN(d))return;
+    var key=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+    byMonth[key]=(byMonth[key]||0)+1;
+  });
+  var keys=Object.keys(byMonth).sort();
+  if(!keys.length){el.innerHTML='<div class="loading" style="padding:12px 0;">No production date data in build records yet.</div>';return;}
+  var maxV=Math.max.apply(null,Object.values(byMonth));
+  var total=Object.values(byMonth).reduce(function(a,b){return a+b;},0);
+  var bars=keys.map(function(k,i){
+    var h=Math.max(Math.round(byMonth[k]/maxV*60),2);
+    var showLbl=(keys.length<=24)||(i%3===0);
+    var lbl=showLbl?k.slice(2):'';
+    return '<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0;">'+
+      '<div style="font-family:var(--mono);font-size:7px;color:var(--dim);line-height:1;">'+byMonth[k]+'</div>'+
+      '<div style="width:100%;background:rgba(122,167,220,.5);border-radius:2px 2px 0 0;height:'+h+'px;"></div>'+
+      '<div style="font-family:var(--mono);font-size:7px;color:var(--dim);line-height:1;overflow:hidden;max-width:100%;text-overflow:ellipsis;white-space:nowrap;">'+lbl+'</div>'+
+    '</div>';
+  }).join('');
+  el.innerHTML='<div style="display:flex;gap:2px;align-items:flex-end;height:90px;overflow:hidden;">'+bars+'</div>'+
+    '<div style="font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:10px;">'+total+' VINs with confirmed dates &middot; '+keys[0]+' to '+keys[keys.length-1]+'</div>';
+}
+
 // ── SCATTER CHART ─────────────────────────────────────────
 function renderScatter(vehicles,market,listings){
   var W=640,H=200,PL=44,PR=18,PT=14,PB=32;
@@ -1840,7 +1981,6 @@ function renderMiBands(vehicles,market,listings){
 
 // ── RSS NEWS ─────────────────────────────────────────────
 var RSS_PROXY='https://corsproxy.io/?';
-var RSS_QUERIES=['mercedes+s65+amg','mercedes+amg+v12+collectible'];
 var newsLoaded=false;
 
 function nCard(a,fromArchive){
@@ -1890,7 +2030,7 @@ function loadNews(){
   }
 
   // Fetch from RSS
-  var url=RSS_PROXY+encodeURIComponent('https://news.google.com/rss/search?q='+RSS_QUERIES[0]+'&hl=en-US&gl=US&ceid=US:en');
+  var url=RSS_PROXY+encodeURIComponent('https://news.google.com/rss/search?q=mercedes+s65+amg&hl=en-US&gl=US&ceid=US:en');
   var statusEl=document.getElementById('rss-status');
   if(statusEl)statusEl.textContent='Fetching latest news\u2026';
 
@@ -2256,6 +2396,10 @@ function loadAll(){
     renderColorBars(vehicles);
     renderDOMTable(allLH);
     renderPriceDrops(vehicles,allLH);
+    renderPriceHistory();
+    renderCohortTable(vehicles,mkt,lhMap);
+    renderBuildRarity(vehicles);
+    renderProductionTimeline(vehicles);
   }).catch(function(e){
     console.error('Load error:',e);
     var strip=document.getElementById('changed-strip');
@@ -2266,12 +2410,13 @@ function loadAll(){
 
 // ── VIDEO MANAGER ─────────────────────────────────────────
 var DEFAULT_VIDEOS = [
-  {id:'aZ3U_w3fOqY',ch:'Engine · Sound',title:'V12 Biturbo Cold Start',desc:'621 hp. Hand-assembled in Affalterbach. The defining sound.',type:'yt'},
-  {id:'Q2D9_04Tf20',ch:'Review · S65 AMG',title:'The Last V12 S-Class',desc:'Why the S65 remains emotionally unmatched among modern AMG products.',type:'yt'},
-  {id:'mI6z6kMreX0',ch:'Performance · Autobahn',title:'Top Speed Run',desc:'No limiter. All twelve cylinders. What $225K of German engineering felt like.',type:'yt'},
-  {id:'mercedes+s65+amg+exhaust+sound',ch:'Sound · Exhaust',title:'S65 Exhaust Notes',desc:'Sport exhaust and cold starts. The M279 V12 as an acoustic instrument.',type:'search',icon:'\u1F3B5'},
-  {id:'mercedes+s65+amg+future+collectible',ch:'Collectibility · Thesis',title:'Future Collectible Case',desc:'Why the last hand-built V12 AMG may appreciate once the floor is found.',type:'search',icon:'\u2B50'},
-  {id:'mercedes+s65+amg+ownership+long+term',ch:'Ownership · Long Term',title:'Living With the S65',desc:'Real owners on maintenance, reliability, and running costs.',type:'search',icon:'\u1F697'}
+  {id:'WU_Nh_wCbXw',ch:'Review · MercBenzKing',title:'Mercedes AMG S65 V12 Final Edition Full Review',desc:'Comprehensive review of the last hand-built V12 AMG S-Class.',type:'yt'},
+  {id:'ocQosq8e7_I',ch:'Review · EddieX',title:'75% Off Depreciated Mercedes S65 AMG',desc:'The depreciation case made in real time — exactly the thesis.',type:'yt'},
+  {id:'xxVEdXKOBBE',ch:'Review · AMGmeister',title:'Mercedes S65 AMG W222: The End of An Era',desc:'Why the W222 S65 marks the close of an era in AMG engineering.',type:'yt'},
+  {id:'RrE_zf4ut6Y',ch:'Sound · TOPS',title:'S65 AMG V12 Final Edition Brutal Cold Start',desc:'The M279 V12 biturbo at startup. The defining acoustic.',type:'yt'},
+  {id:'JgR8f6ypt4Q',ch:'Sound · Sebastian Tomczak',title:'Mercedes-Benz S65 AMG V12 Biturbo Cold Start',desc:'Clean cold start recording — pure M279 V12 sound.',type:'yt'},
+  {id:'pkFCMYdaNP8',ch:'Buyer Intelligence · Discerning Cars',title:'W222 S-Class Reliability & Common Problems',desc:'What fails, when, and what to budget. Essential pre-purchase.',type:'yt'},
+  {id:'HtN-La6kfwk',ch:'Buyer Intelligence · Exotic Car Hacks',title:'The Ultimate S63 & S65 AMG Buyer\'s Guide',desc:'Inspection checklist, negotiation tactics, and ownership costs.',type:'yt'}
 ];
 
 function getVideos(){
