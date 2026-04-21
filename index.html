@@ -2492,9 +2492,12 @@ function saveNewListing(){
   btn.disabled=true;btn.textContent='Saving\u2026';
   var err=document.getElementById('al-err');if(err){err.textContent='';err.classList.remove('show');}
 
-  // Upload photo first if provided
+  // Upload photo if provided — non-blocking, save continues on failure
   var photoPromise=photoFile
-    ? qs('gallery/'+vin+'_'+Date.now()+'.'+((photoFile.name.split('.').pop())||'jpg'),photoFile)
+    ? qs('photos/'+vin+'_'+Date.now()+'.'+((photoFile.name.split('.').pop())||'jpg'),photoFile).catch(function(e){
+        console.warn('Photo upload failed, continuing without image:',e);
+        return null;
+      })
     : Promise.resolve(null);
 
   photoPromise.then(function(imageUrl){
