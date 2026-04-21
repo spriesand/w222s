@@ -1493,6 +1493,7 @@ function renderCompact(v,vm,lh){
       '<div style="display:flex;gap:6px;align-items:center;">'+
         (v.listing_url?'<a href="'+v.listing_url+'" target="_blank" rel="noopener" class="lc-btn" style="flex:1;justify-content:center;padding:6px 9px;">&#9654; View Listing</a>':'<span style="flex:1;"></span>')+
         '<button class="price-edit" onclick="openUrlEdit(\''+v.vin+'\',this)" title="Edit listing URL">&#9998;</button>'+
+        (active?'<button class="price-edit" onclick="markInactive(\''+v.vin+'\')" title="Mark listing inactive" style="color:var(--red);opacity:.6;">&#10005;</button>':'')+
       '</div>'+
       '<div class="url-edit-row" id="url-edit-'+v.vin+'" style="display:none;gap:5px;align-items:center;">'+
         '<input type="text" class="url-edit-input" id="url-input-'+v.vin+'" placeholder="https://..." value="'+esc(v.listing_url||'')+'" style="flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:6px;color:var(--ink);font-family:var(--mono);font-size:11px;padding:6px 8px;outline:none;">'+
@@ -1679,6 +1680,20 @@ function saveListingUrl(vin){
       renderDashListings();
     })
     .catch(function(err){alert('Save failed: '+err);});
+}
+
+function markInactive(vin){
+  if(!confirm('Mark '+vin+' as inactive? It will be removed from active listings.'))return;
+  qw('vehicles?vin=eq.'+vin,'PATCH',{listing_status:'inactive'})
+    .then(function(){
+      var v=G.v.find(function(x){return x.vin===vin;});
+      if(v)v.listing_status='inactive';
+      delete G.l[vin];
+      delete G.activeSet[vin];
+      renderMkt();
+      renderDashListings();
+    })
+    .catch(function(err){alert('Failed: '+err);});
 }
 
 function demoteTarget(vin){
