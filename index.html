@@ -2533,9 +2533,11 @@ function saveNewListing(){
     return qups('vehicle_build',{vin:vin});
   })
   .then(function(){
-    return qign('odometer_readings',{
-      vin:vin,reading_date:today,odometer:miles,source:'listing'
-    });
+    return fetch(SB+'/rest/v1/odometer_readings',{
+      method:'POST',
+      headers:Object.assign({},H,{'Prefer':'resolution=ignore-duplicates'}),
+      body:JSON.stringify({vin:vin,reading_date:today,odometer:miles,source:'listing'})
+    }).then(function(r){if(!r.ok&&r.status!==409)return r.text().then(function(t){return Promise.reject(r.status+' '+t);});return null;});
   })
   .then(function(){
     return qw('listing_history','POST',{
