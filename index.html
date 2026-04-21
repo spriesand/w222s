@@ -585,6 +585,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <span id="market-label" style="color:var(--green);"></span>
   </div>
   <div class="mkt-controls">
+    <button class="fbtn" onclick="openAddListing()" style="background:rgba(76,190,130,.12);border-color:rgba(76,190,130,.3);color:var(--green);">&#43; Add Listing</button>
+    <span class="fsep">|</span>
     <button class="fbtn active" onclick="fMkt('all',this)">All</button>
     <button class="fbtn" onclick="fMkt('target',this)">Targets Only</button>
     <button class="fbtn" onclick="fMkt('reference',this)">Reference</button>
@@ -821,6 +823,71 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 </div>
 </div>
 
+<!-- ADD LISTING MODAL -->
+<div class="price-modal-ov" id="al-ov" onclick="closeAddListing()"></div>
+<div class="price-modal" id="al-modal" role="dialog" aria-label="Add new listing" style="width:480px;max-height:90vh;overflow-y:auto;">
+  <div class="pe-head">
+    <div>
+      <div class="pe-title">&#43; Add New Listing</div>
+      <div class="pe-vin" id="al-status">Enter a VIN and hit Decode</div>
+    </div>
+    <button class="pe-close" onclick="closeAddListing()" aria-label="Close">&times;</button>
+  </div>
+  <div class="pe-body">
+    <!-- VIN + Decode -->
+    <label for="al-vin">VIN</label>
+    <div style="display:flex;gap:6px;">
+      <input type="text" id="al-vin" maxlength="17" placeholder="17-character VIN" style="flex:1;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()">
+      <button onclick="alDecode()" id="al-decode-btn" style="background:var(--blue);color:var(--bg);border:none;padding:8px 14px;border-radius:6px;font-family:var(--mono);font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;">Decode</button>
+    </div>
+    <!-- Decoded fields -->
+    <div id="al-fields" style="display:none;margin-top:4px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;">
+        <div><label>Year</label><input type="number" id="al-year" style="width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;"></div>
+        <div><label>Trim</label>
+          <select id="al-trim" style="width:100%;background:rgba(15,18,32,.95);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;">
+            <option value="S65 AMG">S65 AMG</option>
+            <option value="S65 AMG Final Edition">S65 AMG Final Edition</option>
+            <option value="S600">S600</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;">
+        <div><label>Price (USD)</label><input type="number" id="al-price" placeholder="e.g. 89900" style="width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;"></div>
+        <div><label>Miles</label><input type="number" id="al-miles" placeholder="e.g. 78000" style="width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;"></div>
+      </div>
+      <label style="margin-top:4px;">Seller Name</label>
+      <input type="text" id="al-seller" placeholder="e.g. AutoNation Dallas" style="width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px;">
+        <div><label>Platform</label><input type="text" id="al-platform" placeholder="e.g. Cars.com" style="width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;"></div>
+        <div><label>City</label><input type="text" id="al-city" placeholder="e.g. Dallas" style="width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;"></div>
+        <div><label>State</label><input type="text" id="al-state" maxlength="2" placeholder="TX" style="width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()"></div>
+      </div>
+      <label style="margin-top:4px;">Listing URL</label>
+      <input type="text" id="al-url" placeholder="https://..." style="width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px;">
+        <div><label>Owners</label><input type="number" id="al-owners" placeholder="e.g. 2" style="width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;"></div>
+        <div><label>Accidents</label><input type="number" id="al-accidents" placeholder="0" style="width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;"></div>
+        <div><label>Title State</label><input type="text" id="al-title-state" maxlength="2" placeholder="TX" style="width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;text-transform:uppercase;" oninput="this.value=this.value.toUpperCase()"></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:8px;">
+        <label style="display:flex;align-items:center;gap:6px;margin:0;font-size:12px;cursor:pointer;">
+          <input type="checkbox" id="al-final-edition"> Final Edition
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;margin:0;font-size:12px;cursor:pointer;">
+          <input type="checkbox" id="al-is-target" checked> Mark as Target
+        </label>
+      </div>
+      <div id="al-existing-info" style="display:none;margin-top:10px;padding:9px 11px;background:rgba(76,190,130,.08);border:1px solid rgba(76,190,130,.2);border-radius:6px;font-family:var(--mono);font-size:11px;color:var(--green);"></div>
+      <div class="pe-err" id="al-err"></div>
+    </div>
+  </div>
+  <div class="pe-foot">
+    <button class="pe-cancel" onclick="closeAddListing()">Cancel</button>
+    <button class="pe-save" id="al-save-btn" onclick="saveNewListing()" style="display:none;">Save Listing</button>
+  </div>
+</div>
+
 <!-- MOBILE NAV -->
 <nav class="bnav">
   <div class="bnav-row">
@@ -913,6 +980,19 @@ function qw(ep,method,body){
     method:method,
     headers:Object.assign({},H,{'Prefer':'return=representation'}),
     body:body?JSON.stringify(body):null
+  }).then(function(r){
+    if(!r.ok)return r.text().then(function(t){return Promise.reject(r.status+' '+t);});
+    if(r.status===204)return null;
+    return r.json();
+  });
+}
+
+// Upsert helper — POST with ON CONFLICT merge
+function qups(table,conflictCol,body){
+  return fetch(SB+'/rest/v1/'+table,{
+    method:'POST',
+    headers:Object.assign({},H,{'Prefer':'resolution=merge-duplicates,return=representation'}),
+    body:JSON.stringify(body)
   }).then(function(r){
     if(!r.ok)return r.text().then(function(t){return Promise.reject(r.status+' '+t);});
     if(r.status===204)return null;
@@ -2257,6 +2337,175 @@ function renderPriceDrops(vehicles,lhRows){
   });
   tbl+='</tbody></table>';
   el.innerHTML=tbl;
+}
+
+// ── ADD LISTING MODULE ────────────────────────────────────
+function openAddListing(){
+  ['al-vin','al-price','al-miles','al-seller','al-platform','al-city','al-state','al-url','al-owners','al-accidents','al-title-state'].forEach(function(id){
+    var el=document.getElementById(id);if(el)el.value='';
+  });
+  var yr=document.getElementById('al-year');if(yr)yr.value='';
+  var tr=document.getElementById('al-trim');if(tr)tr.value='S65 AMG';
+  var fe=document.getElementById('al-final-edition');if(fe)fe.checked=false;
+  var tgt=document.getElementById('al-is-target');if(tgt)tgt.checked=true;
+  var fields=document.getElementById('al-fields');if(fields)fields.style.display='none';
+  var save=document.getElementById('al-save-btn');if(save)save.style.display='none';
+  var info=document.getElementById('al-existing-info');if(info)info.style.display='none';
+  var err=document.getElementById('al-err');if(err){err.textContent='';err.classList.remove('show');}
+  alSetStatus('Enter a VIN and hit Decode');
+  document.getElementById('al-modal').classList.add('open');
+  document.getElementById('al-ov').classList.add('open');
+  setTimeout(function(){var v=document.getElementById('al-vin');if(v)v.focus();},220);
+}
+function closeAddListing(){
+  document.getElementById('al-modal').classList.remove('open');
+  document.getElementById('al-ov').classList.remove('open');
+}
+function alSetStatus(msg,color){
+  var el=document.getElementById('al-status');
+  if(el){el.textContent=msg;el.style.color=color||'var(--dim)';}
+}
+function alErr(msg){
+  var el=document.getElementById('al-err');
+  if(el){el.textContent=msg;el.classList.add('show');}
+}
+function alDecode(){
+  var vin=document.getElementById('al-vin').value.trim();
+  if(vin.length!==17){alErr('VIN must be exactly 17 characters.');return;}
+  var btn=document.getElementById('al-decode-btn');
+  btn.textContent='Decoding\u2026';btn.disabled=true;
+  var err=document.getElementById('al-err');if(err){err.textContent='';err.classList.remove('show');}
+  alSetStatus('Checking database\u2026','var(--muted)');
+  Promise.all([
+    q('vehicles?select=*&vin=eq.'+vin),
+    q('vehicle_market?select=*&vin=eq.'+vin),
+    q('vehicle_build?select=*&vin=eq.'+vin)
+  ]).then(function(res){
+    var dbV=res[0]&&res[0][0];
+    var dbM=res[1]&&res[1][0];
+    var dbB=res[2]&&res[2][0];
+    if(dbV){
+      alSetStatus('Found in database \u2014 pre-filled from existing records','var(--green)');
+      var info=document.getElementById('al-existing-info');
+      var msgs=[];
+      if(dbV.car_status)msgs.push('Status: '+dbV.car_status);
+      if(dbM&&dbM.total_owners)msgs.push('Owners: '+dbM.total_owners);
+      if(dbM&&dbM.curr_odo)msgs.push('Last odo: '+Number(dbM.curr_odo).toLocaleString()+' mi');
+      if(dbB&&dbB.paint_name)msgs.push('Color: '+formatColor(dbB.paint_name));
+      if(info&&msgs.length){info.textContent='Existing record: '+msgs.join(' \u00b7 ');info.style.display='block';}
+      document.getElementById('al-year').value=dbV.year||'';
+      document.getElementById('al-trim').value=dbV.trim||'S65 AMG';
+      if(dbV.last_title_state)document.getElementById('al-title-state').value=dbV.last_title_state;
+      if(dbV.is_final_edition)document.getElementById('al-final-edition').checked=true;
+      if(dbV.car_status==='reference')document.getElementById('al-is-target').checked=false;
+      if(dbM&&dbM.total_owners)document.getElementById('al-owners').value=dbM.total_owners;
+      if(dbM&&dbM.accident_count!==null&&dbM.accident_count!==undefined)document.getElementById('al-accidents').value=dbM.accident_count;
+      alShowFields();
+    } else {
+      alSetStatus('Not in database \u2014 decoding via NHTSA\u2026','var(--muted)');
+      return fetch('https://vpic.nhtsa.dot.gov/api/vehicles/DecodeVinValues/'+vin+'?format=json')
+        .then(function(r){return r.json();})
+        .then(function(data){
+          var r=(data.Results&&data.Results[0])||{};
+          var year=parseInt(r.ModelYear)||null;
+          var model=(r.Model||'').toUpperCase();
+          var series=(r.Series||'').toUpperCase();
+          var combined=model+' '+series;
+          var trim=combined.indexOf('S65')>=0?'S65 AMG':combined.indexOf('S600')>=0?'S600':'S65 AMG';
+          if(year)document.getElementById('al-year').value=year;
+          document.getElementById('al-trim').value=trim;
+          alSetStatus('Decoded via NHTSA \u2014 fill in listing details','var(--blue2)');
+          alShowFields();
+        });
+    }
+  }).catch(function(e){
+    alErr('Decode failed: '+e);
+    alSetStatus('Decode failed','var(--red)');
+  }).then(function(){
+    btn.textContent='Decode';btn.disabled=false;
+  });
+}
+function alShowFields(){
+  var fields=document.getElementById('al-fields');if(fields)fields.style.display='block';
+  var save=document.getElementById('al-save-btn');if(save)save.style.display='inline-block';
+}
+function alCohort(year,trim,isFE){
+  if(isFE)return '2020_S65_FE';
+  return String(year)+'_'+(trim.indexOf('S600')>=0?'S600':'S65');
+}
+function alCarStatus(year,trim,isTgt){
+  if(!isTgt)return 'reference';
+  var targetYears=[2017,2018,2019,2020];
+  if(trim.indexOf('S65')>=0&&targetYears.indexOf(parseInt(year))>=0)return 'target';
+  if(trim.indexOf('S600')>=0&&parseInt(year)===2017)return 'target';
+  return 'reference';
+}
+function saveNewListing(){
+  var vin=document.getElementById('al-vin').value.trim();
+  var year=parseInt(document.getElementById('al-year').value)||null;
+  var trim=document.getElementById('al-trim').value;
+  var price=parseInt(document.getElementById('al-price').value)||null;
+  var miles=parseInt(document.getElementById('al-miles').value);
+  if(isNaN(miles))miles=null;
+  var seller=document.getElementById('al-seller').value.trim()||null;
+  var platform=document.getElementById('al-platform').value.trim()||null;
+  var city=document.getElementById('al-city').value.trim()||null;
+  var state=document.getElementById('al-state').value.trim()||null;
+  var url=document.getElementById('al-url').value.trim()||null;
+  var owners=parseInt(document.getElementById('al-owners').value)||null;
+  var accidents=parseInt(document.getElementById('al-accidents').value);
+  if(isNaN(accidents))accidents=null;
+  var titleState=document.getElementById('al-title-state').value.trim()||state||null;
+  var isFE=document.getElementById('al-final-edition').checked;
+  var isTgt=document.getElementById('al-is-target').checked;
+  if(vin.length!==17){alErr('Invalid VIN.');return;}
+  if(!year){alErr('Year is required.');return;}
+  if(!price){alErr('Price is required.');return;}
+  if(miles===null){alErr('Miles is required.');return;}
+  var cohort=alCohort(year,trim,isFE);
+  var carStatus=alCarStatus(year,trim,isTgt);
+  var today=new Date().toISOString().slice(0,10);
+  var btn=document.getElementById('al-save-btn');
+  btn.disabled=true;btn.textContent='Saving\u2026';
+  var err=document.getElementById('al-err');if(err){err.textContent='';err.classList.remove('show');}
+  // Upsert vehicles
+  qups('vehicles',{
+    vin:vin,year:year,trim:trim,cohort:cohort,
+    car_status:carStatus,listing_status:'active',
+    last_title_state:titleState,is_final_edition:isFE,listing_url:url
+  })
+  .then(function(){
+    return qups('vehicle_market',{
+      vin:vin,curr_odo:miles,curr_odo_date:today,
+      total_owners:owners,accident_count:accidents,
+      lemon:false,salvage:false,flood:false,
+      theft_reported:false,theft_recovery:false
+    });
+  })
+  .then(function(){
+    return qups('vehicle_build',{vin:vin});
+  })
+  .then(function(){
+    return qw('odometer_readings','POST',{
+      vin:vin,reading_date:today,odometer:miles,source:'listing'
+    });
+  })
+  .then(function(){
+    return qw('listing_history','POST',{
+      vin:vin,price:price,miles:miles,
+      seller_name:seller,seller_type:'dealer',
+      city:city,state:state,platform:platform,
+      first_seen:today,last_seen:today
+    });
+  })
+  .then(function(){
+    closeAddListing();
+    loadAll();
+  })
+  .catch(function(e){
+    alErr('Save failed: '+e);
+    btn.disabled=false;btn.textContent='Save Listing';
+  });
 }
 
 // ── LOAD ALL DATA ─────────────────────────────────────────
