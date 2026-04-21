@@ -2494,7 +2494,10 @@ function saveNewListing(){
   if(vin.length!==17){alErr('Invalid VIN.');return;}
   if(!year){alErr('Year is required.');return;}
   if(!price){alErr('Price is required.');return;}
-  if(miles===null){alErr('Miles is required.');return;}var summary='Confirm new listing:\n\n'+
+  if(miles===null){alErr('Miles is required.');return;}
+
+  // Confirmation summary
+  var summary='Confirm new listing:\n\n'+
     'VIN: '+vin+'\n'+
     'Year/Trim: '+year+' '+trim+'\n'+
     'Price: $'+price.toLocaleString()+'\n'+
@@ -2642,8 +2645,8 @@ function loadAll(){
         galleryImages=files
           .filter(function(f){return f.name&&/\.(jpg|jpeg|png|webp|gif)$/i.test(f.name);})
           .map(function(f){return SB+'/storage/v1/object/public/v12-apex-documents/gallery/'+encodeURIComponent(f.name);});
+        // Note: galleryLoaded intentionally NOT set here so Gallery tab still builds its grid/carousel
         if(galleryImages.length){
-          galleryLoaded=true;
           set('gallery-count',galleryImages.length+' photos');
         }
         buildDashCarousel(galleryImages);
@@ -2869,6 +2872,14 @@ var lbIdx=0;
 function loadGallery(){
   if(galleryLoaded)return;
   galleryLoaded=true;
+
+  // If images already fetched by eager load, just build the UI
+  if(galleryImages.length){
+    set('gallery-count',galleryImages.length+' photos');
+    buildCarousel();
+    buildGrid();
+    return;
+  }
 
   // List files in Supabase Storage gallery folder
   fetch(SB+'/storage/v1/object/list/v12-apex-documents',{
