@@ -2462,19 +2462,27 @@ function renderVideos(){
 function closeVideoModal(){var m=document.getElementById('vm-modal');if(m)m.remove();}
 function openVideoManager(){
   var vids=getVideos();
+  renderVmModal(vids);
+}
+
+function renderVmModal(vids){
+  var existing=document.getElementById('vm-modal');
+  if(existing)existing.remove();
   var rows=vids.map(function(v,i){
-    return '<div style="border:1px solid var(--line);border-radius:8px;padding:11px;display:flex;flex-direction:column;gap:7px;">'+
-      '<div style="font-family:var(--mono);font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;">Slot '+(i+1)+'</div>'+
-      '<input id="vm-ch-'+i+'" value="'+v.ch+'" placeholder="Channel label" style="background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:5px 8px;font-family:var(--mono);font-size:13px;color:var(--ink);width:100%;">'+
-      '<input id="vm-title-'+i+'" value="'+v.title+'" placeholder="Title" style="background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:5px 8px;font-family:var(--mono);font-size:13px;color:var(--ink);width:100%;">'+
-      '<input id="vm-id-'+i+'" value="'+v.id+'" placeholder="YouTube ID (e.g. aZ3U_w3fOqY) or search query" style="background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:5px 8px;font-family:var(--mono);font-size:13px;color:var(--ink);width:100%;">'+
+    return '<div id="vm-slot-'+i+'" style="border:1px solid var(--line);border-radius:8px;padding:11px;display:flex;flex-direction:column;gap:7px;">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;">'+
+        '<span style="font-family:var(--mono);font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;">Slot '+(i+1)+'</span>'+
+        '<button onclick="vmRemoveSlot('+i+')" style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:14px;padding:0 4px;" title="Remove slot">&#x2715;</button>'+
+      '</div>'+
+      '<input id="vm-ch-'+i+'" value="'+esc(v.ch||'')+'" placeholder="Channel label" style="background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:5px 8px;font-family:var(--mono);font-size:13px;color:var(--ink);width:100%;">'+
+      '<input id="vm-title-'+i+'" value="'+esc(v.title||'')+'" placeholder="Title" style="background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:5px 8px;font-family:var(--mono);font-size:13px;color:var(--ink);width:100%;">'+
+      '<input id="vm-id-'+i+'" value="'+esc(v.id||'')+'" placeholder="YouTube ID or search query" style="background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:5px 8px;font-family:var(--mono);font-size:13px;color:var(--ink);width:100%;">'+
       '<div style="display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted);">'+
-        '<label><input type="radio" name="vm-type-'+i+'" value="yt" '+(v.type==='yt'?'checked':'')+' style="margin-right:4px;">YouTube ID</label>'+
+        '<label><input type="radio" name="vm-type-'+i+'" value="yt" '+(v.type!=='search'?'checked':'')+' style="margin-right:4px;">YouTube ID</label>'+
         '<label><input type="radio" name="vm-type-'+i+'" value="search" '+(v.type==='search'?'checked':'')+' style="margin-right:4px;">Search query</label>'+
       '</div>'+
     '</div>';
   }).join('');
-
   var modal=document.createElement('div');
   modal.id='vm-modal';
   modal.style.cssText='position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:20px;';
@@ -2483,9 +2491,10 @@ function openVideoManager(){
       '<div style="font-family:var(--serif);font-size:20px;color:var(--ink);">Manage Videos</div>'+
       '<button onclick="closeVideoModal()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;">&#x2715;</button>'+
     '</div>'+
-    '<div style="font-family:var(--mono);font-size:12px;color:var(--muted);">For YouTube IDs: copy the code after ?v= in the URL. For searches: paste the search query.</div>'+
-    rows+
-    '<div style="display:flex;gap:8px;margin-top:4px;">'+
+    '<div style="font-family:var(--mono);font-size:12px;color:var(--muted);">Paste the YouTube ID from after ?v= in the URL.</div>'+
+    '<div id="vm-slots">'+rows+'</div>'+
+    '<button onclick="vmAddSlot()" style="background:none;border:1px dashed var(--line2);color:var(--muted);border-radius:8px;padding:10px;font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor=\'var(--blue)\';this.style.color=\'var(--blue2)\'" onmouseout="this.style.borderColor=\'var(--line2)\';this.style.color=\'var(--muted)\'">+ Add Video Slot</button>'+
+    '<div style="display:flex;gap:8px;">'+
       '<button onclick="vmSave()" style="flex:1;background:var(--blue);color:var(--bg);border:none;border-radius:7px;padding:10px;font-family:var(--mono);font-size:13px;cursor:pointer;font-weight:500;">Save &amp; Update</button>'+
       '<button onclick="vmReset()" style="padding:10px 14px;background:none;border:1px solid var(--line2);color:var(--muted);border-radius:7px;font-family:var(--mono);font-size:12px;cursor:pointer;">Reset to Defaults</button>'+
     '</div>'+
@@ -2493,18 +2502,46 @@ function openVideoManager(){
   document.body.appendChild(modal);
 }
 
-function vmSave(){
-  var vids=getVideos();
-  for(var i=0;i<vids.length;i++){
+function vmReadSlots(){
+  var vids=[];
+  var i=0;
+  while(document.getElementById('vm-ch-'+i)){
     var ch=document.getElementById('vm-ch-'+i);
     var title=document.getElementById('vm-title-'+i);
     var id=document.getElementById('vm-id-'+i);
     var typeEl=document.querySelector('input[name="vm-type-'+i+'"]:checked');
-    if(ch)vids[i].ch=ch.value;
-    if(title)vids[i].title=title.value;
-    if(id)vids[i].id=id.value.trim();
-    if(typeEl)vids[i].type=typeEl.value;
+    vids.push({
+      ch:ch?ch.value:'',
+      title:title?title.value:'',
+      id:id?id.value.trim():'',
+      type:typeEl?typeEl.value:'yt'
+    });
+    i++;
   }
+  return vids;
+}
+
+function vmAddSlot(){
+  var vids=vmReadSlots();
+  vids.push({ch:'',title:'',id:'',type:'yt'});
+  saveVideos(vids);
+  renderVmModal(vids);
+  // Scroll to bottom of modal
+  setTimeout(function(){
+    var inner=document.querySelector('#vm-modal > div');
+    if(inner)inner.scrollTop=inner.scrollHeight;
+  },50);
+}
+
+function vmRemoveSlot(idx){
+  var vids=vmReadSlots();
+  vids.splice(idx,1);
+  saveVideos(vids);
+  renderVmModal(vids);
+}
+
+function vmSave(){
+  var vids=vmReadSlots().filter(function(v){return v.id;});
   saveVideos(vids);
   closeVideoModal();
   renderVideos();
