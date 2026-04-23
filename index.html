@@ -2685,13 +2685,19 @@ function loadAll(){
     var build={};buildRows.forEach(function(b){build[b.vin]=b;});G.build=build;
     // Build notes index (already ordered DESC by created_at)
     var notesByVin={};noteRows.forEach(function(n){if(!notesByVin[n.vin])notesByVin[n.vin]=[];notesByVin[n.vin].push(n);});G.notesByVin=notesByVin;
-    // Build profile-image override index from [profile_image] notes (most recent wins — noteRows is DESC sorted)
+    // Build profile-image override index from [profile_image] notes (most recent wins — noteRows is DESC sorted).
+    // Source of URL: n.image_url (from upload flow), or first http(s) URL in note body (for hand-written notes).
     var profileImageByVin={};
     noteRows.forEach(function(n){
-      if(!n.image_url)return;
       if(profileImageByVin[n.vin])return;
       var p=parseNoteTag(n.body||'');
-      if(p.tag==='profile_image')profileImageByVin[n.vin]=n.image_url;
+      if(p.tag!=='profile_image')return;
+      var url=n.image_url;
+      if(!url){
+        var m=/(https?:\/\/\S+)/.exec(p.body||'');
+        if(m)url=m[1].replace(/[.,;:)\]]+$/,'');
+      }
+      if(url)profileImageByVin[n.vin]=url;
     });
     G.profileImageByVin=profileImageByVin;
     if(!Array.isArray(vehicles))return;
