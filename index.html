@@ -178,6 +178,10 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .lc-mi{font-family:var(--mono);font-size:13px;color:var(--muted)}
 .lc-flags{display:flex;gap:3px;flex-wrap:wrap}
 .lc-btn{font-family:var(--mono);font-size:11px;padding:4px 9px;border-radius:5px;background:rgba(122,167,220,.1);border:1px solid rgba(122,167,220,.2);color:var(--blue2);text-decoration:none;display:inline-flex;align-items:center;transition:all .15s;white-space:nowrap}
+.lc-btn-on{border-color:rgba(76,190,130,.4);color:var(--green);background:rgba(76,190,130,.08)}
+.lc-btn-on:hover{background:rgba(76,190,130,.15)}
+.lc-btn-off{opacity:.32;cursor:not-allowed;text-decoration:line-through;background:rgba(255,255,255,.02);color:var(--muted)}
+.lc-btn-off:hover{opacity:.32;background:rgba(255,255,255,.02)}
 .lc-btn:hover{background:rgba(122,167,220,.18)}
 .tbadge{font-family:var(--mono);font-size:11px;padding:2px 7px;border-radius:10px;background:rgba(122,167,220,.1);color:var(--blue2);border:1px solid rgba(122,167,220,.2)}
 .rbadge{font-family:var(--mono);font-size:11px;padding:2px 7px;border-radius:10px;background:rgba(15,18,32,.78);color:#fff;border:1px solid rgba(255,255,255,.3)}
@@ -1651,6 +1655,29 @@ function vehicleImage(v){
   return ph(v.year,v.trim,v.vin);
 }
 
+// ── DOC LINKS ─────────────────────────────────────────────
+// Renders the row of 6 report buttons. Stored (Supabase) docs become active
+// green links with a checkmark. Missing docs are shown greyed-out and
+// unclickable — no accidental trips to paywalled external lookups.
+function renderDocLinks(vin){
+  var d=G.docs[vin]||{};
+  var providers=[
+    {k:'carfax',        lbl:'CARFAX'},
+    {k:'autocheck',     lbl:'AutoCheck'},
+    {k:'iseecars',      lbl:'iSeeCars'},
+    {k:'goodcar',       lbl:'GoodCar'},
+    {k:'public_record', lbl:'PubRec'},
+    {k:'window_sticker',lbl:'Sticker'}
+  ];
+  return '<div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px;">'+
+    providers.map(function(p){
+      var stored=d[p.k];
+      if(stored)return '<a href="'+esc(stored)+'" target="_blank" rel="noopener" class="lc-btn lc-btn-on">&#10003; '+p.lbl+'</a>';
+      return '<span class="lc-btn lc-btn-off" title="No '+p.lbl+' report on file">'+p.lbl+'</span>';
+    }).join('')+
+  '</div>';
+}
+
 // ── RENDER COMPACT CARD ───────────────────────────────────
 function renderCompact(v,vm,lh){
   var priceHTML=lh?renderPriceWithDelta(lh):'<span class="lc-price">--</span>';
@@ -1680,7 +1707,7 @@ function renderCompact(v,vm,lh){
         notesPill(v.vin)+
       '</div>'+
       '<div class="lc-meta">'+v.vin+' &middot; '+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?formatColor(b.paint_name)+' &middot; ':'';})()+loc+(lh&&lh.seller_name?' &middot; '+lh.seller_name:'')+'</div>'+
-      '<div class="lc-flags">'+flags(v,vm)+'</div>'+ (function(){var d=G.docs[v.vin]||{};var hasSB=function(u){return u&&u.indexOf('supabase')>-1;};return '<div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px;">'+'<a href="'+(d.carfax||'https://www.carfax.com/VehicleHistory/p/Report.cfx?vin='+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.carfax)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.carfax)?'✓ ':'')+' CARFAX</a>'+'<a href="'+(d.autocheck||'https://www.autocheck.com/vehiclehistory/?vin='+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.autocheck)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.autocheck)?'✓ ':'')+' AutoCheck</a>'+'<a href="'+(d.iseecars||'https://www.iseecars.com/vin#vin='+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.iseecars)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.iseecars)?'✓ ':'')+' iSeeCars</a>'+'<a href="'+(d.goodcar||'https://www.goodcar.com/us/vin-check/'+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.goodcar)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.goodcar)?'✓ ':'')+' GoodCar</a>'+'<a href="'+(d.public_record||'https://www.publicrecords.us/vehicle/'+v.vin)+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.public_record)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.public_record)?'✓ ':'')+' PubRec</a>'+'<a href="'+(d.window_sticker||'https://www.mbusa.com/content/dam/mb-nafta/us/owners/window-sticker/'+v.vin+'.pdf')+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.window_sticker)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.window_sticker)?'✓ ':'')+' Sticker</a>'+'</div>';})()+
+      '<div class="lc-flags">'+flags(v,vm)+'</div>'+renderDocLinks(v.vin)+
       '<div class="lc-row">'+
         priceHTML+priceEditBtn(v.vin,active)+
         '<span class="lc-mi">'+miles+'</span>'+
@@ -1737,7 +1764,7 @@ function renderTarget(v,vm,lh){
         '<div class="tc-stat"><span class="tc-sv">'+miles+'</span><span class="tc-sl">Miles</span></div>'+
         '<div class="tc-stat"><span class="tc-sv">'+owners+'</span><span class="tc-sl">Owners</span></div>'+
       '</div>'+
-      '<div class="tc-flags">'+flags(v,vm)+'</div>'+ (function(){   var d=G.docs[v.vin]||{};   var cfUrl=d.carfax||'https://www.carfax.com/VehicleHistory/p/Report.cfx?vin='+v.vin;   var acUrl=d.autocheck||'https://www.autocheck.com/vehiclehistory/?vin='+v.vin;   var isUrl=d.iseecars||'https://www.iseecars.com/vin#vin='+v.vin;   var gcUrl=d.goodcar||'https://www.goodcar.com/us/vin-check/'+v.vin;   var prUrl=d.public_record||'https://www.publicrecords.us/vehicle/'+v.vin;   var wsUrl=d.window_sticker||'https://www.mbusa.com/content/dam/mb-nafta/us/owners/window-sticker/'+v.vin+'.pdf';   var hasSB=function(u){return u&&u.indexOf('supabase')>-1;};   return '<div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px;">'+     '<a href="'+cfUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.carfax)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.carfax)?'✓ ':'')+' CARFAX</a>'+     '<a href="'+acUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.autocheck)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.autocheck)?'✓ ':'')+' AutoCheck</a>'+     '<a href="'+isUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.iseecars)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.iseecars)?'✓ ':'')+' iSeeCars</a>'+     '<a href="'+gcUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.goodcar)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.goodcar)?'✓ ':'')+' GoodCar</a>'+     '<a href="'+prUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.public_record)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.public_record)?'✓ ':'')+' PubRec</a>'+     '<a href="'+wsUrl+'" target="_blank" rel="noopener" class="lc-btn" style="'+(hasSB(d.window_sticker)?'border-color:rgba(76,190,130,.4);color:var(--green);':'')+'">'+( hasSB(d.window_sticker)?'✓ ':'')+' Sticker</a>'+   '</div>'; })()+
+      '<div class="tc-flags">'+flags(v,vm)+'</div>'+renderDocLinks(v.vin)+
       '<div style="display:flex;gap:6px;align-items:stretch;">'+
         (v.listing_url?'<a href="'+v.listing_url+'" target="_blank" rel="noopener" class="tc-btn" style="flex:1;">&#9654; View Listing</a>':(active?'<span class="tc-btn" style="flex:1;opacity:.5;cursor:default;">&#9679; Active</span>':'<span style="flex:1;"></span>'))+
         '<button class="tc-btn" style="flex:none;padding:8px 10px;" onclick="openUrlEdit(\''+v.vin+'\',this)" title="Edit listing URL">&#9998;</button>'+
