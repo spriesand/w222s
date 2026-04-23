@@ -379,6 +379,13 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .nt-research{background:rgba(122,167,220,.14);color:var(--blue2);border:1px solid rgba(122,167,220,.3)}
 .nt-state_trail{background:rgba(0,212,200,.12);color:var(--teal);border:1px solid rgba(0,212,200,.3)}
 .nt-provenance{background:rgba(200,169,106,.12);color:var(--gold2);border:1px solid rgba(200,169,106,.3)}
+.nt-profile_image{background:rgba(0,212,200,.12);color:var(--teal);border:1px solid rgba(0,212,200,.3)}
+/* Profile image edit button (overlays card photo) */
+.tc-img-edit{position:absolute;top:10px;right:11px;z-index:4;width:30px;height:30px;border-radius:50%;background:rgba(7,9,15,.82);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,transform .15s,opacity .15s;opacity:0;padding:0;line-height:1}
+.tc-img:hover .tc-img-edit,.lc-img:hover .tc-img-edit{opacity:.85}
+.tc-img-edit:hover{opacity:1!important;background:rgba(7,9,15,.95);transform:scale(1.08)}
+.tc-img-edit.uploading{opacity:1!important;background:rgba(200,169,106,.3);cursor:wait}
+@media(hover:none){.tc-img-edit{opacity:.7}}
 .note-item{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:rgba(255,255,255,.02)}
 .note-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .note-head time{font-size:10px;color:var(--dim);font-family:var(--mono);letter-spacing:.3px}
@@ -1151,7 +1158,8 @@ var NOTE_TAGS=[
   {k:'user',  lbl:'Notes'},
   {k:'research',lbl:'Research'},
   {k:'state_trail',lbl:'State Trail'},
-  {k:'provenance',lbl:'Provenance'}
+  {k:'provenance',lbl:'Provenance'},
+  {k:'profile_image',lbl:'Profile Image'}
 ];
 
 function renderNotes(){
@@ -1166,7 +1174,7 @@ function renderNotes(){
   });
   // Tag filter chips
   var active=NS.tagFilter||'';
-  var tagCounts={user:0,research:0,state_trail:0,provenance:0};
+  var tagCounts={user:0,research:0,state_trail:0,provenance:0,profile_image:0};
   classified.forEach(function(c){if(tagCounts[c.tag]!==undefined)tagCounts[c.tag]++;});
   var chips=NOTE_TAGS.map(function(t){
     var cnt=t.k===''?rows.length:(tagCounts[t.k]||0);
@@ -1277,6 +1285,84 @@ function updateNotesBadges(vin){
     btn.innerHTML=notesPillInner(cnt);
     btn.className=cnt?'notes-pill has-notes':'notes-pill';
   });
+}
+
+// ── PROFILE IMAGE PICKER ──────────────────────────────────
+// Hover a card photo → camera icon appears → click opens file picker.
+// Uploads to v12-apex-documents/images/{VIN}_{ts}.{ext}, then inserts a
+// vehicle_notes row with body='[profile_image]' and image_url=<url>.
+// Most recent such note per VIN wins in G.profileImageByVin.
+var PI={vin:null,uploading:false,fileInput:null};
+
+function ensureProfileImageInput(){
+  if(PI.fileInput)return PI.fileInput;
+  var inp=document.createElement('input');
+  inp.type='file';
+  inp.accept='image/*';
+  inp.style.display='none';
+  inp.id='profile-image-input';
+  inp.addEventListener('change',profileImageFileChange);
+  document.body.appendChild(inp);
+  PI.fileInput=inp;
+  return inp;
+}
+
+function openProfileImagePicker(vin){
+  if(PI.uploading){alert('An image upload is still in progress. Please wait.');return;}
+  PI.vin=vin;
+  var inp=ensureProfileImageInput();
+  inp.value='';
+  inp.click();
+}
+
+function profileImageFileChange(e){
+  var file=e.target.files&&e.target.files[0];
+  if(!file||!PI.vin)return;
+  if(!/^image\//i.test(file.type)){alert('Not an image file.');return;}
+  if(file.size>10*1024*1024){alert('Image too large (10MB max).');return;}
+  uploadProfileImage(PI.vin,file);
+}
+
+function setProfileImageBtnState(vin,uploading){
+  document.querySelectorAll('.tc-img-edit').forEach(function(btn){
+    var handler=btn.getAttribute('onclick')||'';
+    if(handler.indexOf("'"+vin+"'")===-1)return;
+    if(uploading){btn.classList.add('uploading');btn.innerHTML='&#9696;';}
+    else{btn.classList.remove('uploading');btn.innerHTML='&#128247;';}
+  });
+}
+
+function uploadProfileImage(vin,file){
+  PI.uploading=true;
+  setProfileImageBtnState(vin,true);
+  var mime=(file.type||'image/jpeg').toLowerCase();
+  var extMap={'image/png':'png','image/jpeg':'jpg','image/jpg':'jpg','image/gif':'gif','image/webp':'webp','image/heic':'heic','image/heif':'heif'};
+  var ext=extMap[mime]||'jpg';
+  var path='images/'+vin+'_'+Date.now()+'.'+ext;
+  qs(path,file)
+    .then(function(url){
+      return qw('vehicle_notes','POST',{vin:vin,body:'[profile_image]',image_url:url})
+        .then(function(rows){return {url:url,row:Array.isArray(rows)?rows[0]:rows};});
+    })
+    .then(function(res){
+      G.profileImageByVin=G.profileImageByVin||{};
+      G.profileImageByVin[vin]=res.url;
+      G.notesByVin=G.notesByVin||{};
+      G.notesByVin[vin]=G.notesByVin[vin]||[];
+      if(res.row)G.notesByVin[vin].unshift(res.row);
+      renderTargets();
+      renderMkt();
+      renderDashListings();
+      updateNotesBadges(vin);
+    })
+    .catch(function(err){
+      alert('Upload failed: '+err);
+    })
+    .then(function(){
+      PI.uploading=false;
+      PI.vin=null;
+      setProfileImageBtnState(vin,false);
+    });
 }
 
 // ── PRICE EDIT MODULE ─────────────────────────────────────
@@ -1468,7 +1554,8 @@ function renderDashListings(){
     var miles=vm&&vm.curr_odo?fM(vm.curr_odo):(lh&&lh.miles?fM(lh.miles):'--');
     var price=lh&&lh.price?fP(lh.price):'--';
     var isTarget=v.car_status==='target';
-    var img=v.image_url?v.image_url:PLACEHOLDERS[Math.abs((function(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return h;})(v.vin))%PLACEHOLDERS.length];
+    var profileImg=G.profileImageByVin&&G.profileImageByVin[v.vin];
+    var img=profileImg||v.image_url||PLACEHOLDERS[Math.abs((function(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return h;})(v.vin))%PLACEHOLDERS.length];
     return '<div style="flex:0 0 160px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--panel2);display:flex;flex-direction:column;">'+
       '<div style="height:100px;position:relative;overflow:hidden;flex-shrink:0;">'+
         '<img src="'+img+'" style="width:100%;height:100%;object-fit:cover;opacity:.88;display:block;">'+
@@ -1555,6 +1642,15 @@ function loadResources(){
   });
 }
 
+// ── IMAGE RESOLUTION ──────────────────────────────────────
+// Priority: [profile_image] note override → vehicles.image_url → placeholder
+function vehicleImage(v){
+  var override=G.profileImageByVin&&G.profileImageByVin[v.vin];
+  if(override)return '<img src="'+esc(override)+'" alt="">';
+  if(v.image_url)return '<img src="'+esc(v.image_url)+'" alt="">';
+  return ph(v.year,v.trim,v.vin);
+}
+
 // ── RENDER COMPACT CARD ───────────────────────────────────
 function renderCompact(v,vm,lh){
   var priceHTML=lh?renderPriceWithDelta(lh):'<span class="lc-price">--</span>';
@@ -1566,9 +1662,10 @@ function renderCompact(v,vm,lh){
   var chip=active?relistChip(v.vin,lh):'';
   return '<div class="lc">'+
     '<div class="lc-img hs-wrap">'+
-    '<div class="hs-img-panel" style="position:relative;height:100%;">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
+    '<div class="hs-img-panel" style="position:relative;height:100%;">'+vehicleImage(v)+
       '<div class="lc-img-ov"></div>'+
       '<div class="lc-top">'+badge+'</div>'+
+      '<button class="tc-img-edit" onclick="event.stopPropagation();openProfileImagePicker(\''+v.vin+'\')" title="Change profile photo">&#128247;</button>'+
       (active?'<div class="lc-active"><span class="live-dot"></span>Active</div>':'')+
     '</div>'+
     '<div class="hs-hist-panel">'+
@@ -1616,10 +1713,11 @@ function renderTarget(v,vm,lh){
     : '<span class="tc-sv" style="color:'+priceColor+';">Not listed</span>';
   return '<div class="tc">'+
     '<div class="tc-img hs-wrap">'+
-    '<div class="hs-img-panel" style="position:relative;height:100%;">'+(v.image_url?'<img src="'+v.image_url+'" alt="">':ph(v.year,v.trim))+
+    '<div class="hs-img-panel" style="position:relative;height:100%;">'+vehicleImage(v)+
       '<div class="tc-img-ov"></div>'+
       '<div class="tc-top"><span class="tag tb">Target</span>'+(v.is_final_edition?'<span class="tag tg">Final Edition</span>':'')+
       '</div>'+
+      '<button class="tc-img-edit" onclick="event.stopPropagation();openProfileImagePicker(\''+v.vin+'\')" title="Change profile photo">&#128247;</button>'+
       (active?'<div class="tc-active"><span class="live-dot"></span>Active Listing</div>':'')+
     '</div>'+
     '<div class="hs-hist-panel">'+
@@ -2587,6 +2685,15 @@ function loadAll(){
     var build={};buildRows.forEach(function(b){build[b.vin]=b;});G.build=build;
     // Build notes index (already ordered DESC by created_at)
     var notesByVin={};noteRows.forEach(function(n){if(!notesByVin[n.vin])notesByVin[n.vin]=[];notesByVin[n.vin].push(n);});G.notesByVin=notesByVin;
+    // Build profile-image override index from [profile_image] notes (most recent wins — noteRows is DESC sorted)
+    var profileImageByVin={};
+    noteRows.forEach(function(n){
+      if(!n.image_url)return;
+      if(profileImageByVin[n.vin])return;
+      var p=parseNoteTag(n.body||'');
+      if(p.tag==='profile_image')profileImageByVin[n.vin]=n.image_url;
+    });
+    G.profileImageByVin=profileImageByVin;
     if(!Array.isArray(vehicles))return;
 
     // Build indexes
