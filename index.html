@@ -23,7 +23,7 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{background:var(--bg)}
-body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% -5%,rgba(122,167,220,.07),transparent 55%),#07090f;color:var(--ink);min-height:100vh;overflow-x:hidden}
+body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% -5%,rgba(122,167,220,.07),transparent 55%),#07090f;color:var(--ink);min-height:100vh;overflow-x:clip}
 
 /* ── MASTHEAD ── */
 .mast{border-bottom:1px solid var(--line);padding:11px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;position:sticky;top:0;z-index:200;background:rgba(7,9,15,.95);backdrop-filter:blur(16px)}
@@ -2837,7 +2837,7 @@ function renderProspectTimeline(vin){
     {year:2024.1, label:'Re-Listed',        price:140775, type:'list',    note:'MB Seattle, 29,677 mi'},
     {year:2024.5, label:'Auction Cycle 2',  price:120000, type:'auction', note:'31,627 mi, unsold x9'},
     {year:2024.8, label:'Final Ask',        price:112400, type:'list',    note:'Lynnwood BMW, 31,251 mi'},
-    {year:2028.0, label:'Target ≤$40K',price:38000,  type:'target',  note:'Golden Intersection'},
+    {year:2028.0, label:'Target ≤ $40K', price:38000, type:'target', note:'Golden Intersection'},
   ];
 
   var W=680,H=220,PL=58,PR=20,PT=30,PB=44;
@@ -3025,7 +3025,6 @@ function renderProspect(){
 
   // Price timeline
   renderProspectTimeline(v.vin);
-  renderProspectTimeline(v.vin);
 
   // Listing history
   var hw=document.getElementById('prospect-history-wrap');
@@ -3058,7 +3057,7 @@ function loadAll(){
     q('vehicles?select=*&order=year.desc&limit=2000'),
     q('vehicle_market?select=*'),
     q('listing_history?select=id,vin,price,miles,seller_name,seller_type,city,state,platform,first_seen,last_seen,dom&order=last_seen.desc,id.desc&limit=5000'),
-    q('vehicle_build?select=vin,paint_name,upholstery_name,production_date,sa_codes,has_burmester,has_night_vision,has_magic_sky,has_ceramic_brakes,has_refrigerator,has_designo,has_abc_suspension,has_carbon_pkg,has_rear_entertainment,has_chauffeur_pkg,has_executive_rear_seat,has_keyless_go'),
+    q('vehicle_build?select=vin,paint_name,upholstery_name,production_date,order_number,msrp_original,sa_codes,has_burmester,has_night_vision,has_magic_sky,has_ceramic_brakes,has_refrigerator,has_designo,has_abc_suspension,has_carbon_pkg,has_rear_entertainment,has_chauffeur_pkg,has_executive_rear_seat,has_keyless_go'),
     q('documents?select=vin,doc_type,storage_url'),
     q('vehicle_notes?select=*&deleted_at=is.null&order=created_at.desc'),
     q('prospect_images?select=*&order=sort_order.asc')
