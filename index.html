@@ -2837,7 +2837,6 @@ function renderProspectTimeline(vin){
     {year:2024.1, label:'Re-Listed',        price:140775, type:'list',    note:'MB Seattle, 29,677 mi'},
     {year:2024.5, label:'Auction Cycle 2',  price:120000, type:'auction', note:'31,627 mi, unsold x9'},
     {year:2024.8, label:'Final Ask',        price:112400, type:'list',    note:'Lynnwood BMW, 31,251 mi'},
-    {year:2026.0, label:'Est. Market',      price:44535,  type:'market',  note:'iSeeCars, Apr 2026'},
     {year:2028.0, label:'Target ≤$40K',price:38000,  type:'target',  note:'Golden Intersection'},
   ];
 
@@ -2890,7 +2889,7 @@ function renderProspectTimeline(vin){
   '</svg>';
 
   var legend='<div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px solid var(--line);">'+
-    [['var(--dim)','MSRP'],['var(--gold2)','Retail Listing'],['var(--amber)','Dealer Auction'],['var(--blue2)','Est. Market'],['var(--green)','Acquisition Target']].map(function(p){
+    [['var(--dim)','MSRP'],['var(--gold2)','Retail Listing'],['var(--amber)','Dealer Auction'],['var(--green)','Acquisition Target']].map(function(p){
       return '<span style="font-family:var(--mono);font-size:10px;color:'+p[0]+';display:flex;align-items:center;gap:5px;"><span style="width:7px;height:7px;border-radius:50%;background:'+p[0]+';display:inline-block;"></span>'+p[1]+'</span>';
     }).join('')+'</div>';
 
@@ -2945,17 +2944,18 @@ function renderProspect(){
     var proj=v.miles_projected_jan28?fM(v.miles_projected_jan28):'--';
     var price=allLHForVin.length?fP(allLHForVin[0].price):'--';
     var priceDate=allLHForVin.length&&allLHForVin[0].last_seen?allLHForVin[0].last_seen.slice(0,10):'';
+    var pkgs=[b.has_designo&&'Designo',b.has_burmester&&'Burmester',b.has_abc_suspension&&'ABC Suspension',b.has_night_vision&&'Night Vision',b.has_rear_entertainment&&'Rear Entertainment',b.has_magic_sky&&'Magic Sky'].filter(Boolean).join(' · ')||'--';
     sw.innerHTML=[
       {label:'Year / Trim',value:v.year+' S65 AMG',sub:'W222 Platform'},
-      {label:'Exterior',value:ext,sub:'Paint Code 890U'},
-      {label:'Interior',value:interior,sub:'Designo Package'},
       {label:'Current Odometer',value:odo,sub:vm.curr_odo_date||''},
-      {label:'Owners',value:vm.total_owners?fN(vm.total_owners)+' owner'+(vm.total_owners>1?'s':''):'--',sub:'MB Financial lease return'},
-      {label:'Last Ask',value:price,sub:priceDate?'as of '+priceDate:''},
       {label:'Projected Jan 2028',value:proj,sub:'~5,400 mi/yr'},
-      {label:'Production Date',value:b.production_date||'--',sub:'Sindelfingen'},
-      {label:'Prior Use',value:vm.prior_usage||'--',sub:''},
+      {label:'Exterior',value:ext,sub:'Paint Code 890U'},
+      {label:'Interior',value:interior,sub:'Designo Silk Beige'},
+      {label:'Owners',value:vm.total_owners?fN(vm.total_owners)+' title holder'+(vm.total_owners>1?'s':''):'--',sub:'MB Financial + personal lessee'},
+      {label:'Production Date',value:b.production_date||'--',sub:'Sindelfingen · Order '+esc(b.order_number||'')},
       {label:'Accidents',value:vm.accident_count?'Reported':'None reported',sub:vm.accident_count?'See notes':'Clean record'},
+      {label:'Key Packages',value:pkgs,sub:'From SA code build data'},
+      {label:'Original MSRP',value:b.msrp_original?fP(b.msrp_original):'--',sub:'vs. ~$40K target — 83% decline'},
     ].map(function(s){
       return '<div class="prospect-spec">'+
         '<div class="prospect-spec-label">'+esc(s.label)+'</div>'+
