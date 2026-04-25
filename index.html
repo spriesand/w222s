@@ -2829,75 +2829,73 @@ function renderProspectTimeline(vin){
   var el=document.getElementById('prospect-price-timeline');
   if(!el)return;
 
-  // Hardcoded price history for KA433990 — augment from listing_history for other VINs
+  // Spread events across fractional years to prevent label overlap
   var events=[
-    {year:2019, label:'New MSRP',        price:237240, type:'msrp'},
-    {year:2022, label:'MB Seattle CPO',  price:177655, type:'list'},
-    {year:2022, label:'Auction Cycle 1', price:156000, type:'auction'},
-    {year:2024, label:'MB Seattle List', price:140775, type:'list'},
-    {year:2024, label:'Auction Cycle 2', price:120000, type:'auction'},
-    {year:2024, label:'Last Listed',     price:112400, type:'list'},
-    {year:2026, label:'Est. Market',     price:44535,  type:'market'},
-    {year:2028, label:'Target ≤$40K',   price:38000,  type:'target'},
+    {year:2019.0, label:'New MSRP',        price:237240, type:'msrp',    note:'Belmont CA delivery'},
+    {year:2022.2, label:'CPO Listed',       price:177655, type:'list',    note:'MB Seattle, 11,829 mi'},
+    {year:2022.7, label:'Auction Cycle 1',  price:156000, type:'auction', note:'14,595 mi, unsold x9'},
+    {year:2024.1, label:'Re-Listed',        price:140775, type:'list',    note:'MB Seattle, 29,677 mi'},
+    {year:2024.5, label:'Auction Cycle 2',  price:120000, type:'auction', note:'31,627 mi, unsold x9'},
+    {year:2024.8, label:'Final Ask',        price:112400, type:'list',    note:'Lynnwood BMW, 31,251 mi'},
+    {year:2026.0, label:'Est. Market',      price:44535,  type:'market',  note:'iSeeCars, Apr 2026'},
+    {year:2028.0, label:'Target ≤$40K',price:38000,  type:'target',  note:'Golden Intersection'},
   ];
 
-  var W=640,H=180,PL=60,PR=30,PT=20,PB=40;
+  var W=680,H=220,PL=58,PR=20,PT=30,PB=44;
   var minP=0,maxP=250000;
-  var minY=2019,maxY=2029;
+  var minY=2018.5,maxY=2029;
 
   function toX(y){return PL+(y-minY)/(maxY-minY)*(W-PL-PR);}
   function toY(p){return PT+(1-p/maxP)*(H-PT-PB);}
 
-  var path=events.map(function(e,i){return (i===0?'M':'L')+toX(e.year)+' '+toY(e.price);}).join(' ');
-  var area=path+' L'+toX(events[events.length-1].year)+' '+(H-PB)+' L'+toX(events[0].year)+' '+(H-PB)+' Z';
+  var path=events.map(function(e,i){return (i===0?'M':'L')+toX(e.year).toFixed(1)+' '+toY(e.price).toFixed(1);}).join(' ');
+  var area=path+' L'+toX(events[events.length-1].year).toFixed(1)+' '+(H-PB)+' L'+toX(events[0].year).toFixed(1)+' '+(H-PB)+' Z';
 
-  var dots=events.map(function(e,i){
+  var dots=events.map(function(e){
     var cx=toX(e.year),cy=toY(e.price);
-    var col=e.type==='target'?'var(--green)':e.type==='msrp'?'var(--dim)':e.type==='auction'?'var(--amber)':e.type==='market'?'var(--blue2)':'var(--gold2)';
-    var r=e.type==='target'?5:4;
-    var label=e.type==='target'?'\u2264$40K':('$'+Math.round(e.price/1000)+'K');
-    var prev=events[i-1],next=events[i+1];
-    var tooClose=(prev&&Math.abs(e.year-prev.year)<1.5)||(next&&Math.abs(e.year-next.year)<1.5);
-    var labelY=tooClose&&(i%2===1)?(cy+18):(cy-8);
-    return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+col+'" stroke="var(--bg)" stroke-width="1.5"/>'+
-      '<text x="'+cx+'" y="'+labelY+'" text-anchor="middle" fill="'+col+'" font-size="9" font-family="IBM Plex Mono">'+label+'</text>';
+    var col=e.type==='target'?'var(--green)':e.type==='msrp'?'rgba(200,210,230,.5)':e.type==='auction'?'var(--amber)':e.type==='market'?'var(--blue2)':'var(--gold2)';
+    var r=e.type==='target'?5.5:4;
+    var priceLabel='$'+Math.round(e.price/1000)+'K';
+    if(e.type==='target')priceLabel='≤$40K';
+    // All labels above with leader line
+    var labelY=cy-20;
+    if(labelY<PT+4)labelY=cy+22;
+    var lineY2=labelY<cy?labelY+10:labelY-2;
+    return '<line x1="'+cx.toFixed(1)+'" y1="'+cy.toFixed(1)+'" x2="'+cx.toFixed(1)+'" y2="'+lineY2.toFixed(1)+'" stroke="'+col+'" stroke-width="1" opacity=".5"/>'+
+      '<circle cx="'+cx.toFixed(1)+'" cy="'+cy.toFixed(1)+'" r="'+r+'" fill="'+col+'" stroke="var(--bg)" stroke-width="1.5"/>'+
+      '<text x="'+cx.toFixed(1)+'" y="'+labelY.toFixed(1)+'" text-anchor="middle" fill="'+col+'" font-size="9" font-family="IBM Plex Mono" font-weight="500">'+priceLabel+'</text>';
   }).join('');
 
-  // Year axis
   var years=[2019,2021,2023,2025,2027,2029];
   var axis=years.map(function(y){
-    return '<text x="'+toX(y)+'" y="'+(H-PB+14)+'" text-anchor="middle" fill="rgba(200,210,230,.4)" font-size="9" font-family="IBM Plex Mono">'+y+'</text>'+
-      '<line x1="'+toX(y)+'" y1="'+PT+'" x2="'+toX(y)+'" y2="'+(H-PB)+'" stroke="rgba(255,255,255,.05)" stroke-width="1"/>';
+    return '<text x="'+toX(y).toFixed(1)+'" y="'+(H-PB+14)+'" text-anchor="middle" fill="rgba(200,210,230,.35)" font-size="9" font-family="IBM Plex Mono">'+y+'</text>'+
+      '<line x1="'+toX(y).toFixed(1)+'" y1="'+PT+'" x2="'+toX(y).toFixed(1)+'" y2="'+(H-PB)+'" stroke="rgba(255,255,255,.04)" stroke-width="1"/>';
   }).join('');
 
-  // Price axis labels
-  var priceAxis=[0,50000,100000,150000,200000,237000].map(function(p){
-    return '<text x="'+(PL-6)+'" y="'+(toY(p)+3)+'" text-anchor="end" fill="rgba(200,210,230,.4)" font-size="9" font-family="IBM Plex Mono">$'+Math.round(p/1000)+'K</text>'+
-      '<line x1="'+PL+'" y1="'+toY(p)+'" x2="'+(W-PR)+'" y2="'+toY(p)+'" stroke="rgba(255,255,255,.05)" stroke-width="1"/>';
+  var priceAxis=[0,50000,100000,150000,200000].map(function(p){
+    return '<text x="'+(PL-6)+'" y="'+(toY(p)+3).toFixed(1)+'" text-anchor="end" fill="rgba(200,210,230,.35)" font-size="9" font-family="IBM Plex Mono">$'+Math.round(p/1000)+'K</text>'+
+      '<line x1="'+PL+'" y1="'+toY(p).toFixed(1)+'" x2="'+(W-PR)+'" y2="'+toY(p).toFixed(1)+'" stroke="rgba(255,255,255,.04)" stroke-width="1"/>';
   }).join('');
 
-  // Target zone shading
   var txL=toX(2027.5),txR=toX(2028.5),tyT=toY(40000),tyB=H-PB;
-  var targetZone='<rect x="'+txL+'" y="'+tyT+'" width="'+(txR-txL)+'" height="'+(tyB-tyT)+'" fill="rgba(76,190,130,.08)" stroke="rgba(76,190,130,.25)" stroke-width="1" rx="2"/>'+
-    '<text x="'+((txL+txR)/2)+'" y="'+(tyT-5)+'" text-anchor="middle" fill="rgba(76,190,130,.7)" font-size="8" font-family="IBM Plex Mono">ACQUISITION</text>';
+  var targetZone='<rect x="'+txL.toFixed(1)+'" y="'+tyT.toFixed(1)+'" width="'+(txR-txL).toFixed(1)+'" height="'+(tyB-tyT).toFixed(1)+'" fill="rgba(76,190,130,.07)" stroke="rgba(76,190,130,.2)" stroke-width="1" rx="2"/>'+
+    '<text x="'+((txL+txR)/2).toFixed(1)+'" y="'+(tyT-6).toFixed(1)+'" text-anchor="middle" fill="rgba(76,190,130,.6)" font-size="8" font-family="IBM Plex Mono" letter-spacing="0.08em">ACQUISITION WINDOW</text>';
 
   var svg='<svg viewBox="0 0 '+W+' '+H+'" width="100%" style="display:block;" xmlns="http://www.w3.org/2000/svg">'+
-    '<defs><linearGradient id="tl-grad" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="var(--gold)" stop-opacity=".15"/><stop offset="100%" stop-color="var(--gold)" stop-opacity="0"/></linearGradient></defs>'+
+    '<defs><linearGradient id="tl-grad" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="var(--gold)" stop-opacity=".12"/><stop offset="100%" stop-color="var(--gold)" stop-opacity="0"/></linearGradient></defs>'+
     priceAxis+axis+targetZone+
     '<path d="'+area+'" fill="url(#tl-grad)"/>'+
-    '<path d="'+path+'" fill="none" stroke="var(--gold)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="4 3" opacity=".5"/>'+
+    '<path d="'+path+'" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="5 3" opacity=".45"/>'+
     dots+
   '</svg>';
 
-  // Legend
-  var legend='<div style="display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;">'+
-    ['msrp:var(--dim):MSRP','list:var(--gold2):Retail Listing','auction:var(--amber):Dealer Auction','market:var(--blue2):Est. Market','target:var(--green):Acquisition Target'].map(function(s){
-      var p=s.split(':');
-      return '<span style="font-family:var(--mono);font-size:10px;color:'+p[1]+';display:flex;align-items:center;gap:4px;"><span style="width:8px;height:8px;border-radius:50%;background:'+p[1]+';display:inline-block;"></span>'+p[2]+'</span>';
+  var legend='<div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px solid var(--line);">'+
+    [['var(--dim)','MSRP'],['var(--gold2)','Retail Listing'],['var(--amber)','Dealer Auction'],['var(--blue2)','Est. Market'],['var(--green)','Acquisition Target']].map(function(p){
+      return '<span style="font-family:var(--mono);font-size:10px;color:'+p[0]+';display:flex;align-items:center;gap:5px;"><span style="width:7px;height:7px;border-radius:50%;background:'+p[0]+';display:inline-block;"></span>'+p[1]+'</span>';
     }).join('')+'</div>';
 
-  el.innerHTML='<div style="margin-bottom:8px;font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;">Price History — $237K → Target ≤$40K</div>'+
-    '<div style="background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px 8px;">'+svg+legend+'</div>';
+  el.innerHTML='<div style="margin-bottom:10px;font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;">Depreciation Arc — $237K → Target ≤$40K</div>'+
+    '<div style="background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px 16px 10px;">'+svg+legend+'</div>';
 }
 
 function renderProspect(){
@@ -2971,34 +2969,62 @@ function renderProspect(){
   var dw=document.getElementById('prospect-docs-wrap');
   if(dw)dw.innerHTML='<div style="margin-bottom:8px;font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;">Documents</div>'+renderDocLinks(v.vin);
 
-  // Equipment from SA codes
+  // Equipment from SA codes — categorized with icons
   var ew=document.getElementById('prospect-equipment-wrap');
   if(ew&&b.sa_codes){
     var sa={};
     try{sa=typeof b.sa_codes==='string'?JSON.parse(b.sa_codes):b.sa_codes||{};}catch(e){sa={};}
-    // Curated notable equipment codes
-    var notable={
-      '487':'ABC Suspension','811':'Burmester High-End 3D Sound','610':'Night View Assist PLUS',
-      '413':'Panoramic Sunroof','864':'Rear Entertainment (2 Screens)','463':'Head-Up Display',
-      '889':'KEYLESS-GO','647':'AMG 20" Forged 10-Spoke Wheels','875':'Magic Vision Control',
-      'P62':'Designo Package','P07':'Chauffeur Package','P43':'Rear Seat Comfort Package',
-      'P46':'Rear Entertainment Package','P64':'Front Memory Package','K32':'Active Lane Change Assist',
-      '233':'DISTRONIC PLUS','235':'Active Park Assist','401':'Front Seat Climate Control',
-      '402':'Rear Seat Climate Control','406':'Multi-Contour Rear Seat','443':'Heated Steering Wheel',
-      '432':'Dynamics Seat Front','453':'Seat with Bunk Function','452':'Chauffeur Setting',
-      '536':'Sirius Satellite Radio','897':'Wireless Charging','891':'Premium Ambiance Lighting',
-      'G932':'G932 Transmission','M279':'M279 V12 Engine'
-    };
-    var chips=Object.keys(notable).filter(function(k){return sa[k]!==undefined;}).map(function(k){
-      return '<span style="display:inline-flex;align-items:center;gap:4px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-family:var(--mono);font-size:10px;color:var(--ink2);white-space:nowrap;">'+
-        '<span style="color:var(--gold);font-size:9px;">'+k+'</span> '+esc(notable[k])+
-      '</span>';
-    }).join('');
-    ew.innerHTML='<div style="margin-bottom:8px;font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;">Notable Factory Equipment</div>'+
-      '<div style="display:flex;flex-wrap:wrap;gap:6px;">'+chips+'</div>';
+    var categories=[
+      {icon:'\u2699\ufe0f', label:'Dynamics & Suspension', items:[
+        {k:'487',l:'ABC Active Body Control'},{k:'233',l:'DISTRONIC PLUS'},
+        {k:'K32',l:'Active Lane Change Assist'},{k:'K33',l:'Enhanced Stop-Go Restart'},
+        {k:'235',l:'Active Park Assist'},{k:'P72',l:'Active Comfort Package'},
+      ]},
+      {icon:'\uD83D\uDD0A', label:'Audio & Entertainment', items:[
+        {k:'811',l:'Burmester High-End 3D Sound'},{k:'864',l:'Rear Entertainment (2 Screens)'},
+        {k:'897',l:'Wireless Smartphone Charging'},{k:'536',l:'SiriusXM Satellite Radio'},
+        {k:'16U',l:'Apple CarPlay'},{k:'17U',l:'Android Auto'},
+      ]},
+      {icon:'\uD83D\uDC41\uFE0F', label:'Safety & Vision', items:[
+        {k:'610',l:'Night View Assist PLUS'},{k:'463',l:'Head-Up Display'},
+        {k:'513',l:'Traffic Sign Recognition'},{k:'608',l:'Auto High-Beam (IHC)'},
+        {k:'640',l:'Dynamic LED Headlamps'},
+      ]},
+      {icon:'\uD83D\uDECB\uFE0F', label:'Comfort & Seating', items:[
+        {k:'406',l:'Multi-Contour Rear Seat'},{k:'401',l:'Front Seat Climate Control'},
+        {k:'402',l:'Rear Seat Climate Control'},{k:'443',l:'Heated Steering Wheel'},
+        {k:'432',l:'Dynamics Seat Front L+R'},{k:'453',l:'Seat Bunk Function'},
+        {k:'452',l:'Chauffeur Setting'},{k:'297',l:'Electric Rear Sun Blinds'},
+      ]},
+      {icon:'\u2728', label:'Packages & Designo', items:[
+        {k:'P62',l:'Designo Package'},{k:'P07',l:'Chauffeur Package'},
+        {k:'P43',l:'Rear Seat Comfort Pkg'},{k:'P46',l:'Rear Entertainment Pkg'},
+        {k:'P64',l:'Front Memory Package'},{k:'P69',l:'Comfort Heater Pkg'},
+        {k:'P34',l:'Exclusive Package'},{k:'P35',l:'Light Package'},
+      ]},
+      {icon:'\uD83D\uDD11', label:'Technology & Drive', items:[
+        {k:'889',l:'KEYLESS-GO'},{k:'891',l:'Premium Ambiance Lighting'},
+        {k:'413',l:'Panoramic Sunroof'},{k:'647',l:'AMG 20\u2033 Forged Wheels'},
+        {k:'G932',l:'G932 AMG Transmission'},{k:'M279',l:'M279 V12 Biturbo Engine'},
+      ]},
+    ];
+    var html=categories.map(function(cat){
+      var present=cat.items.filter(function(item){return sa[item.k]!==undefined;});
+      if(!present.length)return '';
+      var rows=present.map(function(item){
+        return '<div style="display:flex;align-items:center;gap:8px;padding:5px 0;border-bottom:1px solid var(--line);">'+
+          '<span style="font-family:var(--mono);font-size:9px;color:var(--gold);min-width:38px;flex-shrink:0;">'+esc(item.k)+'</span>'+
+          '<span style="font-size:12px;color:var(--ink2);">'+esc(item.l)+'</span></div>';
+      }).join('');
+      return '<div style="background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;">'+
+        '<div style="font-family:var(--mono);font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">'+cat.icon+' '+esc(cat.label)+'</div>'+rows+'</div>';
+    }).filter(Boolean).join('');
+    ew.innerHTML='<div style="margin-bottom:10px;font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;">Factory Equipment \u2014 '+Object.keys(sa).length+' SA Codes Decoded</div>'+
+      '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;">'+html+'</div>';
   }
 
   // Price timeline
+  renderProspectTimeline(v.vin);
   renderProspectTimeline(v.vin);
 
   // Listing history
