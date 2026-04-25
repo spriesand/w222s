@@ -641,6 +641,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   </div>
   <div id="prospect-thumbs-wrap" class="prospect-thumbs"></div>
   <div id="prospect-specs-wrap" class="prospect-specs-grid"></div>
+  <div id="prospect-equipment-wrap" style="margin-bottom:16px;"></div>
   <div id="prospect-price-timeline" style="margin-bottom:16px;"></div>
   <div id="prospect-docs-wrap" style="margin-bottom:16px;"></div>
   <div id="prospect-history-wrap"></div>
@@ -2850,13 +2851,16 @@ function renderProspectTimeline(vin){
   var path=events.map(function(e,i){return (i===0?'M':'L')+toX(e.year)+' '+toY(e.price);}).join(' ');
   var area=path+' L'+toX(events[events.length-1].year)+' '+(H-PB)+' L'+toX(events[0].year)+' '+(H-PB)+' Z';
 
-  var dots=events.map(function(e){
+  var dots=events.map(function(e,i){
     var cx=toX(e.year),cy=toY(e.price);
     var col=e.type==='target'?'var(--green)':e.type==='msrp'?'var(--dim)':e.type==='auction'?'var(--amber)':e.type==='market'?'var(--blue2)':'var(--gold2)';
     var r=e.type==='target'?5:4;
-    var label=e.type==='target'?'≤$40K':('$'+Math.round(e.price/1000)+'K');
+    var label=e.type==='target'?'\u2264$40K':('$'+Math.round(e.price/1000)+'K');
+    var prev=events[i-1],next=events[i+1];
+    var tooClose=(prev&&Math.abs(e.year-prev.year)<1.5)||(next&&Math.abs(e.year-next.year)<1.5);
+    var labelY=tooClose&&(i%2===1)?(cy+18):(cy-8);
     return '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+col+'" stroke="var(--bg)" stroke-width="1.5"/>'+
-      '<text x="'+cx+'" y="'+(cy-8)+'" text-anchor="middle" fill="'+col+'" font-size="9" font-family="IBM Plex Mono">'+label+'</text>';
+      '<text x="'+cx+'" y="'+labelY+'" text-anchor="middle" fill="'+col+'" font-size="9" font-family="IBM Plex Mono">'+label+'</text>';
   }).join('');
 
   // Year axis
@@ -2966,6 +2970,32 @@ function renderProspect(){
   // Docs
   var dw=document.getElementById('prospect-docs-wrap');
   if(dw)dw.innerHTML='<div style="margin-bottom:8px;font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;">Documents</div>'+renderDocLinks(v.vin);
+
+  // Equipment from SA codes
+  var ew=document.getElementById('prospect-equipment-wrap');
+  if(ew&&b.sa_codes){
+    var sa=typeof b.sa_codes==='string'?JSON.parse(b.sa_codes):b.sa_codes;
+    // Curated notable equipment codes
+    var notable={
+      '487':'ABC Suspension','811':'Burmester High-End 3D Sound','610':'Night View Assist PLUS',
+      '413':'Panoramic Sunroof','864':'Rear Entertainment (2 Screens)','463':'Head-Up Display',
+      '889':'KEYLESS-GO','647':'AMG 20" Forged 10-Spoke Wheels','875':'Magic Vision Control',
+      'P62':'Designo Package','P07':'Chauffeur Package','P43':'Rear Seat Comfort Package',
+      'P46':'Rear Entertainment Package','P64':'Front Memory Package','K32':'Active Lane Change Assist',
+      '233':'DISTRONIC PLUS','235':'Active Park Assist','401':'Front Seat Climate Control',
+      '402':'Rear Seat Climate Control','406':'Multi-Contour Rear Seat','443':'Heated Steering Wheel',
+      '432':'Dynamics Seat Front','453':'Seat with Bunk Function','452':'Chauffeur Setting',
+      '536':'Sirius Satellite Radio','897':'Wireless Charging','891':'Premium Ambiance Lighting',
+      'G932':'G932 Transmission','M279':'M279 V12 Engine'
+    };
+    var chips=Object.keys(notable).filter(function(k){return sa[k]!==undefined;}).map(function(k){
+      return '<span style="display:inline-flex;align-items:center;gap:4px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-family:var(--mono);font-size:10px;color:var(--ink2);white-space:nowrap;">'+
+        '<span style="color:var(--gold);font-size:9px;">'+k+'</span> '+esc(notable[k])+
+      '</span>';
+    }).join('');
+    ew.innerHTML='<div style="margin-bottom:8px;font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;">Notable Factory Equipment</div>'+
+      '<div style="display:flex;flex-wrap:wrap;gap:6px;">'+chips+'</div>';
+  }
 
   // Price timeline
   renderProspectTimeline(v.vin);
