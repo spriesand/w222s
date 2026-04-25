@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>S65 Playbook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -108,6 +108,44 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 /* ── DASHBOARD ── */
 .dash-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:14px;align-items:start}
 .dash-col{display:flex;flex-direction:column;gap:12px;min-height:0;min-width:0}
+
+/* ── PROSPECT ── */
+.ntab-prospect{color:var(--gold)!important;font-weight:600;}
+.ntab-prospect.active{border-bottom-color:var(--gold)!important;}
+.prospect-hero{position:relative;width:100%;height:320px;border-radius:var(--r);overflow:hidden;cursor:pointer;background:#0a0c14;}
+.prospect-hero-track{display:flex;height:100%;transition:transform .6s cubic-bezier(.25,.46,.45,.94);}
+.prospect-hero-slide{min-width:100%;height:100%;position:relative;flex-shrink:0;}
+.prospect-hero-slide img{width:100%;height:100%;object-fit:cover;object-position:center;}
+.prospect-hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.82) 0%,rgba(0,0,0,.3) 45%,rgba(0,0,0,.1) 100%);}
+.prospect-hero-info{position:absolute;bottom:0;left:0;right:0;padding:18px 20px;}
+.prospect-hero-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(200,169,106,.15);border:1px solid rgba(200,169,106,.4);border-radius:20px;padding:3px 10px;font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:.1em;margin-bottom:8px;}
+.prospect-hero-vin{font-family:var(--mono);font-size:11px;color:var(--gold2);letter-spacing:.12em;margin-bottom:4px;}
+.prospect-hero-title{font-family:var(--serif);font-size:22px;font-weight:600;color:var(--ink);margin-bottom:3px;}
+.prospect-hero-colors{font-family:var(--mono);font-size:11px;color:rgba(200,169,106,.75);margin-bottom:10px;}
+.prospect-hero-cta{font-family:var(--mono);font-size:11px;color:var(--gold);border:1px solid rgba(200,169,106,.35);border-radius:6px;padding:5px 12px;display:inline-flex;align-items:center;gap:5px;background:rgba(200,169,106,.08);}
+.prospect-hero-dots{position:absolute;bottom:14px;right:16px;display:flex;gap:5px;}
+.prospect-hero-dot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:background .2s;}
+.prospect-hero-dot.active{background:var(--gold);}
+.prospect-hero-prev,.prospect-hero-next{position:absolute;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;}
+.prospect-hero-prev{left:10px;}
+.prospect-hero-next{right:10px;}
+
+/* Prospect Tab */
+.prospect-page-carousel{position:relative;width:100%;height:420px;border-radius:var(--r);overflow:hidden;background:#0a0c14;margin-bottom:16px;}
+.prospect-page-track{display:flex;height:100%;transition:transform .5s cubic-bezier(.25,.46,.45,.94);}
+.prospect-page-slide{min-width:100%;height:100%;flex-shrink:0;}
+.prospect-page-slide img{width:100%;height:100%;object-fit:cover;object-position:center;}
+.prospect-thumbs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent;margin-bottom:16px;}
+.prospect-thumb{width:72px;height:48px;border-radius:6px;overflow:hidden;cursor:pointer;border:2px solid transparent;flex-shrink:0;opacity:.6;transition:all .2s;}
+.prospect-thumb.active,.prospect-thumb:hover{border-color:var(--gold);opacity:1;}
+.prospect-thumb img{width:100%;height:100%;object-fit:cover;}
+.prospect-specs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-bottom:16px;}
+.prospect-spec{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 14px;}
+.prospect-spec-label{font-family:var(--mono);font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px;}
+.prospect-spec-value{font-family:var(--serif);font-size:17px;color:var(--gold2);font-weight:600;}
+.prospect-spec-sub{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px;}
+.tc-top-prospect-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(200,169,106,.12);border:1px solid rgba(200,169,106,.35);border-radius:12px;padding:2px 8px;font-family:var(--mono);font-size:9px;color:var(--gold);letter-spacing:.08em;margin-left:6px;}
+.tc.is-top-prospect{border-color:rgba(200,169,106,.4)!important;box-shadow:0 0 0 1px rgba(200,169,106,.15),var(--sh);}
 
 /* Hero */
 .btn-g{padding:8px 13px;border:1px solid rgba(122,167,220,.28);color:var(--blue2);background:none;border-radius:7px;font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center}
@@ -499,6 +537,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 <!-- DESKTOP NAV -->
 <nav class="nav-tabs">
   <div class="ntab active" onclick="go('dashboard',this)">Dashboard</div>
+  <div class="ntab ntab-prospect" onclick="go('prospect',this)">&#11088; Prospect</div>
   <div class="ntab" onclick="go('market',this)">The Market <span class="npip" id="market-pip">--</span></div>
   <div class="ntab" onclick="go('targets',this)">Targets</div>
   <div class="ntab" onclick="go('analytics',this)">Analytics</div>
@@ -520,6 +559,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   </div>
   <div class="dash-grid">
     <div class="dash-col">
+      <!-- Top Prospect Hero -->
+      <div id="dash-prospect-wrap"></div>
       <!-- Active listings strip -->
       <div class="card soft" style="overflow:hidden;">
         <div style="padding:10px 14px 8px;display:flex;align-items:center;justify-content:space-between;">
@@ -588,6 +629,23 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 </div>
 </div>
 
+<!-- ═══ PROSPECT ═══ -->
+<div class="page" id="page-prospect">
+<div class="pp">
+  <div class="sec" style="margin-bottom:16px;">
+    <span style="font-family:var(--serif);font-size:18px;color:var(--gold);font-weight:600;">&#11088; Top Prospect</span>
+    <span id="prospect-status" style="font-family:var(--mono);font-size:11px;color:var(--muted);"></span>
+  </div>
+  <div id="prospect-carousel-wrap" style="margin-bottom:0;">
+    <div class="loading">Loading prospect data&hellip;</div>
+  </div>
+  <div id="prospect-thumbs-wrap" class="prospect-thumbs"></div>
+  <div id="prospect-specs-wrap" class="prospect-specs-grid"></div>
+  <div id="prospect-docs-wrap" style="margin-bottom:16px;"></div>
+  <div id="prospect-history-wrap"></div>
+</div>
+</div>
+
 <!-- ═══ THE MARKET ═══ -->
 <div class="page" id="page-market">
 <div class="pp">
@@ -618,8 +676,11 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <span id="targets-label" style="color:var(--gold2);"></span>
   </div>
   <div class="mkt-controls" style="margin-bottom:10px;align-items:center;">
-    <input class="mkt-search" id="tgt-search" type="text" placeholder="&#128269; Search VIN, color, state, seller&hellip;" oninput="renderTargets()" autocomplete="off" autocorrect="off" spellcheck="false">
-    <button class="filter-toggle" id="tgt-filter-btn" onclick="toggleFilterPanel()">&#9881; Filters <span class="filter-badge" id="tgt-filter-badge" style="display:none;"></span></button>
+    <div style="position:relative;flex:1;min-width:0;">
+      <input class="mkt-search" id="tgt-search" type="text" placeholder="&#128269; Search VIN, color, state, seller&hellip;" oninput="renderTargets();document.getElementById('tgt-search-clear').style.display=this.value?'flex':'none';" autocomplete="off" autocorrect="off" spellcheck="false" style="width:100%;padding-right:28px;">
+      <button id="tgt-search-clear" onclick="document.getElementById('tgt-search').value='';document.getElementById('tgt-search-clear').style.display='none';renderTargets();" style="display:none;position:absolute;right:6px;top:50%;transform:translateY(-50%);width:18px;height:18px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:var(--ink2);font-size:11px;cursor:pointer;align-items:center;justify-content:center;line-height:1;">&times;</button>
+    </div>
+    <button class="filter-toggle" id="tgt-filter-btn" onclick="toggleFilterPanel()"><span>&#9881; Filters &#9660; </span><span class="filter-badge" id="tgt-filter-badge" style="display:none;"></span></button>
   </div>
   <div class="filter-panel" id="tgt-filter-panel">
     <div class="tgt-filter-row" id="tgt-ext-row" style="display:none;border-bottom:none;margin:0;padding:0;">
@@ -916,11 +977,12 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   </div>
 </nav>
 <div class="more-drawer" id="more-drawer">
-  <div class="mdr" onclick="go('analytics',null);closeMore()"><span class="mdr-icon">&#128200;</span>Analytics</div>
-  <div class="mdr" onclick="go('news',null);loadNews();closeMore()"><span class="mdr-icon">&#128240;</span>News</div>
-  <div class="mdr" onclick="go('videos',null);closeMore()"><span class="mdr-icon">&#127909;</span>Videos</div>
-  <div class="mdr" onclick="go('gallery',null);loadGallery();closeMore()"><span class="mdr-icon">&#128247;</span>Gallery</div>
-  <div class="mdr" onclick="go('resources',null);loadResources();closeMore()"><span class="mdr-icon">&#128196;</span>Resources</div>
+  <div class="mdr" onclick="go('prospect',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#11088;</span>Top Prospect</div>
+  <div class="mdr" onclick="go('analytics',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128200;</span>Analytics</div>
+  <div class="mdr" onclick="go('news',null);loadNews();closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128240;</span>News</div>
+  <div class="mdr" onclick="go('videos',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#127909;</span>Videos</div>
+  <div class="mdr" onclick="go('gallery',null);loadGallery();closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128247;</span>Gallery</div>
+  <div class="mdr" onclick="go('resources',null);loadResources();closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128196;</span>Resources</div>
 </div>
 <div class="more-ov" id="more-ov" onclick="closeMore()"></div>
 
@@ -990,7 +1052,7 @@ function formatColor(raw){
 var SB='https://kevwkxuloxxrevodsukg.supabase.co';
 var KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtldndreHVsb3h4cmV2b2RzdWtnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ4NjkwNTUsImV4cCI6MjA5MDQ0NTA1NX0.xU3Ii35aYSozwtznzD9ixHtO0swgYAGVS4FBaM3pN0M';
 var H={'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'};
-function q(ep){return fetch(SB+'/rest/v1/'+ep,{headers:H}).then(function(r){return r.json();});}
+function q(ep){return fetch(SB+'/rest/v1/'+ep,{headers:H}).then(function(r){if(!r.ok)return r.text().then(function(t){return Promise.reject(r.status+': '+t);});return r.json();});}
 
 // Write helper (POST/PATCH) — returns parsed JSON or null
 function qw(ep,method,body){
@@ -1050,6 +1112,7 @@ function linkify(s){return esc(s).replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" 
 // Compares current active row to most recent prior SAME-SELLER row with a different price
 function priceDelta(vin,cur){
   if(!cur||!cur.price)return null;
+  if(!cur.seller_name)return null;
   var rows=(G.lhAll||[]).filter(function(l){
     return l.vin===vin && l.seller_name===cur.seller_name && l.id!==cur.id && l.price;
   });
@@ -1085,7 +1148,9 @@ function renderPriceWithDelta(cur,cls,extraStyle){
 }
 
 // ── RELIST CHIP ───────────────────────────────────────────
-// Same-seller with >30d gap → Relisted. Different seller with prior <90d → New Listing + Recently Active.
+// Same-seller with >30d gap → Relisted. Different seller with prior <90d → Recently Active.
+var RELIST_GAP_DAYS    = 30;   // days gap before same-seller is flagged Relisted
+var RECENT_ACTIVE_DAYS = 90;   // days window for "Recently Active" badge
 function relistChip(vin,cur){
   if(!cur)return '';
   var vinRows=(G.lhAll||[]).filter(function(l){return l.vin===vin && l.id!==cur.id;});
@@ -1094,7 +1159,7 @@ function relistChip(vin,cur){
   var priorSame=vinRows.filter(function(l){return l.seller_name===cur.seller_name;});
   var gapped=priorSame.some(function(l){
     var ls=l.last_seen?new Date(l.last_seen):new Date(0);
-    return (curFirst-ls) > 30*86400000;
+    return (curFirst-ls) > RELIST_GAP_DAYS*86400000;
   });
   if(gapped)return '<span class="lst-chip relisted">Relisted</span>';
   var priorOther=vinRows.filter(function(l){return l.seller_name && l.seller_name!==cur.seller_name;});
@@ -1102,7 +1167,7 @@ function relistChip(vin,cur){
     var now=new Date();
     var recent=priorOther.some(function(l){
       var ls=l.last_seen?new Date(l.last_seen):new Date(0);
-      return (now-ls) < 90*86400000;
+      return (now-ls) < RECENT_ACTIVE_DAYS*86400000;
     });
     return '<span class="lst-chip new-listing">New Listing</span>'+
       (recent?'<span class="lst-chip recent-active">Recently Active</span>':'');
@@ -1235,6 +1300,7 @@ function notesKeydown(e){
 }
 
 function notesSave(){
+  if(navigator.vibrate)navigator.vibrate(10);
   if(NS.saving||!NS.vin)return;
   var body=document.getElementById('notes-textarea').value.trim();
   if(!body&&!NS.pendingFile){return;}
@@ -1412,6 +1478,7 @@ function peErr(msg){
 }
 
 function savePriceChange(){
+  if(navigator.vibrate)navigator.vibrate(10);
   if(PE.saving||!PE.vin||!PE.cur)return;
   var priceStr=document.getElementById('pe-price').value.trim();
   var milesStr=document.getElementById('pe-miles').value.trim();
@@ -1461,8 +1528,9 @@ var dlEl=document.getElementById('dash-date');
 if(dlEl)dlEl.textContent=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dn.getDay()]+' Briefing \u2014 '+['January','February','March','April','May','June','July','August','September','October','November','December'][dn.getMonth()]+' '+dn.getDate()+', '+dn.getFullYear();
 
 // ── PAGE NAV ──────────────────────────────────────────────
-var PAGES=['dashboard','market','targets','analytics','news','videos','gallery','resources'];
+var PAGES=['dashboard','prospect','market','targets','analytics','news','videos','gallery','resources'];
 function go(k,tab){
+  if(navigator.vibrate)navigator.vibrate(10);
   PAGES.forEach(function(p){var el=document.getElementById('page-'+p);if(el)el.classList.toggle('active',p===k);});
   document.querySelectorAll('.ntab').forEach(function(t){t.classList.remove('active');});
   if(tab)tab.classList.add('active');
@@ -1520,14 +1588,15 @@ function flags(v,vm){
 }
 
 // ── WHAT CHANGED ─────────────────────────────────────────
-function buildChanged(lhRows){
+function buildChanged(currentRows,allLH){
   var now=new Date(),week=7*24*60*60*1000;
   var changes=[];
   // New active listings this week: active vehicles with first_seen within 7 days
-  var newVINs=[...new Set(lhRows.filter(function(l){return G.activeSet&&G.activeSet[l.vin]&&l.first_seen&&(now-new Date(l.first_seen))<week;}).map(function(l){return l.vin;}))];
-  // "Gone" listings: NOT in activeSet but last_seen within last week — i.e., recently inactive
-  var goneVINs=[...new Set(lhRows.filter(function(l){return G.activeSet&&!G.activeSet[l.vin]&&l.last_seen&&(now-new Date(l.last_seen))<week;}).map(function(l){return l.vin;}))];
-  var activePrices=lhRows.filter(function(l){return G.activeSet&&G.activeSet[l.vin]&&l.price;}).map(function(l){return l.price;});
+  var newVINs=[...new Set(allLH.filter(function(l){return G.activeSet&&G.activeSet[l.vin]&&l.first_seen&&(now-new Date(l.first_seen))<week;}).map(function(l){return l.vin;}))];
+  // "Gone" listings: NOT in activeSet but last_seen within last week
+  var goneVINs=[...new Set(allLH.filter(function(l){return G.activeSet&&!G.activeSet[l.vin]&&l.last_seen&&(now-new Date(l.last_seen))<week;}).map(function(l){return l.vin;}))];
+  // Avg ask uses only current rows (one per active VIN)
+  var activePrices=currentRows.filter(function(l){return l.price;}).map(function(l){return l.price;});
   var avg=activePrices.length?Math.round(activePrices.reduce(function(a,b){return a+b;},0)/activePrices.length):null;
   var giN=G.v.filter(function(v){var m=G.m[v.vin];return m&&m.curr_odo&&m.curr_odo>=70000&&m.curr_odo<=100000;}).length;
 
@@ -1570,7 +1639,7 @@ function renderDashListings(){
         '<div style="font-family:var(--serif);font-size:13px;font-weight:600;color:var(--ink);line-height:1.1;">'+(v.year||'')+' '+(v.trim&&v.trim.indexOf('S65')>=0?'S65':'S600')+'</div>'+
         '<div style="font-family:var(--mono);font-size:11px;color:var(--green);">'+price+'</div>'+
         '<div style="font-family:var(--mono);font-size:10px;color:var(--muted);">'+miles+'</div>'+
-        (v.listing_url?'<a href="'+v.listing_url+'" target="_blank" rel="noopener" style="margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--blue2);text-decoration:none;display:inline-flex;align-items:center;gap:3px;">&#9654; View</a>':'')+
+        (v.listing_url?'<a href="'+esc(v.listing_url)+'" target="_blank" rel="noopener" style="margin-top:4px;font-family:var(--mono);font-size:10px;color:var(--blue2);text-decoration:none;display:inline-flex;align-items:center;gap:3px;">&#9654; View</a>':'')+ 
       '</div>'+
     '</div>';
   }).join('');
@@ -1650,9 +1719,11 @@ function loadResources(){
 // Priority: [profile_image] note override → vehicles.image_url → placeholder
 function vehicleImage(v){
   var override=G.profileImageByVin&&G.profileImageByVin[v.vin];
-  if(override)return '<img src="'+esc(override)+'" alt="">';
-  if(v.image_url)return '<img src="'+esc(v.image_url)+'" alt="">';
-  return ph(v.year,v.trim,v.vin);
+  var fallback=ph(v.year,v.trim,v.vin);
+  var onerr='this.onerror=null;this.outerHTML='+JSON.stringify(fallback)+';';
+  if(override)return '<img src="'+esc(override)+'" alt="" onerror="'+esc(onerr)+'" style="width:100%;height:100%;object-fit:cover;display:block;">';
+  if(v.image_url)return '<img src="'+esc(v.image_url)+'" alt="" onerror="'+esc(onerr)+'" style="width:100%;height:100%;object-fit:cover;display:block;">';
+  return fallback;
 }
 
 // ── DOC LINKS ─────────────────────────────────────────────
@@ -1664,6 +1735,7 @@ function renderDocLinks(vin){
   var providers=[
     {k:'carfax',        lbl:'CARFAX'},
     {k:'autocheck',     lbl:'AutoCheck'},
+    {k:'badvin',        lbl:'BADVIN'},
     {k:'iseecars',      lbl:'iSeeCars'},
     {k:'goodcar',       lbl:'GoodCar'},
     {k:'public_record', lbl:'PubRec'},
@@ -1684,7 +1756,7 @@ function renderCompact(v,vm,lh){
   var miles=vm&&vm.curr_odo?fM(vm.curr_odo):(lh&&lh.miles?fM(lh.miles):'--');
   var owners=vm?fN(vm.total_owners):'--';
   var loc=(lh&&lh.state)?lh.state:(v.last_title_state||'--');
-  var active=v.listing_status==='active';
+  var active=!!G.l[v.vin];
   var badge=v.car_status==='target'?'<span class="tbadge">Target</span>':'<span class="rbadge">Ref</span>';
   var chip=active?relistChip(v.vin,lh):'';
   return '<div class="lc">'+
@@ -1706,7 +1778,7 @@ function renderCompact(v,vm,lh){
         '<div class="lc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
         notesPill(v.vin)+
       '</div>'+
-      '<div class="lc-meta">'+v.vin+' &middot; '+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?formatColor(b.paint_name)+' &middot; ':'';})()+loc+(lh&&lh.seller_name?' &middot; '+lh.seller_name:'')+'</div>'+
+      '<div class="lc-meta">'+esc(v.vin)+' &middot; '+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?formatColor(b.paint_name)+' &middot; ':'';})()+esc(loc)+(lh&&lh.seller_name?' &middot; '+esc(lh.seller_name):'')+'</div>'+
       '<div class="lc-flags">'+flags(v,vm)+'</div>'+renderDocLinks(v.vin)+
       '<div class="lc-row">'+
         priceHTML+priceEditBtn(v.vin,active)+
@@ -1714,7 +1786,7 @@ function renderCompact(v,vm,lh){
 
       '</div>'+
       '<div style="display:flex;gap:6px;align-items:center;">'+
-        (v.listing_url?'<a href="'+v.listing_url+'" target="_blank" rel="noopener" class="lc-btn" style="flex:1;justify-content:center;padding:6px 9px;">&#9654; View Listing</a>':'<span style="flex:1;"></span>')+
+        (v.listing_url?'<a href="'+esc(v.listing_url)+'" target="_blank" rel="noopener" class="lc-btn" style="flex:1;justify-content:center;padding:6px 9px;">&#9654; View Listing</a>':'<span style="flex:1;"></span>')+
         '<button class="price-edit" onclick="openUrlEdit(\''+v.vin+'\',this)" title="Edit listing URL">&#9998;</button>'+
         (active?'<button class="price-edit" onclick="markInactive(\''+v.vin+'\')" title="Mark listing inactive" style="color:var(--red);opacity:.6;">&#10005;</button>':'')+
       '</div>'+
@@ -1732,18 +1804,17 @@ function renderTarget(v,vm,lh){
   var miles=vm&&vm.curr_odo?fM(vm.curr_odo):(lh&&lh.miles?fM(lh.miles):'--');
   var owners=vm?fN(vm.total_owners):'--';
   var loc=v.last_title_state||(lh&&lh.state)||'--';
-  var active=v.listing_status==='active';
+  var active=!!G.l[v.vin];
   var chip=active?relistChip(v.vin,lh):'';
   var priceColor=lh&&lh.price&&lh.price<=40000?'var(--green)':'var(--gold2)';
   var priceHTML=lh
     ? renderPriceWithDelta(lh,'tc-sv','color:'+priceColor+';')
     : '<span class="tc-sv" style="color:'+priceColor+';">Not listed</span>';
-  return '<div class="tc">'+
+  return '<div class="tc'+(v.is_top_prospect?' is-top-prospect':'')+'">'+ 
     '<div class="tc-img hs-wrap">'+
     '<div class="hs-img-panel" style="position:relative;height:100%;">'+vehicleImage(v)+
       '<div class="tc-img-ov"></div>'+
-      '<div class="tc-top"><span class="tag tb">Target</span>'+(v.is_final_edition?'<span class="tag tg">Final Edition</span>':'')+
-      '</div>'+
+      '<div class="tc-top"><span class="tag tb">Target</span>'+(v.is_top_prospect?'<span class="tc-top-prospect-badge">&#11088; Top Prospect</span>':'')+(v.is_final_edition?'<span class="tag tg">Final Edition</span>':'')+'</div>'+
       '<button class="tc-img-edit" onclick="event.stopPropagation();openProfileImagePicker(\''+v.vin+'\')" title="Change profile photo">&#128247;</button>'+
       (active?'<div class="tc-active"><span class="live-dot"></span>Active Listing</div>':'')+
     '</div>'+
@@ -1766,7 +1837,7 @@ function renderTarget(v,vm,lh){
       '</div>'+
       '<div class="tc-flags">'+flags(v,vm)+'</div>'+renderDocLinks(v.vin)+
       '<div style="display:flex;gap:6px;align-items:stretch;">'+
-        (v.listing_url?'<a href="'+v.listing_url+'" target="_blank" rel="noopener" class="tc-btn" style="flex:1;">&#9654; View Listing</a>':(active?'<span class="tc-btn" style="flex:1;opacity:.5;cursor:default;">&#9679; Active</span>':'<span style="flex:1;"></span>'))+
+        (v.listing_url?'<a href="'+esc(v.listing_url)+'" target="_blank" rel="noopener" class="tc-btn" style="flex:1;">&#9654; View Listing</a>':(active?'<span class="tc-btn" style="flex:1;opacity:.5;cursor:default;">&#9679; Active</span>':'<span style="flex:1;"></span>'))+
         '<button class="tc-btn" style="flex:none;padding:8px 10px;" onclick="openUrlEdit(\''+v.vin+'\',this)" title="Edit listing URL">&#9998;</button>'+
       '</div>'+
       '<div class="url-edit-row" id="url-edit-'+v.vin+'" style="display:none;gap:5px;align-items:center;">'+
@@ -1817,12 +1888,9 @@ function toggleFilterPanel(){
   var btn=document.getElementById('tgt-filter-btn');
   if(!panel)return;
   var open=panel.classList.toggle('open');
-  if(btn)btn.textContent='';
   if(btn){
-    var badge=document.getElementById('tgt-filter-badge');
-    btn.innerHTML='&#9881; Filters '+(badge?badge.outerHTML:'');
-    if(open)btn.innerHTML='&#9881; Filters &#9650; '+(badge?badge.outerHTML:'');
-    else btn.innerHTML='&#9881; Filters &#9660; '+(badge?badge.outerHTML:'');
+    var arrow=open?'\u25b2':'\u25bc';
+    btn.firstChild.textContent='\u2699\ufe0f Filters '+arrow+' ';
   }
 }
 
@@ -1853,12 +1921,18 @@ function buildTgtFilters(){
       return '<button class="fchip'+(TF.ext===c?' active':'')+'" onclick="toggleColorChip(this,\'ext\')">'+c+'</button>';
     }).join('');
     if(extRow)extRow.style.display='flex';
+  } else {
+    if(extEl)extEl.innerHTML='';
+    if(extRow)extRow.style.display='none';
   }
   if(intEl&&intKeys.length){
     intEl.innerHTML=intKeys.map(function(c){
       return '<button class="fchip'+(TF.int===c?' active':'')+'" onclick="toggleColorChip(this,\'int\')">'+c+'</button>';
     }).join('');
     if(intRow)intRow.style.display='flex';
+  } else {
+    if(intEl)intEl.innerHTML='';
+    if(intRow)intRow.style.display='none';
   }
 }
 
@@ -1891,6 +1965,7 @@ function cancelUrlEdit(vin){
   if(row)row.style.display='none';
 }
 function saveListingUrl(vin){
+  if(navigator.vibrate)navigator.vibrate(10);
   var inp=document.getElementById('url-input-'+vin);
   if(!inp)return;
   var url=inp.value.trim();
@@ -1908,7 +1983,10 @@ function saveListingUrl(vin){
 
 function markInactive(vin){
   if(!confirm('Mark '+vin+' as inactive? It will be removed from active listings.'))return;
-  qw('vehicles?vin=eq.'+vin,'PATCH',{listing_status:'inactive'})
+  var lh=G.l&&G.l[vin];
+  var p1=qw('vehicles?vin=eq.'+vin,'PATCH',{listing_status:'inactive'});
+  var p2=lh?qw('listing_history?id=eq.'+lh.id,'PATCH',{last_seen:new Date().toISOString().slice(0,10)}):Promise.resolve();
+  Promise.all([p1,p2])
     .then(function(){
       var v=G.v.find(function(x){return x.vin===vin;});
       if(v)v.listing_status='inactive';
@@ -1924,12 +2002,15 @@ function demoteTarget(vin){
   if(!confirm('Move '+vin+' to Reference? This will set car_status=reference and listing_status=inactive.'))return;
   qw('vehicles?vin=eq.'+vin,'PATCH',{car_status:'reference',listing_status:'inactive'})
     .then(function(){
-      // Update local state so card disappears immediately
       var v=G.v.find(function(x){return x.vin===vin;});
       if(v){v.car_status='reference';v.listing_status='inactive';}
       G.sortedT=(G.sortedT||[]).filter(function(x){return x.vin!==vin;});
+      delete G.l[vin];
+      delete G.activeSet[vin];
       buildTgtFilters();
       renderTargets();
+      renderMkt();
+      renderDashListings();
     })
     .catch(function(err){alert('Demote failed: '+err);});
 }
@@ -2326,8 +2407,6 @@ function toggleHistory(btn){
 function lhBack(vin){
   var rows=(G.lhAll||[]).filter(function(l){return l.vin===vin;});
   rows.sort(function(a,b){
-    if(a.link_status==='active'&&b.link_status!=='active')return -1;
-    if(b.link_status==='active'&&a.link_status!=='active')return 1;
     var da=a.last_seen?new Date(a.last_seen):new Date(0);
     var db=b.last_seen?new Date(b.last_seen):new Date(0);
     return db-da;
@@ -2343,7 +2422,7 @@ function lhBack(vin){
     var miles=l.miles?Number(l.miles).toLocaleString()+' mi':'--';
     var first=l.first_seen?l.first_seen.slice(0,10):'--';
     var last=l.last_seen?l.last_seen.slice(0,10):'--';
-    var seller=l.seller_name||'--';
+    var seller=esc(l.seller_name||'--');
     var status=isActive?'<span style="color:var(--green);">&#9679;</span>':'<span style="color:var(--dim);">&#9675;</span>';
     tbl+='<tr'+(isActive?' class="lh-active-row"':'')+'>'+
       '<td>'+seller+'</td><td>'+price+'</td><td>'+miles+'</td>'+
@@ -2620,6 +2699,9 @@ function saveNewListing(){
   if(!year){alErr('Year is required.');return;}
   if(!price){alErr('Price is required.');return;}
   if(miles===null){alErr('Miles is required.');return;}
+  // Soft warning: target window is 2017–2020
+  var inWindow=(year>=2017&&year<=2020);
+  if(isTgt&&!inWindow&&!confirm('Warning: '+year+' is outside the 2017–2020 target acquisition window. Mark as Target anyway?'))return;
 
   // Confirmation summary
   var summary='Confirm new listing:\n\n'+
@@ -2693,8 +2775,149 @@ function saveNewListing(){
   });
 }
 
+// ── PROSPECT TAB + DASHBOARD HERO ─────────────────────────
+var pCarouselIdx=0,pCarouselTimer=null;
+var pPageIdx=0;
+
+function renderDashProspect(){
+  var wrap=document.getElementById('dash-prospect-wrap');
+  if(!wrap)return;
+  var v=G.prospect;
+  if(!v){wrap.innerHTML='';return;}
+  var imgs=G.prospectImgs&&G.prospectImgs[v.vin]?G.prospectImgs[v.vin]:[];
+  var hero=imgs.filter(function(i){return i.is_hero;})[0]||imgs[0];
+  var b=G.build&&G.build[v.vin]||{};
+  var ext=b.paint_name?formatColor(b.paint_name):'Cavansite Blue Metallic';
+  var interior=b.upholstery_name?formatColor(b.upholstery_name):'Designo Beige';
+  var vm=G.m&&G.m[v.vin]||{};
+  var slides=imgs.slice(0,8);
+  var placeholderSlide='<div class="prospect-hero-slide" style="background:var(--panel2);display:flex;align-items:center;justify-content:center;"><span style="font-family:var(--mono);font-size:12px;color:var(--dim);">No images uploaded yet</span></div>';
+  var slidesHtml=slides.length?slides.map(function(img){
+    return '<div class="prospect-hero-slide"><img src="'+esc(img.storage_url)+'" alt="'+esc(img.caption||'')+'" loading="lazy"><div class="prospect-hero-ov"></div></div>';
+  }).join(''):placeholderSlide;
+  var dotsHtml=slides.length>1?'<div class="prospect-hero-dots">'+slides.map(function(_,i){return '<div class="prospect-hero-dot'+(i===0?' active':'')+'" onclick="pDashGoTo('+i+')"></div>';}).join('')+'</div>':'';
+  wrap.innerHTML='<div class="prospect-hero card" onclick="go(\'prospect\',document.querySelector(\'.ntab-prospect\'))" style="cursor:pointer;">'+
+    '<div class="prospect-hero-track" id="ph-track" style="transform:translateX(0)">'+slidesHtml+'</div>'+
+    (slides.length>1?'<button class="prospect-hero-prev" onclick="event.stopPropagation();pDashPrev()">&#8592;</button><button class="prospect-hero-next" onclick="event.stopPropagation();pDashNext()">&#8594;</button>':'')+
+    dotsHtml+
+    '<div class="prospect-hero-info">'+
+      '<div class="prospect-hero-badge">&#11088; TOP PROSPECT</div>'+
+      '<div class="prospect-hero-vin">'+esc(v.vin)+'</div>'+
+      '<div class="prospect-hero-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+'</div>'+
+      '<div class="prospect-hero-colors">'+esc(ext)+' &middot; '+esc(interior)+'</div>'+
+      '<div class="prospect-hero-cta">View Full Profile &#8594;</div>'+
+    '</div>'+
+  '</div>';
+  pCarouselIdx=0;
+  clearInterval(pCarouselTimer);
+  if(slides.length>1)pCarouselTimer=setInterval(function(){pDashNext();},4500);
+}
+
+function pDashGoTo(idx){
+  var slides=document.querySelectorAll('#ph-track .prospect-hero-slide');
+  if(!slides.length)return;
+  pCarouselIdx=(idx+slides.length)%slides.length;
+  document.getElementById('ph-track').style.transform='translateX(-'+pCarouselIdx+'00%)';
+  document.querySelectorAll('.prospect-hero-dot').forEach(function(d,i){d.classList.toggle('active',i===pCarouselIdx);});
+}
+function pDashPrev(){clearInterval(pCarouselTimer);pDashGoTo(pCarouselIdx-1);pCarouselTimer=setInterval(function(){pDashNext();},4500);}
+function pDashNext(){clearInterval(pCarouselTimer);pDashGoTo(pCarouselIdx+1);pCarouselTimer=setInterval(function(){pDashNext();},4500);}
+
+function renderProspect(){
+  var v=G.prospect;
+  var statusEl=document.getElementById('prospect-status');
+  if(!v){
+    var cw=document.getElementById('prospect-carousel-wrap');
+    if(cw)cw.innerHTML='<div class="loading" style="padding:40px;text-align:center;">No top prospect designated.<br><span style="color:var(--dim);font-size:12px;">Set is_top_prospect=true on a vehicle to feature it here.</span></div>';
+    if(statusEl)statusEl.textContent='';
+    return;
+  }
+  var imgs=G.prospectImgs&&G.prospectImgs[v.vin]?G.prospectImgs[v.vin]:[];
+  var vm=G.m&&G.m[v.vin]||{};
+  var b=G.build&&G.build[v.vin]||{};
+  var lh=G.l&&G.l[v.vin]||null;
+  var allLHForVin=(G.lhAll||[]).filter(function(l){return l.vin===v.vin;});
+  allLHForVin.sort(function(a,b){return new Date(b.last_seen||0)-new Date(a.last_seen||0);});
+  var ext=b.paint_name?formatColor(b.paint_name):'--';
+  var interior=b.upholstery_name?formatColor(b.upholstery_name):'--';
+  if(statusEl)statusEl.textContent=v.vin+' \u00b7 '+ext;
+
+  // Carousel
+  var cw=document.getElementById('prospect-carousel-wrap');
+  if(cw){
+    var placeholderSlide='<div class="prospect-page-slide" style="background:var(--panel2);display:flex;align-items:center;justify-content:center;"><span style="font-family:var(--mono);font-size:12px;color:var(--dim);">No images uploaded yet</span></div>';
+    var slidesHtml=imgs.length?imgs.map(function(img){
+      return '<div class="prospect-page-slide"><img src="'+esc(img.storage_url)+'" alt="'+esc(img.caption||'')+'" loading="lazy"></div>';
+    }).join(''):placeholderSlide;
+    cw.innerHTML='<div class="prospect-page-carousel"><div class="prospect-page-track" id="pp-track">'+slidesHtml+'</div>'+
+      (imgs.length>1?'<button class="prospect-hero-prev" onclick="pPagePrev()">&#8592;</button><button class="prospect-hero-next" onclick="pPageNext()">&#8594;</button>':'')+
+    '</div>';
+    pPageIdx=0;
+  }
+
+  // Thumbnails
+  var tw=document.getElementById('prospect-thumbs-wrap');
+  if(tw&&imgs.length){
+    tw.innerHTML=imgs.map(function(img,i){
+      return '<div class="prospect-thumb'+(i===0?' active':'')+'" onclick="pPageGoTo('+i+')" id="pthumb-'+i+'"><img src="'+esc(img.storage_url)+'" alt="'+esc(img.caption||'')+'"></div>';
+    }).join('');
+  }
+
+  // Specs
+  var sw=document.getElementById('prospect-specs-wrap');
+  if(sw){
+    var odo=vm.curr_odo?fM(vm.curr_odo):'--';
+    var proj=v.miles_projected_jan28?fM(v.miles_projected_jan28):'--';
+    var price=allLHForVin.length?fP(allLHForVin[0].price):'--';
+    var priceDate=allLHForVin.length&&allLHForVin[0].last_seen?allLHForVin[0].last_seen.slice(0,10):'';
+    sw.innerHTML=[
+      {label:'Year / Trim',value:v.year+' S65 AMG',sub:'W222 Platform'},
+      {label:'Exterior',value:ext,sub:'Paint Code 890U'},
+      {label:'Interior',value:interior,sub:'Designo Package'},
+      {label:'Current Odometer',value:odo,sub:vm.curr_odo_date||''},
+      {label:'Owners',value:vm.total_owners?fN(vm.total_owners)+' owner'+(vm.total_owners>1?'s':''):'--',sub:'MB Financial lease return'},
+      {label:'Last Ask',value:price,sub:priceDate?'as of '+priceDate:''},
+      {label:'Projected Jan 2028',value:proj,sub:'~5,400 mi/yr'},
+      {label:'Production Date',value:b.production_date||'--',sub:'Sindelfingen'},
+      {label:'Prior Use',value:vm.prior_usage||'--',sub:''},
+      {label:'Accidents',value:vm.accident_count?'Reported':'None reported',sub:vm.accident_count?'See notes':'Clean record'},
+    ].map(function(s){
+      return '<div class="prospect-spec">'+
+        '<div class="prospect-spec-label">'+esc(s.label)+'</div>'+
+        '<div class="prospect-spec-value">'+esc(s.value)+'</div>'+
+        (s.sub?'<div class="prospect-spec-sub">'+esc(s.sub)+'</div>':'')+
+      '</div>';
+    }).join('');
+  }
+
+  // Docs
+  var dw=document.getElementById('prospect-docs-wrap');
+  if(dw)dw.innerHTML='<div style="margin-bottom:8px;font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;">Documents</div>'+renderDocLinks(v.vin);
+
+  // Listing history
+  var hw=document.getElementById('prospect-history-wrap');
+  if(hw){
+    hw.innerHTML='<div style="margin-bottom:8px;font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;">Listing History</div>'+lhBack(v.vin);
+  }
+
+  // Also render dashboard hero
+  renderDashProspect();
+}
+
+function pPageGoTo(idx){
+  var slides=document.querySelectorAll('#pp-track .prospect-page-slide');
+  if(!slides.length)return;
+  pPageIdx=(idx+slides.length)%slides.length;
+  document.getElementById('pp-track').style.transform='translateX(-'+pPageIdx+'00%)';
+  document.querySelectorAll('.prospect-thumb').forEach(function(t,i){t.classList.toggle('active',i===pPageIdx);});
+}
+function pPagePrev(){pPageGoTo(pPageIdx-1);}
+function pPageNext(){pPageGoTo(pPageIdx+1);}
+
 // ── LOAD ALL DATA ─────────────────────────────────────────
 function loadAll(){
+  if(G.loading)return;
+  G.loading=true;
   var strip=document.getElementById('changed-strip');
   if(strip)strip.innerHTML='<span class="ch-item" style="color:var(--dim);">&#9679; Syncing&hellip;</span>';
 
@@ -2704,12 +2927,17 @@ function loadAll(){
     q('listing_history?select=id,vin,price,miles,seller_name,seller_type,city,state,platform,first_seen,last_seen,dom&order=last_seen.desc,id.desc&limit=5000'),
     q('vehicle_build?select=vin,paint_name,upholstery_name,production_date,has_burmester,has_night_vision,has_magic_sky,has_ceramic_brakes,has_refrigerator,has_designo,has_abc_suspension,has_carbon_pkg,has_rear_entertainment,has_chauffeur_pkg,has_executive_rear_seat,has_keyless_go'),
     q('documents?select=vin,doc_type,storage_url'),
-    q('vehicle_notes?select=*&deleted_at=is.null&order=created_at.desc')
+    q('vehicle_notes?select=*&deleted_at=is.null&order=created_at.desc'),
+    q('prospect_images?select=*&order=sort_order.asc')
   ]).then(function(res){
-    var vehicles=res[0]||[],mktRows=res[1]||[],allLH=res[2]||[],buildRows=res[3]||[],docRows=res[4]||[],noteRows=res[5]||[];
+    var vehicles=res[0]||[],mktRows=res[1]||[],allLH=res[2]||[],buildRows=res[3]||[],docRows=res[4]||[],noteRows=res[5]||[],prospectImgRows=res[6]||[];
     var docs={};docRows.forEach(function(d){if(!docs[d.vin])docs[d.vin]={};docs[d.vin][d.doc_type]=d.storage_url;});G.docs=docs;
     // Build vehicle_build index (paint, upholstery, factory options)
     var build={};buildRows.forEach(function(b){build[b.vin]=b;});G.build=build;
+    // Build prospect images index by VIN
+    var prospectImgs={};prospectImgRows.forEach(function(img){if(!prospectImgs[img.vin])prospectImgs[img.vin]=[];prospectImgs[img.vin].push(img);});G.prospectImgs=prospectImgs;
+    // Find top prospect vehicle
+    G.prospect=vehicles.filter(function(v){return v.is_top_prospect;})[0]||null;
     // Build notes index (already ordered DESC by created_at)
     var notesByVin={};noteRows.forEach(function(n){if(!notesByVin[n.vin])notesByVin[n.vin]=[];notesByVin[n.vin].push(n);});G.notesByVin=notesByVin;
     // Build profile-image override index from [profile_image] notes (most recent wins — noteRows is DESC sorted).
@@ -2739,8 +2967,8 @@ function loadAll(){
       // Keep most recent listing per active VIN (allLH is ordered by last_seen DESC)
       if(!lhMap[l.vin])lhMap[l.vin]=l;
     });
-    // activeLH = listings for active VINs only (used for price averages, KPIs)
-    var activeLH=allLH.filter(function(l){return activeSet[l.vin];});
+    // activeLH = one row per active VIN (most recent only) — prevents history rows inflating avg/KPIs
+    var activeLH=Object.values(lhMap);
 
     G.v=vehicles;G.m=mkt;G.l=lhMap;G.lhAll=allLH;G.activeSet=activeSet;
 
@@ -2769,7 +2997,7 @@ function loadAll(){
     set('ak-gi',giN);
     set('ak-split',s65n+' S65 \u00b7 '+s600n+' S600');
 
-    buildChanged(allLH);
+    buildChanged(Object.values(lhMap),allLH);
 
     // Dashboard listings strip
     renderDashListings();
@@ -2800,12 +3028,16 @@ function loadAll(){
 
     // Targets
     var sortedT=targetV.slice().sort(function(a,b){
+      // Top prospect always first
+      if(a.is_top_prospect&&!b.is_top_prospect)return -1;
+      if(!a.is_top_prospect&&b.is_top_prospect)return 1;
       var aA=lhMap[a.vin]?0:1,bA=lhMap[b.vin]?0:1;
       return aA!==bA?aA-bA:(b.year||0)-(a.year||0);
     });
     G.sortedT=sortedT;
     buildTgtFilters();
     renderTargets();
+    renderProspect();
 
     // Cohort bars — S65 + S600 grouped by year
     var years=[2015,2016,2017,2018,2019,2020];
@@ -2862,13 +3094,15 @@ function loadAll(){
     renderScatter(vehicles,mkt,lhMap);
     renderMiBands(vehicles,mkt,lhMap);
     renderColorBars(vehicles);
-    renderDOMTable(allLH);
+    renderDOMTable(Object.values(lhMap));
     renderPriceDrops(vehicles,allLH);
     renderPriceHistory();
     renderCohortTable(vehicles,mkt,lhMap);
     renderBuildRarity(vehicles);
     renderProductionTimeline(vehicles);
+    G.loading=false;
   }).catch(function(e){
+    G.loading=false;
     console.error('Load error:',e);
     var strip=document.getElementById('changed-strip');
     if(strip)strip.innerHTML='<span class="ch-item" style="color:var(--red);">&#9888; Load failed — '+(e&&e.message?e.message:String(e))+' (check console)</span>';
@@ -2990,6 +3224,7 @@ function vmRemoveSlot(idx){
 }
 
 function vmSave(){
+  if(navigator.vibrate)navigator.vibrate(10);
   var vids=vmReadSlots().filter(function(v){return v.id;});
   saveVideos(vids);
   closeVideoModal();
@@ -3028,6 +3263,7 @@ function loadGallery(){
     body:JSON.stringify({prefix:'gallery/',limit:200,offset:0,sortBy:{column:'name',order:'asc'}})
   }).then(function(r){return r.json();}).then(function(files){
     if(!Array.isArray(files)||files.length===0){
+      galleryLoaded=false;
       document.getElementById('gallery-grid').innerHTML='<div class="gallery-upload-hint">No photos found yet.<br>Upload your photos to:<br><strong style="color:var(--ink);">Supabase Storage &rarr; v12-apex-documents &rarr; gallery/</strong><br><br>Supports JPG, PNG, WEBP. All photos load automatically.</div>';
       document.getElementById('carousel-wrap').style.display='none';
       return;
@@ -3043,6 +3279,7 @@ function loadGallery(){
     buildGrid();
   }).catch(function(e){
     console.error('Gallery load error:',e);
+    galleryLoaded=false;
     document.getElementById('gallery-grid').innerHTML='<div class="loading">Could not load gallery.</div>';
   });
 }
@@ -3071,11 +3308,13 @@ function buildCarousel(){
   }).join('');
 
   carouselGoTo(0);
+  clearCarouselTimer();
   startCarouselTimer();
 }
 
 function carouselGoTo(idx){
   var featured=Math.min(10,galleryImages.length);
+  if(!featured)return;
   carouselIdx=((idx%featured)+featured)%featured;
   var track=document.getElementById('carousel-track');
   if(track)track.style.transform='translateX(-'+carouselIdx+'00%)';
