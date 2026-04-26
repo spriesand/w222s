@@ -3034,7 +3034,16 @@ function renderProspect(){
   // Listing history
   var hw=document.getElementById('prospect-history-wrap');
   if(hw){
-    hw.innerHTML='<div style="margin-bottom:8px;font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;">Listing History</div>'+lhBack(v.vin);
+    var notesCnt=(G.notes&&G.notes[v.vin]?G.notes[v.vin].length:0);
+    hw.innerHTML=
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">'+
+        '<div style="font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;">Notes</div>'+
+        '<button onclick="openNotes(\''+v.vin+'\')" style="display:flex;align-items:center;gap:6px;background:var(--panel2);border:1px solid var(--line);border-radius:6px;padding:5px 12px;font-family:var(--mono);font-size:11px;color:var(--ink2);cursor:pointer;">'+
+          notesPillInner(notesCnt)+
+        '</button>'+
+      '</div>'+
+      '<div style="margin-bottom:16px;font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;">Listing History</div>'+
+      lhBack(v.vin);
   }
 
   // Also render dashboard hero
