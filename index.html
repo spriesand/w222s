@@ -98,6 +98,17 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .fn{background:rgba(76,190,130,.12);color:var(--green);border:1px solid rgba(76,190,130,.22)}
 .fa{background:rgba(212,136,74,.12);color:var(--amber);border:1px solid rgba(212,136,74,.28)}
 
+/* Corner ribbons (Reference / Final Edition) */
+.cr{position:absolute;width:130px;text-align:center;font-family:var(--mono);font-size:9px;letter-spacing:.18em;font-weight:600;padding:3px 0;z-index:3;text-transform:uppercase;box-shadow:0 1px 4px rgba(0,0,0,.4);pointer-events:none}
+.cr-tl{top:18px;left:-34px;transform:rotate(-45deg)}
+.cr-tr{top:18px;right:-34px;transform:rotate(45deg)}
+.cr-ref{background:rgba(120,120,130,.88);color:#f0f0f5;border-top:1px solid rgba(255,255,255,.15);border-bottom:1px solid rgba(0,0,0,.25)}
+.cr-fe{background:rgba(200,169,106,.92);color:#1a1a1a;border-top:1px solid rgba(232,200,138,.5);border-bottom:1px solid rgba(0,0,0,.2)}
+
+/* Equipment chip row */
+.eq-row{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+.eq-chip{display:inline-flex;align-items:center;font-family:var(--mono);font-size:9px;color:var(--teal);background:rgba(0,212,200,.06);border:1px solid rgba(0,212,200,.22);padding:2px 7px;border-radius:10px;text-transform:uppercase;letter-spacing:.06em;white-space:nowrap}
+
 /* ── SEC LABEL ── */
 .sec{font-family:var(--mono);font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.2em;padding-bottom:9px;margin-bottom:14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:5px}
 .loading{font-family:var(--mono);font-size:13px;color:var(--muted);padding:24px;text-align:center;letter-spacing:.08em}
@@ -238,7 +249,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .tc-body{padding:14px 15px 15px;display:flex;flex-direction:column;gap:9px}
 .tc-title{font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink);line-height:1.1}
 .tc-sub{font-family:var(--mono);font-size:12px;color:var(--muted)}
-.tc-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-radius:7px;overflow:hidden}
+.tc-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border-radius:7px;overflow:hidden}
 .tc-stat{background:var(--panel2);padding:7px 8px}
 .tc-sv{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--ink);display:block}
 .tc-sl{font-family:var(--mono);font-size:7px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;display:block;margin-top:2px}
@@ -542,7 +553,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 <!-- DESKTOP NAV -->
 <nav class="nav-tabs">
   <div class="ntab active" onclick="go('dashboard',this)">Dashboard</div>
-  <div class="ntab ntab-prospect" onclick="go('prospect',this)">&#11088; Prospect</div>
+  <div class="ntab ntab-prospect" onclick="go('prospect',this)">&#11088; Top Prospect</div>
   <div class="ntab" onclick="go('market',this)">The Market <span class="npip" id="market-pip">--</span></div>
   <div class="ntab" onclick="go('targets',this)">Targets</div>
   <div class="ntab" onclick="go('analytics',this)">Analytics</div>
@@ -1584,16 +1595,25 @@ function ph(year,trim,vin){
 // Car flags
 function flags(v,vm){
   var f=[];
-  if(v.car_status==='target')f.push({c:'fb',l:'Target'});
   if(vm&&vm.curr_odo&&vm.curr_odo>=70000&&vm.curr_odo<=100000)f.push({c:'fn',l:'GI Zone'});
-  if(vm&&vm.total_owners===1)f.push({c:'fg',l:'Single Owner'});
-  else if(vm&&vm.total_owners===2)f.push({c:'fg',l:'2 Owners'});
   if(vm&&(vm.salvage===true||(typeof vm.salvage==='string'&&vm.salvage.toLowerCase()==='yes')))f.push({c:'fr',l:'SALVAGE'});
   if(vm&&(vm.theft_recovery===true||(typeof vm.theft_recovery==='string'&&vm.theft_recovery.toLowerCase()==='yes')))f.push({c:'fr',l:'THEFT'});
   if(vm&&typeof vm.accident_count==='number'&&vm.accident_count>0)f.push({c:'fa',l:'⚠ '+vm.accident_count+' Accident'+(vm.accident_count>1?'s':'')});
-  if(v.is_final_edition)f.push({c:'tg',l:'Final Edition'});
-  if(v.last_title_state)f.push({c:'fd',l:v.last_title_state});
   return f.map(function(x){return '<span class="flag '+x.c+'">'+x.l+'</span>';}).join('');
+}
+
+// Equipment chips for vehicle cards (reads vehicle_build flags)
+function equipChips(vin){
+  var b=G.build&&G.build[vin];if(!b)return '';
+  var items=[];
+  if(b.has_burmester)items.push('Burmester');
+  if(b.has_night_vision)items.push('Night Vision');
+  if(b.has_magic_sky)items.push('Magic Sky');
+  if(b.has_ceramic_brakes)items.push('Ceramic Brakes');
+  if(b.has_designo)items.push('designo');
+  if(b.has_refrigerator)items.push('Refrigerator');
+  if(!items.length)return '';
+  return '<div class="eq-row">'+items.map(function(t){return '<span class="eq-chip">'+t+'</span>';}).join('')+'</div>';
 }
 
 // ── WHAT CHANGED ─────────────────────────────────────────
@@ -1766,13 +1786,13 @@ function renderCompact(v,vm,lh){
   var owners=vm?fN(vm.total_owners):'--';
   var loc=(lh&&lh.state)?lh.state:(v.last_title_state||'--');
   var active=!!G.l[v.vin];
-  var badge=v.car_status==='target'?'<span class="tbadge">Target</span>':'<span class="rbadge">Ref</span>';
   var chip=active?relistChip(v.vin,lh):'';
   return '<div class="lc">'+
     '<div class="lc-img hs-wrap">'+
     '<div class="hs-img-panel" style="position:relative;height:100%;">'+vehicleImage(v)+
       '<div class="lc-img-ov"></div>'+
-      '<div class="lc-top">'+badge+'</div>'+
+      (v.car_status==='reference'?'<div class="cr cr-tl cr-ref">Reference</div>':'')+
+      (v.is_final_edition?'<div class="cr cr-tr cr-fe">Final Edition</div>':'')+
       '<button class="tc-img-edit" onclick="event.stopPropagation();openProfileImagePicker(\''+v.vin+'\')" title="Change profile photo">&#128247;</button>'+
       (active?'<div class="lc-active"><span class="live-dot"></span>Active</div>':'')+
     '</div>'+
@@ -1788,7 +1808,7 @@ function renderCompact(v,vm,lh){
         notesPill(v.vin)+
       '</div>'+
       '<div class="lc-meta">'+esc(v.vin)+' &middot; '+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?formatColor(b.paint_name)+' &middot; ':'';})()+esc(loc)+(lh&&lh.seller_name?' &middot; '+esc(lh.seller_name):'')+'</div>'+
-      '<div class="lc-flags">'+flags(v,vm)+'</div>'+renderDocLinks(v.vin)+
+      '<div class="lc-flags">'+flags(v,vm)+'</div>'+equipChips(v.vin)+renderDocLinks(v.vin)+
       '<div class="lc-row">'+
         priceHTML+priceEditBtn(v.vin,active)+
         '<span class="lc-mi">'+miles+'</span>'+
@@ -1823,7 +1843,9 @@ function renderTarget(v,vm,lh){
     '<div class="tc-img hs-wrap">'+
     '<div class="hs-img-panel" style="position:relative;height:100%;">'+vehicleImage(v)+
       '<div class="tc-img-ov"></div>'+
-      '<div class="tc-top"><span class="tag tb">Target</span>'+(v.is_top_prospect?'<span class="tc-top-prospect-badge">&#11088; Top Prospect</span>':'')+(v.is_final_edition?'<span class="tag tg">Final Edition</span>':'')+'</div>'+
+      (v.car_status==='reference'?'<div class="cr cr-tl cr-ref">Reference</div>':'')+
+      (v.is_final_edition?'<div class="cr cr-tr cr-fe">Final Edition</div>':'')+
+      (v.is_top_prospect?'<div class="tc-top"><span class="tc-top-prospect-badge">&#11088; Top Prospect</span></div>':'')+
       '<button class="tc-img-edit" onclick="event.stopPropagation();openProfileImagePicker(\''+v.vin+'\')" title="Change profile photo">&#128247;</button>'+
       (active?'<div class="tc-active"><span class="live-dot"></span>Active Listing</div>':'')+
     '</div>'+
@@ -1838,13 +1860,14 @@ function renderTarget(v,vm,lh){
         '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
         notesPill(v.vin)+
       '</div>'+
-      '<div class="tc-sub">'+v.vin+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?' &middot; '+formatColor(b.paint_name):'';})()+' &middot; '+loc+'</div>'+
+      '<div class="tc-sub">'+v.vin+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?' &middot; '+formatColor(b.paint_name):'';})()+'</div>'+
       '<div class="tc-stats">'+
         '<div class="tc-stat">'+priceHTML+priceEditBtn(v.vin,active)+'<span class="tc-sl">Ask</span></div>'+
         '<div class="tc-stat"><span class="tc-sv">'+miles+'</span><span class="tc-sl">Miles</span></div>'+
-        '<div class="tc-stat"><span class="tc-sv">'+owners+'</span><span class="tc-sl">Owners</span></div>'+
+        '<div class="tc-stat"><span class="tc-sv">'+(vm?fN(vm.total_owners):'--')+'</span><span class="tc-sl">Owners</span></div>'+
+        '<div class="tc-stat"><span class="tc-sv">'+esc(loc)+'</span><span class="tc-sl">State</span></div>'+
       '</div>'+
-      '<div class="tc-flags">'+flags(v,vm)+'</div>'+renderDocLinks(v.vin)+
+      '<div class="tc-flags">'+flags(v,vm)+'</div>'+equipChips(v.vin)+renderDocLinks(v.vin)+
       '<div style="display:flex;gap:6px;align-items:stretch;">'+
         (v.listing_url?'<a href="'+esc(v.listing_url)+'" target="_blank" rel="noopener" class="tc-btn" style="flex:1;">&#9654; View Listing</a>':(active?'<span class="tc-btn" style="flex:1;opacity:.5;cursor:default;">&#9679; Active</span>':'<span style="flex:1;"></span>'))+
         '<button class="tc-btn" style="flex:none;padding:8px 10px;" onclick="openUrlEdit(\''+v.vin+'\',this)" title="Edit listing URL">&#9998;</button>'+
