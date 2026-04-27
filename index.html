@@ -230,6 +230,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .lc-dom-pill.short{border-color:rgba(76,190,130,.5);color:var(--green)}
 .lc-dom-pill.medium{border-color:rgba(212,136,74,.5);color:var(--amber)}
 .lc-dom-pill.long{border-color:rgba(224,90,90,.5);color:var(--red)}
+/* Inline DOM indicator — sits next to car title in title's own color, no pill */
+.title-dom{font-family:var(--serif);font-size:.7em;font-weight:400;color:inherit;opacity:.55;margin-left:6px;white-space:nowrap}
 .lc-body{padding:10px 11px 12px;flex:1;display:flex;flex-direction:column;gap:7px}
 .lc-title{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);line-height:1.1}
 .lc-meta{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.6}
@@ -1100,7 +1102,6 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   </div>
 </nav>
 <div class="more-drawer" id="more-drawer">
-  <div class="mdr" onclick="goProspect();closeMore();"><span class="mdr-icon">&#11088;</span>Top Prospect</div>
   <div class="mdr" onclick="go('analytics',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128200;</span>Analytics</div>
   <div class="mdr" onclick="go('news',null);loadNews();closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128240;</span>News</div>
   <div class="mdr" onclick="go('videos',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#127909;</span>Videos</div>
@@ -1988,28 +1989,19 @@ function renderCompact(v,vm,lh){
   var owners=vm?fN(vm.total_owners):'--';
   var loc=(lh&&lh.state)?lh.state:(v.last_title_state||'--');
   var active=!!G.l[v.vin];
-  var chip=active?relistChip(v.vin,lh):'';
-  // Days-on-market pill — only for active listings
-  // Prefer the platform-tracked `dom` field if present (more accurate for re-listed cars)
-  var domPill='';
-  if(active&&lh){
-    var days=null;
-    if(lh.dom!=null&&!isNaN(Number(lh.dom))){
-      days=Math.max(0,Number(lh.dom));
-    } else if(lh.first_seen){
-      var calc=Math.round((new Date()-new Date(lh.first_seen))/86400000);
-      if(!isNaN(calc)&&calc>=0)days=calc;
-    }
-    if(days!==null){
-      var domClass=days<14?'short':days<60?'medium':'long';
-      domPill='<div class="lc-dom-pill '+domClass+'">'+days+' day'+(days===1?'':'s')+' listed</div>';
+  // Days listed inline next to title — today - first_seen
+  // No pill UI, no relist/new-listing chips. Plain text in title's color family.
+  var titleDom='';
+  if(active&&lh&&lh.first_seen){
+    var calc=Math.round((new Date()-new Date(lh.first_seen))/86400000);
+    if(!isNaN(calc)&&calc>=0){
+      titleDom=' <span class="title-dom">&middot; '+calc+'d listed</span>';
     }
   }
   return '<div class="lc">'+
     '<div class="lc-img hs-wrap">'+
     '<div class="hs-img-panel" style="position:relative;height:100%;">'+vehicleImage(v)+
       '<div class="lc-img-ov"></div>'+
-      domPill+
       (v.car_status==='reference'?'<div class="cr cr-tl cr-ref">Reference</div>':'')+
       (v.is_final_edition?'<div class="cr cr-tr cr-fe">Final Edition</div>':'')+
       '<button class="tc-img-edit" onclick="event.stopPropagation();openProfileImagePicker(\''+v.vin+'\')" title="Change profile photo" aria-label="Change profile photo for '+v.vin+'">&#128247;</button>'+
@@ -2023,7 +2015,7 @@ function renderCompact(v,vm,lh){
     '</div>'+
     '<div class="lc-body">'+
       '<div class="title-row">'+
-        '<div class="lc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
+        '<div class="lc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+titleDom+'</div>'+
         notesPill(v.vin)+
       '</div>'+
       '<div class="lc-meta">'+esc(v.vin)+' &middot; '+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?formatColor(b.paint_name)+' &middot; ':'';})()+esc(loc)+(lh&&lh.seller_name?' &middot; '+esc(lh.seller_name):'')+'</div>'+
@@ -2053,7 +2045,14 @@ function renderTarget(v,vm,lh){
   var owners=vm?fN(vm.total_owners):'--';
   var loc=v.last_title_state||(lh&&lh.state)||'--';
   var active=!!G.l[v.vin];
-  var chip=active?relistChip(v.vin,lh):'';
+  // Days listed inline next to title — today - first_seen
+  var titleDom='';
+  if(active&&lh&&lh.first_seen){
+    var calc=Math.round((new Date()-new Date(lh.first_seen))/86400000);
+    if(!isNaN(calc)&&calc>=0){
+      titleDom=' <span class="title-dom">&middot; '+calc+'d listed</span>';
+    }
+  }
   var priceColor=lh&&lh.price&&lh.price<=40000?'var(--green)':'var(--gold2)';
   var priceHTML=lh
     ? renderPriceWithDelta(lh,'tc-sv','color:'+priceColor+';')
@@ -2076,7 +2075,7 @@ function renderTarget(v,vm,lh){
     '</div>'+
     '<div class="tc-body">'+
       '<div class="title-row">'+
-        '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
+        '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+titleDom+'</div>'+
         notesPill(v.vin)+
       '</div>'+
       '<div class="tc-sub">'+v.vin+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?' &middot; '+formatColor(b.paint_name):'';})()+'</div>'+
@@ -2822,18 +2821,16 @@ function renderDOMTable(lhRows){
   if(!el)return;
   // Targets only: active listings for vehicles with car_status='target'
   var targetVins={};(G.v||[]).forEach(function(v){if(v.car_status==='target')targetVins[v.vin]=true;});
-  // Accept rows that have either dom OR first_seen
+  // Need first_seen to compute today - first_seen
   var actives=lhRows.filter(function(l){
     if(!G.activeSet||!G.activeSet[l.vin]||!targetVins[l.vin])return false;
-    return (l.dom!=null&&!isNaN(Number(l.dom)))||l.first_seen;
+    return !!l.first_seen;
   });
   if(!actives.length){el.innerHTML='<div class="lh-empty">No active listings with date data.</div>';return;}
   var now=new Date();
   var rows=actives.map(function(l){
-    // Prefer platform-tracked dom field; fall back to first_seen calc
-    var days;
-    if(l.dom!=null&&!isNaN(Number(l.dom))){days=Math.max(0,Number(l.dom));}
-    else{days=Math.round((now-new Date(l.first_seen))/86400000);}
+    // Always today - first_seen for consistency with the cards
+    var days=Math.max(0,Math.round((now-new Date(l.first_seen))/86400000));
     return {vin:l.vin,seller:l.seller_name||'--',price:l.price,days:days};
   });
   // Dedupe by VIN, keep longest DOM
@@ -3541,16 +3538,12 @@ function loadAll(){
     var prices=activeLH.filter(function(l){return l.price;}).map(function(l){return l.price;});
     var avg=prices.length?Math.round(prices.reduce(function(a,b){return a+b;},0)/prices.length):null;
 
-    // Compute avg DOM across active marketplace listings
-    // Prefer platform-tracked `dom` field; fall back to first_seen calculation
+    // Compute avg DOM across active marketplace listings — today - first_seen
     var nowMs=Date.now();
     var domDays=Object.values(lhMap).map(function(l){
-      if(l.dom!=null&&!isNaN(Number(l.dom)))return Math.max(0,Number(l.dom));
-      if(l.first_seen){
-        var calc=Math.round((nowMs-new Date(l.first_seen))/86400000);
-        if(!isNaN(calc)&&calc>=0)return calc;
-      }
-      return null;
+      if(!l.first_seen)return null;
+      var calc=Math.round((nowMs-new Date(l.first_seen))/86400000);
+      return (!isNaN(calc)&&calc>=0)?calc:null;
     }).filter(function(d){return d!==null;});
     var avgDom=domDays.length?Math.round(domDays.reduce(function(a,b){return a+b;},0)/domDays.length):null;
 
