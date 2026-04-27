@@ -46,6 +46,10 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 @keyframes throb{0%,100%{opacity:1}50%{opacity:.3}}
 .mbtn{background:none;border:1px solid var(--line2);border-radius:7px;color:var(--muted);font-family:var(--mono);font-size:12px;padding:4px 10px;cursor:pointer;transition:all .15s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
 .mbtn:hover{border-color:var(--blue);color:var(--blue2)}
+.mbtn-prospect{border-color:rgba(200,169,106,.45);color:var(--gold2);background:rgba(200,169,106,.08)}
+.mbtn-prospect:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,169,106,.15)}
+.mbtn-diary{border-color:rgba(122,167,220,.35);color:var(--blue2);background:rgba(122,167,220,.05)}
+.mbtn-diary:hover{border-color:var(--blue);color:var(--blue2);background:rgba(122,167,220,.12)}
 
 /* ── DESKTOP NAV ── */
 .nav-tabs{display:flex;border-bottom:1px solid var(--line);padding:0 20px;background:rgba(7,9,15,.88);overflow-x:auto;scrollbar-width:none}
@@ -222,6 +226,10 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .lc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.40),transparent 72%)}
 .lc-top{position:absolute;top:8px;left:8px;right:8px;z-index:2;display:flex;justify-content:space-between}
 .lc-active{position:absolute;bottom:8px;left:8px;z-index:2;display:flex;align-items:center;gap:3px;background:rgba(7,9,15,.82);border:1px solid rgba(76,190,130,.22);border-radius:3px;padding:2px 6px;font-family:var(--mono);font-size:11px;color:var(--green)}
+.lc-dom-pill{position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:3;background:rgba(7,9,15,.92);border:1px solid var(--gold);border-radius:14px;padding:3px 10px;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--gold2);letter-spacing:.05em;box-shadow:0 2px 8px rgba(0,0,0,.4);white-space:nowrap}
+.lc-dom-pill.short{border-color:rgba(76,190,130,.5);color:var(--green)}
+.lc-dom-pill.medium{border-color:rgba(212,136,74,.5);color:var(--amber)}
+.lc-dom-pill.long{border-color:rgba(224,90,90,.5);color:var(--red)}
 .lc-body{padding:10px 11px 12px;flex:1;display:flex;flex-direction:column;gap:7px}
 .lc-title{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);line-height:1.1}
 .lc-meta{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.6}
@@ -346,6 +354,42 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   .news-lay{grid-template-columns:1fr}
 }
 
+/* ── DIARY ── */
+.diary-section{margin-bottom:18px;background:linear-gradient(155deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.diary-head{padding:11px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(122,167,220,.04)}
+.diary-head-t{font-family:var(--serif);font-size:16px;color:var(--ink);font-weight:600}
+.diary-head-c{font-family:var(--mono);font-size:11px;color:var(--muted)}
+.diary-list{max-height:400px;overflow-y:auto;padding:8px 14px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent}
+.diary-list::-webkit-scrollbar{width:6px}
+.diary-list::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:3px}
+.diary-empty{color:var(--dim);font-family:var(--mono);font-size:12px;padding:20px;text-align:center}
+.diary-entry{padding:9px 0;border-bottom:1px solid var(--line);display:flex;flex-direction:column;gap:4px}
+.diary-entry:last-child{border-bottom:none}
+.diary-entry-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.diary-entry-time{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.05em}
+.diary-entry-del{background:none;border:none;color:var(--red);opacity:.4;cursor:pointer;font-size:13px;padding:2px 6px;line-height:1}
+.diary-entry-del:hover{opacity:1}
+.diary-entry-body{font-family:var(--sans);font-size:13px;line-height:1.5;color:var(--ink2);white-space:pre-wrap;word-wrap:break-word}
+.diary-entry-body a{color:var(--blue2);text-decoration:underline}
+.diary-compose{padding:10px 14px;border-top:1px solid var(--line);background:var(--panel2)}
+.diary-compose textarea{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px;color:#e8e8f0;font-family:inherit;font-size:13px;padding:9px 11px;resize:vertical;min-height:60px;box-sizing:border-box}
+.diary-compose textarea:focus{outline:none;border-color:var(--blue)}
+.diary-compose-row{display:flex;justify-content:flex-end;margin-top:7px}
+.diary-save{background:var(--blue);color:var(--bg);border:none;font-family:var(--mono);font-size:12px;font-weight:600;padding:7px 16px;border-radius:6px;cursor:pointer;transition:background .15s}
+.diary-save:hover{background:var(--blue2)}
+.diary-save:disabled{opacity:.5;cursor:not-allowed}
+/* Diary as drawer (header trigger) */
+.diary-ov{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:998;opacity:0;pointer-events:none;transition:opacity .2s}
+.diary-ov.open{opacity:1;pointer-events:auto}
+.diary-drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,92vw);background:var(--bg);border-left:1px solid var(--line2);z-index:999;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+.diary-drawer.open{transform:translateX(0)}
+.diary-drawer-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;background:var(--panel)}
+.diary-drawer-head-t{font-family:var(--serif);font-size:18px;color:var(--ink);font-weight:600}
+.diary-drawer-close{background:none;border:none;color:var(--muted);font-size:22px;cursor:pointer;padding:0 8px}
+.diary-drawer-close:hover{color:var(--ink)}
+.diary-drawer .diary-list{max-height:none;flex:1;padding:8px 18px}
+.diary-drawer .diary-compose{padding:14px 18px}
+
 /* ── GALLERY ── */
 .car-carousel{position:relative;border-radius:var(--r);overflow:hidden;background:#050810;border:1px solid var(--line);margin-bottom:14px}
 .car-carousel-track{display:flex;transition:transform .5s cubic-bezier(.25,.46,.45,.94);will-change:transform}
@@ -453,8 +497,16 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .notes-compose{padding:12px 14px;border-top:1px solid var(--line);background:var(--panel2);flex-shrink:0}
 .notes-compose textarea{width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px;color:#e8e8f0;font-family:inherit;font-size:12px;padding:10px;resize:vertical;min-height:70px;box-sizing:border-box}
 .notes-compose textarea:focus{outline:none;border-color:var(--gold2)}
-.notes-compose-row{display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap}
-.notes-file{flex:1;min-width:0}
+.notes-compose-row{display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap}.notes-file{flex:1;min-width:0}
+.notes-tag-btn{background:rgba(0,212,200,.08);border:1px solid rgba(0,212,200,.3);color:var(--teal);font-family:var(--mono);font-size:11px;padding:7px 11px;border-radius:6px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.notes-tag-btn:hover{background:rgba(0,212,200,.15);border-color:var(--teal)}
+.tc-prospect-btn{background:rgba(200,169,106,.08);border:1px solid rgba(200,169,106,.35);color:var(--gold2);font-family:var(--mono);font-size:11px;padding:6px;border-radius:7px;cursor:pointer;transition:all .15s;text-align:center;width:100%;margin-top:4px}
+.tc-prospect-btn:hover{background:rgba(200,169,106,.18);border-color:var(--gold)}
+.tc-prospect-btn.is-current{background:rgba(200,169,106,.22);border-color:var(--gold);color:var(--gold)}
+.fchip-yr{font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);cursor:pointer;transition:all .15s}
+.fchip-yr.active{background:var(--blue);color:var(--bg);border-color:var(--blue)}
+.fchip-fe{font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:14px;background:rgba(200,169,106,.08);border:1px solid rgba(200,169,106,.3);color:var(--gold2);cursor:pointer;transition:all .15s}
+.fchip-fe.active{background:var(--gold);color:var(--bg);border-color:var(--gold)}
 .notes-file input{display:none}
 .notes-file label{cursor:pointer;color:var(--muted);padding:6px 10px;border:1px dashed var(--line);border-radius:6px;font-size:11px;display:inline-block;transition:all .15s}
 .notes-file label:hover{color:#fff;border-color:var(--gold2)}
@@ -545,8 +597,10 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   </div>
   <div class="mast-r">
     <div class="live-badge"><span class="live-dot"></span><span id="mast-count">--</span> VINs</div>
-    <button class="mbtn" onclick="loadAll()">&#8635; Sync</button>
-    <a class="mbtn" href="https://spriesand.github.io/w222playbook/" target="_blank" rel="noopener">&#128214; Playbook</a>
+    <button class="mbtn mbtn-prospect" onclick="goProspect()" title="Jump to Top Prospect" aria-label="Jump to Top Prospect">&#11088;</button>
+    <button class="mbtn mbtn-diary" onclick="openDiary()" title="Open diary / general notes" aria-label="Open diary">&#128221;</button>
+    <button class="mbtn" onclick="loadAll()" aria-label="Sync data">&#8635; Sync</button>
+    <a class="mbtn" href="https://spriesand.github.io/w222playbook/" target="_blank" rel="noopener" aria-label="Open Playbook in new tab">&#128214; Playbook</a>
   </div>
 </header>
 
@@ -554,7 +608,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 <nav class="nav-tabs">
   <div class="ntab active" onclick="go('dashboard',this)">Dashboard</div>
   <div class="ntab ntab-prospect" onclick="go('prospect',this)">&#11088; Top Prospect</div>
-  <div class="ntab" onclick="go('market',this)">The Market <span class="npip" id="market-pip">--</span></div>
+  <div class="ntab" onclick="go('market',this)">Marketplace <span class="npip" id="market-pip">--</span></div>
   <div class="ntab" onclick="go('targets',this)">Targets</div>
   <div class="ntab" onclick="go('analytics',this)">Analytics</div>
   <div class="ntab" onclick="go('news',this);loadNews()">News</div>
@@ -621,10 +675,10 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
       <!-- Minis -->
       <div class="mini-row">
         <div class="card mini-card">
-          <div class="tag ta" style="width:fit-content;">GI Range</div>
-          <div class="mini-big" style="color:var(--amber);" id="dash-gi">--</div>
-          <div class="mini-desc">Cars in the Golden Intersection</div>
-          <div class="mini-sm">70K&ndash;100K mi band</div>
+          <div class="tag ta" style="width:fit-content;">Avg DOM</div>
+          <div class="mini-big" style="color:var(--amber);" id="dash-avg-dom">--</div>
+          <div class="mini-desc">Days on market &mdash; active listings</div>
+          <div class="mini-sm" id="dash-avg-dom-sub">All marketplace VINs</div>
         </div>
         <div class="card mini-card">
           <div class="tag tg" style="width:fit-content;">Rarity</div>
@@ -669,7 +723,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 <div class="page" id="page-market">
 <div class="pp">
   <div class="sec">
-    <span>The Market &mdash; All Active Listings</span>
+    <span>Marketplace &mdash; All Active Listings</span>
     <span id="market-label" style="color:var(--green);"></span>
   </div>
   <div class="mkt-controls">
@@ -681,7 +735,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <span class="fsep">|</span>
     <button class="fbtn" onclick="sMkt('price',this)">Price &#8593;</button>
     <button class="fbtn" onclick="sMkt('miles',this)">Miles &#8593;</button>
-    <button class="fbtn" onclick="sMkt('year',this)">Year &#8595;</button>
+    <button class="fbtn active" onclick="sMkt('year',this)">Year &#8595;</button>
   </div>
   <div class="mkt-grid" id="market-grid"><div class="loading">Loading&hellip;</div></div>
 </div>
@@ -702,6 +756,11 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <button class="filter-toggle" id="tgt-filter-btn" onclick="toggleFilterPanel()"><span>&#9881; Filters &#9660; </span><span class="filter-badge" id="tgt-filter-badge" style="display:none;"></span></button>
   </div>
   <div class="filter-panel" id="tgt-filter-panel">
+    <div class="tgt-filter-row" style="border-bottom:none;margin:0;padding:0;">
+      <span class="tgt-filter-lbl">Year</span>
+      <div id="tgt-year-chips" style="display:flex;flex-wrap:wrap;gap:5px;"></div>
+      <button class="fchip-fe" id="tgt-fe-chip" onclick="toggleFEChip(this)" title="Final Edition only">&#11088; Final Edition</button>
+    </div>
     <div class="tgt-filter-row" id="tgt-ext-row" style="display:none;border-bottom:none;margin:0;padding:0;">
       <span class="tgt-filter-lbl">Ext</span>
       <div id="tgt-ext-chips" style="display:flex;flex-wrap:wrap;gap:5px;"></div>
@@ -732,7 +791,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <div class="k4"><span class="k4-n" style="color:var(--blue2);" id="ak-total">--</span><span class="k4-l">Total VINs</span><span class="k4-t" id="ak-split">loading</span></div>
     <div class="k4"><span class="k4-n" style="color:var(--green);" id="ak-active">--</span><span class="k4-l">Active Listings</span><span class="k4-t">Live today</span></div>
     <div class="k4"><span class="k4-n" style="color:var(--gold2);" id="ak-targets">--</span><span class="k4-l">Target Cars</span><span class="k4-t">2017&ndash;2020</span></div>
-    <div class="k4"><span class="k4-n" style="color:var(--teal);" id="ak-gi">--</span><span class="k4-l">In GI Range</span><span class="k4-t">70K&ndash;100K mi</span></div>
+    <div class="k4"><span class="k4-n" style="color:var(--teal);" id="ak-avg-dom">--</span><span class="k4-l">Avg Days on Market</span><span class="k4-t">Active marketplace listings</span></div>
   </div>
   <div class="an-grid">
 
@@ -818,6 +877,13 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
       <div id="price-drop-table" style="margin-top:8px;"><div class="loading">Loading&hellip;</div></div>
     </div>
 
+    <!-- 9. Original MSRP Distribution — Full Width -->
+    <div class="card an-full an-card">
+      <div class="an-title">Original Built MSRP &mdash; Per-VIN Sticker Prices</div>
+      <div class="an-sub">From Neo VIN factory build records &middot; reveals which cars were optioned-up new</div>
+      <div id="msrp-table" style="margin-top:8px;"><div class="loading">Loading&hellip;</div></div>
+    </div>
+
   </div>
 </div>
 </div>
@@ -877,8 +943,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   <div class="car-carousel" id="carousel-wrap">
     <div class="car-carousel-track" id="carousel-track"></div>
     <div class="carousel-nav">
-      <button class="cnav-btn" onclick="carouselPrev()">&#8592;</button>
-      <button class="cnav-btn" onclick="carouselNext()">&#8594;</button>
+      <button class="cnav-btn" onclick="carouselPrev()" aria-label="Previous gallery image">&#8592;</button>
+      <button class="cnav-btn" onclick="carouselNext()" aria-label="Next gallery image">&#8594;</button>
     </div>
     <div class="carousel-dots" id="carousel-dots"></div>
   </div>
@@ -895,9 +961,9 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   <button class="lb-close" onclick="closeLb()">&#x2715;</button>
   <div class="lb-img-wrap"><img id="lb-img" src="" alt=""></div>
   <div class="lb-nav">
-    <button class="lb-btn" onclick="lbPrev()">&#8592;</button>
+    <button class="lb-btn" onclick="lbPrev()" aria-label="Previous image">&#8592;</button>
     <span class="lb-counter" id="lb-counter"></span>
-    <button class="lb-btn" onclick="lbNext()">&#8594;</button>
+    <button class="lb-btn" onclick="lbNext()" aria-label="Next image">&#8594;</button>
   </div>
 </div>
 
@@ -908,10 +974,48 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <span>Resources &mdash; Brochures &amp; Manuals</span>
     <span id="resources-label" style="color:var(--muted);"></span>
   </div>
+
+  <!-- Diary section (always-visible scrollable journal) -->
+  <div class="diary-section">
+    <div class="diary-head">
+      <div>
+        <div class="diary-head-t">&#128221; Diary &amp; General Notes</div>
+        <div class="diary-head-c" id="res-diary-count">0 entries</div>
+      </div>
+      <button class="mbtn" onclick="openDiary()" title="Open as drawer">&#8599; Expand</button>
+    </div>
+    <div class="diary-list" id="res-diary-list"><div class="diary-empty">No entries yet. Start journaling below.</div></div>
+    <div class="diary-compose">
+      <textarea id="res-diary-textarea" placeholder="Thoughts, observations, follow-ups, ideas. Cmd/Ctrl+Enter to save." onkeydown="diaryKeydown(event,'res')"></textarea>
+      <div class="diary-compose-row">
+        <button class="diary-save" id="res-diary-save-btn" onclick="diarySave('res')">Save Entry</button>
+      </div>
+    </div>
+  </div>
+
   <div id="resources-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;">
     <div class="loading">Loading&hellip;</div>
   </div>
 </div>
+</div>
+
+<!-- DIARY DRAWER (header trigger) -->
+<div class="diary-ov" id="diary-ov" onclick="closeDiary()"></div>
+<div class="diary-drawer" id="diary-drawer" role="dialog" aria-label="Diary">
+  <div class="diary-drawer-head">
+    <div>
+      <div class="diary-drawer-head-t">&#128221; Diary</div>
+      <div class="diary-head-c" id="drawer-diary-count">0 entries</div>
+    </div>
+    <button class="diary-drawer-close" onclick="closeDiary()" aria-label="Close">&times;</button>
+  </div>
+  <div class="diary-list" id="drawer-diary-list"><div class="diary-empty">No entries yet.</div></div>
+  <div class="diary-compose">
+    <textarea id="drawer-diary-textarea" placeholder="Quick note. Cmd/Ctrl+Enter to save." onkeydown="diaryKeydown(event,'drawer')"></textarea>
+    <div class="diary-compose-row">
+      <button class="diary-save" id="drawer-diary-save-btn" onclick="diarySave('drawer')">Save Entry</button>
+    </div>
+  </div>
 </div>
 
 <!-- ADD LISTING MODAL -->
@@ -990,13 +1094,13 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 <nav class="bnav">
   <div class="bnav-row">
     <div class="bi active" onclick="go('dashboard',null);mGo(this)"><span class="bi-icon">&#128202;</span><span class="bi-lbl">Dashboard</span></div>
-    <div class="bi" onclick="go('market',null);mGo(this)"><span class="bi-icon">&#128663;</span><span class="bi-lbl">Market</span></div>
+    <div class="bi" onclick="go('market',null);mGo(this)"><span class="bi-icon">&#128663;</span><span class="bi-lbl">Marketplace</span></div>
     <div class="bi" onclick="go('targets',null);mGo(this)"><span class="bi-icon">&#127919;</span><span class="bi-lbl">Targets</span></div>
     <div class="bi" onclick="toggleMore(this)"><span class="bi-icon">&#9776;</span><span class="bi-lbl">More</span></div>
   </div>
 </nav>
 <div class="more-drawer" id="more-drawer">
-  <div class="mdr" onclick="go('prospect',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#11088;</span>Top Prospect</div>
+  <div class="mdr" onclick="goProspect();closeMore();"><span class="mdr-icon">&#11088;</span>Top Prospect</div>
   <div class="mdr" onclick="go('analytics',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128200;</span>Analytics</div>
   <div class="mdr" onclick="go('news',null);loadNews();closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128240;</span>News</div>
   <div class="mdr" onclick="go('videos',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#127909;</span>Videos</div>
@@ -1024,6 +1128,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
         <label for="notes-file-input">&#128247; Attach image</label>
         <span class="notes-file-name" id="notes-file-name"></span>
       </div>
+      <button type="button" class="notes-tag-btn" onclick="notesInsertProfileImage()" title="Insert [profile_image] tag, then paste URL">&#128444;&#65039; Profile Img</button>
       <button class="notes-save" id="notes-save-btn" onclick="notesSave()">Save</button>
     </div>
   </div>
@@ -1098,9 +1203,13 @@ function qign(table,body){
   });
 }
 
-// Upsert helper — POST with ON CONFLICT merge
-function qups(table,body){
-  return fetch(SB+'/rest/v1/'+table,{
+// Upsert helper — POST with ON CONFLICT merge.
+// `conflictCol` MUST match the unique key (e.g. 'vin'). Without an explicit
+// on_conflict query param, Supabase REST returns 409 on duplicate-key insert.
+function qups(table,body,conflictCol){
+  conflictCol=conflictCol||'vin';
+  var ep=table+(table.indexOf('?')>-1?'&':'?')+'on_conflict='+encodeURIComponent(conflictCol);
+  return fetch(SB+'/rest/v1/'+ep,{
     method:'POST',
     headers:Object.assign({},H,{'Prefer':'resolution=merge-duplicates,return=representation'}),
     body:JSON.stringify(body)
@@ -1378,7 +1487,7 @@ function updateNotesBadges(vin){
 
 // ── PROFILE IMAGE PICKER ──────────────────────────────────
 // Hover a card photo → camera icon appears → click opens file picker.
-// Uploads to v12-apex-documents/images/{VIN}_{ts}.{ext}, then inserts a
+// Uploads to v12-apex-documents/photos/{VIN}_{ts}.{ext}, then inserts a
 // vehicle_notes row with body='[profile_image]' and image_url=<url>.
 // Most recent such note per VIN wins in G.profileImageByVin.
 var PI={vin:null,uploading:false,fileInput:null};
@@ -1427,7 +1536,7 @@ function uploadProfileImage(vin,file){
   var mime=(file.type||'image/jpeg').toLowerCase();
   var extMap={'image/png':'png','image/jpeg':'jpg','image/jpg':'jpg','image/gif':'gif','image/webp':'webp','image/heic':'heic','image/heif':'heif'};
   var ext=extMap[mime]||'jpg';
-  var path='images/'+vin+'_'+Date.now()+'.'+ext;
+  var path='photos/'+vin+'_'+Date.now()+'.'+ext;
   qs(path,file)
     .then(function(url){
       return qw('vehicle_notes','POST',{vin:vin,body:'[profile_image]',image_url:url})
@@ -1528,7 +1637,7 @@ function savePriceChange(){
 
 // ── STATE ─────────────────────────────────────────────────
 var G={v:[],m:{},l:{},lhAll:[],docs:{}};
-var mktFilter='all',mktSort='price';
+var mktFilter='all',mktSort='year';
 
 // ── COUNTDOWN ─────────────────────────────────────────────
 function tick(){
@@ -1568,6 +1677,99 @@ function toggleMore(btn){
 function closeMore(){
   document.getElementById('more-drawer').classList.remove('open');
   document.getElementById('more-ov').classList.remove('open');
+}
+
+// ── TOP PROSPECT NAVIGATION ───────────────────────────────
+function goProspect(){
+  go('prospect',null);
+  // Mark the matching desktop ntab as active
+  document.querySelectorAll('.ntab').forEach(function(t){
+    t.classList.toggle('active',t.classList.contains('ntab-prospect'));
+  });
+  // Mobile: clear bnav active state
+  document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');});
+}
+
+// ── DIARY (localStorage-backed) ───────────────────────────
+var DIARY_KEY='v12_diary_entries';
+function diaryLoad(){
+  try{var raw=localStorage.getItem(DIARY_KEY);return raw?JSON.parse(raw):[];}catch(e){return [];}
+}
+function diaryStore(entries){
+  try{localStorage.setItem(DIARY_KEY,JSON.stringify(entries));}catch(e){alert('Failed to save: localStorage may be full or disabled.');}
+}
+function diaryRender(){
+  var entries=diaryLoad();
+  var html;
+  if(!entries.length){
+    html='<div class="diary-empty">No entries yet. Start journaling below.</div>';
+  }else{
+    html=entries.map(function(e){
+      var d=new Date(e.ts);
+      var ds=d.toLocaleDateString([],{year:'numeric',month:'short',day:'numeric'})+' \u00b7 '+d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});
+      var bodyHtml=linkify(e.body||'');
+      return '<div class="diary-entry">'+
+        '<div class="diary-entry-head"><span class="diary-entry-time">'+ds+'</span>'+
+          '<button class="diary-entry-del" onclick="diaryDelete('+e.ts+')" title="Delete" aria-label="Delete diary entry">&times;</button></div>'+
+        '<div class="diary-entry-body">'+bodyHtml+'</div>'+
+      '</div>';
+    }).join('');
+  }
+  var resList=document.getElementById('res-diary-list');
+  if(resList)resList.innerHTML=html;
+  var drList=document.getElementById('drawer-diary-list');
+  if(drList)drList.innerHTML=html;
+  var label=entries.length+' entr'+(entries.length===1?'y':'ies');
+  set('res-diary-count',label);
+  set('drawer-diary-count',label);
+}
+function diarySave(scope){
+  if(navigator.vibrate)navigator.vibrate(10);
+  var ta=document.getElementById((scope==='drawer'?'drawer':'res')+'-diary-textarea');
+  if(!ta)return;
+  var body=ta.value.trim();
+  if(!body)return;
+  var entries=diaryLoad();
+  entries.unshift({ts:Date.now(),body:body});
+  diaryStore(entries);
+  ta.value='';
+  diaryRender();
+}
+function diaryDelete(ts){
+  if(!confirm('Delete this diary entry?'))return;
+  var entries=diaryLoad().filter(function(e){return e.ts!==ts;});
+  diaryStore(entries);
+  diaryRender();
+}
+function diaryKeydown(e,scope){
+  if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();diarySave(scope);}
+}
+function openDiary(){
+  document.getElementById('diary-drawer').classList.add('open');
+  document.getElementById('diary-ov').classList.add('open');
+  diaryRender();
+  setTimeout(function(){var ta=document.getElementById('drawer-diary-textarea');if(ta)ta.focus();},250);
+}
+function closeDiary(){
+  document.getElementById('diary-drawer').classList.remove('open');
+  document.getElementById('diary-ov').classList.remove('open');
+}
+
+// ── NOTES: insert profile_image tag into textarea ─────────
+function notesInsertProfileImage(){
+  var ta=document.getElementById('notes-textarea');
+  if(!ta)return;
+  var tag='[profile_image] ';
+  var cur=ta.value||'';
+  if(cur.indexOf('[profile_image]')>-1){
+    // Already present — just focus and scroll cursor to end
+    ta.focus();
+    ta.setSelectionRange(ta.value.length,ta.value.length);
+    return;
+  }
+  ta.value=tag+cur;
+  ta.focus();
+  ta.setSelectionRange(tag.length,tag.length);
 }
 
 // ── HELPERS ───────────────────────────────────────────────
@@ -1787,20 +1989,37 @@ function renderCompact(v,vm,lh){
   var loc=(lh&&lh.state)?lh.state:(v.last_title_state||'--');
   var active=!!G.l[v.vin];
   var chip=active?relistChip(v.vin,lh):'';
+  // Days-on-market pill — only for active listings
+  // Prefer the platform-tracked `dom` field if present (more accurate for re-listed cars)
+  var domPill='';
+  if(active&&lh){
+    var days=null;
+    if(lh.dom!=null&&!isNaN(Number(lh.dom))){
+      days=Math.max(0,Number(lh.dom));
+    } else if(lh.first_seen){
+      var calc=Math.round((new Date()-new Date(lh.first_seen))/86400000);
+      if(!isNaN(calc)&&calc>=0)days=calc;
+    }
+    if(days!==null){
+      var domClass=days<14?'short':days<60?'medium':'long';
+      domPill='<div class="lc-dom-pill '+domClass+'">'+days+' day'+(days===1?'':'s')+' listed</div>';
+    }
+  }
   return '<div class="lc">'+
     '<div class="lc-img hs-wrap">'+
     '<div class="hs-img-panel" style="position:relative;height:100%;">'+vehicleImage(v)+
       '<div class="lc-img-ov"></div>'+
+      domPill+
       (v.car_status==='reference'?'<div class="cr cr-tl cr-ref">Reference</div>':'')+
       (v.is_final_edition?'<div class="cr cr-tr cr-fe">Final Edition</div>':'')+
-      '<button class="tc-img-edit" onclick="event.stopPropagation();openProfileImagePicker(\''+v.vin+'\')" title="Change profile photo">&#128247;</button>'+
+      '<button class="tc-img-edit" onclick="event.stopPropagation();openProfileImagePicker(\''+v.vin+'\')" title="Change profile photo" aria-label="Change profile photo for '+v.vin+'">&#128247;</button>'+
       (active?'<div class="lc-active"><span class="live-dot"></span>Active</div>':'')+
     '</div>'+
     '<div class="hs-hist-panel">'+
       '<div class="lh-back-header"><span class="lh-back-title">&#128202; History &middot; '+v.vin.slice(-6)+'</span></div>'+
       lhBack(v.vin)+
     '</div>'+
-    '<button class="hs-toggle" onclick="toggleHistory(this)">&#9650;</button>'+
+    '<button class="hs-toggle" onclick="toggleHistory(this)" title="Toggle history view" aria-label="Toggle listing history">&#9650;</button>'+
     '</div>'+
     '<div class="lc-body">'+
       '<div class="title-row">'+
@@ -1816,13 +2035,13 @@ function renderCompact(v,vm,lh){
       '</div>'+
       '<div style="display:flex;gap:6px;align-items:center;">'+
         (v.listing_url?'<a href="'+esc(v.listing_url)+'" target="_blank" rel="noopener" class="lc-btn" style="flex:1;justify-content:center;padding:6px 9px;">&#9654; View Listing</a>':'<span style="flex:1;"></span>')+
-        '<button class="price-edit" onclick="openUrlEdit(\''+v.vin+'\',this)" title="Edit listing URL">&#9998;</button>'+
+        '<button class="price-edit" onclick="openUrlEdit(\''+v.vin+'\',\'m\',this)" title="Edit listing URL">&#9998;</button>'+
         (active?'<button class="price-edit" onclick="markInactive(\''+v.vin+'\')" title="Mark listing inactive" style="color:var(--red);opacity:.6;">&#10005;</button>':'')+
       '</div>'+
-      '<div class="url-edit-row" id="url-edit-'+v.vin+'" style="display:none;gap:5px;align-items:center;">'+
-        '<input type="text" class="url-edit-input" id="url-input-'+v.vin+'" placeholder="https://..." value="'+esc(v.listing_url||'')+'" style="flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:6px;color:var(--ink);font-family:var(--mono);font-size:11px;padding:6px 8px;outline:none;">'+
-        '<button class="lc-btn" onclick="saveListingUrl(\''+v.vin+'\')" style="flex:none;padding:5px 10px;">Save</button>'+
-        '<button class="lc-btn" onclick="cancelUrlEdit(\''+v.vin+'\')" style="flex:none;padding:5px 8px;opacity:.6;">&#x2715;</button>'+
+      '<div class="url-edit-row" id="url-edit-m-'+v.vin+'" style="display:none;gap:5px;align-items:center;">'+
+        '<input type="text" class="url-edit-input" id="url-input-m-'+v.vin+'" placeholder="https://..." value="'+esc(v.listing_url||'')+'" style="flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:6px;color:var(--ink);font-family:var(--mono);font-size:11px;padding:6px 8px;outline:none;">'+
+        '<button class="lc-btn" onclick="saveListingUrl(\''+v.vin+'\',\'m\')" style="flex:none;padding:5px 10px;">Save</button>'+
+        '<button class="lc-btn" onclick="cancelUrlEdit(\''+v.vin+'\',\'m\')" style="flex:none;padding:5px 8px;opacity:.6;">&#x2715;</button>'+
       '</div>'+
     '</div>'+
   '</div>';
@@ -1846,14 +2065,14 @@ function renderTarget(v,vm,lh){
       (v.car_status==='reference'?'<div class="cr cr-tl cr-ref">Reference</div>':'')+
       (v.is_final_edition?'<div class="cr cr-tr cr-fe">Final Edition</div>':'')+
       (v.is_top_prospect?'<div class="tc-top"><span class="tc-top-prospect-badge">&#11088; Top Prospect</span></div>':'')+
-      '<button class="tc-img-edit" onclick="event.stopPropagation();openProfileImagePicker(\''+v.vin+'\')" title="Change profile photo">&#128247;</button>'+
+      '<button class="tc-img-edit" onclick="event.stopPropagation();openProfileImagePicker(\''+v.vin+'\')" title="Change profile photo" aria-label="Change profile photo for '+v.vin+'">&#128247;</button>'+
       (active?'<div class="tc-active"><span class="live-dot"></span>Active Listing</div>':'')+
     '</div>'+
     '<div class="hs-hist-panel">'+
       '<div class="lh-back-header"><span class="lh-back-title">&#128202; History &middot; '+v.vin.slice(-6)+'</span></div>'+
       lhBack(v.vin)+
     '</div>'+
-    '<button class="hs-toggle" onclick="toggleHistory(this)">&#9650;</button>'+
+    '<button class="hs-toggle" onclick="toggleHistory(this)" title="Toggle history view" aria-label="Toggle listing history">&#9650;</button>'+
     '</div>'+
     '<div class="tc-body">'+
       '<div class="title-row">'+
@@ -1870,13 +2089,14 @@ function renderTarget(v,vm,lh){
       '<div class="tc-flags">'+flags(v,vm)+'</div>'+equipChips(v.vin)+renderDocLinks(v.vin)+
       '<div style="display:flex;gap:6px;align-items:stretch;">'+
         (v.listing_url?'<a href="'+esc(v.listing_url)+'" target="_blank" rel="noopener" class="tc-btn" style="flex:1;">&#9654; View Listing</a>':(active?'<span class="tc-btn" style="flex:1;opacity:.5;cursor:default;">&#9679; Active</span>':'<span style="flex:1;"></span>'))+
-        '<button class="tc-btn" style="flex:none;padding:8px 10px;" onclick="openUrlEdit(\''+v.vin+'\',this)" title="Edit listing URL">&#9998;</button>'+
+        '<button class="tc-btn" style="flex:none;padding:8px 10px;" onclick="openUrlEdit(\''+v.vin+'\',\'t\',this)" title="Edit listing URL">&#9998;</button>'+
       '</div>'+
-      '<div class="url-edit-row" id="url-edit-'+v.vin+'" style="display:none;gap:5px;align-items:center;">'+
-        '<input type="text" class="url-edit-input" id="url-input-'+v.vin+'" placeholder="https://..." value="'+esc(v.listing_url||'')+'" style="flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:6px;color:var(--ink);font-family:var(--mono);font-size:11px;padding:6px 8px;outline:none;">'+
-        '<button class="lc-btn" onclick="saveListingUrl(\''+v.vin+'\')" style="flex:none;padding:5px 10px;">Save</button>'+
-        '<button class="lc-btn" onclick="cancelUrlEdit(\''+v.vin+'\')" style="flex:none;padding:5px 8px;opacity:.6;">✕</button>'+
+      '<div class="url-edit-row" id="url-edit-t-'+v.vin+'" style="display:none;gap:5px;align-items:center;">'+
+        '<input type="text" class="url-edit-input" id="url-input-t-'+v.vin+'" placeholder="https://..." value="'+esc(v.listing_url||'')+'" style="flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:6px;color:var(--ink);font-family:var(--mono);font-size:11px;padding:6px 8px;outline:none;">'+
+        '<button class="lc-btn" onclick="saveListingUrl(\''+v.vin+'\',\'t\')" style="flex:none;padding:5px 10px;">Save</button>'+
+        '<button class="lc-btn" onclick="cancelUrlEdit(\''+v.vin+'\',\'t\')" style="flex:none;padding:5px 8px;opacity:.6;">✕</button>'+
       '</div>'+
+      '<button class="tc-prospect-btn'+(v.is_top_prospect?' is-current':'')+'" onclick="goProspect()">'+(v.is_top_prospect?'&#11088; This is the Top Prospect &middot; View':'&#11088; View Top Prospect')+'</button>'+
       '<button class="tc-demote" onclick="demoteTarget(\''+v.vin+'\')">&#8595; Move to Reference</button>'+
     '</div>'+
   '</div>';
@@ -1913,7 +2133,7 @@ function renderMkt(){
 
 // ── RENDER TARGETS ────────────────────────────────────────
 // ── TARGET FILTERS ────────────────────────────────────────
-var TF={ext:'',int:'',equip:[]};
+var TF={ext:'',int:'',equip:[],years:[],feOnly:false};
 
 function toggleFilterPanel(){
   var panel=document.getElementById('tgt-filter-panel');
@@ -1927,7 +2147,7 @@ function toggleFilterPanel(){
 }
 
 function updateFilterBadge(){
-  var count=(TF.ext?1:0)+(TF.int?1:0)+TF.equip.length;
+  var count=(TF.ext?1:0)+(TF.int?1:0)+TF.equip.length+TF.years.length+(TF.feOnly?1:0);
   var badge=document.getElementById('tgt-filter-badge');
   var btn=document.getElementById('tgt-filter-btn');
   if(badge){badge.textContent=count;badge.style.display=count?'inline':'none';}
@@ -1936,14 +2156,25 @@ function updateFilterBadge(){
 
 function buildTgtFilters(){
   var targets=G.sortedT||[];
-  var exts={},ints={};
+  var exts={},ints={},years={};
   targets.forEach(function(v){
     var b=(G.build&&G.build[v.vin])||{};
     if(b.paint_name){var c=formatColor(b.paint_name);if(c)exts[c]=true;}
     if(b.upholstery_name){var u=formatColor(b.upholstery_name);if(u)ints[u]=true;}
+    if(v.year)years[v.year]=true;
   });
   var extKeys=Object.keys(exts).sort();
   var intKeys=Object.keys(ints).sort();
+  var yearKeys=Object.keys(years).sort();
+  var yrEl=document.getElementById('tgt-year-chips');
+  if(yrEl){
+    yrEl.innerHTML=yearKeys.map(function(y){
+      return '<button class="fchip-yr'+(TF.years.indexOf(parseInt(y))>-1?' active':'')+'" onclick="toggleYearChip(this,'+y+')">'+y+'</button>';
+    }).join('');
+  }
+  // Sync FE chip active state
+  var feBtn=document.getElementById('tgt-fe-chip');
+  if(feBtn)feBtn.classList.toggle('active',TF.feOnly);
   var extRow=document.getElementById('tgt-ext-row');
   var intRow=document.getElementById('tgt-int-row');
   var extEl=document.getElementById('tgt-ext-chips');
@@ -1968,6 +2199,22 @@ function buildTgtFilters(){
   }
 }
 
+function toggleYearChip(btn,year){
+  year=parseInt(year);
+  var idx=TF.years.indexOf(year);
+  if(idx>-1){TF.years.splice(idx,1);btn.classList.remove('active');}
+  else{TF.years.push(year);btn.classList.add('active');}
+  updateFilterBadge();
+  renderTargets();
+}
+
+function toggleFEChip(btn){
+  TF.feOnly=!TF.feOnly;
+  btn.classList.toggle('active',TF.feOnly);
+  updateFilterBadge();
+  renderTargets();
+}
+
 function toggleColorChip(btn,type){
   var val=btn.textContent.trim();
   TF[type]=(TF[type]===val)?'':val;
@@ -1985,27 +2232,38 @@ function toggleEquipChip(btn){
   renderTargets();
 }
 
-function openUrlEdit(vin,btn){
-  var row=document.getElementById('url-edit-'+vin);
+function openUrlEdit(vin,ctx,btn){
+  // ctx: 'm' = market, 't' = targets
+  // Backwards-compat: if 2 args (vin, btn), default ctx to 't' (legacy callers)
+  if(typeof ctx!=='string'){btn=ctx;ctx='t';}
+  var row=document.getElementById('url-edit-'+ctx+'-'+vin);
   if(!row)return;
   row.style.display='flex';
-  var inp=document.getElementById('url-input-'+vin);
+  var inp=document.getElementById('url-input-'+ctx+'-'+vin);
   if(inp){inp.focus();inp.select();}
 }
-function cancelUrlEdit(vin){
-  var row=document.getElementById('url-edit-'+vin);
+function cancelUrlEdit(vin,ctx){
+  if(typeof ctx!=='string')ctx='t';
+  var row=document.getElementById('url-edit-'+ctx+'-'+vin);
   if(row)row.style.display='none';
 }
-function saveListingUrl(vin){
+function saveListingUrl(vin,ctx){
+  if(typeof ctx!=='string')ctx='t';
   if(navigator.vibrate)navigator.vibrate(10);
-  var inp=document.getElementById('url-input-'+vin);
+  var inp=document.getElementById('url-input-'+ctx+'-'+vin);
   if(!inp)return;
   var url=inp.value.trim();
+  // Validate: empty (clears the URL) is OK; otherwise must be http/https
+  if(url&&!/^https?:\/\/\S+\.\S+/i.test(url)){
+    alert('URL must start with http:// or https:// (or leave blank to clear).');
+    inp.focus();
+    return;
+  }
   qw('vehicles?vin=eq.'+vin,'PATCH',{listing_url:url||null})
     .then(function(){
       var v=G.v.find(function(x){return x.vin===vin;});
       if(v)v.listing_url=url||null;
-      cancelUrlEdit(vin);
+      cancelUrlEdit(vin,ctx);
       renderTargets();
       renderMkt();
       renderDashListings();
@@ -2016,8 +2274,20 @@ function saveListingUrl(vin){
 function markInactive(vin){
   if(!confirm('Mark '+vin+' as inactive? It will be removed from active listings.'))return;
   var lh=G.l&&G.l[vin];
+  var today=new Date().toISOString().slice(0,10);
   var p1=qw('vehicles?vin=eq.'+vin,'PATCH',{listing_status:'inactive'});
-  var p2=lh?qw('listing_history?id=eq.'+lh.id,'PATCH',{last_seen:new Date().toISOString().slice(0,10)}):Promise.resolve();
+  // Lock in final DOM on the listing_history row when closing it.
+  // listing_history has no is_active flag — final DOM + last_seen=today is the historical
+  // record that this listing closed today.
+  var p2=Promise.resolve();
+  if(lh){
+    var lhPatch={last_seen:today};
+    if(lh.first_seen){
+      var finalDom=Math.max(0,Math.round((new Date(today)-new Date(lh.first_seen))/86400000));
+      lhPatch.dom=finalDom;
+    }
+    p2=qw('listing_history?id=eq.'+lh.id,'PATCH',lhPatch);
+  }
   Promise.all([p1,p2])
     .then(function(){
       var v=G.v.find(function(x){return x.vin===vin;});
@@ -2063,6 +2333,12 @@ function renderTargets(){
       ].join(' ').toLowerCase();
       return haystack.indexOf(q)>-1;
     });
+  }
+  if(TF.years.length){
+    list=list.filter(function(v){return TF.years.indexOf(parseInt(v.year))>-1;});
+  }
+  if(TF.feOnly){
+    list=list.filter(function(v){return v.is_final_edition===true||(v.cohort&&v.cohort.indexOf('_FE')>-1);});
   }
   if(TF.ext){
     list=list.filter(function(v){
@@ -2332,7 +2608,36 @@ function renderMiBands(vehicles,market,listings){
 }
 
 // ── RSS NEWS ─────────────────────────────────────────────
-var RSS_PROXY='https://corsproxy.io/?';
+// Multiple proxies for resilience — try in order, first one that returns valid XML wins
+var RSS_PROXIES=[
+  'https://corsproxy.io/?',
+  'https://api.allorigins.win/raw?url=',
+  'https://api.codetabs.com/v1/proxy/?quest='
+];
+
+// Try each proxy in turn; resolve on first success, reject only if all fail
+function rssFetchWithFallback(targetUrl){
+  return new Promise(function(resolve,reject){
+    var idx=0;
+    function tryNext(){
+      if(idx>=RSS_PROXIES.length){reject(new Error('All RSS proxies failed'));return;}
+      var proxy=RSS_PROXIES[idx++];
+      fetch(proxy+encodeURIComponent(targetUrl))
+        .then(function(r){
+          if(!r.ok)throw new Error('HTTP '+r.status);
+          return r.text();
+        })
+        .then(function(xml){
+          // Validate that we got XML with at least one <item>
+          if(xml&&xml.indexOf('<item')>-1){resolve(xml);}
+          else{tryNext();}
+        })
+        .catch(function(){tryNext();});
+    }
+    tryNext();
+  });
+}
+
 var newsLoaded=false;
 
 function nCard(a,fromArchive){
@@ -2381,12 +2686,12 @@ function loadNews(){
     return;
   }
 
-  // Fetch from RSS
-  var url=RSS_PROXY+encodeURIComponent('https://news.google.com/rss/search?q=mercedes+s65+amg&hl=en-US&gl=US&ceid=US:en');
+  // Fetch from RSS — uses fallback proxy chain
+  var feedUrl='https://news.google.com/rss/search?q=mercedes+s65+amg&hl=en-US&gl=US&ceid=US:en';
   var statusEl=document.getElementById('rss-status');
   if(statusEl)statusEl.textContent='Fetching latest news\u2026';
 
-  fetch(url).then(function(r){return r.text();}).then(function(xml){
+  rssFetchWithFallback(feedUrl).then(function(xml){
     var parser=new DOMParser();
     var doc=parser.parseFromString(xml,'text/xml');
     var items=doc.querySelectorAll('item');
@@ -2517,11 +2822,18 @@ function renderDOMTable(lhRows){
   if(!el)return;
   // Targets only: active listings for vehicles with car_status='target'
   var targetVins={};(G.v||[]).forEach(function(v){if(v.car_status==='target')targetVins[v.vin]=true;});
-  var actives=lhRows.filter(function(l){return G.activeSet&&G.activeSet[l.vin]&&targetVins[l.vin]&&l.first_seen;});
+  // Accept rows that have either dom OR first_seen
+  var actives=lhRows.filter(function(l){
+    if(!G.activeSet||!G.activeSet[l.vin]||!targetVins[l.vin])return false;
+    return (l.dom!=null&&!isNaN(Number(l.dom)))||l.first_seen;
+  });
   if(!actives.length){el.innerHTML='<div class="lh-empty">No active listings with date data.</div>';return;}
   var now=new Date();
   var rows=actives.map(function(l){
-    var days=Math.round((now-new Date(l.first_seen))/86400000);
+    // Prefer platform-tracked dom field; fall back to first_seen calc
+    var days;
+    if(l.dom!=null&&!isNaN(Number(l.dom))){days=Math.max(0,Number(l.dom));}
+    else{days=Math.round((now-new Date(l.first_seen))/86400000);}
     return {vin:l.vin,seller:l.seller_name||'--',price:l.price,days:days};
   });
   // Dedupe by VIN, keep longest DOM
@@ -2592,6 +2904,81 @@ function renderPriceDrops(vehicles,lhRows){
   });
   tbl+='</tbody></table>';
   el.innerHTML=tbl;
+}
+
+// ── ORIGINAL MSRP (FROM NEO VIN NOTES) ────────────────────
+function renderMSRP(vehicles){
+  var el=document.getElementById('msrp-table');
+  if(!el)return;
+  // Primary: vehicle_build.msrp_original (canonical column).
+  // Fallback: parse [research] notes containing "Neo VIN factory built MSRP for this VIN: $XXX,XXX".
+  // The fallback path covers VINs decoded before the column was added.
+  var rx=/Neo VIN factory built MSRP[^$]*\$([\d,]+)/i;
+  var msrps=[];
+  var sourceCounts={column:0,notes:0};
+  (vehicles||[]).forEach(function(v){
+    var build=(G.build&&G.build[v.vin])||null;
+    var matched=null;
+    var source=null;
+    // Primary: column
+    if(build&&build.msrp_original!=null&&!isNaN(Number(build.msrp_original))){
+      matched=Number(build.msrp_original);
+      source='column';
+    } else {
+      // Fallback: notes
+      var notes=(G.notesByVin&&G.notesByVin[v.vin])||[];
+      for(var i=0;i<notes.length;i++){
+        var b=notes[i].body||'';
+        var m=b.match(rx);
+        if(m){matched=parseInt(m[1].replace(/,/g,''),10);source='notes';break;}
+      }
+    }
+    if(matched){
+      sourceCounts[source]++;
+      msrps.push({vin:v.vin,year:v.year,trim:v.trim,cohort:v.cohort,msrp:matched,is_fe:v.is_final_edition,is_target:v.car_status==='target',source:source});
+    }
+  });
+  if(!msrps.length){
+    el.innerHTML='<div class="lh-empty">No Neo VIN MSRP data yet. Pull via MarketCheck Neo VIN sweep.</div>';
+    return;
+  }
+  msrps.sort(function(a,b){return b.msrp-a.msrp;});
+  // Cohort summary
+  var byCohort={};
+  msrps.forEach(function(r){
+    if(!byCohort[r.cohort])byCohort[r.cohort]={cohort:r.cohort,prices:[]};
+    byCohort[r.cohort].prices.push(r.msrp);
+  });
+  var summary=Object.values(byCohort).map(function(c){
+    var avg=Math.round(c.prices.reduce(function(a,b){return a+b;},0)/c.prices.length);
+    var min=Math.min.apply(null,c.prices);
+    var max=Math.max.apply(null,c.prices);
+    return {cohort:c.cohort,n:c.prices.length,avg:avg,min:min,max:max};
+  }).sort(function(a,b){return a.cohort.localeCompare(b.cohort);});
+  var sumTbl='<div style="margin-bottom:14px;"><div style="font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.15em;margin-bottom:6px;">Cohort Summary &middot; '+sourceCounts.column+' from build column &middot; '+sourceCounts.notes+' from notes</div>'+
+    '<table class="lh-table"><thead><tr><th>Cohort</th><th>VINs</th><th>Avg MSRP</th><th>Min</th><th>Max</th></tr></thead><tbody>';
+  summary.forEach(function(s){
+    sumTbl+='<tr><td style="font-family:var(--mono);font-size:11px;">'+s.cohort+'</td>'+
+      '<td>'+s.n+'</td>'+
+      '<td style="color:var(--gold2);">$'+s.avg.toLocaleString()+'</td>'+
+      '<td style="color:var(--muted);">$'+s.min.toLocaleString()+'</td>'+
+      '<td style="color:var(--muted);">$'+s.max.toLocaleString()+'</td></tr>';
+  });
+  sumTbl+='</tbody></table></div>';
+  // Detail table top 10
+  var top=msrps.slice(0,10);
+  var detTbl='<div style="font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.15em;margin-bottom:6px;">Top 10 By MSRP (loaded-up cars)</div>'+
+    '<table class="lh-table"><thead><tr><th>Year</th><th>VIN</th><th>Cohort</th><th>MSRP</th></tr></thead><tbody>';
+  top.forEach(function(r){
+    detTbl+='<tr>'+
+      '<td>'+(r.year||'--')+'</td>'+
+      '<td style="font-family:var(--mono);font-size:10px;">'+r.vin.slice(-8)+(r.is_target?' <span class="flag fb" style="font-size:8px;">T</span>':'')+'</td>'+
+      '<td style="font-family:var(--mono);font-size:10px;color:var(--muted);">'+(r.cohort||'--')+'</td>'+
+      '<td style="color:var(--gold2);font-weight:500;">$'+r.msrp.toLocaleString()+'</td>'+
+    '</tr>';
+  });
+  detTbl+='</tbody></table>';
+  el.innerHTML=sumTbl+detTbl;
 }
 
 // ── ADD LISTING MODULE ────────────────────────────────────
@@ -2731,6 +3118,7 @@ function saveNewListing(){
   if(!year){alErr('Year is required.');return;}
   if(!price){alErr('Price is required.');return;}
   if(miles===null){alErr('Miles is required.');return;}
+  if(url&&!/^https?:\/\/\S+\.\S+/i.test(url)){alErr('URL must start with http:// or https://');return;}
   // Soft warning: target window is 2017–2020
   var inWindow=(year>=2017&&year<=2020);
   if(isTgt&&!inWindow&&!confirm('Warning: '+year+' is outside the 2017–2020 target acquisition window. Mark as Target anyway?'))return;
@@ -2755,8 +3143,10 @@ function saveNewListing(){
   var err=document.getElementById('al-err');if(err){err.textContent='';err.classList.remove('show');}
 
   // Upload photo if provided — non-blocking, save continues on failure
+  // Normalize extension by MIME type (filename extension may be missing/wrong)
+  var EXT_MAP={'image/png':'png','image/jpeg':'jpg','image/jpg':'jpg','image/gif':'gif','image/webp':'webp','image/heic':'heic','image/heif':'heif'};
   var photoPromise=photoFile
-    ? qs('photos/'+vin+'_'+Date.now()+'.'+((photoFile.name.split('.').pop())||'jpg'),photoFile).catch(function(e){
+    ? qs('photos/'+vin+'_'+Date.now()+'.'+(EXT_MAP[(photoFile.type||'').toLowerCase()]||'jpg'),photoFile).catch(function(e){
         console.warn('Photo upload failed, continuing without image:',e);
         return null;
       })
@@ -3059,7 +3449,7 @@ function renderProspect(){
   // Listing history
   var hw=document.getElementById('prospect-history-wrap');
   if(hw){
-    var notesCnt=(G.notes&&G.notes[v.vin]?G.notes[v.vin].length:0);
+    var notesCnt=(G.notesByVin&&G.notesByVin[v.vin]?G.notesByVin[v.vin].length:0);
     hw.innerHTML=
       '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">'+
         '<div style="font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;">Notes</div>'+
@@ -3151,12 +3541,26 @@ function loadAll(){
     var prices=activeLH.filter(function(l){return l.price;}).map(function(l){return l.price;});
     var avg=prices.length?Math.round(prices.reduce(function(a,b){return a+b;},0)/prices.length):null;
 
+    // Compute avg DOM across active marketplace listings
+    // Prefer platform-tracked `dom` field; fall back to first_seen calculation
+    var nowMs=Date.now();
+    var domDays=Object.values(lhMap).map(function(l){
+      if(l.dom!=null&&!isNaN(Number(l.dom)))return Math.max(0,Number(l.dom));
+      if(l.first_seen){
+        var calc=Math.round((nowMs-new Date(l.first_seen))/86400000);
+        if(!isNaN(calc)&&calc>=0)return calc;
+      }
+      return null;
+    }).filter(function(d){return d!==null;});
+    var avgDom=domDays.length?Math.round(domDays.reduce(function(a,b){return a+b;},0)/domDays.length):null;
+
     // KPIs
     set('mast-count',Number(vehicles.length).toLocaleString());
     set('kpi-active',Object.keys(lhMap).length);
     set('kpi-targets',targetV.length);
     set('kpi-total',Number(vehicles.length).toLocaleString());
-    set('dash-gi',giN);
+    set('dash-avg-dom',avgDom!==null?avgDom+(avgDom===1?' day':' days'):'--');
+    set('dash-avg-dom-sub',domDays.length?domDays.length+' active listings':'No active listings');
     set('dash-avg',avg?fP(avg):'--');
     set('dash-sum',Object.keys(lhMap).length+' active listings \u00b7 market trending down');
     set('market-pip',Object.keys(lhMap).length);
@@ -3165,7 +3569,7 @@ function loadAll(){
     set('ak-total',Number(vehicles.length).toLocaleString());
     set('ak-active',Object.keys(lhMap).length);
     set('ak-targets',targetV.length);
-    set('ak-gi',giN);
+    set('ak-avg-dom',avgDom!==null?avgDom+(avgDom===1?' day':' days'):'--');
     set('ak-split',s65n+' S65 \u00b7 '+s600n+' S600');
 
     buildChanged(Object.values(lhMap),allLH);
@@ -3267,6 +3671,7 @@ function loadAll(){
     renderColorBars(vehicles);
     renderDOMTable(Object.values(lhMap));
     renderPriceDrops(vehicles,allLH);
+    renderMSRP(vehicles);
     renderPriceHistory();
     renderCohortTable(vehicles,mkt,lhMap);
     renderBuildRarity(vehicles);
@@ -3539,6 +3944,7 @@ document.addEventListener('keydown',function(e){
 
 loadAll();
 renderVideos();
+diaryRender();
 </script>
 </body>
 </html>
