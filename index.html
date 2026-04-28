@@ -531,10 +531,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .pd-tag{font-size:.62em;padding:2px 5px;border-radius:3px;font-weight:700;letter-spacing:.3px;white-space:nowrap}
 .pd-tag.drop{background:rgba(76,190,130,.15);color:var(--green)}
 .pd-tag.up{background:rgba(230,160,50,.15);color:var(--amber)}
-.lst-chip{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;padding:2px 7px;border-radius:10px;margin-left:4px;vertical-align:middle;white-space:nowrap}
-.lst-chip.relisted{background:rgba(230,160,50,.18);color:var(--amber);border:1px solid rgba(230,160,50,.35)}
-.lst-chip.new-listing{background:rgba(76,190,130,.15);color:var(--green);border:1px solid rgba(76,190,130,.35)}
-.lst-chip.recent-active{background:rgba(100,150,230,.15);color:var(--blue2);border:1px solid rgba(100,150,230,.35)}
+
 
 /* Price edit pencil button */
 .price-edit{background:transparent;border:none;color:var(--dim);cursor:pointer;padding:2px 5px;font-size:11px;margin-left:2px;border-radius:4px;line-height:1;vertical-align:middle;transition:all .15s}
@@ -1287,31 +1284,6 @@ function renderPriceWithDelta(cur,cls,extraStyle){
 
 // ── RELIST CHIP ───────────────────────────────────────────
 // Same-seller with >30d gap → Relisted. Different seller with prior <90d → Recently Active.
-var RELIST_GAP_DAYS    = 30;   // days gap before same-seller is flagged Relisted
-var RECENT_ACTIVE_DAYS = 90;   // days window for "Recently Active" badge
-function relistChip(vin,cur){
-  if(!cur)return '';
-  var vinRows=(G.lhAll||[]).filter(function(l){return l.vin===vin && l.id!==cur.id;});
-  if(!vinRows.length)return '';
-  var curFirst=cur.first_seen?new Date(cur.first_seen):new Date();
-  var priorSame=vinRows.filter(function(l){return l.seller_name===cur.seller_name;});
-  var gapped=priorSame.some(function(l){
-    var ls=l.last_seen?new Date(l.last_seen):new Date(0);
-    return (curFirst-ls) > RELIST_GAP_DAYS*86400000;
-  });
-  if(gapped)return '<span class="lst-chip relisted">Relisted</span>';
-  var priorOther=vinRows.filter(function(l){return l.seller_name && l.seller_name!==cur.seller_name;});
-  if(priorOther.length){
-    var now=new Date();
-    var recent=priorOther.some(function(l){
-      var ls=l.last_seen?new Date(l.last_seen):new Date(0);
-      return (now-ls) < RECENT_ACTIVE_DAYS*86400000;
-    });
-    return '<span class="lst-chip new-listing">New Listing</span>'+
-      (recent?'<span class="lst-chip recent-active">Recently Active</span>':'');
-  }
-  return '';
-}
 
 // ── NOTES MODULE ──────────────────────────────────────────
 var NS={vin:null,pendingFile:null,saving:false};
@@ -1998,7 +1970,6 @@ function renderCompact(v,vm,lh){
   var owners=vm?fN(vm.total_owners):'--';
   var loc=(lh&&lh.state)?lh.state:(v.last_title_state||'--');
   var active=!!G.l[v.vin];
-  var chip=active?relistChip(v.vin,lh):'';
   // Days-on-market — rendered in card body, not on image. Always live-compute
   // (today − first_seen). Stored lh.dom is a stale snapshot for active rows.
   var domBlock='';
@@ -2028,7 +1999,7 @@ function renderCompact(v,vm,lh){
     '</div>'+
     '<div class="lc-body">'+
       '<div class="title-row">'+
-        '<div class="lc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
+        '<div class="lc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+'</div>'+
         '<div style="display:flex;align-items:center;gap:6px;">'+domBlock+notesPill(v.vin)+'</div>'+
       '</div>'+
       '<div class="lc-meta">'+esc(v.vin)+' &middot; '+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?formatColor(b.paint_name)+' &middot; ':'';})()+esc(loc)+(lh&&lh.seller_name?' &middot; '+esc(lh.seller_name):'')+'</div>'+
@@ -2058,7 +2029,6 @@ function renderTarget(v,vm,lh){
   var owners=vm?fN(vm.total_owners):'--';
   var loc=v.last_title_state||(lh&&lh.state)||'--';
   var active=!!G.l[v.vin];
-  var chip=active?relistChip(v.vin,lh):'';
   var priceColor=lh&&lh.price&&lh.price<=40000?'var(--green)':'var(--gold2)';
   var priceHTML=lh
     ? renderPriceWithDelta(lh,'tc-sv','color:'+priceColor+';')
@@ -2081,7 +2051,7 @@ function renderTarget(v,vm,lh){
     '</div>'+
     '<div class="tc-body">'+
       '<div class="title-row">'+
-        '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
+        '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+'</div>'+
         notesPill(v.vin)+
       '</div>'+
       '<div class="tc-sub">'+v.vin+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?' &middot; '+formatColor(b.paint_name):'';})()+'</div>'+
