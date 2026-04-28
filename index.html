@@ -27,6 +27,9 @@ html{background:var(--bg)}
 body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% -5%,rgba(122,167,220,.07),transparent 55%),#07090f;color:var(--ink);min-height:100vh;overflow-x:hidden;overflow-x:clip}
 /* Defensive kill-switch: hide legacy pill markup if rendered from a cached build */
 .lst-chip{display:none !important}
+.lc-dom{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--muted);white-space:nowrap}
+.lc-dom-edit{background:transparent;border:none;color:var(--dim);cursor:pointer;font-size:11px;padding:1px 3px;line-height:1;opacity:.7;transition:opacity .15s}
+.lc-dom-edit:hover{opacity:1;color:var(--blue2)}
 
 /* ── MASTHEAD ── */
 .sticky-header{position:sticky;top:0;z-index:200;background:var(--bg);}
@@ -1057,6 +1060,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
       </div>
       <label style="margin-top:4px;">Listing URL</label>
       <input type="text" id="al-url" placeholder="https://..." style="width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;">
+      <label style="margin-top:4px;">Initial Listing Date <span style="color:var(--dim);font-weight:400;">(when the seller first posted it)</span></label>
+      <input type="date" id="al-first-seen" style="width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;">
       <label style="margin-top:4px;">Car Photo <span style="color:var(--dim);font-weight:400;">(optional)</span></label>
       <div style="display:flex;gap:8px;align-items:center;">
         <input type="file" id="al-photo-input" accept="image/*" style="display:none;" onchange="alPhotoChange()">
@@ -1777,7 +1782,6 @@ function ph(year,trim,vin){
 // Car flags
 function flags(v,vm){
   var f=[];
-  if(vm&&vm.curr_odo&&vm.curr_odo>=70000&&vm.curr_odo<=100000)f.push({c:'fn',l:'GI Zone'});
   if(vm&&(vm.salvage===true||(typeof vm.salvage==='string'&&vm.salvage.toLowerCase()==='yes')))f.push({c:'fr',l:'SALVAGE'});
   if(vm&&(vm.theft_recovery===true||(typeof vm.theft_recovery==='string'&&vm.theft_recovery.toLowerCase()==='yes')))f.push({c:'fr',l:'THEFT'});
   if(vm&&typeof vm.accident_count==='number'&&vm.accident_count>0)f.push({c:'fa',l:'⚠ '+vm.accident_count+' Accident'+(vm.accident_count>1?'s':'')});
@@ -1974,6 +1978,17 @@ function renderCompact(v,vm,lh){
   var owners=vm?fN(vm.total_owners):'--';
   var loc=(lh&&lh.state)?lh.state:(v.last_title_state||'--');
   var active=!!G.l[v.vin];
+  // Days-on-market — live computed from first_seen. Editable via calendar pencil.
+  var domBlock='';
+  if(active&&lh&&lh.first_seen){
+    var calc=Math.round((new Date()-new Date(lh.first_seen))/86400000);
+    if(!isNaN(calc)&&calc>=0){
+      domBlock='<span style="display:inline-flex;align-items:center;gap:3px;">'+
+        '<span class="lc-dom">'+calc+' Day'+(calc===1?'':'s')+'</span>'+
+        '<button class="lc-dom-edit" onclick="openFirstSeenEdit(\''+v.vin+'\')" title="Edit initial listing date" aria-label="Edit initial listing date for '+v.vin+'">&#128197;</button>'+
+      '</span>';
+    }
+  }
   return '<div class="lc">'+
     '<div class="lc-img hs-wrap">'+
     '<div class="hs-img-panel" style="position:relative;height:100%;">'+vehicleImage(v)+
@@ -1992,7 +2007,7 @@ function renderCompact(v,vm,lh){
     '<div class="lc-body">'+
       '<div class="title-row">'+
         '<div class="lc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+'</div>'+
-        notesPill(v.vin)+
+        '<div style="display:flex;align-items:center;gap:6px;">'+domBlock+notesPill(v.vin)+'</div>'+
       '</div>'+
       '<div class="lc-meta">'+esc(v.vin)+' &middot; '+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?formatColor(b.paint_name)+' &middot; ':'';})()+esc(loc)+(lh&&lh.seller_name?' &middot; '+esc(lh.seller_name):'')+'</div>'+
       '<div class="lc-flags">'+flags(v,vm)+'</div>'+equipChips(v.vin)+renderDocLinks(v.vin)+
@@ -2233,6 +2248,34 @@ function saveListingUrl(vin,ctx){
       cancelUrlEdit(vin,ctx);
       renderTargets();
       renderMkt();
+      renderDashListings();
+    })
+    .catch(function(err){alert('Save failed: '+err);});
+}
+
+function openFirstSeenEdit(vin){
+  if(navigator.vibrate)navigator.vibrate(10);
+  var lh=G.l&&G.l[vin];
+  if(!lh){alert('No active listing row for '+vin+'.');return;}
+  var current=lh.first_seen?lh.first_seen.slice(0,10):new Date().toISOString().slice(0,10);
+  var input=prompt('Initial Listing Date for '+vin+'\n(YYYY-MM-DD — when the seller first posted it)',current);
+  if(input===null)return;
+  input=String(input).trim();
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(input)){alert('Date must be YYYY-MM-DD.');return;}
+  var d=new Date(input+'T00:00:00');
+  if(isNaN(d.getTime())){alert('Invalid date.');return;}
+  var todayStr=new Date().toISOString().slice(0,10);
+  if(input>todayStr){alert('Initial listing date cannot be in the future.');return;}
+  qw('listing_history?id=eq.'+lh.id,'PATCH',{first_seen:input})
+    .then(function(){
+      lh.first_seen=input;
+      if(G.lhAll){
+        for(var i=0;i<G.lhAll.length;i++){
+          if(G.lhAll[i].id===lh.id){G.lhAll[i].first_seen=input;break;}
+        }
+      }
+      renderMkt();
+      renderTargets();
       renderDashListings();
     })
     .catch(function(err){alert('Save failed: '+err);});
@@ -3000,6 +3043,7 @@ function openAddListing(){
   ['al-vin','al-price','al-miles','al-seller','al-platform','al-city','al-state','al-url','al-owners','al-accidents','al-title-state'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.value='';
   });
+  var fs=document.getElementById('al-first-seen');if(fs)fs.value=new Date().toISOString().slice(0,10);
   var pi=document.getElementById('al-photo-input');if(pi)pi.value='';
   document.getElementById('al-photo-name').textContent='';
   document.getElementById('al-photo-preview').style.display='none';
@@ -3115,6 +3159,7 @@ function saveNewListing(){
   var accidents=parseInt(document.getElementById('al-accidents').value);
   if(isNaN(accidents))accidents=null;
   var titleState=document.getElementById('al-title-state').value.trim()||state||null;
+  var firstSeen=(document.getElementById('al-first-seen')||{}).value||null;
   var isFE=document.getElementById('al-final-edition').checked;
   var isTgt=document.getElementById('al-is-target').checked;
   if(vin.length!==17){alErr('Invalid VIN.');return;}
@@ -3122,6 +3167,9 @@ function saveNewListing(){
   if(!price){alErr('Price is required.');return;}
   if(miles===null){alErr('Miles is required.');return;}
   if(url&&!/^https?:\/\/\S+\.\S+/i.test(url)){alErr('URL must start with http:// or https://');return;}
+  if(!firstSeen){alErr('Initial Listing Date is required.');return;}
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(firstSeen)){alErr('Initial Listing Date must be YYYY-MM-DD.');return;}
+  if(firstSeen>new Date().toISOString().slice(0,10)){alErr('Initial Listing Date cannot be in the future.');return;}
   // Re-validate photo (defensive: catches programmatic file drops that bypass alPhotoChange)
   var photoFileEarly=document.getElementById('al-photo-input').files[0]||null;
   if(photoFileEarly){
@@ -3142,15 +3190,15 @@ function saveNewListing(){
         return;
       }
     }
-    proceedSaveNewListing(vin,year,trim,price,miles,seller,platform,city,state,url,owners,accidents,titleState,isFE,isTgt);
+    proceedSaveNewListing(vin,year,trim,price,miles,seller,platform,city,state,url,owners,accidents,titleState,isFE,isTgt,firstSeen);
   }).catch(function(e){
     // If the dup-check fails (network/RLS), still warn but don't block — user can retry
     if(!confirm('Could not verify existing listing status ('+e+'). Save anyway?'))return;
-    proceedSaveNewListing(vin,year,trim,price,miles,seller,platform,city,state,url,owners,accidents,titleState,isFE,isTgt);
+    proceedSaveNewListing(vin,year,trim,price,miles,seller,platform,city,state,url,owners,accidents,titleState,isFE,isTgt,firstSeen);
   });
 }
 
-function proceedSaveNewListing(vin,year,trim,price,miles,seller,platform,city,state,url,owners,accidents,titleState,isFE,isTgt){
+function proceedSaveNewListing(vin,year,trim,price,miles,seller,platform,city,state,url,owners,accidents,titleState,isFE,isTgt,firstSeen){
   // Confirmation summary
   var summary='Confirm new listing:\n\n'+
     'VIN: '+vin+'\n'+
@@ -3212,7 +3260,7 @@ function proceedSaveNewListing(vin,year,trim,price,miles,seller,platform,city,st
       vin:vin,price:price,miles:miles,
       seller_name:seller,seller_type:'dealer',
       city:city,state:state,platform:platform,
-      first_seen:today,last_seen:today,
+      first_seen:firstSeen||today,last_seen:today,
       listing_url:url
     });
   })
