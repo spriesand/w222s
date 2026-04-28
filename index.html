@@ -226,12 +226,9 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .lc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.40),transparent 72%)}
 .lc-top{position:absolute;top:8px;left:8px;right:8px;z-index:2;display:flex;justify-content:space-between}
 .lc-active{position:absolute;bottom:8px;left:8px;z-index:2;display:flex;align-items:center;gap:3px;background:rgba(7,9,15,.82);border:1px solid rgba(76,190,130,.22);border-radius:3px;padding:2px 6px;font-family:var(--mono);font-size:11px;color:var(--green)}
-.lc-dom-pill{position:absolute;top:8px;left:50%;transform:translateX(-50%);z-index:3;background:rgba(7,9,15,.92);border:1px solid var(--gold);border-radius:14px;padding:3px 10px;font-family:var(--mono);font-size:11px;font-weight:500;color:var(--gold2);letter-spacing:.05em;box-shadow:0 2px 8px rgba(0,0,0,.4);white-space:nowrap}
-.lc-dom-pill.short{border-color:rgba(76,190,130,.5);color:var(--green)}
-.lc-dom-pill.medium{border-color:rgba(212,136,74,.5);color:var(--amber)}
-.lc-dom-pill.long{border-color:rgba(224,90,90,.5);color:var(--red)}
-/* Inline DOM indicator — sits next to car title in title's own color, no pill */
-.title-dom{font-family:var(--serif);font-size:.7em;font-weight:400;color:inherit;opacity:.55;margin-left:6px;white-space:nowrap}
+.lc-dom{font-family:var(--mono);font-size:13px;font-weight:500;color:var(--ink)}
+.lc-dom-edit{background:transparent;border:none;color:var(--dim);cursor:pointer;font-size:13px;padding:2px 4px;line-height:1;opacity:.7;transition:opacity .15s}
+.lc-dom-edit:hover{opacity:1;color:var(--blue2)}
 .lc-body{padding:10px 11px 12px;flex:1;display:flex;flex-direction:column;gap:7px}
 .lc-title{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);line-height:1.1}
 .lc-meta{font-family:var(--mono);font-size:11px;color:var(--muted);line-height:1.6}
@@ -1062,6 +1059,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
       </div>
       <label style="margin-top:4px;">Listing URL</label>
       <input type="text" id="al-url" placeholder="https://..." style="width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;">
+      <label style="margin-top:4px;">Initial Listing Date <span style="color:var(--dim);font-weight:400;">(when the seller first posted it)</span></label>
+      <input type="date" id="al-first-seen" style="width:100%;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:6px;padding:9px 10px;color:#e8e8f0;font-family:var(--mono);font-size:13px;">
       <label style="margin-top:4px;">Car Photo <span style="color:var(--dim);font-weight:400;">(optional)</span></label>
       <div style="display:flex;gap:8px;align-items:center;">
         <input type="file" id="al-photo-input" accept="image/*" style="display:none;" onchange="alPhotoChange()">
@@ -1102,6 +1101,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   </div>
 </nav>
 <div class="more-drawer" id="more-drawer">
+  <div class="mdr" onclick="goProspect();closeMore();"><span class="mdr-icon">&#11088;</span>Top Prospect</div>
   <div class="mdr" onclick="go('analytics',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128200;</span>Analytics</div>
   <div class="mdr" onclick="go('news',null);loadNews();closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128240;</span>News</div>
   <div class="mdr" onclick="go('videos',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#127909;</span>Videos</div>
@@ -1239,11 +1239,19 @@ function linkify(s){return esc(s).replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" 
 
 // ── PRICE DELTA (CarGurus-style) ──────────────────────────
 // Compares current active row to most recent prior SAME-SELLER row with a different price
+// Normalize seller for comparison: lowercase, trim, collapse whitespace, strip common punctuation.
+// Tolerates "ABC Motors", "abc motors", "ABC Motors.", "ABC  Motors" -> same key.
+function normSeller(s){
+  if(s==null)return '';
+  return String(s).toLowerCase().replace(/[.,;:]+/g,' ').replace(/\s+/g,' ').trim();
+}
 function priceDelta(vin,cur){
   if(!cur||!cur.price)return null;
   if(!cur.seller_name)return null;
+  var curKey=normSeller(cur.seller_name);
+  if(!curKey)return null;
   var rows=(G.lhAll||[]).filter(function(l){
-    return l.vin===vin && l.seller_name===cur.seller_name && l.id!==cur.id && l.price;
+    return l.vin===vin && normSeller(l.seller_name)===curKey && l.id!==cur.id && l.price;
   });
   rows.sort(function(a,b){
     var da=a.first_seen?new Date(a.first_seen):new Date(0);
@@ -1989,13 +1997,17 @@ function renderCompact(v,vm,lh){
   var owners=vm?fN(vm.total_owners):'--';
   var loc=(lh&&lh.state)?lh.state:(v.last_title_state||'--');
   var active=!!G.l[v.vin];
-  // Days listed inline next to title — today - first_seen
-  // No pill UI, no relist/new-listing chips. Plain text in title's color family.
-  var titleDom='';
+  var chip=active?relistChip(v.vin,lh):'';
+  // Days-on-market — rendered in card body, not on image. Always live-compute
+  // (today − first_seen). Stored lh.dom is a stale snapshot for active rows.
+  var domBlock='';
   if(active&&lh&&lh.first_seen){
     var calc=Math.round((new Date()-new Date(lh.first_seen))/86400000);
     if(!isNaN(calc)&&calc>=0){
-      titleDom=' <span class="title-dom">&middot; '+calc+'d listed</span>';
+      domBlock='<span style="display:inline-flex;align-items:center;gap:3px;">'+
+        '<span class="lc-dom">'+calc+' Day'+(calc===1?'':'s')+'</span>'+
+        '<button class="lc-dom-edit" onclick="openFirstSeenEdit(\''+v.vin+'\')" title="Edit initial listing date" aria-label="Edit initial listing date for '+v.vin+'">&#128197;</button>'+
+      '</span>';
     }
   }
   return '<div class="lc">'+
@@ -2015,13 +2027,14 @@ function renderCompact(v,vm,lh){
     '</div>'+
     '<div class="lc-body">'+
       '<div class="title-row">'+
-        '<div class="lc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+titleDom+'</div>'+
+        '<div class="lc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
         notesPill(v.vin)+
       '</div>'+
       '<div class="lc-meta">'+esc(v.vin)+' &middot; '+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?formatColor(b.paint_name)+' &middot; ':'';})()+esc(loc)+(lh&&lh.seller_name?' &middot; '+esc(lh.seller_name):'')+'</div>'+
       '<div class="lc-flags">'+flags(v,vm)+'</div>'+equipChips(v.vin)+renderDocLinks(v.vin)+
       '<div class="lc-row">'+
         priceHTML+priceEditBtn(v.vin,active)+
+        domBlock+
         '<span class="lc-mi">'+miles+'</span>'+
 
       '</div>'+
@@ -2045,14 +2058,7 @@ function renderTarget(v,vm,lh){
   var owners=vm?fN(vm.total_owners):'--';
   var loc=v.last_title_state||(lh&&lh.state)||'--';
   var active=!!G.l[v.vin];
-  // Days listed inline next to title — today - first_seen
-  var titleDom='';
-  if(active&&lh&&lh.first_seen){
-    var calc=Math.round((new Date()-new Date(lh.first_seen))/86400000);
-    if(!isNaN(calc)&&calc>=0){
-      titleDom=' <span class="title-dom">&middot; '+calc+'d listed</span>';
-    }
-  }
+  var chip=active?relistChip(v.vin,lh):'';
   var priceColor=lh&&lh.price&&lh.price<=40000?'var(--green)':'var(--gold2)';
   var priceHTML=lh
     ? renderPriceWithDelta(lh,'tc-sv','color:'+priceColor+';')
@@ -2075,7 +2081,7 @@ function renderTarget(v,vm,lh){
     '</div>'+
     '<div class="tc-body">'+
       '<div class="title-row">'+
-        '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+titleDom+'</div>'+
+        '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+chip+'</div>'+
         notesPill(v.vin)+
       '</div>'+
       '<div class="tc-sub">'+v.vin+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?' &middot; '+formatColor(b.paint_name):'';})()+'</div>'+
@@ -2270,6 +2276,37 @@ function saveListingUrl(vin,ctx){
     .catch(function(err){alert('Save failed: '+err);});
 }
 
+function openFirstSeenEdit(vin){
+  if(navigator.vibrate)navigator.vibrate(10);
+  var lh=G.l&&G.l[vin];
+  if(!lh){alert('No active listing row for '+vin+'.');return;}
+  var current=lh.first_seen?lh.first_seen.slice(0,10):new Date().toISOString().slice(0,10);
+  var input=prompt('Initial Listing Date for '+vin+'\n(YYYY-MM-DD — when the seller first posted it)',current);
+  if(input===null)return; // user cancelled
+  input=String(input).trim();
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(input)){alert('Date must be YYYY-MM-DD.');return;}
+  var d=new Date(input+'T00:00:00');
+  if(isNaN(d.getTime())){alert('Invalid date.');return;}
+  var todayStr=new Date().toISOString().slice(0,10);
+  if(input>todayStr){alert('Initial listing date cannot be in the future.');return;}
+  // Update the active listing_history row's first_seen.
+  // last_seen stays as-is (active rows have it tracked separately).
+  qw('listing_history?id=eq.'+lh.id,'PATCH',{first_seen:input})
+    .then(function(){
+      lh.first_seen=input;
+      // Also update the matching row in G.lhAll so price-history calcs see the change
+      if(G.lhAll){
+        for(var i=0;i<G.lhAll.length;i++){
+          if(G.lhAll[i].id===lh.id){G.lhAll[i].first_seen=input;break;}
+        }
+      }
+      renderMkt();
+      renderTargets();
+      renderDashListings();
+    })
+    .catch(function(err){alert('Save failed: '+err);});
+}
+
 function markInactive(vin){
   if(!confirm('Mark '+vin+' as inactive? It will be removed from active listings.'))return;
   var lh=G.l&&G.l[vin];
@@ -2301,7 +2338,20 @@ function markInactive(vin){
 
 function demoteTarget(vin){
   if(!confirm('Move '+vin+' to Reference? This will set car_status=reference and listing_status=inactive.'))return;
-  qw('vehicles?vin=eq.'+vin,'PATCH',{car_status:'reference',listing_status:'inactive'})
+  var lh=G.l&&G.l[vin];
+  var today=new Date().toISOString().slice(0,10);
+  var p1=qw('vehicles?vin=eq.'+vin,'PATCH',{car_status:'reference',listing_status:'inactive'});
+  // Close the active listing_history row (mirrors markInactive): set last_seen=today and final dom.
+  var p2=Promise.resolve();
+  if(lh){
+    var lhPatch={last_seen:today};
+    if(lh.first_seen){
+      var finalDom=Math.max(0,Math.round((new Date(today)-new Date(lh.first_seen))/86400000));
+      lhPatch.dom=finalDom;
+    }
+    p2=qw('listing_history?id=eq.'+lh.id,'PATCH',lhPatch);
+  }
+  Promise.all([p1,p2])
     .then(function(){
       var v=G.v.find(function(x){return x.vin===vin;});
       if(v){v.car_status='reference';v.listing_status='inactive';}
@@ -2643,8 +2693,15 @@ function nCard(a,fromArchive){
   var d=a.pubDate?new Date(a.pubDate):null;
   var ago=d?Math.round((new Date()-d)/86400000):null;
   var dateStr=ago!==null?(ago===0?'Today':(ago===1?'Yesterday':ago+' days ago')):'';
-  return '<a class="ncard" href="'+a.link+'" target="_blank" rel="noopener">'+'<div class="nthumb">&#128240;</div>'+
-    '<div><div class="nsrc">'+a.source+(fromArchive?' &middot; archive':'')+'</div><div class="ntitle">'+a.title+'</div><div class="ndesc">'+a.description.slice(0,100)+'&hellip;</div>'+(dateStr?'<div class="ndate">'+dateStr+'</div>':'')+'</div></a>';
+  // Validate href: only allow http(s); fall back to '#' otherwise
+  var rawLink=String(a.link||'');
+  var safeHref=/^https?:\/\//i.test(rawLink)?esc(rawLink):'#';
+  var src=esc(a.source||'');
+  var title=esc(a.title||'');
+  var descRaw=String(a.description||'');
+  var desc=esc(descRaw.slice(0,100));
+  return '<a class="ncard" href="'+safeHref+'" target="_blank" rel="noopener">'+'<div class="nthumb">&#128240;</div>'+
+    '<div><div class="nsrc">'+src+(fromArchive?' &middot; archive':'')+'</div><div class="ntitle">'+title+'</div><div class="ndesc">'+desc+'&hellip;</div>'+(dateStr?'<div class="ndate">'+dateStr+'</div>':'')+'</div></a>';
 }
 
 function loadNews(){
@@ -2821,7 +2878,8 @@ function renderDOMTable(lhRows){
   if(!el)return;
   // Targets only: active listings for vehicles with car_status='target'
   var targetVins={};(G.v||[]).forEach(function(v){if(v.car_status==='target')targetVins[v.vin]=true;});
-  // Need first_seen to compute today - first_seen
+  // Active rows must have first_seen — we always live-compute. Stored lh.dom is ignored
+  // because it's a stale snapshot for active listings.
   var actives=lhRows.filter(function(l){
     if(!G.activeSet||!G.activeSet[l.vin]||!targetVins[l.vin])return false;
     return !!l.first_seen;
@@ -2829,7 +2887,6 @@ function renderDOMTable(lhRows){
   if(!actives.length){el.innerHTML='<div class="lh-empty">No active listings with date data.</div>';return;}
   var now=new Date();
   var rows=actives.map(function(l){
-    // Always today - first_seen for consistency with the cards
     var days=Math.max(0,Math.round((now-new Date(l.first_seen))/86400000));
     return {vin:l.vin,seller:l.seller_name||'--',price:l.price,days:days};
   });
@@ -2979,9 +3036,30 @@ function renderMSRP(vehicles){
 }
 
 // ── ADD LISTING MODULE ────────────────────────────────────
+// Allowed photo MIME types and 10 MB cap (matches profile upload guard)
+var AL_PHOTO_MAX=10*1024*1024;
+var AL_PHOTO_MIME={'image/png':1,'image/jpeg':1,'image/jpg':1,'image/gif':1,'image/webp':1,'image/heic':1,'image/heif':1};
 function alPhotoChange(){
-  var f=document.getElementById('al-photo-input').files[0];
+  var input=document.getElementById('al-photo-input');
+  var f=input.files[0];
   if(!f)return;
+  var mime=(f.type||'').toLowerCase();
+  if(!AL_PHOTO_MIME[mime]){
+    alErr('Photo must be PNG, JPEG, GIF, WebP, or HEIC. Got: '+(mime||'unknown'));
+    input.value='';
+    document.getElementById('al-photo-name').textContent='';
+    document.getElementById('al-photo-preview').style.display='none';
+    return;
+  }
+  if(f.size>AL_PHOTO_MAX){
+    alErr('Photo is '+(f.size/1024/1024).toFixed(1)+' MB. Max 10 MB.');
+    input.value='';
+    document.getElementById('al-photo-name').textContent='';
+    document.getElementById('al-photo-preview').style.display='none';
+    return;
+  }
+  // Clear any prior error from a rejected file
+  var err=document.getElementById('al-err');if(err){err.textContent='';err.classList.remove('show');}
   document.getElementById('al-photo-name').textContent=f.name;
   var preview=document.getElementById('al-photo-preview');
   var img=document.getElementById('al-photo-img');
@@ -2994,6 +3072,9 @@ function openAddListing(){
   ['al-vin','al-price','al-miles','al-seller','al-platform','al-city','al-state','al-url','al-owners','al-accidents','al-title-state'].forEach(function(id){
     var el=document.getElementById(id);if(el)el.value='';
   });
+  // Default initial listing date to today; user can change it
+  var fs=document.getElementById('al-first-seen');
+  if(fs)fs.value=new Date().toISOString().slice(0,10);
   var pi=document.getElementById('al-photo-input');if(pi)pi.value='';
   document.getElementById('al-photo-name').textContent='';
   document.getElementById('al-photo-preview').style.display='none';
@@ -3109,6 +3190,7 @@ function saveNewListing(){
   var accidents=parseInt(document.getElementById('al-accidents').value);
   if(isNaN(accidents))accidents=null;
   var titleState=document.getElementById('al-title-state').value.trim()||state||null;
+  var firstSeen=(document.getElementById('al-first-seen')||{}).value||null;
   var isFE=document.getElementById('al-final-edition').checked;
   var isTgt=document.getElementById('al-is-target').checked;
   if(vin.length!==17){alErr('Invalid VIN.');return;}
@@ -3116,16 +3198,49 @@ function saveNewListing(){
   if(!price){alErr('Price is required.');return;}
   if(miles===null){alErr('Miles is required.');return;}
   if(url&&!/^https?:\/\/\S+\.\S+/i.test(url)){alErr('URL must start with http:// or https://');return;}
+  // Validate initial listing date: required, must be YYYY-MM-DD, must not be in the future
+  if(!firstSeen){alErr('Initial Listing Date is required.');return;}
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(firstSeen)){alErr('Initial Listing Date must be YYYY-MM-DD.');return;}
+  var fsDate=new Date(firstSeen+'T00:00:00');
+  if(isNaN(fsDate.getTime())){alErr('Initial Listing Date is invalid.');return;}
+  var todayStr=new Date().toISOString().slice(0,10);
+  if(firstSeen>todayStr){alErr('Initial Listing Date cannot be in the future.');return;}
+  // Re-validate photo (defensive: catches programmatic file drops that bypass alPhotoChange)
+  var photoFileEarly=document.getElementById('al-photo-input').files[0]||null;
+  if(photoFileEarly){
+    var pmime=(photoFileEarly.type||'').toLowerCase();
+    if(!AL_PHOTO_MIME[pmime]){alErr('Photo type not allowed: '+(pmime||'unknown'));return;}
+    if(photoFileEarly.size>AL_PHOTO_MAX){alErr('Photo exceeds 10 MB.');return;}
+  }
   // Soft warning: target window is 2017–2020
   var inWindow=(year>=2017&&year<=2020);
   if(isTgt&&!inWindow&&!confirm('Warning: '+year+' is outside the 2017–2020 target acquisition window. Mark as Target anyway?'))return;
 
+  // Duplicate-active-listing guard: refetch latest listing_status to avoid stale G state.
+  // If vehicle is already active, require explicit override before adding a second active-ish history row.
+  q('vehicles?select=listing_status&vin=eq.'+vin).then(function(rows){
+    var existing=rows&&rows[0];
+    if(existing&&existing.listing_status==='active'){
+      if(!confirm(vin+' already has an active listing in the database.\n\nAdding another row will create a duplicate active record. Continue anyway?')){
+        return;
+      }
+    }
+    proceedSaveNewListing(vin,year,trim,price,miles,seller,platform,city,state,url,owners,accidents,titleState,isFE,isTgt,firstSeen);
+  }).catch(function(e){
+    // If the dup-check fails (network/RLS), still warn but don't block — user can retry
+    if(!confirm('Could not verify existing listing status ('+e+'). Save anyway?'))return;
+    proceedSaveNewListing(vin,year,trim,price,miles,seller,platform,city,state,url,owners,accidents,titleState,isFE,isTgt,firstSeen);
+  });
+}
+
+function proceedSaveNewListing(vin,year,trim,price,miles,seller,platform,city,state,url,owners,accidents,titleState,isFE,isTgt,firstSeen){
   // Confirmation summary
   var summary='Confirm new listing:\n\n'+
     'VIN: '+vin+'\n'+
     'Year/Trim: '+year+' '+trim+'\n'+
     'Price: $'+price.toLocaleString()+'\n'+
     'Miles: '+miles.toLocaleString()+'\n'+
+    'Initial Listed: '+firstSeen+'\n'+
     'Seller: '+(seller||'--')+' · '+(platform||'--')+'\n'+
     'Location: '+(city||'--')+', '+(state||'--')+'\n'+
     'Owners: '+(owners||'--')+' · Accidents: '+(accidents!==null?accidents:'--');
@@ -3181,7 +3296,8 @@ function saveNewListing(){
       vin:vin,price:price,miles:miles,
       seller_name:seller,seller_type:'dealer',
       city:city,state:state,platform:platform,
-      first_seen:today,last_seen:today
+      first_seen:firstSeen||today,last_seen:today,
+      listing_url:url
     });
   })
   .then(function(){
@@ -3538,7 +3654,9 @@ function loadAll(){
     var prices=activeLH.filter(function(l){return l.price;}).map(function(l){return l.price;});
     var avg=prices.length?Math.round(prices.reduce(function(a,b){return a+b;},0)/prices.length):null;
 
-    // Compute avg DOM across active marketplace listings — today - first_seen
+    // Compute avg DOM across active marketplace listings.
+    // Always live-compute (today − first_seen). Stored l.dom is a stale snapshot for
+    // active rows, so we ignore it here.
     var nowMs=Date.now();
     var domDays=Object.values(lhMap).map(function(l){
       if(!l.first_seen)return null;
