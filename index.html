@@ -24,7 +24,7 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{background:var(--bg)}
-body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% -5%,rgba(122,167,220,.07),transparent 55%),#07090f;color:var(--ink);min-height:100vh;overflow-x:clip}
+body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% -5%,rgba(122,167,220,.07),transparent 55%),#07090f;color:var(--ink);min-height:100vh;overflow-x:hidden;overflow-x:clip}
 /* Defensive kill-switch: hide legacy pill markup if rendered from a cached build */
 .lst-chip{display:none !important}
 
@@ -596,7 +596,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <div class="live-badge"><span class="live-dot"></span><span id="mast-count">--</span> VINs</div>
     <button class="mbtn mbtn-prospect" onclick="goProspect()" title="Jump to Top Prospect" aria-label="Jump to Top Prospect">&#11088;</button>
     <button class="mbtn mbtn-diary" onclick="openDiary()" title="Open diary / general notes" aria-label="Open diary">&#128221;</button>
-    <button class="mbtn" onclick="loadAll()" aria-label="Sync data">&#8635; Sync</button>
+    <button class="mbtn" id="sync-btn" onclick="loadAll()" aria-label="Sync data">&#8635; Sync</button>
     <a class="mbtn" href="https://spriesand.github.io/w222playbook/" target="_blank" rel="noopener" aria-label="Open Playbook in new tab">&#128214; Playbook</a>
   </div>
 </header>
@@ -1862,7 +1862,13 @@ var dashCarTimer=null;
 function buildDashCarousel(images){
   var wrap=document.getElementById('dash-gallery-wrap');
   var track=document.getElementById('dash-gallery-track');
-  if(!track||!images.length)return;
+  if(!track)return;
+  // Empty-state: replace stuck "Loading gallery..." with a useful message
+  if(!images||!images.length){
+    track.innerHTML='<div style="flex:0 0 100%;min-width:100%;height:160px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.05em;">No gallery images yet.</div>';
+    if(dashCarTimer){clearInterval(dashCarTimer);dashCarTimer=null;}
+    return;
+  }
   track.innerHTML=images.map(function(url){
     return '<div style="flex:0 0 100%;width:100%;height:160px;position:relative;flex-shrink:0;overflow:hidden;">'+
       '<img src="'+url+'" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;opacity:.92;">'+
@@ -1932,8 +1938,8 @@ function vehicleImage(v){
   var override=G.profileImageByVin&&G.profileImageByVin[v.vin];
   var fallback=ph(v.year,v.trim,v.vin);
   var onerr='this.onerror=null;this.outerHTML='+JSON.stringify(fallback)+';';
-  if(override)return '<img src="'+esc(override)+'" alt="" onerror="'+esc(onerr)+'" style="width:100%;height:100%;object-fit:cover;display:block;">';
-  if(v.image_url)return '<img src="'+esc(v.image_url)+'" alt="" onerror="'+esc(onerr)+'" style="width:100%;height:100%;object-fit:cover;display:block;">';
+  if(override)return '<img src="'+esc(override)+'" alt="" loading="lazy" onerror="'+esc(onerr)+'" style="width:100%;height:100%;object-fit:cover;display:block;">';
+  if(v.image_url)return '<img src="'+esc(v.image_url)+'" alt="" loading="lazy" onerror="'+esc(onerr)+'" style="width:100%;height:100%;object-fit:cover;display:block;">';
   return fallback;
 }
 
@@ -2251,12 +2257,9 @@ function markInactive(vin){
   }
   Promise.all([p1,p2])
     .then(function(){
-      var v=G.v.find(function(x){return x.vin===vin;});
-      if(v)v.listing_status='inactive';
-      delete G.l[vin];
-      delete G.activeSet[vin];
-      renderMkt();
-      renderDashListings();
+      // Full reload so KPIs, analytics tables, and price drops all reflect the close.
+      // Partial re-renders left analytics stale.
+      loadAll();
     })
     .catch(function(err){alert('Failed: '+err);});
 }
@@ -2278,15 +2281,9 @@ function demoteTarget(vin){
   }
   Promise.all([p1,p2])
     .then(function(){
-      var v=G.v.find(function(x){return x.vin===vin;});
-      if(v){v.car_status='reference';v.listing_status='inactive';}
-      G.sortedT=(G.sortedT||[]).filter(function(x){return x.vin!==vin;});
-      delete G.l[vin];
-      delete G.activeSet[vin];
-      buildTgtFilters();
-      renderTargets();
-      renderMkt();
-      renderDashListings();
+      // Full reload so KPIs, target filters, analytics tables, and price drops
+      // all reflect the demotion. Partial re-renders left analytics stale.
+      loadAll();
     })
     .catch(function(err){alert('Demote failed: '+err);});
 }
@@ -2856,13 +2853,19 @@ function renderPriceDrops(vehicles,lhRows){
     var entries=byVin[vin].filter(function(e){return e.date;});
     entries.sort(function(a,b){return new Date(a.date)-new Date(b.date);});
     if(entries.length<2)return;
-    var first=entries[0].price,last=entries[entries.length-1].price;
-    if(last<first){
-      var drop=first-last;
-      var pct=Math.round(drop/first*100);
-      var v=vehicles.find(function(x){return x.vin===vin;});
-      drops.push({vin:vin,year:v?v.year:'--',trim:v?v.trim:'--',first:first,last:last,drop:drop,pct:pct});
-    }
+    // Use peak-to-current rather than first-vs-last so a $120k → $110k → $115k
+    // pattern still surfaces the real drop. We compare the highest historical
+    // ask to the most recent ask. One drop per VIN, the max realized.
+    var current=entries[entries.length-1].price;
+    var peak=current,peakDate=entries[entries.length-1].date;
+    entries.forEach(function(e){
+      if(e.price>peak){peak=e.price;peakDate=e.date;}
+    });
+    if(peak<=current)return; // no drop from any prior peak
+    var drop=peak-current;
+    var pct=Math.round(drop/peak*100);
+    var v=vehicles.find(function(x){return x.vin===vin;});
+    drops.push({vin:vin,year:v?v.year:'--',trim:v?v.trim:'--',first:peak,last:current,drop:drop,pct:pct});
   });
   if(!drops.length){
     el.innerHTML='<div class="lh-empty">No confirmed price reductions in listing history.</div>';
@@ -3398,7 +3401,7 @@ function renderProspect(){
       {label:'Exterior',value:ext,sub:'Paint Code 890U'},
       {label:'Interior',value:interior,sub:'Designo Silk Beige'},
       {label:'Owners',value:vm.total_owners?fN(vm.total_owners)+' title holder'+(vm.total_owners>1?'s':''):'--',sub:'MB Financial + personal lessee'},
-      {label:'Production Date',value:b.production_date||'--',sub:'Sindelfingen · Order '+esc(b.order_number||'')},
+      {label:'Production Date',value:b.production_date||'--',sub:'Sindelfingen · Order '+(b.order_number||'')},
       {label:'Accidents',value:vm.accident_count?'Reported':'None reported',sub:vm.accident_count?'See notes':'Clean record'},
       {label:'Key Packages',value:pkgs,sub:'From SA code build data'},
       {label:'Original MSRP',value:b.msrp_original?fP(b.msrp_original):'--',sub:'vs. ~$40K target — 83% decline'},
@@ -3507,6 +3510,15 @@ function loadAll(){
   G.loading=true;
   var strip=document.getElementById('changed-strip');
   if(strip)strip.innerHTML='<span class="ch-item" style="color:var(--dim);">&#9679; Syncing&hellip;</span>';
+  // Visual feedback on the Sync button: spin + label swap, restored when loadAll resolves.
+  var syncBtn=document.getElementById('sync-btn');
+  if(syncBtn){
+    syncBtn.dataset.originalText=syncBtn.dataset.originalText||syncBtn.innerHTML;
+    syncBtn.innerHTML='&#8635; Syncing\u2026';
+    syncBtn.disabled=true;
+    syncBtn.style.opacity='.6';
+    syncBtn.setAttribute('aria-busy','true');
+  }
 
   Promise.all([
     q('vehicles?select=*&order=year.desc&limit=2000'),
@@ -3701,12 +3713,23 @@ function loadAll(){
     renderBuildRarity(vehicles);
     renderProductionTimeline(vehicles);
     G.loading=false;
+    restoreSyncBtn();
   }).catch(function(e){
     G.loading=false;
+    restoreSyncBtn();
     console.error('Load error:',e);
     var strip=document.getElementById('changed-strip');
     if(strip)strip.innerHTML='<span class="ch-item" style="color:var(--red);">&#9888; Load failed — '+(e&&e.message?e.message:String(e))+' (check console)</span>';
   });
+}
+
+function restoreSyncBtn(){
+  var b=document.getElementById('sync-btn');
+  if(!b)return;
+  if(b.dataset.originalText)b.innerHTML=b.dataset.originalText;
+  b.disabled=false;
+  b.style.opacity='';
+  b.removeAttribute('aria-busy');
 }
 
 
