@@ -692,8 +692,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
         <button onclick="dashCarouselPrev()" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#8592;</button>
         <button onclick="dashCarouselNext()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#8594;</button>
       </div>
-      <!-- Market chart (flex:1 absorbs leftover height so right col bottom aligns with playbook) -->
-      <div class="card soft chart-box" style="flex:1;min-height:280px;display:flex;flex-direction:column;">
+      <!-- Market chart (flex:1 with low min so it shrinks to align right-col bottom with playbook bottom) -->
+      <div class="card soft chart-box" style="flex:1;min-height:0;display:flex;flex-direction:column;">
         <p style="font-family:var(--serif);font-style:italic;font-size:14px;color:rgba(255,255,255,.85);margin-bottom:7px;">Market Update</p>
         <div style="font-family:var(--serif);font-size:16px;color:var(--ink);margin-bottom:2px;">Avg Asking Price &mdash; S65 AMG</div>
         <div style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:8px;">Bear trend &minus;13%/yr &middot; thesis intact</div>
@@ -2915,47 +2915,109 @@ function filterGallery(f,btn){
 }
 
 // ── NEWS FEED ─────────────────────────────────────────────
-// Multi-source RSS aggregator via rss2json proxy
+// Multi-source RSS aggregator with proxy fallback chain
 // Sources: forum subforums + Reddit + Google News (chip-filterable)
+// Tries allorigins (raw XML) → corsproxy.io (raw XML) → rss2json (JSON) in order; first non-empty wins.
 var NEWS_FEEDS=[
   {source:'MBWorld',     chip:'Forum',  icon:'\u{1F3CE}',  url:'https://mbworld.org/forums/s63-amg-s63-amg-4matic-s65-amg-w222-v222-192/index.rss'},
   {source:'BenzWorld',   chip:'Forum',  icon:'\u{1F697}',  url:'https://www.benzworld.org/forums/w222-s-class.214/index.rss'},
   {source:'Reddit',      chip:'Reddit', icon:'\u{1F4AC}',  url:'https://www.reddit.com/r/mercedes_benz/search.rss?q=s65&restrict_sr=1&sort=new'},
   {source:'Google News', chip:'News',   icon:'\u{1F4F0}',  url:'https://news.google.com/rss/search?q=mercedes+s65+amg&hl=en-US&gl=US&ceid=US:en'}
 ];
-var RSS2JSON='https://api.rss2json.com/v1/api.rss?rss_url=';
+var RSS_PROXIES=[
+  function(url){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(url);},
+  function(url){return 'https://corsproxy.io/?'+encodeURIComponent(url);},
+  function(url){return 'https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(url);}
+];
 var newsLoaded=false;
+var newsInFlight=false;
 
-// Fetch one feed with 15s timeout, return [] on any failure (graceful degradation)
+function stripHtml(s){
+  return String(s||'').replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
+}
+
+// Parse raw RSS/Atom XML text into normalized item array
+function parseXmlFeed(xmlText,feed){
+  var xml;
+  try{xml=new DOMParser().parseFromString(xmlText,'text/xml');}catch(e){return [];}
+  if(xml.querySelector('parsererror'))return [];
+  var nodes=Array.prototype.slice.call(xml.querySelectorAll('item, entry'));
+  return nodes.map(function(n){
+    var titleEl=n.querySelector('title');
+    var title=titleEl?titleEl.textContent:'';
+    var linkEl=n.querySelector('link');
+    var link='';
+    if(linkEl){
+      // Atom uses <link href="..."/>; RSS uses <link>...</link>
+      link=linkEl.getAttribute('href')||linkEl.textContent||'';
+    }
+    var dateEl=n.querySelector('pubDate, published, updated');
+    var date=dateEl?dateEl.textContent:'';
+    var descEl=n.querySelector('description, summary, content');
+    var desc=descEl?descEl.textContent:'';
+    // Replace dashes with slashes for Safari date-parsing compat
+    var dateForParse=date.replace(/-/g,'/');
+    var ts=date?new Date(dateForParse).getTime():0;
+    if(isNaN(ts))ts=date?new Date(date).getTime():0;
+    return {
+      source:feed.source,chip:feed.chip,icon:feed.icon,
+      title:stripHtml(title),
+      link:stripHtml(link),
+      pubDate:date,
+      description:stripHtml(desc).slice(0,140),
+      ts:isNaN(ts)?0:ts
+    };
+  }).filter(function(a){return a.title&&a.link;});
+}
+
+// Normalize rss2json's JSON shape into the same item structure
+function normalizeRss2Json(data,feed){
+  if(!data||!Array.isArray(data.items))return [];
+  return data.items.map(function(item){
+    var ts=item.pubDate?new Date(item.pubDate).getTime():0;
+    return {
+      source:feed.source,chip:feed.chip,icon:feed.icon,
+      title:String(item.title||'').trim(),
+      link:String(item.link||'').trim(),
+      pubDate:item.pubDate||'',
+      description:stripHtml(item.description||item.content||'').slice(0,140),
+      ts:isNaN(ts)?0:ts
+    };
+  }).filter(function(a){return a.title&&a.link;});
+}
+
+// Try proxies in order; first non-empty result wins. 12s timeout per attempt.
 function fetchOneFeed(feed){
-  var ctrl=(typeof AbortController!=='undefined')?new AbortController():null;
-  var timer=ctrl?setTimeout(function(){ctrl.abort();},15000):null;
-  return fetch(RSS2JSON+encodeURIComponent(feed.url),{cache:'no-store',signal:ctrl?ctrl.signal:undefined})
-    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
-    .then(function(data){
-      if(timer)clearTimeout(timer);
-      if(!data||data.status!=='ok'||!Array.isArray(data.items)){
-        console.warn('Feed '+feed.source+' returned no items. Status:',data&&data.status,'Message:',data&&data.message);
-        return [];
-      }
-      return data.items.map(function(item){
-        var rawDesc=String(item.description||item.content||'').replace(/<[^>]+>/g,'').trim();
-        var ts=item.pubDate?new Date(item.pubDate).getTime():0;
-        return{
-          source:feed.source,chip:feed.chip,icon:feed.icon,
-          title:String(item.title||'').trim(),
-          link:String(item.link||''),
-          pubDate:item.pubDate||'',
-          description:rawDesc.slice(0,140),
-          ts:isNaN(ts)?0:ts
-        };
-      }).filter(function(a){return a.title&&a.link;});
-    })
-    .catch(function(e){
-      if(timer)clearTimeout(timer);
-      console.warn('Feed failed:',feed.source,e&&e.message?e.message:e);
-      return [];
-    });
+  function tryProxy(i){
+    if(i>=RSS_PROXIES.length)return Promise.resolve([]);
+    var url=RSS_PROXIES[i](feed.url);
+    var ctrl=(typeof AbortController!=='undefined')?new AbortController():null;
+    var timer=ctrl?setTimeout(function(){ctrl.abort();},12000):null;
+    return fetch(url,{cache:'no-store',signal:ctrl?ctrl.signal:undefined})
+      .then(function(r){
+        if(timer)clearTimeout(timer);
+        if(!r.ok)throw new Error('HTTP '+r.status);
+        return r.text();
+      })
+      .then(function(text){
+        // rss2json returns JSON; other proxies return raw RSS/Atom XML
+        if(text.trim().charAt(0)==='{'){
+          var data;
+          try{data=JSON.parse(text);}catch(e){return [];}
+          return normalizeRss2Json(data,feed);
+        }
+        return parseXmlFeed(text,feed);
+      })
+      .then(function(items){
+        return items.length?items:tryProxy(i+1);
+      })
+      .catch(function(e){
+        if(timer)clearTimeout(timer);
+        console.warn('Feed proxy '+i+' failed for '+feed.source+':',e&&e.message?e.message:e);
+        return tryProxy(i+1);
+      });
+  }
+  return tryProxy(0);
 }
 
 function nCard(a){
@@ -2995,7 +3057,9 @@ function filterNews(chip,btn){
 }
 
 function loadNews(){
-  if(newsLoaded)return;
+  if(newsInFlight)return;
+  if(newsLoaded&&(G.newsItems||[]).length)return;
+  newsInFlight=true;
   newsLoaded=true;
   G.newsFilter=G.newsFilter||'all';
   var CACHE_KEY='s65_news_v2',TIME_KEY='s65_news_v2_time';
@@ -3010,6 +3074,7 @@ function loadNews(){
       G.newsItems=JSON.parse(cached);
       renderNewsFeed();
       if(statusEl)statusEl.textContent='Cached '+Math.round((Date.now()-cacheTime)/3600000)+'h ago';
+      newsInFlight=false;
       return;
     }
   }catch(e){}
@@ -3034,6 +3099,7 @@ function loadNews(){
       if(all.length)statusEl.textContent='Updated just now \u00B7 '+all.length+' items';
       else statusEl.textContent='No items returned (check console for details)';
     }
+    newsInFlight=false;
   }).catch(function(e){
     console.error('News load error:',e);
     // Try to fall back to stale cache
@@ -3043,10 +3109,12 @@ function loadNews(){
         G.newsItems=JSON.parse(staleCached);
         renderNewsFeed();
         if(statusEl)statusEl.textContent='Live fetch failed — showing cached items';
+        newsInFlight=false;
         return;
       }
     }catch(_e){}
     newsLoaded=false; // allow retry on next visit
+    newsInFlight=false;
     if(statusEl)statusEl.textContent='Load failed: '+(e&&e.message?e.message:e)+' (tap News tab again to retry)';
   });
 }
