@@ -299,9 +299,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .ned-lbl{font-family:var(--mono);font-size:11px;color:var(--blue2);text-transform:uppercase;letter-spacing:.14em;margin-bottom:5px}
 .ned-txt{font-family:var(--serif);font-size:16px;line-height:1.55;color:var(--ink2)}
 .ned-txt strong{color:var(--ink)}
-.news-lay{display:grid;grid-template-columns:1.1fr 1fr;gap:14px;align-items:start}
-.news-col{display:flex;flex-direction:column;gap:8px}
-.ncol-lbl{font-family:var(--mono);font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.18em;padding-bottom:7px;border-bottom:1px solid var(--line);margin-bottom:2px}
+.ncol-lbl{font-family:var(--mono);font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.18em;padding-bottom:7px;border-bottom:1px solid var(--line);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:10px}
 .ncard{display:flex;gap:10px;padding:11px;text-decoration:none;color:inherit;transition:border-color .15s;border-radius:var(--r);border:1px solid var(--line);background:linear-gradient(160deg,var(--panel2),var(--panel))}
 .ncard:hover{border-color:var(--line2)}
 .nthumb{width:64px;height:48px;border-radius:6px;flex-shrink:0;overflow:hidden;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:19px}
@@ -310,13 +308,20 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .ntitle{font-family:var(--serif);font-size:14px;line-height:1.3;color:var(--ink);margin-bottom:2px}
 .ndesc{font-size:11px;color:var(--muted);line-height:1.5}
 .ndate{font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:3px}
-/* RSS live feed */
-.rss-col{display:flex;flex-direction:column;gap:8px}
-.rss-status{font-family:var(--mono);font-size:12px;color:var(--dim);padding:6px 0}
-.rss-archive-btn{font-family:var(--mono);font-size:12px;padding:5px 12px;border-radius:20px;border:1px solid var(--line2);color:var(--muted);background:none;cursor:pointer;transition:all .15s;margin-top:4px}
-.rss-archive-btn:hover{border-color:var(--blue);color:var(--blue2)}
-.rss-archive{display:none;flex-direction:column;gap:8px;margin-top:8px;padding-top:8px;border-top:1px solid var(--line)}
-.rss-archive.open{display:flex}
+/* Pinned Discussions */
+.pinned-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.pinned-card{display:block;padding:11px 13px;text-decoration:none;color:inherit;border-radius:var(--r);border:1px solid rgba(200,169,106,.28);background:linear-gradient(160deg,rgba(200,169,106,.06),rgba(200,169,106,.02));transition:border-color .15s,transform .15s}
+.pinned-card:hover{border-color:var(--gold);transform:translateY(-1px)}
+.pc-pin{font-family:var(--mono);font-size:10px;color:var(--gold2);text-transform:uppercase;letter-spacing:.14em;margin-bottom:4px}
+.pc-source{font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.pc-title{font-family:var(--serif);font-size:13px;line-height:1.3;color:var(--ink)}
+/* Live Feed chips */
+.news-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.nchip{font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);cursor:pointer;transition:all .15s}
+.nchip:hover{border-color:var(--line2);color:var(--ink2)}
+.nchip.active{background:var(--blue);color:var(--bg);border-color:var(--blue)}
+.news-feed{display:flex;flex-direction:column;gap:8px}
+.rss-status{font-family:var(--mono);font-size:11px;color:var(--dim);font-weight:normal;text-transform:none;letter-spacing:0}
 
 /* ── VIDEOS ── */
 .vid-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
@@ -341,9 +346,10 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 /* ── RESPONSIVE ── */
 @media(max-width:900px){
   .mast-mid{display:none}
-  .dash-grid,.an-grid,.news-lay{grid-template-columns:1fr}
+  .dash-grid,.an-grid{grid-template-columns:1fr}
   .an-full{grid-column:span 1}
   .kpi4,.kpi-row{grid-template-columns:repeat(2,1fr)}
+  .pinned-row{grid-template-columns:1fr}
 }
 @media(max-width:640px){
   .nav-tabs{display:none}
@@ -354,7 +360,6 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   .mkt-grid,.vid-grid{grid-template-columns:1fr}
   .tgt-grid{grid-template-columns:1fr}
   .mini-row{grid-template-columns:1fr}
-  .news-lay{grid-template-columns:1fr}
 }
 
 /* ── DIARY ── */
@@ -414,24 +419,13 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .gallery-tile img{width:100%;height:100%;object-fit:cover;display:block}
 .gallery-tile-ov{position:absolute;inset:0;background:rgba(0,0,0,0);transition:background .15s}
 .gallery-tile:hover .gallery-tile-ov{background:rgba(0,0,0,.15)}
-/* Lightbox */
-.lb{position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:600;display:none;align-items:center;justify-content:center;flex-direction:column;gap:12px}
-.lb.open{display:flex}
-.lb-img-wrap{position:relative;max-width:90vw;max-height:85vh;display:flex;align-items:center;justify-content:center}
-.lb-img-wrap img{max-width:90vw;max-height:82vh;object-fit:contain;border-radius:6px;display:block}
-.lb-close{position:absolute;top:14px;right:18px;width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10}
-.lb-close:hover{background:rgba(255,255,255,.2)}
-.lb-nav{display:flex;align-items:center;gap:18px}
-.lb-btn{width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
-.lb-btn:hover{background:rgba(255,255,255,.22)}
-.lb-counter{font-family:var(--mono);font-size:13px;color:rgba(255,255,255,.5);min-width:60px;text-align:center}
 .gallery-upload-hint{font-family:var(--mono);font-size:12px;color:var(--dim);text-align:center;padding:40px;line-height:1.8}
 
 
 .pb-card{border-radius:var(--r);overflow:hidden;border:1px solid rgba(200,169,106,.2);background:#07090f;position:relative;transition:border-color .15s}
 .pb-card:hover{border-color:rgba(200,169,106,.5)}
 .pb-banner{height:160px;background:linear-gradient(160deg,#0a1018,#050810);position:relative;overflow:hidden;display:flex;align-items:flex-end}
-.pb-bg-img{position:absolute;inset:0;background:url(https://kevwkxuloxxrevodsukg.supabase.co/storage/v1/object/public/v12-apex-documents/gallery/S-Class%20Heritage%20Lineage%20V4300.png) center/cover;opacity:.25}
+.pb-bg-img{position:absolute;inset:0;background:url(https://kevwkxuloxxrevodsukg.supabase.co/storage/v1/object/public/v12-apex-documents/images/S-Class%20Heritage%20Lineage%20V4300.png) center/cover;opacity:.25}
 .pb-banner-ov{position:absolute;inset:0;background:linear-gradient(to top,#07090f 0%,transparent 65%)}
 .pb-banner-txt{position:relative;z-index:2;padding:14px 16px}
 .pb-eyebrow{font-family:var(--mono);font-size:7px;color:var(--gold);text-transform:uppercase;letter-spacing:.25em;margin-bottom:4px}
@@ -503,9 +497,48 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .notes-compose-row{display:flex;gap:8px;margin-top:8px;align-items:center;flex-wrap:wrap}.notes-file{flex:1;min-width:0}
 .notes-tag-btn{background:rgba(0,212,200,.08);border:1px solid rgba(0,212,200,.3);color:var(--teal);font-family:var(--mono);font-size:11px;padding:7px 11px;border-radius:6px;cursor:pointer;transition:all .15s;white-space:nowrap}
 .notes-tag-btn:hover{background:rgba(0,212,200,.15);border-color:var(--teal)}
-.tc-prospect-btn{background:rgba(200,169,106,.08);border:1px solid rgba(200,169,106,.35);color:var(--gold2);font-family:var(--mono);font-size:11px;padding:6px;border-radius:7px;cursor:pointer;transition:all .15s;text-align:center;width:100%;margin-top:4px}
-.tc-prospect-btn:hover{background:rgba(200,169,106,.18);border-color:var(--gold)}
-.tc-prospect-btn.is-current{background:rgba(200,169,106,.22);border-color:var(--gold);color:var(--gold)}
+
+/* ── IMAGE MINI-GALLERY (per-card thumbnail strip) ── */
+.mini-gal{display:flex;gap:5px;overflow-x:auto;padding:6px 0 2px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.mini-gal::-webkit-scrollbar{height:4px}
+.mini-gal::-webkit-scrollbar-thumb{background:var(--line2);border-radius:2px}
+.mg-thumb{flex:0 0 56px;height:42px;border-radius:5px;overflow:hidden;border:1px solid var(--line);cursor:pointer;background:var(--panel2);transition:border-color .15s,transform .15s;position:relative}
+.mg-thumb:hover{border-color:var(--blue);transform:translateY(-1px)}
+.mg-thumb.is-hero{border-color:var(--gold)}
+.mg-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.mg-add{flex:0 0 56px;height:42px;border-radius:5px;border:1px dashed var(--line2);background:rgba(122,167,220,.04);color:var(--blue2);cursor:pointer;font-family:var(--mono);font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.mg-add:hover{border-color:var(--blue);background:rgba(122,167,220,.10);color:var(--blue)}
+.mg-add-row{display:none;gap:5px;align-items:center;margin-top:6px}
+.mg-add-row.open{display:flex}
+.mg-add-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:5px;color:var(--ink);font-family:var(--mono);font-size:11px;padding:5px 8px;outline:none}
+.mg-add-input:focus{border-color:var(--blue)}
+.mg-add-save{background:var(--blue);color:var(--bg);border:none;border-radius:5px;font-family:var(--mono);font-size:11px;padding:5px 10px;cursor:pointer;font-weight:600}
+.mg-add-cancel{background:none;border:1px solid var(--line2);border-radius:5px;color:var(--muted);font-family:var(--mono);font-size:11px;padding:5px 8px;cursor:pointer}
+
+/* ── LIGHTBOX (in-app full-image viewer) ── */
+.lb-ov{position:fixed;inset:0;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;z-index:9999;padding:20px}
+.lb-ov.open{display:flex}
+.lb-stage{position:relative;max-width:100%;max-height:100%;display:flex;flex-direction:column;align-items:center;gap:10px}
+.lb-img{max-width:100%;max-height:80vh;border-radius:6px;box-shadow:0 12px 48px rgba(0,0,0,.6);object-fit:contain}
+.lb-cap{font-family:var(--mono);font-size:12px;color:#ddd;text-align:center;max-width:90vw;line-height:1.4}
+.lb-counter{font-family:var(--mono);font-size:11px;color:#888;margin-top:2px}
+.lb-close{position:absolute;top:14px;right:18px;background:rgba(0,0,0,.5);border:1px solid #444;color:#eee;font-size:20px;width:36px;height:36px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.lb-close:hover{background:rgba(255,255,255,.1);border-color:#888}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.5);border:1px solid #444;color:#eee;font-size:24px;width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.lb-nav:hover{background:rgba(255,255,255,.1);border-color:#888}
+.lb-prev{left:18px}
+.lb-next{right:18px}
+
+/* ── GALLERY page additions (chips + stock input) ── */
+.gal-chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 14px}
+.gal-chip{font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);cursor:pointer;transition:all .15s}
+.gal-chip:hover{border-color:var(--line2);color:var(--ink2)}
+.gal-chip.active{background:var(--blue);color:var(--bg);border-color:var(--blue)}
+.gal-stock-row{display:flex;gap:6px;align-items:center;background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin-bottom:14px}
+.gal-stock-lbl{font-family:var(--mono);font-size:11px;color:var(--dim);white-space:nowrap}
+.gal-stock-input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:5px;color:var(--ink);font-family:var(--mono);font-size:11px;padding:6px 9px;outline:none;min-width:0}
+.gal-stock-input:focus{border-color:var(--blue)}
+.gal-stock-save{background:var(--blue);color:var(--bg);border:none;border-radius:5px;font-family:var(--mono);font-size:11px;padding:6px 12px;cursor:pointer;font-weight:600;white-space:nowrap}
 .fchip-yr{font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);cursor:pointer;transition:all .15s}
 .fchip-yr.active{background:var(--blue);color:var(--bg);border-color:var(--blue)}
 .fchip-fe{font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:14px;background:rgba(200,169,106,.08);border:1px solid rgba(200,169,106,.3);color:var(--gold2);cursor:pointer;transition:all .15s}
@@ -648,21 +681,29 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
       </a>
     </div>
     <div class="dash-col">
-      <!-- Market chart -->
-      <div class="card soft chart-box">
+      <!-- Mini gallery carousel (swapped to top, sized like prior market chart) -->
+      <div class="card" style="overflow:hidden;position:relative;height:260px;" id="dash-gallery-wrap">
+        <div id="dash-gallery-track" style="display:flex;height:100%;transition:transform .5s cubic-bezier(.25,.46,.45,.94);">
+          <div class="loading" style="min-width:100%;display:flex;align-items:center;justify-content:center;">Loading gallery&hellip;</div>
+        </div>
+        <button onclick="dashCarouselPrev()" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#8592;</button>
+        <button onclick="dashCarouselNext()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#8594;</button>
+      </div>
+      <!-- Market chart (swapped to bottom, grown to mirror playbook height) -->
+      <div class="card soft chart-box" style="min-height:360px;display:flex;flex-direction:column;">
         <p style="font-family:var(--serif);font-style:italic;font-size:14px;color:rgba(255,255,255,.85);margin-bottom:7px;">Market Update</p>
         <div style="font-family:var(--serif);font-size:16px;color:var(--ink);margin-bottom:2px;">Avg Asking Price &mdash; S65 AMG</div>
         <div style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:8px;">Bear trend &minus;13%/yr &middot; thesis intact</div>
-        <svg viewBox="0 0 480 145" width="100%" style="display:block;">
+        <svg viewBox="0 0 480 230" width="100%" style="display:block;flex:1;min-height:0;" preserveAspectRatio="xMidYMid meet">
           <defs><linearGradient id="ag1" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#9dc2ec" stop-opacity=".22"/><stop offset="100%" stop-color="#9dc2ec" stop-opacity="0"/></linearGradient></defs>
-          <g stroke="rgba(255,255,255,.07)" stroke-width="1"><line x1="26" y1="13" x2="460" y2="13"/><line x1="26" y1="50" x2="460" y2="50"/><line x1="26" y1="87" x2="460" y2="87"/><line x1="26" y1="118" x2="460" y2="118"/></g>
-          <text x="22" y="17" text-anchor="end" fill="rgba(200,210,230,.45)" font-size="9" font-family="IBM Plex Mono">$60k</text>
-          <text x="22" y="54" text-anchor="end" fill="rgba(200,210,230,.45)" font-size="9" font-family="IBM Plex Mono">$55k</text>
-          <text x="22" y="91" text-anchor="end" fill="rgba(200,210,230,.45)" font-size="9" font-family="IBM Plex Mono">$50k</text>
-          <path d="M26 36 L98 50 L170 44 L242 61 L314 77 L386 72 L460 88 L460 118 L26 118 Z" fill="url(#ag1)"/>
-          <path d="M26 36 L98 50 L170 44 L242 61 L314 77 L386 72 L460 88" fill="none" stroke="#b8d4f3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-          <g fill="#d9e8f8"><circle cx="26" cy="36" r="3"/><circle cx="98" cy="50" r="3"/><circle cx="170" cy="44" r="3"/><circle cx="242" cy="61" r="3"/><circle cx="314" cy="77" r="3"/><circle cx="386" cy="72" r="3"/><circle cx="460" cy="88" r="3.5" fill="#c8a96a"/></g>
-          <g fill="rgba(200,210,230,.4)" font-size="9" font-family="IBM Plex Mono"><text x="26" y="135">Jan</text><text x="170" y="135" text-anchor="middle">Mar</text><text x="314" y="135" text-anchor="middle">May</text><text x="460" y="135" text-anchor="end" fill="rgba(200,169,106,.8)">Now</text></g>
+          <g stroke="rgba(255,255,255,.07)" stroke-width="1"><line x1="26" y1="20" x2="460" y2="20"/><line x1="26" y1="80" x2="460" y2="80"/><line x1="26" y1="140" x2="460" y2="140"/><line x1="26" y1="190" x2="460" y2="190"/></g>
+          <text x="22" y="24" text-anchor="end" fill="rgba(200,210,230,.45)" font-size="9" font-family="IBM Plex Mono">$60k</text>
+          <text x="22" y="84" text-anchor="end" fill="rgba(200,210,230,.45)" font-size="9" font-family="IBM Plex Mono">$55k</text>
+          <text x="22" y="144" text-anchor="end" fill="rgba(200,210,230,.45)" font-size="9" font-family="IBM Plex Mono">$50k</text>
+          <path d="M26 58 L98 80 L170 70 L242 98 L314 124 L386 116 L460 142 L460 190 L26 190 Z" fill="url(#ag1)"/>
+          <path d="M26 58 L98 80 L170 70 L242 98 L314 124 L386 116 L460 142" fill="none" stroke="#b8d4f3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          <g fill="#d9e8f8"><circle cx="26" cy="58" r="3.5"/><circle cx="98" cy="80" r="3.5"/><circle cx="170" cy="70" r="3.5"/><circle cx="242" cy="98" r="3.5"/><circle cx="314" cy="124" r="3.5"/><circle cx="386" cy="116" r="3.5"/><circle cx="460" cy="142" r="4" fill="#c8a96a"/></g>
+          <g fill="rgba(200,210,230,.4)" font-size="9" font-family="IBM Plex Mono"><text x="26" y="215">Jan</text><text x="170" y="215" text-anchor="middle">Mar</text><text x="314" y="215" text-anchor="middle">May</text><text x="460" y="215" text-anchor="end" fill="rgba(200,169,106,.8)">Now</text></g>
         </svg>
         <div style="font-family:var(--mono);font-size:12px;color:var(--muted);text-align:right;margin-top:3px;">Avg ask: <span id="dash-avg" style="color:var(--gold2);">--</span></div>
       </div>
@@ -686,14 +727,6 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
           <div class="mini-desc">US examples ever produced</div>
           <div class="mini-sm">Last V12 S-Class &middot; 2015&ndash;2020</div>
         </div>
-      </div>
-      <!-- Mini gallery carousel -->
-      <div class="card" style="overflow:hidden;position:relative;height:160px;" id="dash-gallery-wrap">
-        <div id="dash-gallery-track" style="display:flex;height:100%;transition:transform .5s cubic-bezier(.25,.46,.45,.94);">
-          <div class="loading" style="min-width:100%;display:flex;align-items:center;justify-content:center;">Loading gallery&hellip;</div>
-        </div>
-        <button onclick="dashCarouselPrev()" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#8592;</button>
-        <button onclick="dashCarouselNext()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#8594;</button>
       </div>
     </div>
   </div>
@@ -896,28 +929,33 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <div class="ned-lbl">Why these matter this week</div>
     <div class="ned-txt">The market continues its bear trend. <strong>BaT remains the most reliable price floor signal</strong> &mdash; recent auction results confirm the thesis is intact. MBWorld owners are reporting ignition coil failures clustering at 80K&ndash;95K miles, reinforcing your VMI leverage position. Hagerty has begun tracking the W222 S65 in their emerging collectible index.</div>
   </div>
-  <div class="news-lay">
-    <!-- LEFT: Curated static links -->
-    <div class="news-col">
-      <div class="ncol-lbl">Curated Sources</div>
-      <a class="ncard" href="https://www.bring-a-trailer.com/search/?s=mercedes+s65" target="_blank" rel="noopener"><div class="nthumb">&#128226;</div><div><div class="nsrc">Bring a Trailer</div><div class="ntitle">S65 AMG Auction Results</div><div class="ndesc">Completed auction prices &mdash; the real transaction floor.</div></div></a>
-      <a class="ncard" href="https://www.cargurus.com/Cars/l-Used-Mercedes-Benz-S65-AMG-d2266" target="_blank" rel="noopener"><div class="nthumb">&#128202;</div><div><div class="nsrc">CarGurus</div><div class="ntitle">S65 AMG Market Pricing</div><div class="ndesc">Algorithmic pricing and listing trends across the universe.</div></div></a>
-      <a class="ncard" href="https://www.hagerty.com/media/car-values/" target="_blank" rel="noopener"><div class="nthumb">&#11088;</div><div><div class="nsrc">Hagerty</div><div class="ntitle">Collectible Car Market Index</div><div class="ndesc">Collector sentiment and modern exotic value trends.</div></div></a>
-      <a class="ncard" href="https://www.mbworld.org/forums/s65-amg-v12-biturbo-278/" target="_blank" rel="noopener"><div class="nthumb">&#127942;</div><div><div class="nsrc">MBWorld Forums</div><div class="ntitle">S65 V12 Owner Community</div><div class="ndesc">M279 failure points, service intervals, and repair costs.</div></div></a>
-      <a class="ncard" href="https://www.reddit.com/r/mercedes_benz/search/?q=s65+amg" target="_blank" rel="noopener"><div class="nthumb">&#128172;</div><div><div class="nsrc">Reddit</div><div class="ntitle">S65 AMG Discussion</div><div class="ndesc">Owner reports and market observations from the community.</div></div></a>
-      <a class="ncard" href="https://mbdecoder.com" target="_blank" rel="noopener"><div class="nthumb">&#9881;</div><div><div class="nsrc">MBDecoder</div><div class="ntitle">Factory Build Data &amp; SA Codes</div><div class="ndesc">Ground truth production data. Confirm paint codes and options.</div></div></a>
-    </div>
-    <!-- RIGHT: Live RSS feed -->
-    <div class="news-col">
-      <div class="ncol-lbl">
-        Live Feed &mdash; Google News
-        <button class="rss-archive-btn" id="archive-btn" onclick="toggleArchive()" style="margin-left:8px;display:none;">Show Archive</button>
-      </div>
-      <div class="rss-status" id="rss-status">Fetching latest news&hellip;</div>
-      <div class="rss-col" id="rss-live"></div>
-      <div class="rss-archive" id="rss-archive"></div>
-    </div>
+
+  <!-- PINNED DISCUSSIONS -->
+  <div class="ncol-lbl"><span>&#128204; Pinned Discussions</span></div>
+  <div class="pinned-row">
+    <a class="pinned-card" href="https://forums.mercedesclub.org.uk/index.php?threads/s65-final-edition.173765/" target="_blank" rel="noopener">
+      <div class="pc-source">Mercedes Club UK</div>
+      <div class="pc-title">S65 Final Edition</div>
+    </a>
+    <a class="pinned-card" href="https://www.germancarforum.com/threads/2015-mercedes-benz-s65-amg-coupe.53071/" target="_blank" rel="noopener">
+      <div class="pc-source">German Car Forum</div>
+      <div class="pc-title">2015 Mercedes-Benz S65 AMG Coupe</div>
+    </a>
+    <a class="pinned-card" href="https://forums.mbclub.co.uk/threads/s63-coupe-v-s65-coupe.267370/" target="_blank" rel="noopener">
+      <div class="pc-source">MBClub UK</div>
+      <div class="pc-title">S63 Coupe vs S65 Coupe</div>
+    </a>
   </div>
+
+  <!-- LIVE FEED -->
+  <div class="ncol-lbl"><span>&#128240; Live Feed</span><span class="rss-status" id="rss-status">Loading&hellip;</span></div>
+  <div class="news-chips" id="news-chips">
+    <button class="nchip active" data-chip="all" onclick="filterNews('all',this)">All</button>
+    <button class="nchip" data-chip="Forum" onclick="filterNews('Forum',this)">Forum</button>
+    <button class="nchip" data-chip="News" onclick="filterNews('News',this)">News</button>
+    <button class="nchip" data-chip="Reddit" onclick="filterNews('Reddit',this)">Reddit</button>
+  </div>
+  <div class="news-feed" id="news-feed"></div>
 </div>
 </div>
 
@@ -939,6 +977,21 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <span id="gallery-count" style="color:var(--muted);"></span>
   </div>
 
+  <!-- Stock image URL paste (Workflow B) -->
+  <div class="gal-stock-row">
+    <span class="gal-stock-lbl">+ Add stock image:</span>
+    <input type="url" id="gal-stock-input" class="gal-stock-input" placeholder="Paste image URL (https://...)" onkeydown="if(event.key==='Enter'){event.preventDefault();saveStockImage()}">
+    <button id="gal-stock-save" class="gal-stock-save" onclick="saveStockImage()">Add</button>
+  </div>
+
+  <!-- Source filter chips -->
+  <div class="gal-chips" id="gal-chips">
+    <button class="gal-chip active" onclick="filterGallery('all',this)">All</button>
+    <button class="gal-chip" onclick="filterGallery('listing',this)">Listings</button>
+    <button class="gal-chip" onclick="filterGallery('stock',this)">Stock</button>
+    <button class="gal-chip" onclick="filterGallery('historical',this)">Historical</button>
+  </div>
+
   <!-- Carousel -->
   <div class="car-carousel" id="carousel-wrap">
     <div class="car-carousel-track" id="carousel-track"></div>
@@ -951,20 +1004,9 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 
   <!-- Tile grid -->
   <div class="gallery-grid" id="gallery-grid">
-    <div class="loading">Upload photos to Supabase Storage &rarr; v12-apex-documents/gallery/ to populate this gallery.</div>
+    <div class="loading">Loading gallery&hellip;</div>
   </div>
 </div>
-</div>
-
-<!-- Lightbox -->
-<div class="lb" id="lightbox" onclick="lbBgClick(event)">
-  <button class="lb-close" onclick="closeLb()">&#x2715;</button>
-  <div class="lb-img-wrap"><img id="lb-img" src="" alt=""></div>
-  <div class="lb-nav">
-    <button class="lb-btn" onclick="lbPrev()" aria-label="Previous image">&#8592;</button>
-    <span class="lb-counter" id="lb-counter"></span>
-    <button class="lb-btn" onclick="lbNext()" aria-label="Next image">&#8594;</button>
-  </div>
 </div>
 
 <!-- ═══ RESOURCES ═══ -->
@@ -1130,9 +1172,20 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
         <label for="notes-file-input">&#128247; Attach image</label>
         <span class="notes-file-name" id="notes-file-name"></span>
       </div>
-      <button type="button" class="notes-tag-btn" onclick="notesInsertProfileImage()" title="Insert [profile_image] tag, then paste URL">&#128444;&#65039; Profile Img</button>
       <button class="notes-save" id="notes-save-btn" onclick="notesSave()">Save</button>
     </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX (in-app image viewer) -->
+<div class="lb-ov" id="lb-ov" onclick="if(event.target===this)closeLightbox()" role="dialog" aria-label="Image viewer">
+  <div class="lb-stage">
+    <button class="lb-close" onclick="closeLightbox()" aria-label="Close">&times;</button>
+    <button class="lb-nav lb-prev" onclick="lbPrev()" aria-label="Previous">&#8592;</button>
+    <button class="lb-nav lb-next" onclick="lbNext()" aria-label="Next">&#8594;</button>
+    <img class="lb-img" id="lb-img" src="" alt="">
+    <div class="lb-cap" id="lb-cap"></div>
+    <div class="lb-counter" id="lb-counter"></div>
   </div>
 </div>
 
@@ -1235,7 +1288,7 @@ function qs(path,file){
 }
 
 // HTML escape + auto-linkify
-function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 function linkify(s){return esc(s).replace(/(https?:\/\/[^\s<]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');}
 
 // ── PRICE DELTA (CarGurus-style) ──────────────────────────
@@ -1472,9 +1525,8 @@ function updateNotesBadges(vin){
 
 // ── PROFILE IMAGE PICKER ──────────────────────────────────
 // Hover a card photo → camera icon appears → click opens file picker.
-// Uploads to v12-apex-documents/photos/{VIN}_{ts}.{ext}, then inserts a
-// vehicle_notes row with body='[profile_image]' and image_url=<url>.
-// Most recent such note per VIN wins in G.profileImageByVin.
+// Uploads to v12-apex-documents/images/{VIN}_{ts}.{ext}, then inserts an
+// images row with is_hero=true. Demotes any prior hero for that VIN.
 var PI={vin:null,uploading:false,fileInput:null};
 
 function ensureProfileImageInput(){
@@ -1521,22 +1573,29 @@ function uploadProfileImage(vin,file){
   var mime=(file.type||'image/jpeg').toLowerCase();
   var extMap={'image/png':'png','image/jpeg':'jpg','image/jpg':'jpg','image/gif':'gif','image/webp':'webp','image/heic':'heic','image/heif':'heif'};
   var ext=extMap[mime]||'jpg';
-  var path='photos/'+vin+'_'+Date.now()+'.'+ext;
+  var path='images/'+vin+'_'+Date.now()+'.'+ext;
   qs(path,file)
     .then(function(url){
-      return qw('vehicle_notes','POST',{vin:vin,body:'[profile_image]',image_url:url})
+      // Demote prior hero for this VIN (PATCH where vin=eq.vin&is_hero=eq.true)
+      return qw('images?vin=eq.'+encodeURIComponent(vin)+'&is_hero=eq.true','PATCH',{is_hero:false})
+        .catch(function(){})  // no prior hero is fine
+        .then(function(){
+          return qw('images','POST',{vin:vin,url:url,source_type:'listing',is_hero:true,sort_order:0});
+        })
         .then(function(rows){return {url:url,row:Array.isArray(rows)?rows[0]:rows};});
     })
     .then(function(res){
-      G.profileImageByVin=G.profileImageByVin||{};
-      G.profileImageByVin[vin]=res.url;
-      G.notesByVin=G.notesByVin||{};
-      G.notesByVin[vin]=G.notesByVin[vin]||[];
-      if(res.row)G.notesByVin[vin].unshift(res.row);
+      // Update local index
+      G.images=G.images||{};
+      G.images[vin]=G.images[vin]||[];
+      // Demote any local hero, then add new one at front
+      G.images[vin].forEach(function(i){i.is_hero=false;});
+      if(res.row)G.images[vin].unshift(res.row);
+      if(G.imagesAll&&res.row)G.imagesAll.unshift(res.row);
       renderTargets();
       renderMkt();
       renderDashListings();
-      updateNotesBadges(vin);
+      if(typeof renderDashProspect==='function')renderDashProspect();
     })
     .catch(function(err){
       alert('Upload failed: '+err);
@@ -1622,6 +1681,8 @@ function savePriceChange(){
 
 // ── STATE ─────────────────────────────────────────────────
 var G={v:[],m:{},l:{},lhAll:[],docs:{}};
+// "What Changed" strip windowing — listings with first_seen / last_seen within this many days are flagged
+var RECENT_ACTIVE_DAYS=7;
 var mktFilter='all',mktSort='year';
 
 // ── COUNTDOWN ─────────────────────────────────────────────
@@ -1740,23 +1801,6 @@ function closeDiary(){
   document.getElementById('diary-ov').classList.remove('open');
 }
 
-// ── NOTES: insert profile_image tag into textarea ─────────
-function notesInsertProfileImage(){
-  var ta=document.getElementById('notes-textarea');
-  if(!ta)return;
-  var tag='[profile_image] ';
-  var cur=ta.value||'';
-  if(cur.indexOf('[profile_image]')>-1){
-    // Already present — just focus and scroll cursor to end
-    ta.focus();
-    ta.setSelectionRange(ta.value.length,ta.value.length);
-    return;
-  }
-  ta.value=tag+cur;
-  ta.focus();
-  ta.setSelectionRange(tag.length,tag.length);
-}
-
 // ── HELPERS ───────────────────────────────────────────────
 function fP(n){return n?'$'+Number(n).toLocaleString():'--';}
 function fM(n){return n?Number(n).toLocaleString()+' mi':'--';}
@@ -1765,9 +1809,9 @@ function set(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
 
 // Image placeholder HTML - rotates brand images from gallery, keyed by VIN for consistency
 var PLACEHOLDERS=[
-  'https://kevwkxuloxxrevodsukg.supabase.co/storage/v1/object/public/v12-apex-documents/gallery/17C142_072.jpg',
-  'https://kevwkxuloxxrevodsukg.supabase.co/storage/v1/object/public/v12-apex-documents/gallery/17C142_074.jpg',
-  'https://kevwkxuloxxrevodsukg.supabase.co/storage/v1/object/public/v12-apex-documents/gallery/17C142_081.jpg'
+  'https://kevwkxuloxxrevodsukg.supabase.co/storage/v1/object/public/v12-apex-documents/images/17C142_072.jpg',
+  'https://kevwkxuloxxrevodsukg.supabase.co/storage/v1/object/public/v12-apex-documents/images/17C142_074.jpg',
+  'https://kevwkxuloxxrevodsukg.supabase.co/storage/v1/object/public/v12-apex-documents/images/17C142_081.jpg'
 ];
 function ph(year,trim,vin){
   var idx=0;
@@ -1776,7 +1820,20 @@ function ph(year,trim,vin){
     idx=Math.abs(h)%PLACEHOLDERS.length;
   }
   var img=PLACEHOLDERS[idx];
-  return '<img src="'+img+'" alt="'+(year||'')+' '+(trim||'')+'" style="width:100%;height:100%;object-fit:cover;opacity:.75;display:block;">';
+  return '<img src="'+img+'" alt="'+esc(String(year||'')+' '+String(trim||''))+'" style="width:100%;height:100%;object-fit:cover;opacity:.75;display:block;">';
+}
+
+// Image fallback handler: when a hero/listing image 404s, swap to deterministic placeholder by VIN.
+// Cleaner than the prior inline `JSON.stringify` + `esc` pattern in onerror attributes.
+function imgFallback(img,vin){
+  img.onerror=null;
+  var idx=0;
+  if(vin){
+    var h=0;for(var i=0;i<vin.length;i++)h=(h*31+vin.charCodeAt(i))|0;
+    idx=Math.abs(h)%PLACEHOLDERS.length;
+  }
+  img.src=PLACEHOLDERS[idx];
+  img.style.opacity='.75';
 }
 
 // Car flags
@@ -1804,12 +1861,12 @@ function equipChips(vin){
 
 // ── WHAT CHANGED ─────────────────────────────────────────
 function buildChanged(currentRows,allLH){
-  var now=new Date(),week=7*24*60*60*1000;
+  var now=new Date(),windowMs=RECENT_ACTIVE_DAYS*24*60*60*1000;
   var changes=[];
-  // New active listings this week: active vehicles with first_seen within 7 days
-  var newVINs=[...new Set(allLH.filter(function(l){return G.activeSet&&G.activeSet[l.vin]&&l.first_seen&&(now-new Date(l.first_seen))<week;}).map(function(l){return l.vin;}))];
-  // "Gone" listings: NOT in activeSet but last_seen within last week
-  var goneVINs=[...new Set(allLH.filter(function(l){return G.activeSet&&!G.activeSet[l.vin]&&l.last_seen&&(now-new Date(l.last_seen))<week;}).map(function(l){return l.vin;}))];
+  // New active listings: active vehicles with first_seen within RECENT_ACTIVE_DAYS
+  var newVINs=[...new Set(allLH.filter(function(l){return G.activeSet&&G.activeSet[l.vin]&&l.first_seen&&(now-new Date(l.first_seen))<windowMs;}).map(function(l){return l.vin;}))];
+  // "Gone" listings: NOT in activeSet but last_seen within RECENT_ACTIVE_DAYS
+  var goneVINs=[...new Set(allLH.filter(function(l){return G.activeSet&&!G.activeSet[l.vin]&&l.last_seen&&(now-new Date(l.last_seen))<windowMs;}).map(function(l){return l.vin;}))];
   // Avg ask uses only current rows (one per active VIN)
   var activePrices=currentRows.filter(function(l){return l.price;}).map(function(l){return l.price;});
   var avg=activePrices.length?Math.round(activePrices.reduce(function(a,b){return a+b;},0)/activePrices.length):null;
@@ -1842,11 +1899,12 @@ function renderDashListings(){
     var miles=vm&&vm.curr_odo?fM(vm.curr_odo):(lh&&lh.miles?fM(lh.miles):'--');
     var price=lh&&lh.price?fP(lh.price):'--';
     var isTarget=v.car_status==='target';
-    var profileImg=G.profileImageByVin&&G.profileImageByVin[v.vin];
-    var img=profileImg||v.image_url||PLACEHOLDERS[Math.abs((function(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return h;})(v.vin))%PLACEHOLDERS.length];
+    var vimgs=G.images&&G.images[v.vin]?G.images[v.vin]:[];
+    var hero=vimgs.filter(function(i){return i.is_hero;})[0]||vimgs[0];
+    var img=(hero&&hero.url)||v.image_url||PLACEHOLDERS[Math.abs((function(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return h;})(v.vin))%PLACEHOLDERS.length];
     return '<div style="flex:0 0 160px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--panel2);display:flex;flex-direction:column;">'+
       '<div style="height:100px;position:relative;overflow:hidden;flex-shrink:0;">'+
-        '<img src="'+img+'" style="width:100%;height:100%;object-fit:cover;opacity:.88;display:block;">'+
+        '<img src="'+esc(img)+'" alt="" style="width:100%;height:100%;object-fit:cover;opacity:.88;display:block;" onerror="this.style.display=\'none\'">'+
         '<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.5),transparent 60%)"></div>'+
         (isTarget?'<span style="position:absolute;top:5px;left:5px;font-family:var(--mono);font-size:9px;background:rgba(122,167,220,.18);border:1px solid rgba(122,167,220,.3);color:var(--blue2);padding:1px 5px;border-radius:3px;">Target</span>':'')+
       '</div>'+
@@ -1869,13 +1927,13 @@ function buildDashCarousel(images){
   if(!track)return;
   // Empty-state: replace stuck "Loading gallery..." with a useful message
   if(!images||!images.length){
-    track.innerHTML='<div style="flex:0 0 100%;min-width:100%;height:160px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.05em;">No gallery images yet.</div>';
+    track.innerHTML='<div style="flex:0 0 100%;min-width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.05em;">No gallery images yet.</div>';
     if(dashCarTimer){clearInterval(dashCarTimer);dashCarTimer=null;}
     return;
   }
   track.innerHTML=images.map(function(url){
-    return '<div style="flex:0 0 100%;width:100%;height:160px;position:relative;flex-shrink:0;overflow:hidden;">'+
-      '<img src="'+url+'" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;opacity:.92;">'+
+    return '<div style="flex:0 0 100%;width:100%;height:100%;position:relative;flex-shrink:0;overflow:hidden;">'+
+      '<img src="'+esc(url)+'" style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block;opacity:.92;" onerror="this.style.display=\'none\'">'+
       '<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(5,8,16,.6),transparent 50%)"></div>'+
       '<div style="position:absolute;bottom:8px;left:12px;font-family:var(--serif);font-size:13px;color:var(--ink);">W222 &mdash; S65 &amp; S600</div>'+
     '</div>';
@@ -1888,14 +1946,18 @@ function buildDashCarousel(images){
   },4000);
 }
 function dashCarouselPrev(){
-  var total=galleryImages.length;if(!total)return;
+  var t=document.getElementById('dash-gallery-track');
+  if(!t)return;
+  var total=t.children.length;if(!total)return;
   dashCarIdx=(dashCarIdx-1+total)%total;
-  var t=document.getElementById('dash-gallery-track');if(t)t.style.transform='translateX(-'+dashCarIdx+'00%)';
+  t.style.transform='translateX(-'+dashCarIdx+'00%)';
 }
 function dashCarouselNext(){
-  var total=galleryImages.length;if(!total)return;
+  var t=document.getElementById('dash-gallery-track');
+  if(!t)return;
+  var total=t.children.length;if(!total)return;
   dashCarIdx=(dashCarIdx+1)%total;
-  var t=document.getElementById('dash-gallery-track');if(t)t.style.transform='translateX(-'+dashCarIdx+'00%)';
+  t.style.transform='translateX(-'+dashCarIdx+'00%)';
 }
 
 // ── RESOURCES ─────────────────────────────────────────────
@@ -1928,7 +1990,7 @@ function loadResources(){
           '</div>'+
         '</a>';
       }).join('');
-      return '<div style="grid-column:1/-1;font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.18em;padding-bottom:7px;border-bottom:1px solid var(--line);margin-bottom:4px;">'+cat+'</div>'+items;
+      return '<div style="grid-column:1/-1;font-family:var(--mono);font-size:11px;color:var(--dim);text-transform:uppercase;letter-spacing:.18em;padding-bottom:7px;border-bottom:1px solid var(--line);margin-bottom:4px;">'+esc(cat)+'</div>'+items;
     }).join('');
   }).catch(function(e){
     var el=document.getElementById('resources-grid');
@@ -1937,13 +1999,15 @@ function loadResources(){
 }
 
 // ── IMAGE RESOLUTION ──────────────────────────────────────
-// Priority: [profile_image] note override → vehicles.image_url → placeholder
+// Priority: images table is_hero → first image for VIN → vehicles.image_url → placeholder
 function vehicleImage(v){
-  var override=G.profileImageByVin&&G.profileImageByVin[v.vin];
+  var imgs=G.images&&G.images[v.vin]?G.images[v.vin]:[];
+  var hero=imgs.filter(function(i){return i.is_hero;})[0]||imgs[0];
   var fallback=ph(v.year,v.trim,v.vin);
-  var onerr='this.onerror=null;this.outerHTML='+JSON.stringify(fallback)+';';
-  if(override)return '<img src="'+esc(override)+'" alt="" loading="lazy" onerror="'+esc(onerr)+'" style="width:100%;height:100%;object-fit:cover;display:block;">';
-  if(v.image_url)return '<img src="'+esc(v.image_url)+'" alt="" loading="lazy" onerror="'+esc(onerr)+'" style="width:100%;height:100%;object-fit:cover;display:block;">';
+  // VINs are alphanumeric (no quotes), so single-quote wrapping is safe without further escaping
+  var onerr="imgFallback(this,'"+(v.vin||'')+"')";
+  if(hero&&hero.url)return '<img src="'+esc(hero.url)+'" alt="" loading="lazy" onerror="'+onerr+'" style="width:100%;height:100%;object-fit:cover;display:block;">';
+  if(v.image_url)return '<img src="'+esc(v.image_url)+'" alt="" loading="lazy" onerror="'+onerr+'" style="width:100%;height:100%;object-fit:cover;display:block;">';
   return fallback;
 }
 
@@ -2068,7 +2132,7 @@ function renderTarget(v,vm,lh){
         '<div class="tc-stat"><span class="tc-sv">'+(vm?fN(vm.total_owners):'--')+'</span><span class="tc-sl">Owners</span></div>'+
         '<div class="tc-stat"><span class="tc-sv">'+esc(loc)+'</span><span class="tc-sl">State</span></div>'+
       '</div>'+
-      '<div class="tc-flags">'+flags(v,vm)+'</div>'+equipChips(v.vin)+renderDocLinks(v.vin)+
+      '<div class="tc-flags">'+flags(v,vm)+'</div>'+equipChips(v.vin)+renderDocLinks(v.vin)+renderMiniGal(v.vin)+
       '<div style="display:flex;gap:6px;align-items:stretch;">'+
         (v.listing_url?'<a href="'+esc(v.listing_url)+'" target="_blank" rel="noopener" class="tc-btn" style="flex:1;">&#9654; View Listing</a>':(active?'<span class="tc-btn" style="flex:1;opacity:.5;cursor:default;">&#9679; Active</span>':'<span style="flex:1;"></span>'))+
         '<button class="tc-btn" style="flex:none;padding:8px 10px;" onclick="openUrlEdit(\''+v.vin+'\',\'t\',this)" title="Edit listing URL">&#9998;</button>'+
@@ -2078,7 +2142,6 @@ function renderTarget(v,vm,lh){
         '<button class="lc-btn" onclick="saveListingUrl(\''+v.vin+'\',\'t\')" style="flex:none;padding:5px 10px;">Save</button>'+
         '<button class="lc-btn" onclick="cancelUrlEdit(\''+v.vin+'\',\'t\')" style="flex:none;padding:5px 8px;opacity:.6;">✕</button>'+
       '</div>'+
-      '<button class="tc-prospect-btn'+(v.is_top_prospect?' is-current':'')+'" onclick="goProspect()">'+(v.is_top_prospect?'&#11088; This is the Top Prospect &middot; View':'&#11088; View Top Prospect')+'</button>'+
       '<button class="tc-demote" onclick="demoteTarget(\''+v.vin+'\')">&#8595; Move to Reference</button>'+
     '</div>'+
   '</div>';
@@ -2105,9 +2168,13 @@ function renderMkt(){
     return true;
   });
   filtered.sort(function(a,b){
-    if(mktSort==='miles'){var oa=(G.m[a.vin]&&G.m[a.vin].curr_odo)||999999;var ob=(G.m[b.vin]&&G.m[b.vin].curr_odo)||999999;return oa-ob;}
+    if(mktSort==='miles'){
+      var oa=(G.m[a.vin]&&G.m[a.vin].curr_odo!=null)?G.m[a.vin].curr_odo:999999;
+      var ob=(G.m[b.vin]&&G.m[b.vin].curr_odo!=null)?G.m[b.vin].curr_odo:999999;
+      return oa-ob;
+    }
     if(mktSort==='year')return (b.year||0)-(a.year||0);
-    return ((G.l[a.vin]&&G.l[a.vin].price)||999999)-((G.l[b.vin]&&G.l[b.vin].price)||999999);
+    return ((G.l[a.vin]&&G.l[a.vin].price!=null)?G.l[a.vin].price:999999)-((G.l[b.vin]&&G.l[b.vin].price!=null)?G.l[b.vin].price:999999);
   });
   var mg=document.getElementById('market-grid');
   if(mg)mg.innerHTML=filtered.length?filtered.map(function(v){return renderCompact(v,G.m[v.vin],G.l[v.vin]);}).join(''):'<div class="loading">No listings match filter.</div>';
@@ -2621,136 +2688,309 @@ function renderMiBands(vehicles,market,listings){
   }).join('');
 }
 
-// ── RSS NEWS ─────────────────────────────────────────────
-// Multiple proxies for resilience — try in order, first one that returns valid XML wins
-var RSS_PROXIES=[
-  'https://corsproxy.io/?',
-  'https://api.allorigins.win/raw?url=',
-  'https://api.codetabs.com/v1/proxy/?quest='
-];
+// ── IMAGE MODULE: lightbox + mini-gallery + URL paste ─────
+// Backed by the `images` table. URL match works for both Supabase-hosted and external URLs.
+var LB={items:[],idx:0,onKey:null};
 
-// Try each proxy in turn; resolve on first success, reject only if all fail
-function rssFetchWithFallback(targetUrl){
-  return new Promise(function(resolve,reject){
-    var idx=0;
-    function tryNext(){
-      if(idx>=RSS_PROXIES.length){reject(new Error('All RSS proxies failed'));return;}
-      var proxy=RSS_PROXIES[idx++];
-      fetch(proxy+encodeURIComponent(targetUrl))
-        .then(function(r){
-          if(!r.ok)throw new Error('HTTP '+r.status);
-          return r.text();
-        })
-        .then(function(xml){
-          // Validate that we got XML with at least one <item>
-          if(xml&&xml.indexOf('<item')>-1){resolve(xml);}
-          else{tryNext();}
-        })
-        .catch(function(){tryNext();});
-    }
-    tryNext();
-  });
+function openLightbox(items,idx){
+  if(!items||!items.length)return;
+  LB.items=items; LB.idx=Math.max(0,Math.min(idx||0,items.length-1));
+  lbRender();
+  document.getElementById('lb-ov').classList.add('open');
+  LB.onKey=function(e){
+    if(e.key==='Escape')closeLightbox();
+    else if(e.key==='ArrowLeft')lbPrev();
+    else if(e.key==='ArrowRight')lbNext();
+  };
+  document.addEventListener('keydown',LB.onKey);
 }
 
+function closeLightbox(){
+  document.getElementById('lb-ov').classList.remove('open');
+  if(LB.onKey){document.removeEventListener('keydown',LB.onKey);LB.onKey=null;}
+}
+
+function lbRender(){
+  var it=LB.items[LB.idx];
+  if(!it)return;
+  document.getElementById('lb-img').src=it.url||'';
+  document.getElementById('lb-cap').textContent=it.caption||'';
+  document.getElementById('lb-counter').textContent=(LB.idx+1)+' of '+LB.items.length;
+}
+
+function lbPrev(){if(LB.items.length<2)return;LB.idx=(LB.idx-1+LB.items.length)%LB.items.length;lbRender();}
+function lbNext(){if(LB.items.length<2)return;LB.idx=(LB.idx+1)%LB.items.length;lbRender();}
+
+// Open lightbox starting at a specific image within a VIN's set
+function lbOpenForVin(vin,startIdx){
+  var imgs=(G.images&&G.images[vin])||[];
+  openLightbox(imgs,startIdx);
+}
+
+// Open lightbox over the whole gallery (filtered by current chip)
+function lbOpenGallery(idx){
+  openLightbox(currentGalleryItems(),idx);
+}
+
+// ── MINI-GALLERY (per-card thumbnail strip + add URL) ──
+function renderMiniGal(vin){
+  var imgs=(G.images&&G.images[vin])||[];
+  var thumbs=imgs.slice(0,8).map(function(img,i){
+    return '<div class="mg-thumb'+(img.is_hero?' is-hero':'')+'" onclick="lbOpenForVin(\''+esc(vin)+'\','+i+')" title="'+esc(img.caption||'')+'">'+
+      '<img src="'+esc(img.url)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'+
+    '</div>';
+  }).join('');
+  return '<div class="mini-gal">'+thumbs+
+    '<button class="mg-add" onclick="toggleAddImageUrl(\''+esc(vin)+'\')" title="Add image URL" aria-label="Add image URL">+</button>'+
+  '</div>'+
+  '<div class="mg-add-row" id="mg-add-'+esc(vin)+'">'+
+    '<input type="url" class="mg-add-input" id="mg-add-input-'+esc(vin)+'" placeholder="Paste image URL (https://...)" onkeydown="if(event.key===\'Enter\'){event.preventDefault();saveImageUrl(\''+esc(vin)+'\')}">'+
+    '<button class="mg-add-save" onclick="saveImageUrl(\''+esc(vin)+'\')">Add</button>'+
+    '<button class="mg-add-cancel" onclick="toggleAddImageUrl(\''+esc(vin)+'\')">&times;</button>'+
+  '</div>';
+}
+
+function toggleAddImageUrl(vin){
+  var row=document.getElementById('mg-add-'+vin);
+  if(!row)return;
+  var open=row.classList.toggle('open');
+  if(open){
+    var inp=document.getElementById('mg-add-input-'+vin);
+    if(inp){inp.value='';setTimeout(function(){inp.focus();},50);}
+  }
+}
+
+function saveImageUrl(vin){
+  if(navigator.vibrate)navigator.vibrate(10);
+  var inp=document.getElementById('mg-add-input-'+vin);
+  if(!inp)return;
+  var url=String(inp.value||'').trim();
+  if(!/^https?:\/\//i.test(url)){alert('Please enter a valid http(s) URL.');return;}
+  var btn=inp.parentNode.querySelector('.mg-add-save');
+  if(btn){btn.disabled=true;btn.textContent='\u2026';}
+  // Determine sort_order = max+1 for this VIN
+  var imgs=(G.images&&G.images[vin])||[];
+  var maxSort=imgs.reduce(function(m,i){return Math.max(m,i.sort_order||0);},0);
+  qw('images','POST',{vin:vin,url:url,source_type:'listing',sort_order:maxSort+1})
+    .then(function(rows){
+      var row=Array.isArray(rows)?rows[0]:rows;
+      G.images=G.images||{};
+      G.images[vin]=G.images[vin]||[];
+      G.images[vin].push(row);
+      if(G.imagesAll)G.imagesAll.push(row);
+      // Re-render so the new thumb appears
+      if(typeof renderTargets==='function')renderTargets();
+      if(typeof renderMkt==='function')renderMkt();
+      if(typeof renderDashListings==='function')renderDashListings();
+      if(typeof rebuildGallery==='function')rebuildGallery();
+    })
+    .catch(function(e){
+      alert('Could not save image URL: '+(e&&e.message?e.message:e));
+      if(btn){btn.disabled=false;btn.textContent='Add';}
+    });
+}
+
+// ── STOCK URL paste (main gallery) ──
+function saveStockImage(){
+  if(navigator.vibrate)navigator.vibrate(10);
+  var inp=document.getElementById('gal-stock-input');
+  if(!inp)return;
+  var url=String(inp.value||'').trim();
+  if(!/^https?:\/\//i.test(url)){alert('Please enter a valid http(s) URL.');return;}
+  var btn=document.getElementById('gal-stock-save');
+  if(btn){btn.disabled=true;btn.textContent='\u2026';}
+  qw('images','POST',{vin:null,url:url,source_type:'stock'})
+    .then(function(rows){
+      var row=Array.isArray(rows)?rows[0]:rows;
+      G.imagesAll=G.imagesAll||[];G.imagesAll.unshift(row);
+      G.imagesStock=G.imagesStock||[];G.imagesStock.unshift(row);
+      inp.value='';
+      if(typeof rebuildGallery==='function')rebuildGallery();
+    })
+    .catch(function(e){
+      alert('Could not save: '+(e&&e.message?e.message:e));
+    })
+    .then(function(){
+      if(btn){btn.disabled=false;btn.textContent='Add';}
+    });
+}
+
+// ── MAIN GALLERY (rebuild from G.imagesAll, chip-filtered) ──
+var GAL={filter:'all',shuffleSeed:0};
+
+function currentGalleryItems(){
+  var items=(G.imagesAll||[]).slice();
+  if(GAL.filter==='listing')items=items.filter(function(i){return i.source_type==='listing';});
+  else if(GAL.filter==='stock')items=items.filter(function(i){return i.source_type==='stock';});
+  else if(GAL.filter==='historical')items=items.filter(function(i){return i.source_type==='historical';});
+  // Always sort newest-first by added_at
+  items.sort(function(a,b){
+    var da=a.added_at?new Date(a.added_at).getTime():0;
+    var db=b.added_at?new Date(b.added_at).getTime():0;
+    return db-da;
+  });
+  return items;
+}
+
+function rebuildGallery(){
+  var grid=document.getElementById('gallery-grid');
+  var countEl=document.getElementById('gallery-count');
+  if(!grid)return;
+  var items=currentGalleryItems();
+  if(countEl)countEl.textContent=items.length+(items.length===1?' photo':' photos');
+  if(!items.length){
+    grid.innerHTML='<div class="loading" style="padding:40px;text-align:center;">No images in this view yet.</div>';
+    rebuildGalleryCarousel([]);
+    return;
+  }
+  grid.innerHTML=items.map(function(img,i){
+    return '<div class="gallery-tile" onclick="lbOpenGallery('+i+')" title="'+esc(img.caption||'')+'">'+
+      '<img src="'+esc(img.url)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'+
+      '<div class="gallery-tile-ov"></div>'+
+    '</div>';
+  }).join('');
+  rebuildGalleryCarousel(items);
+}
+
+function rebuildGalleryCarousel(items){
+  var track=document.getElementById('carousel-track');
+  var dots=document.getElementById('carousel-dots');
+  if(!track||!dots)return;
+  var featured=items.slice(0,Math.min(10,items.length));
+  if(!featured.length){track.innerHTML='';dots.innerHTML='';return;}
+  track.innerHTML=featured.map(function(img,i){
+    return '<div class="car-carousel-slide">'+
+      '<img src="'+esc(img.url)+'" alt="" loading="'+(i===0?'eager':'lazy')+'">'+
+      '<div class="car-carousel-overlay"></div>'+
+      '<div class="car-carousel-caption">'+
+        '<div class="ccc-title">W222 &mdash; S65 &amp; S600</div>'+
+        '<div class="ccc-sub">'+esc(img.caption||'M279 Biturbo V12 \u00b7 The Final Expression')+'</div>'+
+      '</div>'+
+    '</div>';
+  }).join('');
+  dots.innerHTML=featured.map(function(_,i){
+    return '<div class="cdot'+(i===0?' active':'')+'" onclick="carouselGoTo('+i+')"></div>';
+  }).join('');
+  carouselGoTo(0);
+  if(typeof clearCarouselTimer==='function')clearCarouselTimer();
+  if(typeof startCarouselTimer==='function')startCarouselTimer();
+}
+
+function filterGallery(f,btn){
+  GAL.filter=f;
+  var bar=document.getElementById('gal-chips');
+  if(bar)bar.querySelectorAll('.gal-chip').forEach(function(b){b.classList.remove('active');});
+  if(btn)btn.classList.add('active');
+  rebuildGallery();
+}
+
+// ── NEWS FEED ─────────────────────────────────────────────
+// Multi-source RSS aggregator via rss2json proxy
+// Sources: forum subforums + Reddit + Google News (chip-filterable)
+var NEWS_FEEDS=[
+  {source:'MBWorld',     chip:'Forum',  icon:'\u{1F3CE}',  url:'https://mbworld.org/forums/s63-amg-s63-amg-4matic-s65-amg-w222-v222-192/index.rss'},
+  {source:'BenzWorld',   chip:'Forum',  icon:'\u{1F697}',  url:'https://www.benzworld.org/forums/w222-s-class.214/index.rss'},
+  {source:'Reddit',      chip:'Reddit', icon:'\u{1F4AC}',  url:'https://www.reddit.com/r/mercedes_benz/search.rss?q=s65&restrict_sr=1&sort=new'},
+  {source:'Google News', chip:'News',   icon:'\u{1F4F0}',  url:'https://news.google.com/rss/search?q=mercedes+s65+amg&hl=en-US&gl=US&ceid=US:en'}
+];
+var RSS2JSON='https://api.rss2json.com/v1/api.rss?rss_url=';
 var newsLoaded=false;
 
-function nCard(a,fromArchive){
-  var d=a.pubDate?new Date(a.pubDate):null;
-  var ago=d?Math.round((new Date()-d)/86400000):null;
-  var dateStr=ago!==null?(ago===0?'Today':(ago===1?'Yesterday':ago+' days ago')):'';
-  // Validate href: only allow http(s); fall back to '#' otherwise
-  var rawLink=String(a.link||'');
-  var safeHref=/^https?:\/\//i.test(rawLink)?esc(rawLink):'#';
-  var src=esc(a.source||'');
-  var title=esc(a.title||'');
-  var descRaw=String(a.description||'');
-  var desc=esc(descRaw.slice(0,100));
-  return '<a class="ncard" href="'+safeHref+'" target="_blank" rel="noopener">'+'<div class="nthumb">&#128240;</div>'+
-    '<div><div class="nsrc">'+src+(fromArchive?' &middot; archive':'')+'</div><div class="ntitle">'+title+'</div><div class="ndesc">'+desc+'&hellip;</div>'+(dateStr?'<div class="ndate">'+dateStr+'</div>':'')+'</div></a>';
+// Fetch one feed, return [] on any failure (graceful degradation)
+function fetchOneFeed(feed){
+  return fetch(RSS2JSON+encodeURIComponent(feed.url),{cache:'no-store'})
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+    .then(function(data){
+      if(!data||data.status!=='ok'||!Array.isArray(data.items))return [];
+      return data.items.map(function(item){
+        var rawDesc=String(item.description||item.content||'').replace(/<[^>]+>/g,'').trim();
+        var ts=item.pubDate?new Date(item.pubDate).getTime():0;
+        return{
+          source:feed.source,chip:feed.chip,icon:feed.icon,
+          title:String(item.title||'').trim(),
+          link:String(item.link||''),
+          pubDate:item.pubDate||'',
+          description:rawDesc.slice(0,140),
+          ts:isNaN(ts)?0:ts
+        };
+      }).filter(function(a){return a.title&&a.link;});
+    })
+    .catch(function(e){console.warn('Feed failed:',feed.source,e.message);return [];});
+}
+
+function nCard(a){
+  var d=a.ts?new Date(a.ts):null;
+  var ago=d?Math.round((Date.now()-d.getTime())/86400000):null;
+  var dateStr=ago!==null&&ago>=0?(ago===0?'Today':(ago===1?'Yesterday':ago+' days ago')):'';
+  var safeHref=/^https?:\/\//i.test(a.link)?esc(a.link):'#';
+  return '<a class="ncard" href="'+safeHref+'" target="_blank" rel="noopener" data-chip="'+esc(a.chip)+'">'+
+    '<div class="nthumb">'+a.icon+'</div>'+
+    '<div><div class="nsrc">'+esc(a.source)+'</div>'+
+    '<div class="ntitle">'+esc(a.title)+'</div>'+
+    (a.description?'<div class="ndesc">'+esc(a.description)+'&hellip;</div>':'')+
+    (dateStr?'<div class="ndate">'+dateStr+'</div>':'')+
+    '</div></a>';
+}
+
+function renderNewsFeed(){
+  var feedEl=document.getElementById('news-feed');
+  if(!feedEl)return;
+  var items=G.newsItems||[];
+  var f=G.newsFilter||'all';
+  if(f!=='all')items=items.filter(function(i){return i.chip===f;});
+  items=items.slice(0,30);
+  if(!items.length){
+    feedEl.innerHTML='<div class="loading" style="padding:24px;text-align:center;color:var(--dim);">No items in this view.</div>';
+  } else {
+    feedEl.innerHTML=items.map(nCard).join('');
+  }
+}
+
+function filterNews(chip,btn){
+  G.newsFilter=chip;
+  var chipsEl=document.getElementById('news-chips');
+  if(chipsEl)chipsEl.querySelectorAll('.nchip').forEach(function(b){b.classList.remove('active');});
+  if(btn)btn.classList.add('active');
+  renderNewsFeed();
 }
 
 function loadNews(){
   if(newsLoaded)return;
   newsLoaded=true;
-  var CACHE_KEY='s65_news_cache',TIME_KEY='s65_news_time',ARCH_KEY='s65_news_archive';
+  G.newsFilter=G.newsFilter||'all';
+  var CACHE_KEY='s65_news_v2',TIME_KEY='s65_news_v2_time';
   var SIX_H=6*60*60*1000;
-  var cached=null,cacheTime=null;
-  try{cached=localStorage.getItem(CACHE_KEY);cacheTime=parseInt(localStorage.getItem(TIME_KEY)||'0');}catch(e){}
-
-  function showArticles(articles,fromFresh){
-    var liveEl=document.getElementById('rss-live');
-    var statusEl=document.getElementById('rss-status');
-    var archBtn=document.getElementById('archive-btn');
-    if(!liveEl)return;
-    if(articles.length){
-      liveEl.innerHTML=articles.slice(0,8).map(function(a){return nCard(a,false);}).join('');
-      if(statusEl)statusEl.textContent=fromFresh?'Updated just now':'Showing cached results';
-    } else {
-      liveEl.innerHTML='<div class="loading">No results found.</div>';
-    }
-    // Archive
-    try{
-      var arch=JSON.parse(localStorage.getItem(ARCH_KEY)||'[]');
-      var live=new Set(articles.map(function(a){return a.link;}));
-      var archOnly=arch.filter(function(a){return !live.has(a.link);});
-      if(archOnly.length){
-        if(archBtn)archBtn.style.display='inline-block';
-        var archEl=document.getElementById('rss-archive');
-        if(archEl)archEl.innerHTML=archOnly.slice(0,20).map(function(a){return nCard(a,true);}).join('');
-      }
-    }catch(e){}
-  }
+  var statusEl=document.getElementById('rss-status');
 
   // Use cache if fresh
-  if(cached&&cacheTime&&(Date.now()-cacheTime)<SIX_H){
-    try{showArticles(JSON.parse(cached),false);}catch(e){}
-    return;
-  }
+  try{
+    var cached=localStorage.getItem(CACHE_KEY);
+    var cacheTime=parseInt(localStorage.getItem(TIME_KEY)||'0');
+    if(cached&&cacheTime&&(Date.now()-cacheTime)<SIX_H){
+      G.newsItems=JSON.parse(cached);
+      renderNewsFeed();
+      if(statusEl)statusEl.textContent='Cached '+Math.round((Date.now()-cacheTime)/3600000)+'h ago';
+      return;
+    }
+  }catch(e){}
 
-  // Fetch from RSS — uses fallback proxy chain
-  var feedUrl='https://news.google.com/rss/search?q=mercedes+s65+amg&hl=en-US&gl=US&ceid=US:en';
-  var statusEl=document.getElementById('rss-status');
-  if(statusEl)statusEl.textContent='Fetching latest news\u2026';
+  if(statusEl)statusEl.textContent='Fetching\u2026';
 
-  rssFetchWithFallback(feedUrl).then(function(xml){
-    var parser=new DOMParser();
-    var doc=parser.parseFromString(xml,'text/xml');
-    var items=doc.querySelectorAll('item');
-    var articles=[];
-    items.forEach(function(item){
-      var t=(item.querySelector('title')||{}).textContent||'';
-      var l=(item.querySelector('link')||{}).textContent||'';
-      var d=(item.querySelector('pubDate')||{}).textContent||'';
-      var desc=(item.querySelector('description')||{}).textContent||'';
-      var src=(item.querySelector('source')||{}).textContent||'Google News';
-      // Strip HTML from description
-      desc=desc.replace(/<[^>]+>/g,'').trim();
-      if(t&&l)articles.push({title:t,link:l,pubDate:d,description:desc,source:src});
-    });
-    // Save to cache and archive
+  // Fetch all feeds in parallel; merge + sort by date desc
+  Promise.all(NEWS_FEEDS.map(fetchOneFeed)).then(function(results){
+    var all=[].concat.apply([],results);
+    all.sort(function(a,b){return b.ts-a.ts;});
+    G.newsItems=all;
     try{
-      var arch=JSON.parse(localStorage.getItem(ARCH_KEY)||'[]');
-      var newLinks=new Set(articles.map(function(a){return a.link;}));
-      var merged=articles.slice();
-      arch.forEach(function(a){if(!newLinks.has(a.link))merged.push(a);});
-      localStorage.setItem(CACHE_KEY,JSON.stringify(articles));
+      localStorage.setItem(CACHE_KEY,JSON.stringify(all));
       localStorage.setItem(TIME_KEY,Date.now().toString());
-      localStorage.setItem(ARCH_KEY,JSON.stringify(merged.slice(0,100)));
     }catch(e){}
-    showArticles(articles,true);
-  }).catch(function(e){
-    console.error('RSS error:',e);
-    if(cached){try{showArticles(JSON.parse(cached),false);}catch(ex){}}
-    else{var s=document.getElementById('rss-status');if(s)s.textContent='Could not load feed. Showing curated sources.';}
+    renderNewsFeed();
+    if(statusEl){
+      if(all.length)statusEl.textContent='Updated just now \u00B7 '+all.length+' items';
+      else statusEl.textContent='No items returned';
+    }
   });
-}
-
-function toggleArchive(){
-  var el=document.getElementById('rss-archive');
-  var btn=document.getElementById('archive-btn');
-  if(!el||!btn)return;
-  var open=el.classList.toggle('open');
-  btn.textContent=open?'Hide Archive':'Show Archive';
 }
 
 
@@ -2868,7 +3108,7 @@ function renderDOMTable(lhRows){
              '<span style="color:var(--dim);">Watch</span>';
     tbl+='<tr>'+
       '<td style="font-family:var(--mono);font-size:10px;">'+r.vin.slice(-8)+'</td>'+
-      '<td>'+r.seller+'</td>'+
+      '<td>'+esc(r.seller)+'</td>'+
       '<td>'+(r.price?'$'+Number(r.price).toLocaleString():'--')+'</td>'+
       '<td style="color:'+(r.days>=30?'var(--gold2)':'var(--muted)')+';">'+r.days+' days</td>'+
       '<td>'+flag+'</td>'+
@@ -3222,14 +3462,30 @@ function proceedSaveNewListing(vin,year,trim,price,miles,seller,platform,city,st
   // Normalize extension by MIME type (filename extension may be missing/wrong)
   var EXT_MAP={'image/png':'png','image/jpeg':'jpg','image/jpg':'jpg','image/gif':'gif','image/webp':'webp','image/heic':'heic','image/heif':'heif'};
   var photoPromise=photoFile
-    ? qs('photos/'+vin+'_'+Date.now()+'.'+(EXT_MAP[(photoFile.type||'').toLowerCase()]||'jpg'),photoFile).catch(function(e){
+    ? qs('images/'+vin+'_'+Date.now()+'.'+(EXT_MAP[(photoFile.type||'').toLowerCase()]||'jpg'),photoFile).catch(function(e){
         console.warn('Photo upload failed, continuing without image:',e);
         return null;
       })
     : Promise.resolve(null);
 
   photoPromise.then(function(imageUrl){
-    // Upsert vehicles
+    // If a photo was uploaded, also create an `images` row so it appears in mini-gallery + main gallery.
+    // Fire-and-forget: don't block the vehicle upsert chain on this.
+    if(imageUrl){
+      qw('images','POST',{vin:vin,url:imageUrl,source_type:'listing',is_hero:true,sort_order:0})
+        .then(function(rows){
+          var row=Array.isArray(rows)?rows[0]:rows;
+          if(row){
+            G.images=G.images||{};
+            G.images[vin]=G.images[vin]||[];
+            G.images[vin].unshift(row);
+            G.imagesAll=G.imagesAll||[];
+            G.imagesAll.unshift(row);
+          }
+        })
+        .catch(function(e){console.warn('images-row insert failed (vehicle still saved):',e);});
+    }
+    // Upsert vehicles (image_url fallback path; preserves prior on update if no new photo)
     return qups('vehicles',{
       vin:vin,year:year,trim:trim,cohort:cohort,
       car_status:carStatus,listing_status:'active',
@@ -3283,7 +3539,7 @@ function renderDashProspect(){
   if(!wrap)return;
   var v=G.prospect;
   if(!v){wrap.innerHTML='';return;}
-  var imgs=G.prospectImgs&&G.prospectImgs[v.vin]?G.prospectImgs[v.vin]:[];
+  var imgs=G.images&&G.images[v.vin]?G.images[v.vin].slice():[];
   var hero=imgs.filter(function(i){return i.is_hero;})[0]||imgs[0];
   var b=G.build&&G.build[v.vin]||{};
   var ext=b.paint_name?formatColor(b.paint_name):'Cavansite Blue Metallic';
@@ -3292,7 +3548,7 @@ function renderDashProspect(){
   var slides=imgs.slice(0,8);
   var placeholderSlide='<div class="prospect-hero-slide" style="background:var(--panel2);display:flex;align-items:center;justify-content:center;"><span style="font-family:var(--mono);font-size:12px;color:var(--dim);">No images uploaded yet</span></div>';
   var slidesHtml=slides.length?slides.map(function(img){
-    return '<div class="prospect-hero-slide"><img src="'+esc(img.storage_url)+'" alt="'+esc(img.caption||'')+'" loading="lazy"><div class="prospect-hero-ov"></div></div>';
+    return '<div class="prospect-hero-slide"><img src="'+esc(img.url)+'" alt="'+esc(img.caption||'')+'" loading="lazy"><div class="prospect-hero-ov"></div></div>';
   }).join(''):placeholderSlide;
   var dotsHtml=slides.length>1?'<div class="prospect-hero-dots">'+slides.map(function(_,i){return '<div class="prospect-hero-dot'+(i===0?' active':'')+'" onclick="pDashGoTo('+i+')"></div>';}).join('')+'</div>':'';
   wrap.innerHTML='<div class="prospect-hero" onclick="go(\'prospect\',document.querySelector(\'.ntab-prospect\'))" style="overflow:hidden;position:relative;cursor:pointer;">'+
@@ -3403,7 +3659,7 @@ function renderProspect(){
     if(statusEl)statusEl.textContent='';
     return;
   }
-  var imgs=G.prospectImgs&&G.prospectImgs[v.vin]?G.prospectImgs[v.vin]:[];
+  var imgs=G.images&&G.images[v.vin]?G.images[v.vin].slice():[];
   var vm=G.m&&G.m[v.vin]||{};
   var b=G.build&&G.build[v.vin]||{};
   var lh=G.l&&G.l[v.vin]||null;
@@ -3418,7 +3674,7 @@ function renderProspect(){
   if(cw){
     var placeholderSlide='<div class="prospect-page-slide" style="background:var(--panel2);display:flex;align-items:center;justify-content:center;"><span style="font-family:var(--mono);font-size:12px;color:var(--dim);">No images uploaded yet</span></div>';
     var slidesHtml=imgs.length?imgs.map(function(img){
-      return '<div class="prospect-page-slide"><img src="'+esc(img.storage_url)+'" alt="'+esc(img.caption||'')+'" loading="lazy"></div>';
+      return '<div class="prospect-page-slide"><img src="'+esc(img.url)+'" alt="'+esc(img.caption||'')+'" loading="lazy"></div>';
     }).join(''):placeholderSlide;
     cw.innerHTML='<div class="prospect-page-carousel"><div class="prospect-page-track" id="pp-track">'+slidesHtml+'</div>'+
       (imgs.length>1?'<button class="prospect-hero-prev" onclick="pPagePrev()">&#8592;</button><button class="prospect-hero-next" onclick="pPageNext()">&#8594;</button>':'')+
@@ -3430,7 +3686,7 @@ function renderProspect(){
   var tw=document.getElementById('prospect-thumbs-wrap');
   if(tw&&imgs.length){
     tw.innerHTML=imgs.map(function(img,i){
-      return '<div class="prospect-thumb'+(i===0?' active':'')+'" onclick="pPageGoTo('+i+')" id="pthumb-'+i+'"><img src="'+esc(img.storage_url)+'" alt="'+esc(img.caption||'')+'"></div>';
+      return '<div class="prospect-thumb'+(i===0?' active':'')+'" onclick="pPageGoTo('+i+')" id="pthumb-'+i+'"><img src="'+esc(img.url)+'" alt="'+esc(img.caption||'')+'"></div>';
     }).join('');
   }
 
@@ -3556,6 +3812,19 @@ function pPageNext(){pPageGoTo(pPageIdx+1);}
 function loadAll(){
   if(G.loading)return;
   G.loading=true;
+  // Reset section-loaded flags so Sync also refreshes news/resources on next visit.
+  // Note: galleryLoaded NOT reset — gallery reads from G.imagesAll, not its own fetch.
+  // We instead rebuild active gallery view at end of loadAll (see below).
+  newsLoaded=false;
+  resourcesLoaded=false;
+  // Safety net: if a request hangs >30s, force-clear the lock so user can retry
+  if(G.loadingTimeout)clearTimeout(G.loadingTimeout);
+  G.loadingTimeout=setTimeout(function(){
+    if(!G.loading)return;
+    console.warn('loadAll lock force-cleared after 30s timeout');
+    G.loading=false;
+    restoreSyncBtn();
+  },30000);
   var strip=document.getElementById('changed-strip');
   if(strip)strip.innerHTML='<span class="ch-item" style="color:var(--dim);">&#9679; Syncing&hellip;</span>';
   // Visual feedback on the Sync button: spin + label swap, restored when loadAll resolves.
@@ -3575,43 +3844,47 @@ function loadAll(){
     q('vehicle_build?select=vin,paint_name,upholstery_name,production_date,order_number,msrp_original,sa_codes,has_burmester,has_night_vision,has_magic_sky,has_ceramic_brakes,has_refrigerator,has_designo,has_abc_suspension,has_carbon_pkg,has_rear_entertainment,has_chauffeur_pkg,has_executive_rear_seat,has_keyless_go'),
     q('documents?select=vin,doc_type,storage_url'),
     q('vehicle_notes?select=*&deleted_at=is.null&order=created_at.desc'),
-    q('prospect_images?select=*&order=sort_order.asc')
+    q('images?select=*&deleted_at=is.null&order=sort_order.asc')
   ]).then(function(res){
-    var vehicles=res[0]||[],mktRows=res[1]||[],allLH=res[2]||[],buildRows=res[3]||[],docRows=res[4]||[],noteRows=res[5]||[],prospectImgRows=res[6]||[];
+    var vehicles=res[0]||[],mktRows=res[1]||[],allLH=res[2]||[],buildRows=res[3]||[],docRows=res[4]||[],noteRows=res[5]||[],imageRows=res[6]||[];
     var docs={};docRows.forEach(function(d){if(!docs[d.vin])docs[d.vin]={};docs[d.vin][d.doc_type]=d.storage_url;});G.docs=docs;
     // Build vehicle_build index (paint, upholstery, factory options)
     var build={};buildRows.forEach(function(b){build[b.vin]=b;});G.build=build;
-    // Build prospect images index by VIN
-    var prospectImgs={};prospectImgRows.forEach(function(img){if(!prospectImgs[img.vin])prospectImgs[img.vin]=[];prospectImgs[img.vin].push(img);});G.prospectImgs=prospectImgs;
+    // Build images indexes — per-VIN for cards/profile, stock pool for gallery shuffle
+    var images={};       // images[vin] = [imgRow, ...]
+    var imagesAll=[];    // every image (including stock) — for main gallery
+    var imagesStock=[];  // vin IS NULL → stock/historical pool
+    imageRows.forEach(function(img){
+      imagesAll.push(img);
+      if(img.vin){
+        if(!images[img.vin])images[img.vin]=[];
+        images[img.vin].push(img);
+      } else {
+        imagesStock.push(img);
+      }
+    });
+    G.images=images; G.imagesAll=imagesAll; G.imagesStock=imagesStock;
     // Find top prospect vehicle
     G.prospect=vehicles.filter(function(v){return v.is_top_prospect;})[0]||null;
     // Build notes index (already ordered DESC by created_at)
     var notesByVin={};noteRows.forEach(function(n){if(!notesByVin[n.vin])notesByVin[n.vin]=[];notesByVin[n.vin].push(n);});G.notesByVin=notesByVin;
-    // Build profile-image override index from [profile_image] notes (most recent wins — noteRows is DESC sorted).
-    // Source of URL: n.image_url (from upload flow), or first http(s) URL in note body (for hand-written notes).
-    var profileImageByVin={};
-    noteRows.forEach(function(n){
-      if(profileImageByVin[n.vin])return;
-      var p=parseNoteTag(n.body||'');
-      if(p.tag!=='profile_image')return;
-      var url=n.image_url;
-      if(!url){
-        var m=/(https?:\/\/\S+)/.exec(p.body||'');
-        if(m)url=m[1].replace(/[.,;:)\]]+$/,'');
-      }
-      if(url)profileImageByVin[n.vin]=url;
-    });
-    G.profileImageByVin=profileImageByVin;
     if(!Array.isArray(vehicles))return;
 
     // Build indexes
     var mkt={};mktRows.forEach(function(m){mkt[m.vin]=m;});
     // Active VINs tracked on vehicles.listing_status; build lhMap from most-recent listing_history row per active VIN
     var activeSet={};vehicles.forEach(function(v){if(v.listing_status==='active')activeSet[v.vin]=true;});
+    // Defensive: re-sort allLH locally with id DESC tiebreak so duplicate last_seen dates resolve deterministically
+    allLH.sort(function(a,b){
+      var da=a.last_seen?new Date(a.last_seen).getTime():0;
+      var db=b.last_seen?new Date(b.last_seen).getTime():0;
+      if(db!==da)return db-da;
+      return (b.id||0)-(a.id||0);
+    });
     var lhMap={};
     allLH.forEach(function(l){
       if(!activeSet[l.vin])return;
-      // Keep most recent listing per active VIN (allLH is ordered by last_seen DESC)
+      // Keep most recent listing per active VIN (allLH is now sorted last_seen DESC, id DESC for determinism)
       if(!lhMap[l.vin])lhMap[l.vin]=l;
     });
     // activeLH = one row per active VIN (most recent only) — prevents history rows inflating avg/KPIs
@@ -3661,26 +3934,12 @@ function loadAll(){
     // Dashboard listings strip
     renderDashListings();
 
-    // Gallery images for dash carousel (eager load)
-    if(!galleryLoaded){
-      fetch(SB+'/storage/v1/object/list/v12-apex-documents',{
-        method:'POST',
-        headers:Object.assign({'Content-Type':'application/json'},H),
-        body:JSON.stringify({prefix:'gallery/',limit:200,offset:0,sortBy:{column:'name',order:'asc'}})
-      }).then(function(r){return r.json();}).then(function(files){
-        if(!Array.isArray(files))return;
-        galleryImages=files
-          .filter(function(f){return f.name&&/\.(jpg|jpeg|png|webp|gif)$/i.test(f.name);})
-          .map(function(f){return SB+'/storage/v1/object/public/v12-apex-documents/gallery/'+encodeURIComponent(f.name);});
-        // Note: galleryLoaded intentionally NOT set here so Gallery tab still builds its grid/carousel
-        if(galleryImages.length){
-          set('gallery-count',galleryImages.length+' photos');
-        }
-        buildDashCarousel(galleryImages);
-      }).catch(function(e){console.error('Gallery eager load error:',e);});
-    } else {
-      buildDashCarousel(galleryImages);
-    }
+    // Dashboard gallery preview — pull URLs from G.imagesAll (already loaded)
+    var dashImgUrls=(G.imagesAll||[])
+      .filter(function(i){return i.source_type==='historical'||i.source_type==='stock';})
+      .slice(0,12)
+      .map(function(i){return i.url;});
+    buildDashCarousel(dashImgUrls);
 
     // Market
     renderMkt();
@@ -3760,10 +4019,14 @@ function loadAll(){
     renderCohortTable(vehicles,mkt,lhMap);
     renderBuildRarity(vehicles);
     renderProductionTimeline(vehicles);
+    // If the Gallery tab was already opened and showed empty (loaded before images arrived), rebuild it now
+    if(galleryLoaded&&typeof rebuildGallery==='function')rebuildGallery();
     G.loading=false;
+    if(G.loadingTimeout){clearTimeout(G.loadingTimeout);G.loadingTimeout=null;}
     restoreSyncBtn();
   }).catch(function(e){
     G.loading=false;
+    if(G.loadingTimeout){clearTimeout(G.loadingTimeout);G.loadingTimeout=null;}
     restoreSyncBtn();
     console.error('Load error:',e);
     var strip=document.getElementById('changed-strip');
@@ -3857,9 +4120,14 @@ function renderVmModal(vids){
 }
 
 function vmReadSlots(){
+  // Query all existing slots by container, not by sequential index — preserves order even if a middle slot was removed.
+  var slots=document.querySelectorAll('#vm-slots [id^="vm-slot-"]');
   var vids=[];
-  var i=0;
-  while(document.getElementById('vm-ch-'+i)){
+  slots.forEach(function(slot){
+    // Slot id is "vm-slot-N"; extract N to find related fields
+    var m=/^vm-slot-(\d+)$/.exec(slot.id);
+    if(!m)return;
+    var i=m[1];
     var ch=document.getElementById('vm-ch-'+i);
     var title=document.getElementById('vm-title-'+i);
     var id=document.getElementById('vm-id-'+i);
@@ -3870,8 +4138,7 @@ function vmReadSlots(){
       id:id?id.value.trim():'',
       type:typeEl?typeEl.value:'yt'
     });
-    i++;
-  }
+  });
   return vids;
 }
 
@@ -3909,84 +4176,24 @@ function vmReset(){
 }
 
 // ── GALLERY ──────────────────────────────────────────────
+// Reads from G.imagesAll (built in loadAll). Filtering, lightbox, and
+// rebuildGallery() live in the IMAGE MODULE earlier in this file.
 var galleryLoaded=false;
-var galleryImages=[];
 var carouselIdx=0;
 var carouselTimer=null;
-var lbIdx=0;
 
 function loadGallery(){
   if(galleryLoaded)return;
   galleryLoaded=true;
-
-  // If images already fetched by eager load, just build the UI
-  if(galleryImages.length){
-    set('gallery-count',galleryImages.length+' photos');
-    buildCarousel();
-    buildGrid();
-    return;
-  }
-
-  // List files in Supabase Storage gallery folder
-  fetch(SB+'/storage/v1/object/list/v12-apex-documents',{
-    method:'POST',
-    headers:Object.assign({'Content-Type':'application/json'},H),
-    body:JSON.stringify({prefix:'gallery/',limit:200,offset:0,sortBy:{column:'name',order:'asc'}})
-  }).then(function(r){return r.json();}).then(function(files){
-    if(!Array.isArray(files)||files.length===0){
-      galleryLoaded=false;
-      document.getElementById('gallery-grid').innerHTML='<div class="gallery-upload-hint">No photos found yet.<br>Upload your photos to:<br><strong style="color:var(--ink);">Supabase Storage &rarr; v12-apex-documents &rarr; gallery/</strong><br><br>Supports JPG, PNG, WEBP. All photos load automatically.</div>';
-      document.getElementById('carousel-wrap').style.display='none';
-      return;
-    }
-
-    // Build public URLs
-    galleryImages=files
-      .filter(function(f){return f.name&&/\.(jpg|jpeg|png|webp|gif)$/i.test(f.name);})
-      .map(function(f){return SB+'/storage/v1/object/public/v12-apex-documents/gallery/'+encodeURIComponent(f.name);});
-
-    set('gallery-count',galleryImages.length+' photos');
-    buildCarousel();
-    buildGrid();
-  }).catch(function(e){
-    console.error('Gallery load error:',e);
-    galleryLoaded=false;
-    document.getElementById('gallery-grid').innerHTML='<div class="loading">Could not load gallery.</div>';
-  });
-}
-
-function buildCarousel(){
-  var track=document.getElementById('carousel-track');
-  var dots=document.getElementById('carousel-dots');
-  if(!track||!dots)return;
-
-  // Use up to 10 images in carousel
-  var featured=galleryImages.slice(0,Math.min(10,galleryImages.length));
-
-  track.innerHTML=featured.map(function(url,i){
-    return '<div class="car-carousel-slide">'+
-      '<img src="'+url+'" alt="Gallery photo '+(i+1)+'" loading="'+(i===0?'eager':'lazy')+'">'+
-      '<div class="car-carousel-overlay"></div>'+
-      '<div class="car-carousel-caption">'+
-        '<div class="ccc-title">W222 &mdash; S65 &amp; S600</div>'+
-        '<div class="ccc-sub">M279 Biturbo V12 &middot; 621 hp &middot; The Final Expression</div>'+
-      '</div>'+
-    '</div>';
-  }).join('');
-
-  dots.innerHTML=featured.map(function(_,i){
-    return '<div class="cdot'+(i===0?' active':'')+'" onclick="carouselGoTo('+i+')"></div>';
-  }).join('');
-
-  carouselGoTo(0);
-  clearCarouselTimer();
-  startCarouselTimer();
+  // G.imagesAll is built by loadAll(); rebuildGallery handles empty state.
+  rebuildGallery();
 }
 
 function carouselGoTo(idx){
-  var featured=Math.min(10,galleryImages.length);
-  if(!featured)return;
-  carouselIdx=((idx%featured)+featured)%featured;
+  var slides=document.querySelectorAll('#carousel-track .car-carousel-slide');
+  var total=slides.length;
+  if(!total)return;
+  carouselIdx=((idx%total)+total)%total;
   var track=document.getElementById('carousel-track');
   if(track)track.style.transform='translateX(-'+carouselIdx+'00%)';
   document.querySelectorAll('.cdot').forEach(function(d,i){d.classList.toggle('active',i===carouselIdx);});
@@ -3994,48 +4201,7 @@ function carouselGoTo(idx){
 function carouselPrev(){clearCarouselTimer();carouselGoTo(carouselIdx-1);startCarouselTimer();}
 function carouselNext(){clearCarouselTimer();carouselGoTo(carouselIdx+1);startCarouselTimer();}
 function startCarouselTimer(){carouselTimer=setInterval(function(){carouselGoTo(carouselIdx+1);},4500);}
-function clearCarouselTimer(){if(carouselTimer)clearInterval(carouselTimer);}
-
-function buildGrid(){
-  var grid=document.getElementById('gallery-grid');
-  if(!grid)return;
-  grid.innerHTML=galleryImages.map(function(url,i){
-    return '<div class="gallery-tile" onclick="openLb('+i+')">'+
-      '<img src="'+url+'" alt="Photo '+(i+1)+'" loading="lazy">'+
-      '<div class="gallery-tile-ov"></div>'+
-    '</div>';
-  }).join('');
-}
-
-// Lightbox
-function openLb(idx){
-  lbIdx=idx;
-  updateLb();
-  document.getElementById('lightbox').classList.add('open');
-  document.body.style.overflow='hidden';
-}
-function closeLb(){
-  document.getElementById('lightbox').classList.remove('open');
-  document.body.style.overflow='';
-}
-function updateLb(){
-  var img=document.getElementById('lb-img');
-  var ctr=document.getElementById('lb-counter');
-  if(img)img.src=galleryImages[lbIdx];
-  if(ctr)ctr.textContent=(lbIdx+1)+' / '+galleryImages.length;
-}
-function lbPrev(){lbIdx=(lbIdx-1+galleryImages.length)%galleryImages.length;updateLb();}
-function lbNext(){lbIdx=(lbIdx+1)%galleryImages.length;updateLb();}
-function lbBgClick(e){if(e.target===document.getElementById('lightbox'))closeLb();}
-
-// Keyboard nav for lightbox
-document.addEventListener('keydown',function(e){
-  var lb=document.getElementById('lightbox');
-  if(!lb||!lb.classList.contains('open'))return;
-  if(e.key==='ArrowLeft')lbPrev();
-  else if(e.key==='ArrowRight')lbNext();
-  else if(e.key==='Escape')closeLb();
-});
+function clearCarouselTimer(){if(carouselTimer){clearInterval(carouselTimer);carouselTimer=null;}}
 
 loadAll();
 renderVideos();
