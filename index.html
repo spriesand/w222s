@@ -129,7 +129,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .ch-sep{color:var(--dim);padding:0 3px}
 
 /* ── DASHBOARD ── */
-.dash-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:14px;align-items:start}
+.dash-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:14px;align-items:stretch}
 .dash-col{display:flex;flex-direction:column;gap:12px;min-height:0;min-width:0}
 
 /* ── PROSPECT ── */
@@ -506,6 +506,9 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .mg-thumb:hover{border-color:var(--blue);transform:translateY(-1px)}
 .mg-thumb.is-hero{border-color:var(--gold)}
 .mg-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.mg-del{position:absolute;top:1px;right:1px;width:16px;height:16px;border-radius:50%;border:none;background:rgba(0,0,0,.7);color:#fff;font-size:11px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;padding:0;font-family:var(--mono)}
+.mg-thumb:hover .mg-del{display:flex}
+.mg-del:hover{background:rgba(220,60,60,.95)}
 .mg-add{flex:0 0 56px;height:42px;border-radius:5px;border:1px dashed var(--line2);background:rgba(122,167,220,.04);color:var(--blue2);cursor:pointer;font-family:var(--mono);font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
 .mg-add:hover{border-color:var(--blue);background:rgba(122,167,220,.10);color:var(--blue)}
 .mg-add-row{display:none;gap:5px;align-items:center;margin-top:6px}
@@ -681,16 +684,16 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
       </a>
     </div>
     <div class="dash-col">
-      <!-- Mini gallery carousel (swapped to top, sized like prior market chart) -->
-      <div class="card" style="overflow:hidden;position:relative;height:260px;" id="dash-gallery-wrap">
+      <!-- Mini gallery carousel (matches Top Prospect 320px height) -->
+      <div class="card" style="overflow:hidden;position:relative;height:320px;flex-shrink:0;" id="dash-gallery-wrap">
         <div id="dash-gallery-track" style="display:flex;height:100%;transition:transform .5s cubic-bezier(.25,.46,.45,.94);">
           <div class="loading" style="min-width:100%;display:flex;align-items:center;justify-content:center;">Loading gallery&hellip;</div>
         </div>
         <button onclick="dashCarouselPrev()" style="position:absolute;left:8px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#8592;</button>
         <button onclick="dashCarouselNext()" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.55);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;">&#8594;</button>
       </div>
-      <!-- Market chart (swapped to bottom, grown to mirror playbook height) -->
-      <div class="card soft chart-box" style="min-height:360px;display:flex;flex-direction:column;">
+      <!-- Market chart (flex:1 absorbs leftover height so right col bottom aligns with playbook) -->
+      <div class="card soft chart-box" style="flex:1;min-height:280px;display:flex;flex-direction:column;">
         <p style="font-family:var(--serif);font-style:italic;font-size:14px;color:rgba(255,255,255,.85);margin-bottom:7px;">Market Update</p>
         <div style="font-family:var(--serif);font-size:16px;color:var(--ink);margin-bottom:2px;">Avg Asking Price &mdash; S65 AMG</div>
         <div style="font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:8px;">Bear trend &minus;13%/yr &middot; thesis intact</div>
@@ -2736,8 +2739,9 @@ function lbOpenGallery(idx){
 function renderMiniGal(vin){
   var imgs=(G.images&&G.images[vin])||[];
   var thumbs=imgs.slice(0,8).map(function(img,i){
-    return '<div class="mg-thumb'+(img.is_hero?' is-hero':'')+'" onclick="lbOpenForVin(\''+esc(vin)+'\','+i+')" title="'+esc(img.caption||'')+'">'+
-      '<img src="'+esc(img.url)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'+
+    return '<div class="mg-thumb'+(img.is_hero?' is-hero':'')+'" title="'+esc(img.caption||'')+'">'+
+      '<img src="'+esc(img.url)+'" alt="" loading="lazy" onclick="lbOpenForVin(\''+esc(vin)+'\','+i+')" onerror="this.style.display=\'none\'">'+
+      '<button class="mg-del" onclick="event.stopPropagation();deleteImage('+img.id+',\''+esc(vin)+'\')" title="Remove image" aria-label="Remove image">&times;</button>'+
     '</div>';
   }).join('');
   return '<div class="mini-gal">'+thumbs+
@@ -2748,6 +2752,32 @@ function renderMiniGal(vin){
     '<button class="mg-add-save" onclick="saveImageUrl(\''+esc(vin)+'\')">Add</button>'+
     '<button class="mg-add-cancel" onclick="toggleAddImageUrl(\''+esc(vin)+'\')">&times;</button>'+
   '</div>';
+}
+
+// Soft-delete an image (sets deleted_at; reversible from DB)
+function deleteImage(id,vin){
+  if(!confirm('Remove this image? (soft-delete — reversible from database)'))return;
+  if(navigator.vibrate)navigator.vibrate(10);
+  qw('images?id=eq.'+id,'PATCH',{deleted_at:new Date().toISOString()})
+    .then(function(){
+      // Update local indexes
+      if(vin&&G.images&&G.images[vin]){
+        G.images[vin]=G.images[vin].filter(function(i){return i.id!==id;});
+      }
+      if(G.imagesAll){
+        G.imagesAll=G.imagesAll.filter(function(i){return i.id!==id;});
+      }
+      if(G.imagesStock){
+        G.imagesStock=G.imagesStock.filter(function(i){return i.id!==id;});
+      }
+      if(typeof renderTargets==='function')renderTargets();
+      if(typeof renderMkt==='function')renderMkt();
+      if(typeof renderDashListings==='function')renderDashListings();
+      if(typeof rebuildGallery==='function')rebuildGallery();
+    })
+    .catch(function(e){
+      alert('Could not remove: '+(e&&e.message?e.message:e));
+    });
 }
 
 function toggleAddImageUrl(vin){
@@ -2896,12 +2926,18 @@ var NEWS_FEEDS=[
 var RSS2JSON='https://api.rss2json.com/v1/api.rss?rss_url=';
 var newsLoaded=false;
 
-// Fetch one feed, return [] on any failure (graceful degradation)
+// Fetch one feed with 15s timeout, return [] on any failure (graceful degradation)
 function fetchOneFeed(feed){
-  return fetch(RSS2JSON+encodeURIComponent(feed.url),{cache:'no-store'})
+  var ctrl=(typeof AbortController!=='undefined')?new AbortController():null;
+  var timer=ctrl?setTimeout(function(){ctrl.abort();},15000):null;
+  return fetch(RSS2JSON+encodeURIComponent(feed.url),{cache:'no-store',signal:ctrl?ctrl.signal:undefined})
     .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
     .then(function(data){
-      if(!data||data.status!=='ok'||!Array.isArray(data.items))return [];
+      if(timer)clearTimeout(timer);
+      if(!data||data.status!=='ok'||!Array.isArray(data.items)){
+        console.warn('Feed '+feed.source+' returned no items. Status:',data&&data.status,'Message:',data&&data.message);
+        return [];
+      }
       return data.items.map(function(item){
         var rawDesc=String(item.description||item.content||'').replace(/<[^>]+>/g,'').trim();
         var ts=item.pubDate?new Date(item.pubDate).getTime():0;
@@ -2915,7 +2951,11 @@ function fetchOneFeed(feed){
         };
       }).filter(function(a){return a.title&&a.link;});
     })
-    .catch(function(e){console.warn('Feed failed:',feed.source,e.message);return [];});
+    .catch(function(e){
+      if(timer)clearTimeout(timer);
+      console.warn('Feed failed:',feed.source,e&&e.message?e.message:e);
+      return [];
+    });
 }
 
 function nCard(a){
@@ -2978,18 +3018,36 @@ function loadNews(){
 
   // Fetch all feeds in parallel; merge + sort by date desc
   Promise.all(NEWS_FEEDS.map(fetchOneFeed)).then(function(results){
+    var perFeedCounts=results.map(function(r,i){return NEWS_FEEDS[i].source+':'+r.length;}).join(' ');
+    console.log('News feed results —',perFeedCounts);
     var all=[].concat.apply([],results);
     all.sort(function(a,b){return b.ts-a.ts;});
     G.newsItems=all;
-    try{
-      localStorage.setItem(CACHE_KEY,JSON.stringify(all));
-      localStorage.setItem(TIME_KEY,Date.now().toString());
-    }catch(e){}
+    if(all.length){
+      try{
+        localStorage.setItem(CACHE_KEY,JSON.stringify(all));
+        localStorage.setItem(TIME_KEY,Date.now().toString());
+      }catch(e){}
+    }
     renderNewsFeed();
     if(statusEl){
       if(all.length)statusEl.textContent='Updated just now \u00B7 '+all.length+' items';
-      else statusEl.textContent='No items returned';
+      else statusEl.textContent='No items returned (check console for details)';
     }
+  }).catch(function(e){
+    console.error('News load error:',e);
+    // Try to fall back to stale cache
+    try{
+      var staleCached=localStorage.getItem(CACHE_KEY);
+      if(staleCached){
+        G.newsItems=JSON.parse(staleCached);
+        renderNewsFeed();
+        if(statusEl)statusEl.textContent='Live fetch failed — showing cached items';
+        return;
+      }
+    }catch(_e){}
+    newsLoaded=false; // allow retry on next visit
+    if(statusEl)statusEl.textContent='Load failed: '+(e&&e.message?e.message:e)+' (tap News tab again to retry)';
   });
 }
 
