@@ -673,10 +673,10 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   <div class="ntab ntab-prospect" onclick="go('prospect',this)">&#11088; Top Prospect</div>
   <div class="ntab" onclick="go('market',this)">Marketplace <span class="npip" id="market-pip">--</span></div>
   <div class="ntab" onclick="go('targets',this)">Targets</div>
-  <div class="ntab" onclick="go('analytics',this)">Analytics</div>
+  <div class="ntab" onclick="go('gallery',this);loadGallery()">Gallery</div>
   <div class="ntab" onclick="go('news',this);loadNews()">News</div>
   <div class="ntab" onclick="go('videos',this)">Videos</div>
-  <div class="ntab" onclick="go('gallery',this);loadGallery()">Gallery</div>
+  <div class="ntab" onclick="go('analytics',this)">Analytics</div>
   <div class="ntab" onclick="go('resources',this);loadResources()">Resources</div>
 </nav>
 </div><!-- end sticky-header -->
@@ -1075,6 +1075,21 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     </div>
   </div>
 
+  <!-- PDF upload bar -->
+  <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:12px;background:rgba(122,167,220,.06);border:1px solid rgba(122,167,220,.22);border-radius:8px;margin-bottom:14px;">
+    <div style="font-family:var(--mono);font-size:11px;color:var(--blue2);text-transform:uppercase;letter-spacing:.1em;flex-basis:100%;">Upload PDF</div>
+    <input type="file" id="res-upload-file" accept="application/pdf,.pdf" style="flex:1 1 220px;font-family:var(--mono);font-size:12px;color:var(--ink);background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:6px 8px;">
+    <input type="text" id="res-upload-title" placeholder="Title (e.g., 2018 S-Class Brochure)" style="flex:2 1 240px;background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:7px 10px;font-family:var(--mono);font-size:12px;color:var(--ink);outline:none;">
+    <input type="number" id="res-upload-year" placeholder="Year" min="2014" max="2025" style="flex:0 0 90px;background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:7px 10px;font-family:var(--mono);font-size:12px;color:var(--ink);outline:none;">
+    <select id="res-upload-cat" style="flex:0 0 130px;background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:7px 10px;font-family:var(--mono);font-size:12px;color:var(--ink);outline:none;">
+      <option value="brochure">Brochure</option>
+      <option value="manual">Manual</option>
+      <option value="reference">Reference</option>
+      <option value="other">Other</option>
+    </select>
+    <button id="res-upload-btn" onclick="uploadResource()" style="flex:0 0 auto;background:var(--blue);color:var(--bg);border:none;border-radius:5px;padding:7px 16px;font-family:var(--mono);font-size:12px;cursor:pointer;font-weight:500;">Upload</button>
+  </div>
+
   <div id="resources-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;">
     <div class="loading">Loading&hellip;</div>
   </div>
@@ -1185,10 +1200,10 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 </nav>
 <div class="more-drawer" id="more-drawer">
   <div class="mdr" onclick="goProspect();closeMore();"><span class="mdr-icon">&#11088;</span>Top Prospect</div>
-  <div class="mdr" onclick="go('analytics',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128200;</span>Analytics</div>
+  <div class="mdr" onclick="go('gallery',null);loadGallery();closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128247;</span>Gallery</div>
   <div class="mdr" onclick="go('news',null);loadNews();closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128240;</span>News</div>
   <div class="mdr" onclick="go('videos',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#127909;</span>Videos</div>
-  <div class="mdr" onclick="go('gallery',null);loadGallery();closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128247;</span>Gallery</div>
+  <div class="mdr" onclick="go('analytics',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128200;</span>Analytics</div>
   <div class="mdr" onclick="go('resources',null);loadResources();closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128196;</span>Resources</div>
 </div>
 <div class="more-ov" id="more-ov" onclick="closeMore()"></div>
@@ -1742,7 +1757,7 @@ var dlEl=document.getElementById('dash-date');
 if(dlEl)dlEl.textContent=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dn.getDay()]+' Briefing \u2014 '+['January','February','March','April','May','June','July','August','September','October','November','December'][dn.getMonth()]+' '+dn.getDate()+', '+dn.getFullYear();
 
 // ── PAGE NAV ──────────────────────────────────────────────
-var PAGES=['dashboard','prospect','market','targets','analytics','news','videos','gallery','resources'];
+var PAGES=['dashboard','prospect','market','targets','gallery','news','videos','analytics','resources'];
 function go(k,tab){
   if(navigator.vibrate)navigator.vibrate(10);
   PAGES.forEach(function(p){var el=document.getElementById('page-'+p);if(el)el.classList.toggle('active',p===k);});
@@ -1944,7 +1959,7 @@ function renderDashListings(){
     var img=(hero&&hero.url)||v.image_url||PLACEHOLDERS[Math.abs((function(s){var h=0;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))|0;return h;})(v.vin))%PLACEHOLDERS.length];
     return '<div style="flex:0 0 160px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--panel2);display:flex;flex-direction:column;">'+
       '<div style="height:100px;position:relative;overflow:hidden;flex-shrink:0;">'+
-        '<img src="'+esc(img)+'" alt="" style="width:100%;height:100%;object-fit:cover;opacity:.88;display:block;" onerror="this.style.display=\'none\'">'+
+        '<img src="'+esc(img)+'" alt="" style="width:100%;height:100%;object-fit:cover;opacity:.88;display:block;" onerror="imgFallback(this,\''+esc(v.vin)+'\')">'+
         '<div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.5),transparent 60%)"></div>'+
         (isTarget?'<span style="position:absolute;top:5px;left:5px;font-family:var(--mono);font-size:9px;background:rgba(122,167,220,.18);border:1px solid rgba(122,167,220,.3);color:var(--blue2);padding:1px 5px;border-radius:3px;">Target</span>':'')+
       '</div>'+
@@ -2036,6 +2051,63 @@ function loadResources(){
     var el=document.getElementById('resources-grid');
     if(el)el.innerHTML='<div class="loading" style="color:var(--red);">Load failed.</div>';
   });
+}
+
+// Upload a PDF to the v12-apex-documents/resources/ folder, then INSERT a row
+// into the resources table. Filename is sanitized title + timestamp to avoid collisions.
+function uploadResource(){
+  if(navigator.vibrate)navigator.vibrate(10);
+  var fileEl=document.getElementById('res-upload-file');
+  var titleEl=document.getElementById('res-upload-title');
+  var yearEl=document.getElementById('res-upload-year');
+  var catEl=document.getElementById('res-upload-cat');
+  var btn=document.getElementById('res-upload-btn');
+  if(!fileEl||!titleEl||!yearEl||!catEl)return;
+
+  var file=fileEl.files&&fileEl.files[0];
+  var title=String(titleEl.value||'').trim();
+  var year=parseInt(yearEl.value)||null;
+  var category=catEl.value||'other';
+
+  if(!file){alert('Pick a PDF file first.');return;}
+  if(!/\.pdf$/i.test(file.name)&&file.type!=='application/pdf'){
+    alert('That doesn\u2019t look like a PDF. File name should end in .pdf.');
+    return;
+  }
+  if(!title){alert('Title is required.');titleEl.focus();return;}
+
+  // Sanitize title for filename: keep alphanumerics, dashes, underscores
+  var safe=title.toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,60)||'doc';
+  var path='resources/'+safe+'_'+Date.now()+'.pdf';
+
+  if(btn){btn.disabled=true;btn.textContent='Uploading\u2026';}
+
+  qs(path,file)
+    .then(function(url){
+      // INSERT into resources table — keep payload minimal in case column set is tight
+      return qw('resources','POST',{
+        title:title,
+        year:year,
+        category:category,
+        storage_url:url
+      }).then(function(){return url;});
+    })
+    .then(function(){
+      // Reset form
+      fileEl.value='';
+      titleEl.value='';
+      yearEl.value='';
+      // Force a fresh fetch on next render
+      resourcesLoaded=false;
+      loadResources();
+      if(btn){btn.disabled=false;btn.textContent='Upload';}
+    })
+    .catch(function(err){
+      console.error('Upload failed:',err);
+      if(btn){btn.disabled=false;btn.textContent='Upload';}
+      var msg=err&&err.message?err.message:String(err);
+      alert('Upload failed: '+msg+'\n\nIf this is a permissions error, the resources table may need an anon INSERT policy.');
+    });
 }
 
 // ── IMAGE RESOLUTION ──────────────────────────────────────
@@ -2777,7 +2849,7 @@ function renderMiniGal(vin){
   var imgs=(G.images&&G.images[vin])||[];
   var thumbs=imgs.slice(0,8).map(function(img,i){
     return '<div class="mg-thumb'+(img.is_hero?' is-hero':'')+'" title="'+esc(img.caption||'')+'">'+
-      '<img src="'+esc(img.url)+'" alt="" loading="lazy" onclick="lbOpenForVin(\''+esc(vin)+'\','+i+')" onerror="this.style.display=\'none\'">'+
+      '<img src="'+esc(img.url)+'" alt="" loading="lazy" onclick="lbOpenForVin(\''+esc(vin)+'\','+i+')" onerror="imgFallback(this,\''+esc(vin)+'\')">'+
       '<button class="mg-del" onclick="event.stopPropagation();deleteImage('+img.id+',\''+esc(vin)+'\')" title="Remove image" aria-label="Remove image">&times;</button>'+
     '</div>';
   }).join('');
@@ -3770,6 +3842,7 @@ function alCarStatus(year,trim,isTgt){
   return 'reference';
 }
 function saveNewListing(){
+  if(navigator.vibrate)navigator.vibrate(10);
   var vin=document.getElementById('al-vin').value.trim();
   var year=parseInt(document.getElementById('al-year').value)||null;
   var trim=document.getElementById('al-trim').value;
@@ -4477,8 +4550,9 @@ function renderVmModal(vids){
         '<span style="font-family:var(--mono);font-size:12px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;">Slot '+(i+1)+'</span>'+
         '<button onclick="vmRemoveSlot('+i+')" style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:14px;padding:0 4px;" title="Remove slot">&#x2715;</button>'+
       '</div>'+
-      '<input id="vm-ch-'+i+'" value="'+esc(v.ch||'')+'" placeholder="Channel label" style="background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:5px 8px;font-family:var(--mono);font-size:13px;color:var(--ink);width:100%;">'+
+      '<input id="vm-ch-'+i+'" value="'+esc(v.ch||'')+'" placeholder="Channel label (e.g., Review · MercBenzKing)" style="background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:5px 8px;font-family:var(--mono);font-size:13px;color:var(--ink);width:100%;">'+
       '<input id="vm-title-'+i+'" value="'+esc(v.title||'')+'" placeholder="Title" style="background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:5px 8px;font-family:var(--mono);font-size:13px;color:var(--ink);width:100%;">'+
+      '<textarea id="vm-desc-'+i+'" placeholder="Description (optional)" rows="2" style="background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:5px 8px;font-family:var(--mono);font-size:12px;color:var(--ink);width:100%;resize:vertical;min-height:36px;">'+esc(v.desc||'')+'</textarea>'+
       '<input id="vm-id-'+i+'" value="'+esc(v.id||'')+'" placeholder="YouTube ID or search query" style="background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:5px 8px;font-family:var(--mono);font-size:13px;color:var(--ink);width:100%;">'+
       '<div style="display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--muted);">'+
         '<label><input type="radio" name="vm-type-'+i+'" value="yt" '+(v.type!=='search'?'checked':'')+' style="margin-right:4px;">YouTube ID</label>'+
@@ -4494,15 +4568,96 @@ function renderVmModal(vids){
       '<div style="font-family:var(--serif);font-size:20px;color:var(--ink);">Manage Videos</div>'+
       '<button onclick="closeVideoModal()" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;">&#x2715;</button>'+
     '</div>'+
-    '<div style="font-family:var(--mono);font-size:12px;color:var(--muted);">Paste the YouTube ID from after ?v= in the URL.</div>'+
+    '<div style="display:flex;flex-direction:column;gap:6px;padding:10px;background:rgba(122,167,220,.06);border:1px solid rgba(122,167,220,.22);border-radius:8px;">'+
+      '<div style="font-family:var(--mono);font-size:11px;color:var(--blue2);text-transform:uppercase;letter-spacing:.1em;">Quick add</div>'+
+      '<div style="display:flex;gap:6px;">'+
+        '<input id="vm-quick-url" type="url" placeholder="Paste any YouTube URL or ID\u2026" style="flex:1;background:var(--panel2);border:1px solid var(--line2);border-radius:5px;padding:7px 10px;font-family:var(--mono);font-size:12px;color:var(--ink);outline:none;" onkeydown="if(event.key===\'Enter\'){event.preventDefault();vmAddByUrl()}">'+
+        '<button id="vm-quick-btn" onclick="vmAddByUrl()" style="background:var(--blue);color:var(--bg);border:none;border-radius:5px;padding:7px 14px;font-family:var(--mono);font-size:12px;cursor:pointer;font-weight:500;">Add</button>'+
+      '</div>'+
+      '<div style="font-family:var(--mono);font-size:10px;color:var(--dim);">Auto-fetches title &amp; channel. Supports <code>youtube.com/watch</code>, <code>youtu.be/</code>, <code>shorts/</code>, <code>embed/</code>, or bare ID.</div>'+
+    '</div>'+
     '<div id="vm-slots">'+rows+'</div>'+
-    '<button onclick="vmAddSlot()" style="background:none;border:1px dashed var(--line2);color:var(--muted);border-radius:8px;padding:10px;font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor=\'var(--blue)\';this.style.color=\'var(--blue2)\'" onmouseout="this.style.borderColor=\'var(--line2)\';this.style.color=\'var(--muted)\'">+ Add Video Slot</button>'+
+    '<button onclick="vmAddSlot()" style="background:none;border:1px dashed var(--line2);color:var(--muted);border-radius:8px;padding:10px;font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .15s;" onmouseover="this.style.borderColor=\'var(--blue)\';this.style.color=\'var(--blue2)\'" onmouseout="this.style.borderColor=\'var(--line2)\';this.style.color=\'var(--muted)\'">+ Add Empty Slot</button>'+
     '<div style="display:flex;gap:8px;">'+
       '<button onclick="vmSave()" style="flex:1;background:var(--blue);color:var(--bg);border:none;border-radius:7px;padding:10px;font-family:var(--mono);font-size:13px;cursor:pointer;font-weight:500;">Save &amp; Update</button>'+
       '<button onclick="vmReset()" style="padding:10px 14px;background:none;border:1px solid var(--line2);color:var(--muted);border-radius:7px;font-family:var(--mono);font-size:12px;cursor:pointer;">Reset to Defaults</button>'+
     '</div>'+
   '</div>';
   document.body.appendChild(modal);
+}
+
+// Extracts a YouTube video ID from any URL form, or returns the input if it
+// already looks like an 11-char ID. Returns null if nothing matches.
+function extractYouTubeId(input){
+  if(!input)return null;
+  var s=String(input).trim();
+  // Bare 11-char ID (YouTube IDs are always 11 chars: A-Z, a-z, 0-9, _, -)
+  if(/^[A-Za-z0-9_-]{11}$/.test(s))return s;
+  // Try URL forms
+  var patterns=[
+    /[?&]v=([A-Za-z0-9_-]{11})/,         // watch?v=ID
+    /youtu\.be\/([A-Za-z0-9_-]{11})/,    // youtu.be/ID
+    /\/shorts\/([A-Za-z0-9_-]{11})/,     // /shorts/ID
+    /\/embed\/([A-Za-z0-9_-]{11})/,      // /embed/ID
+    /\/v\/([A-Za-z0-9_-]{11})/           // /v/ID (legacy)
+  ];
+  for(var i=0;i<patterns.length;i++){
+    var m=patterns[i].exec(s);
+    if(m)return m[1];
+  }
+  return null;
+}
+
+// Quick-add: paste URL → extract ID → fetch oEmbed metadata → add new slot.
+// Falls back to adding an empty-meta slot if oEmbed fails (private video, network, etc).
+function vmAddByUrl(){
+  if(navigator.vibrate)navigator.vibrate(10);
+  var inp=document.getElementById('vm-quick-url');
+  var btn=document.getElementById('vm-quick-btn');
+  if(!inp)return;
+  var raw=String(inp.value||'').trim();
+  if(!raw){inp.focus();return;}
+  var id=extractYouTubeId(raw);
+  if(!id){
+    alert('Could not detect a YouTube ID in that URL.\n\nAccepted forms:\n  \u2022 youtube.com/watch?v=ID\n  \u2022 youtu.be/ID\n  \u2022 youtube.com/shorts/ID\n  \u2022 youtube.com/embed/ID\n  \u2022 bare 11-char ID');
+    return;
+  }
+  if(btn){btn.disabled=true;btn.textContent='Fetching\u2026';}
+
+  // YouTube oEmbed is public, CORS-enabled, no API key required
+  var watchUrl='https://www.youtube.com/watch?v='+encodeURIComponent(id);
+  var oembedUrl='https://www.youtube.com/oembed?url='+encodeURIComponent(watchUrl)+'&format=json';
+
+  function finish(meta){
+    var current=vmReadSlots();
+    current.push({
+      ch:meta&&meta.author_name?'Review \u00b7 '+meta.author_name:'',
+      title:(meta&&meta.title)||'',
+      desc:'',
+      id:id,
+      type:'yt'
+    });
+    saveVideos(current);
+    renderVmModal(current);
+    // Scroll to the newly added slot (last one)
+    setTimeout(function(){
+      var inner=document.querySelector('#vm-modal > div');
+      if(inner)inner.scrollTop=inner.scrollHeight;
+    },50);
+  }
+
+  fetch(oembedUrl)
+    .then(function(r){
+      if(!r.ok)return Promise.reject(r.status);
+      return r.json();
+    })
+    .then(function(meta){finish(meta);})
+    .catch(function(e){
+      console.warn('oEmbed fetch failed:',e);
+      // Still add the slot — user can fill in title/channel manually
+      if(confirm('Could not auto-fetch title/channel (video may be private, deleted, or blocked).\n\nAdd the slot anyway with empty title?'))finish(null);
+      else if(btn){btn.disabled=false;btn.textContent='Add';}
+    });
 }
 
 function vmReadSlots(){
@@ -4516,11 +4671,13 @@ function vmReadSlots(){
     var i=m[1];
     var ch=document.getElementById('vm-ch-'+i);
     var title=document.getElementById('vm-title-'+i);
+    var desc=document.getElementById('vm-desc-'+i);
     var id=document.getElementById('vm-id-'+i);
     var typeEl=document.querySelector('input[name="vm-type-'+i+'"]:checked');
     vids.push({
       ch:ch?ch.value:'',
       title:title?title.value:'',
+      desc:desc?desc.value:'',
       id:id?id.value.trim():'',
       type:typeEl?typeEl.value:'yt'
     });
@@ -4530,7 +4687,7 @@ function vmReadSlots(){
 
 function vmAddSlot(){
   var vids=vmReadSlots();
-  vids.push({ch:'',title:'',id:'',type:'yt'});
+  vids.push({ch:'',title:'',desc:'',id:'',type:'yt'});
   saveVideos(vids);
   renderVmModal(vids);
   // Scroll to bottom of modal
