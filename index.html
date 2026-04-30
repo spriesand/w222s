@@ -3087,6 +3087,10 @@ function findOrphans(){
 
     if(!orphans.length){
       panel.innerHTML='<div class="orphan-panel-hd"><span class="opc">0 orphans</span><span style="color:var(--dim);font-weight:normal;">All storage files are referenced by an active image row.</span></div>';
+      panel.scrollIntoView({behavior:'smooth',block:'start'});
+      panel.style.transition='box-shadow .25s';
+      panel.style.boxShadow='0 0 0 2px rgba(80,160,80,.5)';
+      setTimeout(function(){panel.style.boxShadow='';},900);
       return;
     }
 
@@ -3104,6 +3108,10 @@ function findOrphans(){
       '</div>';
     }).join('')+'</div>';
     panel.innerHTML=head+grid;
+    panel.scrollIntoView({behavior:'smooth',block:'start'});
+    panel.style.transition='box-shadow .25s';
+    panel.style.boxShadow='0 0 0 2px rgba(168,50,50,.6)';
+    setTimeout(function(){panel.style.boxShadow='';},900);
   }).catch(function(e){
     if(btn){btn.disabled=false;btn.innerHTML='&#128270; Find orphan files';}
     panel.innerHTML='<div class="loading" style="padding:20px;color:#e88;">Scan failed: '+esc(String(e))+'</div>';
