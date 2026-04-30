@@ -420,6 +420,33 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .gallery-tile-ov{position:absolute;inset:0;background:rgba(0,0,0,0);transition:background .15s}
 .gallery-tile:hover .gallery-tile-ov{background:rgba(0,0,0,.15)}
 .gallery-upload-hint{font-family:var(--mono);font-size:12px;color:var(--dim);text-align:center;padding:40px;line-height:1.8}
+/* Manage / dedup mode */
+.gal-toggle-mng{margin-left:auto;background:transparent;border:1px solid var(--line2);color:var(--muted);font-family:var(--mono);font-size:11px;letter-spacing:.05em;padding:6px 12px;border-radius:6px;cursor:pointer;text-transform:uppercase;transition:all .15s}
+.gal-toggle-mng:hover{border-color:#888;color:#ddd}
+.gal-toggle-mng.active{background:#7a1f1f;border-color:#a83232;color:#fff}
+.manage-bar{display:flex;align-items:center;gap:10px;padding:8px 12px;margin:0 0 10px 0;background:rgba(168,50,50,.08);border:1px solid rgba(168,50,50,.3);border-radius:8px;font-family:var(--mono);font-size:11px;color:#e8b8b8;letter-spacing:.04em}
+.manage-bar button{background:#1c1f2c;border:1px solid var(--line2);color:#ddd;font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:5px;cursor:pointer;letter-spacing:.04em}
+.manage-bar button:hover:not(:disabled){border-color:#888}
+.manage-bar button:disabled{opacity:.5;cursor:wait}
+.manage-bar .mb-hint{margin-left:auto;color:var(--dim);font-size:10px}
+.gallery-tile.mng{border-color:rgba(168,50,50,.4)}
+.gallery-tile-del{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(168,50,50,.92);border:1px solid #c44;color:#fff;font-size:13px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:3;padding:0;font-weight:bold}
+.gallery-tile-del:hover{background:#c44}
+.gallery-tile.mng .gallery-tile-del{display:flex}
+.gallery-tile.mng{cursor:default}
+.gallery-tile.mng:hover{transform:none}
+.orphan-panel{margin-top:14px;padding:12px;background:#0a0c14;border:1px solid var(--line);border-radius:8px}
+.orphan-panel-hd{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.orphan-panel-hd .opc{color:#e8b8b8;font-weight:bold}
+.orphan-panel-hd button{margin-left:auto;background:#7a1f1f;border:1px solid #a83232;color:#fff;font-family:var(--mono);font-size:11px;padding:5px 11px;border-radius:5px;cursor:pointer;letter-spacing:.04em}
+.orphan-panel-hd button:hover:not(:disabled){background:#a83232}
+.orphan-panel-hd button:disabled{opacity:.5;cursor:wait}
+.orphan-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.orphan-tile{position:relative;aspect-ratio:4/3;border-radius:6px;overflow:hidden;border:1px solid var(--line);background:#050810}
+.orphan-tile img{width:100%;height:100%;object-fit:cover;display:block}
+.orphan-tile .otp{position:absolute;left:0;right:0;bottom:0;background:rgba(0,0,0,.78);color:#bbb;font-family:var(--mono);font-size:9px;padding:3px 5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.orphan-tile .otd{position:absolute;top:4px;right:4px;width:22px;height:22px;border-radius:50%;background:rgba(168,50,50,.92);border:1px solid #c44;color:#fff;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;font-weight:bold}
+.orphan-tile .otd:hover{background:#c44}
 
 
 .pb-card{border-radius:var(--r);overflow:hidden;border:1px solid rgba(200,169,106,.2);background:#07090f;position:relative;transition:border-color .15s}
@@ -988,11 +1015,18 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   </div>
 
   <!-- Source filter chips -->
-  <div class="gal-chips" id="gal-chips">
+  <div class="gal-chips" id="gal-chips" style="display:flex;align-items:center;">
     <button class="gal-chip active" onclick="filterGallery('all',this)">All</button>
     <button class="gal-chip" onclick="filterGallery('listing',this)">Listings</button>
     <button class="gal-chip" onclick="filterGallery('stock',this)">Stock</button>
     <button class="gal-chip" onclick="filterGallery('historical',this)">Historical</button>
+    <button class="gal-toggle-mng" id="gal-toggle-mng" onclick="toggleManage()" title="Manage / dedup mode">&#9881; Manage</button>
+  </div>
+
+  <!-- Manage bar (shown only in manage mode) -->
+  <div class="manage-bar" id="manage-bar" style="display:none;">
+    <button onclick="findOrphans()" id="orphan-find-btn">&#128270; Find orphan files</button>
+    <span class="mb-hint">Sorted by URL &mdash; duplicates appear adjacent. Click &times; to permanently delete (DB row + storage file).</span>
   </div>
 
   <!-- Carousel -->
@@ -1009,6 +1043,9 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   <div class="gallery-grid" id="gallery-grid">
     <div class="loading">Loading gallery&hellip;</div>
   </div>
+
+  <!-- Orphan panel (manage mode only, populated on demand) -->
+  <div class="orphan-panel" id="orphan-panel" style="display:none;"></div>
 </div>
 </div>
 
@@ -2846,19 +2883,28 @@ function saveStockImage(){
 }
 
 // ── MAIN GALLERY (rebuild from G.imagesAll, chip-filtered) ──
-var GAL={filter:'all',shuffleSeed:0};
+var GAL={filter:'all',shuffleSeed:0,manageMode:false};
 
 function currentGalleryItems(){
   var items=(G.imagesAll||[]).slice();
   if(GAL.filter==='listing')items=items.filter(function(i){return i.source_type==='listing';});
   else if(GAL.filter==='stock')items=items.filter(function(i){return i.source_type==='stock';});
   else if(GAL.filter==='historical')items=items.filter(function(i){return i.source_type==='historical';});
-  // Always sort newest-first by added_at
-  items.sort(function(a,b){
-    var da=a.added_at?new Date(a.added_at).getTime():0;
-    var db=b.added_at?new Date(b.added_at).getTime():0;
-    return db-da;
-  });
+  if(GAL.manageMode){
+    // Sort by URL so duplicate (or near-duplicate) URLs sit adjacent for visual scanning
+    items.sort(function(a,b){
+      var ua=String(a.url||'').toLowerCase();
+      var ub=String(b.url||'').toLowerCase();
+      if(ua<ub)return -1;if(ua>ub)return 1;return 0;
+    });
+  }else{
+    // Default: newest-first by added_at
+    items.sort(function(a,b){
+      var da=a.added_at?new Date(a.added_at).getTime():0;
+      var db=b.added_at?new Date(b.added_at).getTime():0;
+      return db-da;
+    });
+  }
   return items;
 }
 
@@ -2873,10 +2919,15 @@ function rebuildGallery(){
     rebuildGalleryCarousel([]);
     return;
   }
+  var mng=GAL.manageMode;
   grid.innerHTML=items.map(function(img,i){
-    return '<div class="gallery-tile" onclick="lbOpenGallery('+i+')" title="'+esc(img.caption||'')+'">'+
+    var cls='gallery-tile'+(mng?' mng':'');
+    var clickAttr=mng?'':' onclick="lbOpenGallery('+i+')"';
+    var delBtn=mng?'<button class="gallery-tile-del" onclick="event.stopPropagation();hardDeleteImageByIdx('+i+',this)" title="Permanently delete (DB row + storage file)">&times;</button>':'';
+    return '<div class="'+cls+'"'+clickAttr+' title="'+esc(img.caption||img.url||'')+'">'+
       '<img src="'+esc(img.url)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'+
       '<div class="gallery-tile-ov"></div>'+
+      delBtn+
     '</div>';
   }).join('');
   rebuildGalleryCarousel(items);
@@ -2912,6 +2963,207 @@ function filterGallery(f,btn){
   if(bar)bar.querySelectorAll('.gal-chip').forEach(function(b){b.classList.remove('active');});
   if(btn)btn.classList.add('active');
   rebuildGallery();
+}
+
+// ── MANAGE / DEDUP MODE ──────────────────────────────────
+// Toggle reorders the gallery by URL (duplicates adjacent) and exposes a
+// red ✕ on each tile that hard-deletes the DB row AND the storage file.
+function toggleManage(){
+  GAL.manageMode=!GAL.manageMode;
+  var btn=document.getElementById('gal-toggle-mng');
+  var bar=document.getElementById('manage-bar');
+  var op=document.getElementById('orphan-panel');
+  if(btn){btn.classList.toggle('active',GAL.manageMode);btn.innerHTML=GAL.manageMode?'&#10003; Done':'&#9881; Manage';}
+  if(bar)bar.style.display=GAL.manageMode?'flex':'none';
+  if(op&&!GAL.manageMode){op.style.display='none';op.innerHTML='';}
+  if(navigator.vibrate)navigator.vibrate(10);
+  rebuildGallery();
+}
+
+// Convert a public storage URL to the bucket-relative path (or null if not in our bucket)
+function urlToBucketPath(url){
+  if(!url)return null;
+  var pub=SB+'/storage/v1/object/public/v12-apex-documents/';
+  if(url.indexOf(pub)===0){
+    try{return decodeURIComponent(url.substring(pub.length));}
+    catch(e){return url.substring(pub.length);}
+  }
+  return null;
+}
+
+// Hard-delete: storage file (if hosted in our bucket) + DB row. Looks up by
+// index into the currently-rendered list to avoid escaping URLs into onclicks.
+function hardDeleteImageByIdx(idx,btn){
+  var items=currentGalleryItems();
+  var img=items[idx];
+  if(!img){alert('Image no longer in list — refresh and try again.');return;}
+  hardDeleteImage(img.id,img.vin,img.url,btn);
+}
+
+function hardDeleteImage(id,vin,url,btn){
+  if(!confirm('Permanently delete this image?\n\nThis removes the database row AND the storage file. Cannot be undone.'))return;
+  if(navigator.vibrate)navigator.vibrate(10);
+  if(btn){btn.disabled=true;btn.textContent='\u2026';}
+
+  var path=urlToBucketPath(url);
+  // Step 1: delete storage file if it lives in our bucket. Tolerate failure
+  // (file may already be gone — proceed with DB delete either way).
+  var storageStep=path
+    ? fetch(SB+'/storage/v1/object/v12-apex-documents/'+path,{
+        method:'DELETE',
+        headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}
+      }).then(function(r){
+        if(!r.ok&&r.status!==404)return r.text().then(function(t){
+          console.warn('Storage delete failed ('+r.status+'): '+t);
+        });
+      }).catch(function(e){console.warn('Storage delete error:',e);})
+    : Promise.resolve();
+
+  // Step 2: HARD delete the DB row (not soft — duplicates have no audit value)
+  storageStep.then(function(){
+    return qw('images?id=eq.'+id,'DELETE');
+  }).then(function(){
+    if(vin&&G.images&&G.images[vin]){
+      G.images[vin]=G.images[vin].filter(function(i){return i.id!==id;});
+    }
+    if(G.imagesAll){
+      G.imagesAll=G.imagesAll.filter(function(i){return i.id!==id;});
+    }
+    if(G.imagesStock){
+      G.imagesStock=G.imagesStock.filter(function(i){return i.id!==id;});
+    }
+    if(typeof renderTargets==='function')renderTargets();
+    if(typeof renderMkt==='function')renderMkt();
+    if(typeof renderDashListings==='function')renderDashListings();
+    rebuildGallery();
+  }).catch(function(e){
+    if(btn){btn.disabled=false;btn.textContent='\u00d7';}
+    alert('Could not delete: '+(e&&e.message?e.message:e));
+  });
+}
+
+// ── ORPHAN FINDER ────────────────────────────────────────
+// Lists every file in v12-apex-documents/images/ and shows the ones not
+// referenced by any active row in the images table.
+function findOrphans(){
+  var btn=document.getElementById('orphan-find-btn');
+  var panel=document.getElementById('orphan-panel');
+  if(!panel)return;
+  if(btn){btn.disabled=true;btn.textContent='Scanning\u2026';}
+  panel.style.display='block';
+  panel.innerHTML='<div class="loading" style="padding:20px;">Listing storage files\u2026</div>';
+
+  // Page through the storage list endpoint (max 100 per call)
+  var allFiles=[];
+  function listPage(offset){
+    return fetch(SB+'/storage/v1/object/list/v12-apex-documents',{
+      method:'POST',
+      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({prefix:'images/',limit:100,offset:offset,sortBy:{column:'name',order:'asc'}})
+    }).then(function(r){
+      if(!r.ok)return r.text().then(function(t){return Promise.reject(r.status+' '+t);});
+      return r.json();
+    }).then(function(rows){
+      // Storage list returns folder placeholders with id===null; filter those out.
+      var files=(rows||[]).filter(function(o){return o&&o.name&&o.id;});
+      allFiles=allFiles.concat(files);
+      if(files.length===100)return listPage(offset+100);
+    });
+  }
+
+  listPage(0).then(function(){
+    // Build set of paths referenced by ACTIVE images rows (deleted_at IS NULL —
+    // already enforced by loadAll's query, so G.imagesAll holds active only)
+    var referenced={};
+    (G.imagesAll||[]).forEach(function(i){
+      var p=urlToBucketPath(i.url);
+      if(p)referenced[p]=true;
+    });
+
+    var orphans=allFiles.filter(function(f){return !referenced['images/'+f.name];});
+    GAL.orphans=orphans;
+
+    if(btn){btn.disabled=false;btn.innerHTML='&#128270; Find orphan files';}
+
+    if(!orphans.length){
+      panel.innerHTML='<div class="orphan-panel-hd"><span class="opc">0 orphans</span><span style="color:var(--dim);font-weight:normal;">All storage files are referenced by an active image row.</span></div>';
+      return;
+    }
+
+    var head='<div class="orphan-panel-hd">'+
+      '<span class="opc">'+orphans.length+' orphan'+(orphans.length===1?'':'s')+'</span>'+
+      '<span style="color:var(--dim);font-weight:normal;">files in storage with no active <code>images</code> row</span>'+
+      '<button onclick="deleteAllOrphans(this)">Delete all '+orphans.length+'</button>'+
+    '</div>';
+    var grid='<div class="orphan-grid">'+orphans.map(function(f,idx){
+      var url=SB+'/storage/v1/object/public/v12-apex-documents/images/'+encodeURIComponent(f.name);
+      return '<div class="orphan-tile" data-idx="'+idx+'">'+
+        '<img src="'+esc(url)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'+
+        '<button class="otd" onclick="deleteOrphan('+idx+',this)" title="Delete this file">&times;</button>'+
+        '<div class="otp" title="'+esc(f.name)+'">'+esc(f.name)+'</div>'+
+      '</div>';
+    }).join('')+'</div>';
+    panel.innerHTML=head+grid;
+  }).catch(function(e){
+    if(btn){btn.disabled=false;btn.innerHTML='&#128270; Find orphan files';}
+    panel.innerHTML='<div class="loading" style="padding:20px;color:#e88;">Scan failed: '+esc(String(e))+'</div>';
+  });
+}
+
+function deleteOrphan(idx,btn){
+  var orphans=GAL.orphans||[];
+  var f=orphans[idx];
+  if(!f){alert('Orphan no longer in list.');return;}
+  if(!confirm('Delete '+f.name+' from storage?\n\nCannot be undone.'))return;
+  if(btn){btn.disabled=true;btn.textContent='\u2026';}
+  fetch(SB+'/storage/v1/object/v12-apex-documents/images/'+encodeURIComponent(f.name),{
+    method:'DELETE',
+    headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}
+  }).then(function(r){
+    if(!r.ok&&r.status!==404)return r.text().then(function(t){return Promise.reject(r.status+' '+t);});
+    // Mark deleted in array (don't reindex — keeps idx-based callbacks valid)
+    GAL.orphans[idx]=null;
+    var tile=btn&&btn.closest?btn.closest('.orphan-tile'):null;
+    if(tile){tile.style.opacity='.25';tile.style.pointerEvents='none';tile.querySelector('.otd').textContent='\u2713';}
+  }).catch(function(e){
+    if(btn){btn.disabled=false;btn.textContent='\u00d7';}
+    alert('Delete failed: '+(e&&e.message?e.message:e));
+  });
+}
+
+function deleteAllOrphans(btn){
+  var orphans=(GAL.orphans||[]).filter(Boolean);
+  if(!orphans.length){alert('No orphans to delete.');return;}
+  if(!confirm('Delete ALL '+orphans.length+' orphan files from storage?\n\nCannot be undone.'))return;
+  if(btn){btn.disabled=true;btn.textContent='Deleting\u2026';}
+  // Sequential to keep error reporting clean and avoid hammering storage
+  var i=0,fails=0;
+  function next(){
+    if(i>=GAL.orphans.length){
+      if(btn){btn.disabled=false;btn.textContent='Done';}
+      var msg='Deleted '+(orphans.length-fails)+' of '+orphans.length+' files.';
+      if(fails)msg+=' '+fails+' failed (see console).';
+      // Refresh panel
+      setTimeout(function(){findOrphans();},300);
+      alert(msg);
+      return;
+    }
+    var f=GAL.orphans[i];
+    if(!f){i++;return next();}
+    fetch(SB+'/storage/v1/object/v12-apex-documents/images/'+encodeURIComponent(f.name),{
+      method:'DELETE',
+      headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}
+    }).then(function(r){
+      if(!r.ok&&r.status!==404){fails++;console.warn('Failed:',f.name,r.status);}
+      else{
+        GAL.orphans[i]=null;
+        var tile=document.querySelector('.orphan-tile[data-idx="'+i+'"]');
+        if(tile){tile.style.opacity='.25';tile.style.pointerEvents='none';}
+      }
+      i++;next();
+    }).catch(function(e){fails++;console.warn('Error:',f.name,e);i++;next();});
+  }
+  next();
 }
 
 // ── NEWS FEED ─────────────────────────────────────────────
