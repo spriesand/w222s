@@ -1546,16 +1546,38 @@ function notesSave(){
     G.notesByVin=G.notesByVin||{};
     G.notesByVin[vin]=G.notesByVin[vin]||[];
     if(row)G.notesByVin[vin].unshift(row);
-    // If body contains an image URL, set it as the vehicle profile image
+    // If body contains an image URL, promote it as the new hero profile image.
+    // Follows same flow as camera-button upload:
+    //   1. Demote prior hero in images table
+    //   2. Insert new images row with is_hero=true
+    //   3. PATCH vehicles.image_url
     if(body){
       var imgUrlMatch=body.match(/https?:\/\/\S+\.(?:jpg|jpeg|png|webp|gif)(\?\S*)?/i);
       if(imgUrlMatch){
         var profileUrl=imgUrlMatch[0];
-        qw('vehicles?vin=eq.'+encodeURIComponent(vin),'PATCH',{image_url:profileUrl})
+        qw('images?vin=eq.'+encodeURIComponent(vin)+'&is_hero=eq.true','PATCH',{is_hero:false})
+          .catch(function(){}) // no prior hero is fine
           .then(function(){
+            return qw('images','POST',{
+              vin:vin,url:profileUrl,source_type:'listing',
+              is_hero:true,sort_order:0
+            });
+          })
+          .then(function(rows){
+            var newRow=Array.isArray(rows)?rows[0]:rows;
+            // Update vehicles.image_url
+            return qw('vehicles?vin=eq.'+encodeURIComponent(vin),'PATCH',{image_url:profileUrl})
+              .then(function(){return newRow;});
+          })
+          .then(function(newRow){
             // Update local state
             var vObj=G.v&&G.v.find(function(x){return x.vin===vin;});
             if(vObj)vObj.image_url=profileUrl;
+            G.images=G.images||{};
+            G.images[vin]=G.images[vin]||[];
+            G.images[vin].forEach(function(i){i.is_hero=false;});
+            if(newRow)G.images[vin].unshift(newRow);
+            if(G.imagesAll&&newRow)G.imagesAll.unshift(newRow);
             renderTargets();renderMkt();renderDashListings();
             if(typeof renderDashProspect==='function')renderDashProspect();
           }).catch(function(){});
