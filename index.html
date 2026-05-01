@@ -3633,7 +3633,7 @@ function renderPriceDrops(vehicles,lhRows){
 function renderMSRP(vehicles){
   var el=document.getElementById('msrp-table');
   if(!el)return;
-  // Primary: vehicle_build.msrp_original (canonical column).
+  // Source: vehicle_notes — parse Neo VIN MSRP from research notes.
   // Fallback: parse [research] notes containing "Neo VIN factory built MSRP for this VIN: $XXX,XXX".
   // The fallback path covers VINs decoded before the column was added.
   var rx=/Neo VIN factory built MSRP[^$]*\$([\d,]+)/i;
@@ -3643,12 +3643,9 @@ function renderMSRP(vehicles){
     var build=(G.build&&G.build[v.vin])||null;
     var matched=null;
     var source=null;
-    // Primary: column
-    if(build&&build.msrp_original!=null&&!isNaN(Number(build.msrp_original))){
-      matched=Number(build.msrp_original);
-      source='column';
-    } else {
-      // Fallback: notes
+    // Source: notes
+    {
+      // notes
       var notes=(G.notesByVin&&G.notesByVin[v.vin])||[];
       for(var i=0;i<notes.length;i++){
         var b=notes[i].body||'';
@@ -4167,7 +4164,7 @@ function renderProspect(){
       {label:'Production Date',value:b.production_date||'--',sub:'Sindelfingen · Order '+(b.order_number||'')},
       {label:'Accidents',value:vm.accident_count?'Reported':'None reported',sub:vm.accident_count?'See notes':'Clean record'},
       {label:'Key Packages',value:pkgs,sub:'From SA code build data'},
-      {label:'Original MSRP',value:b.msrp_original?fP(b.msrp_original):'--',sub:'vs. ~$40K target — 83% decline'},
+      {label:'Original MSRP',value:'--',sub:'Column removed 2026-05-01'},
     ].map(function(s){
       return '<div class="prospect-spec">'+
         '<div class="prospect-spec-label">'+esc(s.label)+'</div>'+
@@ -4300,7 +4297,7 @@ function loadAll(){
     q('vehicles?select=*&order=year.desc&limit=2000'),
     q('vehicle_market?select=*'),
     q('listing_history?select=id,vin,price,miles,seller_name,seller_type,city,state,platform,first_seen,last_seen,dom&order=last_seen.desc,id.desc&limit=5000'),
-    q('vehicle_build?select=vin,paint_name,upholstery_name,production_date,order_number,msrp_original,sa_codes,has_burmester,has_night_vision,has_magic_sky,has_ceramic_brakes,has_refrigerator,has_designo,has_abc_suspension,has_carbon_pkg,has_rear_entertainment,has_chauffeur_pkg,has_executive_rear_seat,has_keyless_go'),
+    q('vehicle_build?select=vin,paint_name,upholstery_name,production_date,order_number,sa_codes,has_burmester,has_night_vision,has_magic_sky,has_ceramic_brakes,has_refrigerator,has_designo,has_abc_suspension,has_carbon_pkg,has_rear_entertainment,has_chauffeur_pkg,has_executive_rear_seat,has_keyless_go'),
     q('documents?select=vin,doc_type,storage_url'),
     q('vehicle_notes?select=*&deleted_at=is.null&order=created_at.desc'),
     q('images?select=*&deleted_at=is.null&order=sort_order.asc')
