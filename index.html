@@ -1216,7 +1216,10 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
       <div class="notes-head-t">&#128221; Notes</div>
       <div class="notes-head-v" id="notes-head-v">&mdash;</div>
     </div>
-    <button class="notes-close" onclick="closeNotes()" aria-label="Close">&times;</button>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button onclick="openProfileImagePicker(NS.vin)" title="Set profile image" style="background:none;border:1px solid var(--line2);border-radius:6px;color:var(--muted);font-size:14px;cursor:pointer;padding:4px 8px;line-height:1;" aria-label="Set profile image">&#128247;</button>
+      <button class="notes-close" onclick="closeNotes()" aria-label="Close">&times;</button>
+    </div>
   </div>
   <div class="notes-body" id="notes-body"><div class="notes-empty">No notes yet.</div></div>
   <div class="notes-compose">
@@ -1543,6 +1546,21 @@ function notesSave(){
     G.notesByVin=G.notesByVin||{};
     G.notesByVin[vin]=G.notesByVin[vin]||[];
     if(row)G.notesByVin[vin].unshift(row);
+    // If body contains an image URL, set it as the vehicle profile image
+    if(body){
+      var imgUrlMatch=body.match(/https?:\/\/\S+\.(?:jpg|jpeg|png|webp|gif)(\?\S*)?/i);
+      if(imgUrlMatch){
+        var profileUrl=imgUrlMatch[0];
+        qw('vehicles?vin=eq.'+encodeURIComponent(vin),'PATCH',{image_url:profileUrl})
+          .then(function(){
+            // Update local state
+            var vObj=G.v&&G.v.find(function(x){return x.vin===vin;});
+            if(vObj)vObj.image_url=profileUrl;
+            renderTargets();renderMkt();renderDashListings();
+            if(typeof renderDashProspect==='function')renderDashProspect();
+          }).catch(function(){});
+      }
+    }
     // Reset compose
     document.getElementById('notes-textarea').value='';
     document.getElementById('notes-file-input').value='';
