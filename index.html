@@ -2193,7 +2193,7 @@ function renderCompact(v,vm,lh){
 
       '</div>'+
       '<div style="display:flex;gap:6px;align-items:center;">'+
-        (v.listing_url?'<a href="'+esc(v.listing_url)+'" target="_blank" rel="noopener" class="lc-btn" style="flex:1;justify-content:center;padding:6px 9px;">&#9654; View Listing</a>':'<span style="flex:1;"></span>')+
+        (v.listing_url?'<a href="'+esc(v.listing_url)+'" target="_blank" rel="noopener" class="lc-btn lc-btn-on" style="flex:1;justify-content:center;padding:6px 9px;">&#10003; View Listing</a>':'<span class="lc-btn lc-btn-off" style="flex:1;justify-content:center;padding:6px 9px;">View Listing</span>')+
         '<button class="price-edit" onclick="openUrlEdit(\''+v.vin+'\',\'m\',this)" title="Edit listing URL">&#9998;</button>'+
         (active?'<button class="price-edit" onclick="markInactive(\''+v.vin+'\')" title="Mark listing inactive" style="color:var(--red);opacity:.6;">&#10005;</button>':'')+
       '</div>'+
@@ -2246,7 +2246,7 @@ function renderTarget(v,vm,lh){
       '</div>'+
       '<div class="tc-flags">'+flags(v,vm)+'</div>'+equipChips(v.vin)+renderDocLinks(v.vin)+renderMiniGal(v.vin)+
       '<div style="display:flex;gap:6px;align-items:stretch;">'+
-        (v.listing_url?'<a href="'+esc(v.listing_url)+'" target="_blank" rel="noopener" class="tc-btn" style="flex:1;">&#9654; View Listing</a>':(active?'<span class="tc-btn" style="flex:1;opacity:.5;cursor:default;">&#9679; Active</span>':'<span style="flex:1;"></span>'))+
+        (v.listing_url?'<a href="'+esc(v.listing_url)+'" target="_blank" rel="noopener" class="tc-btn lc-btn-on" style="flex:1;">&#10003; View Listing</a>':'<span class="tc-btn lc-btn-off" style="flex:1;cursor:not-allowed;">View Listing</span>')+
         '<button class="tc-btn" style="flex:none;padding:8px 10px;" onclick="openUrlEdit(\''+v.vin+'\',\'t\',this)" title="Edit listing URL">&#9998;</button>'+
       '</div>'+
       '<div class="url-edit-row" id="url-edit-t-'+v.vin+'" style="display:none;gap:5px;align-items:center;">'+
