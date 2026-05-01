@@ -4401,6 +4401,15 @@ function loadAll(){
     renderMkt();
 
     // Targets
+    // Color family normalizer: White → Black → Grey → Other
+    function colorFamily(vin){
+      var p=((G.build&&G.build[vin]&&G.build[vin].paint_name)||'').toLowerCase();
+      if(/white|polar|diamond/.test(p))  return '1_white';
+      if(/black|obsidian|onyx/.test(p))  return '2_black';
+      if(/grey|gray|silver|graphite|selenite|iridium|anthracite/.test(p)) return '3_grey';
+      if(p) return '4_other';
+      return '5_unknown';
+    }
     var sortedT=targetV.slice().sort(function(a,b){
       // 1. Top prospect always first
       if(a.is_top_prospect&&!b.is_top_prospect)return -1;
@@ -4408,12 +4417,14 @@ function loadAll(){
       // 2. Active listings before inactive
       var aA=lhMap[a.vin]?0:1,bA=lhMap[b.vin]?0:1;
       if(aA!==bA)return aA-bA;
-      // 3. Year descending
+      // 3. Final Editions to bottom
+      var aFE=a.is_final_edition?1:0,bFE=b.is_final_edition?1:0;
+      if(aFE!==bFE)return aFE-bFE;
+      // 4. Year descending
       if((b.year||0)!==(a.year||0))return (b.year||0)-(a.year||0);
-      // 4. Color alphabetically
-      var aC=(G.build&&G.build[a.vin]&&G.build[a.vin].paint_name)||'zzz';
-      var bC=(G.build&&G.build[b.vin]&&G.build[b.vin].paint_name)||'zzz';
-      return aC.localeCompare(bC);
+      // 5. Color family (White → Black → Grey → Other)
+      var aCF=colorFamily(a.vin),bCF=colorFamily(b.vin);
+      return aCF.localeCompare(bCF);
     });
     G.sortedT=sortedT;
     buildTgtFilters();
