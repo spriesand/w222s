@@ -4402,11 +4402,18 @@ function loadAll(){
 
     // Targets
     var sortedT=targetV.slice().sort(function(a,b){
-      // Top prospect always first
+      // 1. Top prospect always first
       if(a.is_top_prospect&&!b.is_top_prospect)return -1;
       if(!a.is_top_prospect&&b.is_top_prospect)return 1;
+      // 2. Active listings before inactive
       var aA=lhMap[a.vin]?0:1,bA=lhMap[b.vin]?0:1;
-      return aA!==bA?aA-bA:(b.year||0)-(a.year||0);
+      if(aA!==bA)return aA-bA;
+      // 3. Year descending
+      if((b.year||0)!==(a.year||0))return (b.year||0)-(a.year||0);
+      // 4. Color alphabetically
+      var aC=(G.build&&G.build[a.vin]&&G.build[a.vin].paint_name)||'zzz';
+      var bC=(G.build&&G.build[b.vin]&&G.build[b.vin].paint_name)||'zzz';
+      return aC.localeCompare(bC);
     });
     G.sortedT=sortedT;
     buildTgtFilters();
