@@ -3972,8 +3972,7 @@ function proceedSaveNewListing(vin,year,trim,price,miles,seller,platform,city,st
       vin:vin,price:price,miles:miles,
       seller_name:seller,seller_type:'dealer',
       city:city,state:state,platform:platform,
-      first_seen:firstSeen||today,last_seen:today,
-      listing_url:url
+      first_seen:firstSeen||today,last_seen:today
     });
   })
   .then(function(){
