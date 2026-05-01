@@ -1216,8 +1216,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
       <div class="notes-head-t">&#128221; Notes</div>
       <div class="notes-head-v" id="notes-head-v">&mdash;</div>
     </div>
-    <div style="display:flex;align-items:center;gap:8px;">
-      <button onclick="openProfileImagePicker(NS.vin)" title="Set profile image" style="background:none;border:1px solid var(--line2);border-radius:6px;color:var(--muted);font-size:14px;cursor:pointer;padding:4px 8px;line-height:1;" aria-label="Set profile image">&#128247;</button>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <button onclick="if(NS.vin)openProfileImagePicker(NS.vin);" title="Set profile image" style="background:rgba(122,167,220,.08);border:1px solid rgba(122,167,220,.25);border-radius:6px;color:var(--blue2);font-size:15px;cursor:pointer;padding:5px 10px;line-height:1;flex-shrink:0;" aria-label="Set profile image">&#128247;</button>
       <button class="notes-close" onclick="closeNotes()" aria-label="Close">&times;</button>
     </div>
   </div>
@@ -1569,17 +1569,22 @@ function notesSave(){
             return qw('vehicles?vin=eq.'+encodeURIComponent(vin),'PATCH',{image_url:profileUrl})
               .then(function(){return newRow;});
           })
-          .then(function(newRow){
-            // Update local state
-            var vObj=G.v&&G.v.find(function(x){return x.vin===vin;});
-            if(vObj)vObj.image_url=profileUrl;
-            G.images=G.images||{};
-            G.images[vin]=G.images[vin]||[];
-            G.images[vin].forEach(function(i){i.is_hero=false;});
-            if(newRow)G.images[vin].unshift(newRow);
-            if(G.imagesAll&&newRow)G.imagesAll.unshift(newRow);
-            renderTargets();renderMkt();renderDashListings();
-            if(typeof renderDashProspect==='function')renderDashProspect();
+          .then(function(){
+            // Re-fetch images for this VIN to guarantee local state matches DB
+            return fetch(SB+'/rest/v1/images?vin=eq.'+encodeURIComponent(vin)+'&deleted_at=is.null&order=sort_order.asc',{headers:H})
+              .then(function(r){return r.ok?r.json():[];})
+              .then(function(freshImgs){
+                var vObj=G.v&&G.v.find(function(x){return x.vin===vin;});
+                if(vObj)vObj.image_url=profileUrl;
+                G.images=G.images||{};
+                G.images[vin]=freshImgs;
+                // Rebuild imagesAll for this VIN
+                if(G.imagesAll){
+                  G.imagesAll=G.imagesAll.filter(function(i){return i.vin!==vin;}).concat(freshImgs);
+                }
+                renderTargets();renderMkt();renderDashListings();
+                if(typeof renderDashProspect==='function')renderDashProspect();
+              });
           }).catch(function(){});
       }
     }
@@ -4203,7 +4208,6 @@ function renderProspect(){
       {label:'Production Date',value:b.production_date||'--',sub:'Sindelfingen · Order '+(b.order_number||'')},
       {label:'Accidents',value:vm.accident_count?'Reported':'None reported',sub:vm.accident_count?'See notes':'Clean record'},
       {label:'Key Packages',value:pkgs,sub:'From SA code build data'},
-      {label:'Original MSRP',value:'--',sub:'Column removed 2026-05-01'},
     ].map(function(s){
       return '<div class="prospect-spec">'+
         '<div class="prospect-spec-label">'+esc(s.label)+'</div>'+
