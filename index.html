@@ -135,6 +135,28 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 /* ── PROSPECT ── */
 .ntab-prospect{color:var(--gold)!important;font-weight:600;}
 .ntab-prospect.active{border-bottom-color:var(--gold)!important;}
+.ntab-fe{color:var(--gold2)!important;font-weight:600;}
+.ntab-fe.active{border-bottom-color:var(--gold2)!important;}
+/* FE Gallery */
+.fe-hero{background:linear-gradient(160deg,rgba(20,15,5,.95),rgba(10,8,3,.98));border:1px solid rgba(212,175,55,.25);border-radius:12px;padding:28px 24px;margin-bottom:20px;text-align:center;}
+.fe-hero-title{font-family:var(--mono);font-size:22px;color:var(--gold2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;}
+.fe-hero-sub{font-size:13px;color:var(--muted);max-width:520px;margin:0 auto 16px;line-height:1.6;}
+.fe-stat{display:inline-block;margin:0 12px;font-family:var(--mono);}
+.fe-stat-n{font-size:28px;color:var(--gold);display:block;}
+.fe-stat-l{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;}
+.fe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:16px;}
+.fe-card{background:var(--panel);border:1px solid rgba(212,175,55,.18);border-radius:10px;padding:16px;position:relative;overflow:hidden;}
+.fe-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(212,175,55,.04),transparent);pointer-events:none;}
+.fe-card-vin{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.08em;margin-bottom:6px;}
+.fe-card-year{font-size:18px;font-weight:700;color:var(--gold2);margin-bottom:2px;}
+.fe-card-trim{font-size:12px;color:var(--muted);margin-bottom:10px;}
+.fe-card-badge{display:inline-block;padding:3px 8px;border-radius:4px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;background:rgba(212,175,55,.12);color:var(--gold2);border:1px solid rgba(212,175,55,.3);}
+.fe-coming{color:var(--dim);font-size:11px;font-family:var(--mono);margin-top:8px;}
+/* Depreciation Charts */
+.dep-charts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:14px;margin-top:8px;}
+.dep-chart-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.dep-chart-wrap svg{width:100%;height:auto;min-width:320px;display:block;}
+@media(max-width:540px){.dep-charts-grid{grid-template-columns:1fr;}.fe-grid{grid-template-columns:1fr;}}
 .prospect-hero{position:relative;width:100%;height:320px;border-radius:var(--r);overflow:hidden;cursor:pointer;background:#0a0c14;}
 .prospect-hero-track{display:flex;width:100%;height:100%;transition:transform .6s cubic-bezier(.25,.46,.45,.94);will-change:transform;}
 .prospect-hero-slide{width:100%;height:100%;position:relative;flex-shrink:0;flex:0 0 100%;overflow:hidden;}
@@ -678,6 +700,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   <div class="ntab" onclick="go('videos',this)">Videos</div>
   <div class="ntab" onclick="go('analytics',this)">Analytics</div>
   <div class="ntab" onclick="go('resources',this);loadResources()">Resources</div>
+  <div class="ntab ntab-fe" onclick="go('finaledition',this)">&#11088; Final Edition</div>
 </nav>
 </div><!-- end sticky-header -->
 
@@ -947,7 +970,40 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
       <div id="msrp-table" style="margin-top:8px;"><div class="loading">Loading&hellip;</div></div>
     </div>
 
+    <!-- 10. Cohort Depreciation Charts — Full Width -->
+    <div class="card an-full an-card">
+      <div class="an-title">Depreciation by Cohort &mdash; Price vs Miles</div>
+      <div class="an-sub">Asking prices vs confirmed transaction prices &middot; retail and wholesale rails separated &middot; Golden Intersection zone highlighted</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center;">
+        <span style="font-family:var(--mono);font-size:11px;color:var(--dim);">Rail:</span>
+        <span style="display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:11px;color:var(--blue2);">&#9679; Retail asking</span>
+        <span style="display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:11px;color:var(--gold);">&#9679; Transaction</span>
+        <span style="display:flex;align-items:center;gap:4px;font-family:var(--mono);font-size:11px;color:rgba(34,197,94,.7);">&#9632; Golden Intersection</span>
+      </div>
+      <div class="dep-charts-grid" id="dep-charts-grid"><div class="loading">Loading&hellip;</div></div>
+    </div>
+
   </div>
+</div>
+</div>
+
+<!-- ═══ FINAL EDITION ═══ -->
+<div class="page" id="page-finaledition">
+<div class="pp">
+  <div class="fe-hero">
+    <div class="fe-hero-title">&#11088; S65 AMG Final Edition</div>
+    <div class="fe-hero-sub">The last V12 S-Class ever built. In 2020, Mercedes-AMG produced a farewell run of the W222 S65 — 8 cars for the US market, each identically specified in Obsidian Black Metallic with Exclusive Nappa Leather. This gallery documents every known US example.</div>
+    <div style="margin-top:16px;">
+      <span class="fe-stat"><span class="fe-stat-n">8</span><span class="fe-stat-l">US Allocation</span></span>
+      <span class="fe-stat"><span class="fe-stat-n">2020</span><span class="fe-stat-l">Final Model Year</span></span>
+      <span class="fe-stat"><span class="fe-stat-n">V12</span><span class="fe-stat-l">M279 Biturbo</span></span>
+      <span class="fe-stat"><span class="fe-stat-n">621</span><span class="fe-stat-l">Horsepower</span></span>
+    </div>
+  </div>
+  <div style="background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.2);border-radius:8px;padding:12px 16px;margin-bottom:20px;font-size:12px;color:var(--muted);font-family:var(--mono);">
+    &#9888;&nbsp; Full provenance profiles, price history, and gallery coming in a future update. VIN cards below reflect current database records.
+  </div>
+  <div class="fe-grid" id="fe-grid"><div class="loading">Loading&hellip;</div></div>
 </div>
 </div>
 
@@ -1205,6 +1261,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   <div class="mdr" onclick="go('videos',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#127909;</span>Videos</div>
   <div class="mdr" onclick="go('analytics',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128200;</span>Analytics</div>
   <div class="mdr" onclick="go('resources',null);loadResources();closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128196;</span>Resources</div>
+  <div class="mdr" onclick="go('finaledition',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#11088;</span>Final Edition</div>
 </div>
 <div class="more-ov" id="more-ov" onclick="closeMore()"></div>
 
@@ -1841,7 +1898,7 @@ var dlEl=document.getElementById('dash-date');
 if(dlEl)dlEl.textContent=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][dn.getDay()]+' Briefing \u2014 '+['January','February','March','April','May','June','July','August','September','October','November','December'][dn.getMonth()]+' '+dn.getDate()+', '+dn.getFullYear();
 
 // ── PAGE NAV ──────────────────────────────────────────────
-var PAGES=['dashboard','prospect','market','targets','gallery','news','videos','analytics','resources'];
+var PAGES=['dashboard','prospect','market','targets','gallery','news','videos','analytics','resources','finaledition'];
 function go(k,tab){
   if(navigator.vibrate)navigator.vibrate(10);
   PAGES.forEach(function(p){var el=document.getElementById('page-'+p);if(el)el.classList.toggle('active',p===k);});
@@ -4575,6 +4632,8 @@ function loadAll(){
     renderCohortTable(vehicles,mkt,lhMap);
     renderBuildRarity(vehicles);
     renderProductionTimeline(vehicles);
+    renderDepreciationCharts();
+    renderFinalEdition();
     // If the Gallery tab was already opened and showed empty (loaded before images arrived), rebuild it now
     if(galleryLoaded&&typeof rebuildGallery==='function')rebuildGallery();
     G.loading=false;
@@ -4618,6 +4677,107 @@ function saveVideos(vids){
   try{localStorage.setItem('s65_videos',JSON.stringify(vids));}catch(e){}
 }
 
+function renderDepreciationCharts(){
+  var el=document.getElementById('dep-charts-grid');
+  if(!el)return;
+  // Fetch listing_history with price_rail for target VINs
+  var targetVins=(G.vehicles||[]).filter(function(v){return v.car_status==='target';}).map(function(v){return v.vin;});
+  if(!targetVins.length){el.innerHTML='<div class="loading">No target VINs loaded.</div>';return;}
+  var vinFilter='vin=in.('+targetVins.map(function(v){return encodeURIComponent(v);}).join(',')+')'+'&select=vin,price,miles,price_rail,first_seen&price_rail=in.(asking,transaction)&price=not.is.null&miles=not.is.null&order=first_seen.asc&limit=2000';
+  fetch(SB+'/rest/v1/listing_history?'+vinFilter,{headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}})
+  .then(function(r){return r.json();})
+  .then(function(rows){
+    // Build year map
+    var vinYear={};
+    (G.vehicles||[]).forEach(function(v){vinYear[v.vin]=v.year;});
+    var byYear={2017:[],2018:[],2019:[],2020:[]};
+    rows.forEach(function(r){
+      var y=vinYear[r.vin];
+      if(byYear[y])byYear[y].push({miles:parseInt(r.miles)||0,price:parseInt(r.price)||0,rail:r.price_rail});
+    });
+    var charts=[2017,2018,2019,2020].map(function(yr){
+      return buildDepChart(yr,byYear[yr]||[]);
+    }).join('');
+    el.innerHTML='<div class="dep-charts-grid">'+charts+'</div>';
+  }).catch(function(){el.innerHTML='<div class="loading">Chart data unavailable.</div>';});
+}
+
+function buildDepChart(year,pts){
+  var W=460,H=280,ML=52,MR=20,MT=24,MB=36;
+  var pw=W-ML-MR,ph=H-MT-MB;
+  if(!pts.length)return '<div class="card an-card"><div class="an-title">'+year+' S65 AMG</div><div style="color:var(--dim);font-size:12px;padding:20px 0;">No data</div></div>';
+  var maxM=Math.max.apply(null,pts.map(function(p){return p.miles;}));
+  maxM=Math.max(maxM,70000);
+  var maxP=Math.max.apply(null,pts.map(function(p){return p.price;}));
+  maxP=Math.ceil(maxP/50000)*50000||300000;
+  function sx(m){return ML+Math.round(m/maxM*pw);}
+  function sy(p){return MT+ph-Math.round(p/maxP*ph);}
+  // Axes
+  var xTicks=[0,25000,50000,75000,100000].filter(function(t){return t<=maxM*1.05;});
+  var yTicks=[];for(var p=0;p<=maxP;p+=50000)yTicks.push(p);
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">';
+  // Grid
+  yTicks.forEach(function(t){var y=sy(t);svg+='<line x1="'+ML+'" y1="'+y+'" x2="'+(ML+pw)+'" y2="'+y+'" stroke="rgba(255,255,255,.06)" stroke-width="1"/>';});
+  xTicks.forEach(function(t){var x=sx(t);svg+='<line x1="'+x+'" y1="'+MT+'" x2="'+x+'" y2="'+(MT+ph)+'" stroke="rgba(255,255,255,.06)" stroke-width="1"/>';});
+  // Golden Intersection zone (70K-100K, $30K-$75K)
+  var giX1=sx(70000),giX2=sx(Math.min(maxM,100000));
+  var giY1=sy(75000),giY2=sy(30000);
+  if(giX1<ML+pw){svg+='<rect x="'+giX1+'" y="'+giY1+'" width="'+(giX2-giX1)+'" height="'+(giY2-giY1)+'" fill="rgba(34,197,94,.08)" rx="2"/>';}
+  // $75K ceiling
+  var cy75=sy(75000);
+  svg+='<line x1="'+ML+'" y1="'+cy75+'" x2="'+(ML+pw)+'" y2="'+cy75+'" stroke="rgba(34,197,94,.5)" stroke-width="1" stroke-dasharray="4,3"/>';
+  svg+='<text x="'+(ML+pw-2)+'" y="'+(cy75-3)+'" font-size="9" fill="rgba(34,197,94,.7)" text-anchor="end" font-family="monospace">$75K</text>';
+  // Dots
+  pts.forEach(function(pt){
+    var cx=sx(pt.miles),cy2=sy(pt.price);
+    var col=pt.rail==='transaction'?'rgba(212,175,55,.85)':'rgba(122,167,220,.6)';
+    var r=pt.rail==='transaction'?4:3;
+    svg+='<circle cx="'+cx+'" cy="'+cy2+'" r="'+r+'" fill="'+col+'" stroke="none" opacity=".85"/>';
+  });
+  // Axes
+  svg+='<line x1="'+ML+'" y1="'+MT+'" x2="'+ML+'" y2="'+(MT+ph)+'" stroke="rgba(255,255,255,.2)" stroke-width="1"/>';
+  svg+='<line x1="'+ML+'" y1="'+(MT+ph)+'" x2="'+(ML+pw)+'" y2="'+(MT+ph)+'" stroke="rgba(255,255,255,.2)" stroke-width="1"/>';
+  // X labels
+  xTicks.forEach(function(t){svg+='<text x="'+sx(t)+'" y="'+(MT+ph+14)+'" font-size="9" fill="rgba(255,255,255,.35)" text-anchor="middle" font-family="monospace">'+(t/1000)+'K</text>';});
+  // Y labels
+  yTicks.filter(function(t){return t>0;}).forEach(function(t){svg+='<text x="'+(ML-4)+'" y="'+(sy(t)+3)+'" font-size="9" fill="rgba(255,255,255,.35)" text-anchor="end" font-family="monospace">$'+(t/1000)+'K</text>';});
+  // Title
+  svg+='<text x="'+(ML+pw/2)+'" y="14" font-size="11" fill="rgba(255,255,255,.7)" text-anchor="middle" font-family="monospace" font-weight="600">'+year+' S65 &mdash; '+pts.length+' records</text>';
+  svg+='</svg>';
+  return '<div class="dep-chart-wrap">'+svg+'</div>';
+}
+
+function renderFinalEdition(){
+  var el=document.getElementById('fe-grid');
+  if(!el)return;
+  var feVins=(G.vehicles||[]).filter(function(v){return v.is_final_edition===true||(v.cohort&&v.cohort.indexOf('_FE')>-1);});
+  if(!feVins.length){el.innerHTML='<div class="loading">No Final Edition records found.</div>';return;}
+  feVins.sort(function(a,b){return (a.vin||'').localeCompare(b.vin||'');});
+  el.innerHTML=feVins.map(function(v){
+    var bld=G.build&&G.build[v.vin];
+    var paint=bld&&bld.paint_name||'Obsidian Black Metallic';
+    var uph=bld&&bld.upholstery_name||'Exclusive Nappa Leather';
+    var mkt=G.mkt&&G.mkt[v.vin];
+    var odo=mkt&&mkt.curr_odo?mkt.curr_odo.toLocaleString()+' mi':'—';
+    var owners=mkt&&mkt.total_owners||'—';
+    var state=v.last_title_state||'—';
+    var isCA=(state.length>2&&['AB','BC','MB','NB','NL','NS','NT','NU','ON','PE','QC','SK','YT'].indexOf(state)>-1);
+    return '<div class="fe-card">'+
+      '<div class="fe-card-vin">...'+v.vin.slice(-6)+'</div>'+
+      '<div class="fe-card-year">'+v.year+'</div>'+
+      '<div class="fe-card-trim">S65 AMG Final Edition</div>'+
+      '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.7;">'+
+        '<span style="color:var(--dim);">Paint:</span> '+paint+'<br>'+
+        '<span style="color:var(--dim);">Interior:</span> '+uph+'<br>'+
+        '<span style="color:var(--dim);">Odo:</span> '+odo+' &nbsp;'+
+        '<span style="color:var(--dim);">Owners:</span> '+owners+'<br>'+
+        '<span style="color:var(--dim);">Title:</span> <span style="color:'+(isCA?'var(--red)':'var(--muted)')+';">'+state+(isCA?' &#9888;':' &#9679;')+'</span>'+
+      '</div>'+
+      '<span class="fe-card-badge">&#11088; Final Edition</span>'+
+      '<div class="fe-coming">Full profile coming soon</div>'+
+    '</div>';
+  }).join('');
+}
 function renderVideos(){
   var vids=getVideos();
   var grid=document.getElementById('vid-grid');
