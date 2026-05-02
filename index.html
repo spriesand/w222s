@@ -4681,7 +4681,7 @@ function renderDepreciationCharts(){
   var el=document.getElementById('dep-charts-grid');
   if(!el)return;
   // Fetch listing_history with price_rail for target VINs
-  var targetVins=(G.vehicles||[]).filter(function(v){return v.car_status==='target';}).map(function(v){return v.vin;});
+  var targetVins=(G.v||[]).filter(function(v){return v.car_status==='target';}).map(function(v){return v.vin;});
   if(!targetVins.length){el.innerHTML='<div class="loading">No target VINs loaded.</div>';return;}
   var vinFilter='vin=in.('+targetVins.map(function(v){return encodeURIComponent(v);}).join(',')+')'+'&select=vin,price,miles,price_rail,first_seen&price_rail=in.(asking,transaction)&price=not.is.null&miles=not.is.null&order=first_seen.asc&limit=2000';
   fetch(SB+'/rest/v1/listing_history?'+vinFilter,{headers:{'apikey':KEY,'Authorization':'Bearer '+KEY}})
@@ -4689,7 +4689,7 @@ function renderDepreciationCharts(){
   .then(function(rows){
     // Build year map
     var vinYear={};
-    (G.vehicles||[]).forEach(function(v){vinYear[v.vin]=v.year;});
+    (G.v||[]).forEach(function(v){vinYear[v.vin]=v.year;});
     var byYear={2017:[],2018:[],2019:[],2020:[]};
     rows.forEach(function(r){
       var y=vinYear[r.vin];
@@ -4750,14 +4750,14 @@ function buildDepChart(year,pts){
 function renderFinalEdition(){
   var el=document.getElementById('fe-grid');
   if(!el)return;
-  var feVins=(G.vehicles||[]).filter(function(v){return v.is_final_edition===true||(v.cohort&&v.cohort.indexOf('_FE')>-1);});
+  var feVins=(G.v||[]).filter(function(v){return v.is_final_edition===true||(v.cohort&&v.cohort.indexOf('_FE')>-1);});
   if(!feVins.length){el.innerHTML='<div class="loading">No Final Edition records found.</div>';return;}
   feVins.sort(function(a,b){return (a.vin||'').localeCompare(b.vin||'');});
   el.innerHTML=feVins.map(function(v){
     var bld=G.build&&G.build[v.vin];
     var paint=bld&&bld.paint_name||'Obsidian Black Metallic';
     var uph=bld&&bld.upholstery_name||'Exclusive Nappa Leather';
-    var mkt=G.mkt&&G.mkt[v.vin];
+    var mkt=G.m&&G.m[v.vin];
     var odo=mkt&&mkt.curr_odo?mkt.curr_odo.toLocaleString()+' mi':'—';
     var owners=mkt&&mkt.total_owners||'—';
     var state=v.last_title_state||'—';
