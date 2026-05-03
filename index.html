@@ -113,6 +113,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .cr-tr{top:18px;right:-34px;transform:rotate(45deg)}
 .cr-ref{background:rgba(120,120,130,.88);color:#f0f0f5;border-top:1px solid rgba(255,255,255,.15);border-bottom:1px solid rgba(0,0,0,.25)}
 .cr-fe{background:rgba(200,169,106,.92);color:#1a1a1a;border-top:1px solid rgba(232,200,138,.5);border-bottom:1px solid rgba(0,0,0,.2)}
+.cr-active{background:rgba(76,190,130,.92);color:#0a1810;border-top:1px solid rgba(120,220,160,.45);border-bottom:1px solid rgba(0,0,0,.2)}
+.cr-prospect{background:rgba(122,167,220,.92);color:#0a141e;border-top:1px solid rgba(168,200,240,.5);border-bottom:1px solid rgba(0,0,0,.2)}
 
 /* Equipment chip row */
 .eq-row{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
@@ -187,8 +189,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .prospect-spec-label{font-family:var(--mono);font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px;}
 .prospect-spec-value{font-family:var(--serif);font-size:17px;color:var(--gold2);font-weight:600;}
 .prospect-spec-sub{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px;}
-.tc-top-prospect-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(122,167,220,.12);border:1px solid rgba(122,167,220,.35);border-radius:12px;padding:2px 8px;font-family:var(--mono);font-size:9px;color:var(--blue);letter-spacing:.08em;margin-left:6px;}
-.tc.is-top-prospect{border-color:rgba(200,169,106,.4)!important;box-shadow:0 0 0 1px rgba(200,169,106,.15),var(--sh);}
+.tc.is-top-prospect{border-color:rgba(122,167,220,.4)!important;box-shadow:0 0 0 1px rgba(122,167,220,.15),var(--sh);}
 
 /* Hero */
 .btn-g{padding:8px 13px;border:1px solid rgba(122,167,220,.28);color:var(--blue2);background:none;border-radius:7px;font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .15s;text-decoration:none;display:inline-flex;align-items:center}
@@ -250,7 +251,6 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .lc-img img{width:100%;height:100%;object-fit:cover;opacity:.92;display:block}
 .lc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.40),transparent 72%)}
 .lc-top{position:absolute;top:8px;left:8px;right:8px;z-index:2;display:flex;justify-content:space-between}
-.lc-active{position:absolute;bottom:8px;left:8px;z-index:2;display:flex;align-items:center;gap:3px;background:rgba(7,9,15,.82);border:1px solid rgba(76,190,130,.22);border-radius:3px;padding:2px 6px;font-family:var(--mono);font-size:11px;color:var(--green)}
 
 .lc-body{padding:10px 11px 12px;flex:1;display:flex;flex-direction:column;gap:7px}
 .lc-title{font-family:var(--serif);font-size:18px;font-weight:600;color:var(--ink);line-height:1.1}
@@ -274,8 +274,6 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .tc-img{height:210px;position:relative;background:linear-gradient(155deg,#0c1825,#040b12);overflow:hidden}
 .tc-img img{width:100%;height:100%;object-fit:cover;opacity:.92;display:block}
 .tc-img-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(10,15,28,.40),transparent 72%)}
-.tc-top{position:absolute;top:10px;left:11px;right:11px;z-index:2;display:flex;justify-content:space-between}
-.tc-active{position:absolute;bottom:10px;left:11px;z-index:2;display:flex;align-items:center;gap:4px;background:rgba(7,9,15,.82);border:1px solid rgba(76,190,130,.22);border-radius:4px;padding:3px 8px;font-family:var(--mono);font-size:11px;color:var(--green)}
 .tc-body{padding:14px 15px 15px;display:flex;flex-direction:column;gap:9px}
 .tc-title{font-family:var(--serif);font-size:21px;font-weight:600;color:var(--ink);line-height:1.1}
 .tc-sub{font-family:var(--mono);font-size:12px;color:var(--muted)}
@@ -1355,14 +1353,14 @@ function formatColor(raw){
 // Base-color family taxonomy. Order matters: Blue before Grey ensures "Anthracite Blue" → Blue, bare "Anthracite" → Grey.
 var COLOR_FAMILIES=[
   {k:'white', lbl:'White',  idx:1,  re:/white|polar|diamond|cashmere/i},
-  {k:'silver',lbl:'Silver', idx:2,  re:/silver|iridium|palladium/i},
+  {k:'silver',lbl:'Silver', idx:2,  re:/silver|iridium|palladium|alanite/i},
   {k:'black', lbl:'Black',  idx:3,  re:/black|obsidian|onyx|magnetite|ruby|mocha/i},
   {k:'blue',  lbl:'Blue',   idx:4,  re:/blue|cavansite|lunar/i},
   {k:'green', lbl:'Green',  idx:5,  re:/green|emerald/i},
   {k:'red',   lbl:'Red',    idx:6,  re:/red|patagonia|mars|crystal/i},
   {k:'brown', lbl:'Brown',  idx:7,  re:/brown|tobacco|bronze|citrine/i},
   {k:'yellow',lbl:'Yellow', idx:8,  re:/yellow|sunbeam|solar/i},
-  {k:'grey',  lbl:'Grey',   idx:9,  re:/grey|gray|graphite|selenite|alanite|tenorite|anthracite/i},
+  {k:'grey',  lbl:'Grey',   idx:9,  re:/grey|gray|graphite|selenite|tenorite|anthracite/i},
   {k:'other', lbl:'Other',  idx:10, re:null}
 ];
 function colorFamily(paintName){
@@ -2375,7 +2373,6 @@ function renderCompact(v,vm,lh){
       (v.car_status==='reference'?'<div class="cr cr-tl cr-ref">Reference</div>':'')+
       (v.is_final_edition?'<div class="cr cr-tr cr-fe">Final Edition</div>':'')+
       '<button class="tc-img-edit" onclick="event.stopPropagation();openProfileImagePicker(\''+v.vin+'\')" title="Change profile photo" aria-label="Change profile photo for '+v.vin+'">&#128247;</button>'+
-      (active?'<div class="lc-active"><span class="live-dot"></span>Active</div>':'')+
     '</div>'+
     '<div class="hs-hist-panel">'+
       '<div class="lh-back-header"><span class="lh-back-title">&#128202; History &middot; '+v.vin.slice(-6)+'</span></div>'+
@@ -2423,11 +2420,9 @@ function renderTarget(v,vm,lh){
     '<div class="tc-img hs-wrap">'+
     '<div class="hs-img-panel" style="position:relative;height:100%;">'+vehicleImage(v)+
       '<div class="tc-img-ov"></div>'+
-      (v.car_status==='reference'?'<div class="cr cr-tl cr-ref">Reference</div>':'')+
+      (v.is_top_prospect?'<div class="cr cr-tl cr-prospect">&#11088; Top Prospect</div>':v.car_status==='reference'?'<div class="cr cr-tl cr-ref">Reference</div>':active?'<div class="cr cr-tl cr-active">Active</div>':'')+
       (v.is_final_edition?'<div class="cr cr-tr cr-fe">Final Edition</div>':'')+
-      (v.is_top_prospect?'<div class="tc-top"><span class="tc-top-prospect-badge">&#11088; Top Prospect</span></div>':'')+
       '<button class="tc-img-edit" onclick="event.stopPropagation();openProfileImagePicker(\''+v.vin+'\')" title="Change profile photo" aria-label="Change profile photo for '+v.vin+'">&#128247;</button>'+
-      (active?'<div class="tc-active"><span class="live-dot"></span>Active Listing</div>':'')+
     '</div>'+
     '<div class="hs-hist-panel">'+
       '<div class="lh-back-header"><span class="lh-back-title">&#128202; History &middot; '+v.vin.slice(-6)+'</span></div>'+
@@ -3691,7 +3686,12 @@ function toggleHistory(btn){
 
 function lhBack(vin){
   var rows=(G.lhAll||[]).filter(function(l){return l.vin===vin;});
+  // Sort: price ASC (null prices end), tiebreak last_seen DESC (more recent ask first within same price).
+  // Per Steve 2026-05 — price ladder is the most intuitive view for floor-spotting.
   rows.sort(function(a,b){
+    var ap=(a.price==null)?Infinity:+a.price;
+    var bp=(b.price==null)?Infinity:+b.price;
+    if(ap!==bp)return ap-bp;
     var da=a.last_seen?new Date(a.last_seen):new Date(0);
     var db=b.last_seen?new Date(b.last_seen):new Date(0);
     return db-da;
@@ -4624,14 +4624,24 @@ function loadAll(){
     // Market
     renderMkt();
 
-    // Targets — sort: Top Prospect → Active → color family → year DESC → miles ASC
+    // Targets — sort: Top Prospect → matches Top Prospect's paint → color family → year DESC → miles ASC
+    // Active status is indicated visually via the corner sash, not via sort priority (per Steve, 2026-05).
+    // Pre-compute Top Prospect's normalized paint for the proximity tier (pulled outside the comparator for efficiency)
+    var topVin=G.prospect&&G.prospect.vin;
+    var topB=topVin&&G.build&&G.build[topVin];
+    var topPaint=(topB&&topB.paint_name)?formatColor(topB.paint_name):'';
     var sortedT=targetV.slice().sort(function(a,b){
       // 1. Top prospect always first
       if(a.is_top_prospect&&!b.is_top_prospect)return -1;
       if(!a.is_top_prospect&&b.is_top_prospect)return 1;
-      // 2. Active listings before inactive
-      var aA=lhMap[a.vin]?0:1,bA=lhMap[b.vin]?0:1;
-      if(aA!==bA)return aA-bA;
+      // 2. Cars matching Top Prospect's exact paint come right after the Top Prospect (proximity tier)
+      if(topPaint){
+        var aBp=G.build&&G.build[a.vin],bBp=G.build&&G.build[b.vin];
+        var aP=(aBp&&aBp.paint_name)?formatColor(aBp.paint_name):'';
+        var bP=(bBp&&bBp.paint_name)?formatColor(bBp.paint_name):'';
+        var aMatch=(aP===topPaint)?0:1,bMatch=(bP===topPaint)?0:1;
+        if(aMatch!==bMatch)return aMatch-bMatch;
+      }
       // 3. Base color family (White → Silver → Black → Blue → Green → Red → Brown → Yellow → Grey → Other)
       var aCF=colorFamilyForVin(a.vin),bCF=colorFamilyForVin(b.vin);
       var aIdx=aCF?aCF.idx:99,bIdx=bCF?bCF.idx:99;
