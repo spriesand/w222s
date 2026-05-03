@@ -51,8 +51,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 @keyframes throb{0%,100%{opacity:1}50%{opacity:.3}}
 .mbtn{background:none;border:1px solid var(--line2);border-radius:7px;color:var(--muted);font-family:var(--mono);font-size:12px;padding:4px 10px;cursor:pointer;transition:all .15s;white-space:nowrap;text-decoration:none;display:inline-flex;align-items:center}
 .mbtn:hover{border-color:var(--blue);color:var(--blue2)}
-.mbtn-prospect{border-color:rgba(200,169,106,.45);color:var(--gold2);background:rgba(200,169,106,.08)}
-.mbtn-prospect:hover{border-color:var(--gold);color:var(--gold);background:rgba(200,169,106,.15)}
+.mbtn-prospect{border-color:rgba(122,167,220,.45);color:var(--blue2);background:rgba(122,167,220,.08)}
+.mbtn-prospect:hover{border-color:var(--blue);color:var(--blue);background:rgba(122,167,220,.15)}
 .mbtn-diary{border-color:rgba(122,167,220,.35);color:var(--blue2);background:rgba(122,167,220,.05)}
 .mbtn-diary:hover{border-color:var(--blue);color:var(--blue2);background:rgba(122,167,220,.12)}
 
@@ -133,8 +133,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .dash-col{display:flex;flex-direction:column;gap:12px;min-height:0;min-width:0}
 
 /* ── PROSPECT ── */
-.ntab-prospect{color:var(--gold)!important;font-weight:600;}
-.ntab-prospect.active{border-bottom-color:var(--gold)!important;}
+.ntab-prospect{color:var(--blue)!important;font-weight:600;}
+.ntab-prospect.active{border-bottom-color:var(--blue)!important;}
 .ntab-fe{color:var(--gold2)!important;font-weight:600;}
 .ntab-fe.active{border-bottom-color:var(--gold2)!important;}
 /* FE Gallery */
@@ -161,7 +161,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .prospect-hero-slide img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;}
 .prospect-hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.82) 0%,rgba(0,0,0,.3) 45%,rgba(0,0,0,.1) 100%);}
 .prospect-hero-info{position:absolute;bottom:0;left:0;right:0;padding:18px 20px;}
-.prospect-hero-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(200,169,106,.15);border:1px solid rgba(200,169,106,.4);border-radius:20px;padding:3px 10px;font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:.1em;margin-bottom:8px;}
+.prospect-hero-badge{display:inline-flex;align-items:center;gap:5px;background:rgba(122,167,220,.15);border:1px solid rgba(122,167,220,.4);border-radius:20px;padding:3px 10px;font-family:var(--mono);font-size:10px;color:var(--blue);letter-spacing:.1em;margin-bottom:8px;}
 .prospect-hero-vin{font-family:var(--mono);font-size:11px;color:var(--gold2);letter-spacing:.12em;margin-bottom:4px;}
 .prospect-hero-title{font-family:var(--serif);font-size:22px;font-weight:600;color:var(--ink);margin-bottom:3px;}
 .prospect-hero-colors{font-family:var(--mono);font-size:11px;color:rgba(200,169,106,.75);margin-bottom:10px;}
@@ -187,7 +187,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .prospect-spec-label{font-family:var(--mono);font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px;}
 .prospect-spec-value{font-family:var(--serif);font-size:17px;color:var(--gold2);font-weight:600;}
 .prospect-spec-sub{font-family:var(--mono);font-size:10px;color:var(--muted);margin-top:2px;}
-.tc-top-prospect-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(200,169,106,.12);border:1px solid rgba(200,169,106,.35);border-radius:12px;padding:2px 8px;font-family:var(--mono);font-size:9px;color:var(--gold);letter-spacing:.08em;margin-left:6px;}
+.tc-top-prospect-badge{display:inline-flex;align-items:center;gap:4px;background:rgba(122,167,220,.12);border:1px solid rgba(122,167,220,.35);border-radius:12px;padding:2px 8px;font-family:var(--mono);font-size:9px;color:var(--blue);letter-spacing:.08em;margin-left:6px;}
 .tc.is-top-prospect{border-color:rgba(200,169,106,.4)!important;box-shadow:0 0 0 1px rgba(200,169,106,.15),var(--sh);}
 
 /* Hero */
@@ -702,7 +702,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   <div class="ntab" onclick="go('videos',this)">Videos</div>
   <div class="ntab" onclick="go('analytics',this)">Analytics</div>
   <div class="ntab" onclick="go('resources',this);loadResources()">Resources</div>
-  <div class="ntab ntab-fe" onclick="go('finaledition',this)">&#11088; Final Edition</div>
+  <div class="ntab ntab-fe" onclick="go('finaledition',this)">&#127937; Final Edition</div>
 </nav>
 </div><!-- end sticky-header -->
 
@@ -792,7 +792,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 <div class="page" id="page-prospect">
 <div class="pp">
   <div class="sec" style="margin-bottom:16px;">
-    <span style="font-family:var(--serif);font-size:18px;color:var(--gold);font-weight:600;">&#11088; Top Prospect</span>
+    <span style="font-family:var(--serif);font-size:18px;color:var(--blue);font-weight:600;">&#11088; Top Prospect</span>
     <span id="prospect-status" style="font-family:var(--mono);font-size:11px;color:var(--muted);"></span>
   </div>
   <div id="prospect-carousel-wrap" style="margin-bottom:0;">
@@ -992,7 +992,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 <div class="page" id="page-finaledition">
 <div class="pp">
   <div class="fe-hero">
-    <div class="fe-hero-title">&#11088; S65 AMG Final Edition</div>
+    <div class="fe-hero-title">&#127937; S65 AMG Final Edition</div>
     <div class="fe-hero-sub">The last V12 S-Class ever built. In 2020, Mercedes-AMG produced a farewell run of the W222 S65 &mdash; 8 cars for the US market, each identically specified in Obsidian Black Metallic with Exclusive Nappa Leather. This gallery documents every known US example.</div>
     <div style="margin-top:10px;">
       <span class="fe-stat"><span class="fe-stat-n">8</span><span class="fe-stat-l">US Allocation</span></span>
@@ -1002,7 +1002,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     </div>
   </div>
   <div style="background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.2);border-radius:8px;padding:12px 16px;margin-bottom:20px;font-size:12px;color:var(--muted);font-family:var(--mono);">
-    &#9679;&nbsp; Tag images in the main Gallery as Final Edition (manage mode &rarr; &#11088; button) and they will appear in the strip below as well as in the main Gallery.
+    &#9679;&nbsp; Tag images in the main Gallery as Final Edition (manage mode &rarr; &#127937; button) and they will appear in the strip below as well as in the main Gallery.
   </div>
 
   <!-- FE Gallery strip (images flagged is_final_edition=true) -->
@@ -1084,7 +1084,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <button class="gal-chip" onclick="filterGallery('listing',this)">Listings</button>
     <button class="gal-chip" onclick="filterGallery('stock',this)">Stock</button>
     <button class="gal-chip" onclick="filterGallery('historical',this)">Historical</button>
-    <button class="gal-chip" onclick="filterGallery('final_edition',this)" style="color:var(--gold2);border-color:rgba(212,175,55,.3);">&#11088; Final Edition</button>
+    <button class="gal-chip" onclick="filterGallery('final_edition',this)" style="color:var(--gold2);border-color:rgba(212,175,55,.3);">&#127937; Final Edition</button>
     <button class="gal-toggle-mng" id="gal-toggle-mng" onclick="toggleManage()" title="Manage / dedup mode">&#9881; Manage</button>
   </div>
 
@@ -1270,7 +1270,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   <div class="mdr" onclick="go('videos',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#127909;</span>Videos</div>
   <div class="mdr" onclick="go('analytics',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128200;</span>Analytics</div>
   <div class="mdr" onclick="go('resources',null);loadResources();closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#128196;</span>Resources</div>
-  <div class="mdr" onclick="go('finaledition',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#11088;</span>Final Edition</div>
+  <div class="mdr" onclick="go('finaledition',null);closeMore();document.querySelectorAll('.bi').forEach(function(i){i.classList.remove('active');})"><span class="mdr-icon">&#127937;</span>Final Edition</div>
 </div>
 <div class="more-ov" id="more-ov" onclick="closeMore()"></div>
 
@@ -3199,8 +3199,8 @@ function rebuildGallery(){
     var cls='gallery-tile'+(mng?' mng':'')+(img.is_final_edition?' is-fe':'');
     var clickAttr=mng?'':' onclick="lbOpenGallery('+i+')"';
     var delBtn=mng?'<button class="gallery-tile-del" onclick="event.stopPropagation();hardDeleteImageByIdx('+i+',this)" title="Permanently delete (DB row + storage file)">&times;</button>':'';
-    var feBtn=mng?'<button class="gallery-tile-fe" onclick="event.stopPropagation();toggleImageFE('+img.id+',this)" title="'+(img.is_final_edition?'Untag Final Edition':'Tag as Final Edition')+'">&#11088;</button>':'';
-    var feFlag=(!mng&&img.is_final_edition)?'<div class="gallery-tile-fe-flag" title="Final Edition">&#11088;</div>':'';
+    var feBtn=mng?'<button class="gallery-tile-fe" onclick="event.stopPropagation();toggleImageFE('+img.id+',this)" title="'+(img.is_final_edition?'Untag Final Edition':'Tag as Final Edition')+'">&#127937;</button>':'';
+    var feFlag=(!mng&&img.is_final_edition)?'<div class="gallery-tile-fe-flag" title="Final Edition">&#127937;</div>':'';
     return '<div class="'+cls+'"'+clickAttr+' title="'+esc(img.caption||img.url||'')+'">'+
       '<img src="'+esc(img.url)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'+
       '<div class="gallery-tile-ov"></div>'+
@@ -4899,7 +4899,7 @@ function renderFinalEdition(){
     });
     if(galCount)galCount.textContent=feImgs.length?feImgs.length+(feImgs.length===1?' photo':' photos'):'';
     if(!feImgs.length){
-      strip.innerHTML='<div class="fe-gal-empty">No images tagged Final Edition yet. Open the main Gallery, click &#9881; Manage, then click the &#11088; button on any tile to tag it.</div>';
+      strip.innerHTML='<div class="fe-gal-empty">No images tagged Final Edition yet. Open the main Gallery, click &#9881; Manage, then click the &#127937; button on any tile to tag it.</div>';
     } else {
       // Cache global indices into G.imagesAll for lightbox navigation across the FE subset
       G.feGalIdx=feImgs.map(function(i){return (G.imagesAll||[]).indexOf(i);});
