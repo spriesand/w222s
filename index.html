@@ -1005,7 +1005,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     &#9679;&nbsp; Tag images in the main Gallery as Final Edition (manage mode &rarr; &#11088; button) and they will appear in the strip below as well as in the main Gallery.
   </div>
 
-  <!-- FE Gallery strip (images tagged category='final_edition') -->
+  <!-- FE Gallery strip (images flagged is_final_edition=true) -->
   <div class="sec" style="margin-top:0;font-size:13px;"><span>Final Edition Gallery</span><span id="fe-gal-count" style="color:var(--muted);font-family:var(--mono);font-size:11px;"></span></div>
   <div class="fe-gal-strip" id="fe-gal-strip"><div class="loading">Loading&hellip;</div></div>
 
@@ -3164,7 +3164,7 @@ function currentGalleryItems(){
   if(GAL.filter==='listing')items=items.filter(function(i){return i.source_type==='listing';});
   else if(GAL.filter==='stock')items=items.filter(function(i){return i.source_type==='stock';});
   else if(GAL.filter==='historical')items=items.filter(function(i){return i.source_type==='historical';});
-  else if(GAL.filter==='final_edition')items=items.filter(function(i){return i.category==='final_edition';});
+  else if(GAL.filter==='final_edition')items=items.filter(function(i){return i.is_final_edition===true;});
   if(GAL.manageMode){
     // Sort by URL so duplicate (or near-duplicate) URLs sit adjacent for visual scanning
     items.sort(function(a,b){
@@ -3196,11 +3196,11 @@ function rebuildGallery(){
   }
   var mng=GAL.manageMode;
   grid.innerHTML=items.map(function(img,i){
-    var cls='gallery-tile'+(mng?' mng':'')+(img.category==='final_edition'?' is-fe':'');
+    var cls='gallery-tile'+(mng?' mng':'')+(img.is_final_edition?' is-fe':'');
     var clickAttr=mng?'':' onclick="lbOpenGallery('+i+')"';
     var delBtn=mng?'<button class="gallery-tile-del" onclick="event.stopPropagation();hardDeleteImageByIdx('+i+',this)" title="Permanently delete (DB row + storage file)">&times;</button>':'';
-    var feBtn=mng?'<button class="gallery-tile-fe" onclick="event.stopPropagation();toggleImageFE('+img.id+',this)" title="'+(img.category==='final_edition'?'Untag Final Edition':'Tag as Final Edition')+'">&#11088;</button>':'';
-    var feFlag=(!mng&&img.category==='final_edition')?'<div class="gallery-tile-fe-flag" title="Final Edition">&#11088;</div>':'';
+    var feBtn=mng?'<button class="gallery-tile-fe" onclick="event.stopPropagation();toggleImageFE('+img.id+',this)" title="'+(img.is_final_edition?'Untag Final Edition':'Tag as Final Edition')+'">&#11088;</button>':'';
+    var feFlag=(!mng&&img.is_final_edition)?'<div class="gallery-tile-fe-flag" title="Final Edition">&#11088;</div>':'';
     return '<div class="'+cls+'"'+clickAttr+' title="'+esc(img.caption||img.url||'')+'">'+
       '<img src="'+esc(img.url)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'+
       '<div class="gallery-tile-ov"></div>'+
@@ -3212,21 +3212,21 @@ function rebuildGallery(){
   rebuildGalleryCarousel(items);
 }
 
-// Toggle Final Edition tag on an image (sets/unsets images.category='final_edition')
+// Toggle Final Edition tag on an image (sets/unsets images.is_final_edition boolean)
 function toggleImageFE(id,btn){
   var img=(G.imagesAll||[]).find(function(i){return i.id===id;});
   if(!img)return;
-  var newCat=img.category==='final_edition'?null:'final_edition';
-  qw('images?id=eq.'+encodeURIComponent(id),'PATCH',{category:newCat})
+  var newVal=!img.is_final_edition;
+  qw('images?id=eq.'+encodeURIComponent(id),'PATCH',{is_final_edition:newVal})
     .then(function(){
-      img.category=newCat;
+      img.is_final_edition=newVal;
       if(btn){
         var tile=btn.closest('.gallery-tile');
         if(tile){
-          if(newCat==='final_edition')tile.classList.add('is-fe');
+          if(newVal)tile.classList.add('is-fe');
           else tile.classList.remove('is-fe');
         }
-        btn.title=newCat==='final_edition'?'Untag Final Edition':'Tag as Final Edition';
+        btn.title=newVal?'Untag Final Edition':'Tag as Final Edition';
       }
       // Refresh FE tab strip if it's currently rendered
       if(typeof renderFinalEdition==='function')renderFinalEdition();
@@ -4889,9 +4889,9 @@ function renderFinalEdition(){
     else{grid.innerHTML=feVins.map(function(v){return renderTarget(v,G.m&&G.m[v.vin],G.l&&G.l[v.vin]);}).join('');}
   }
   if(cardCount)cardCount.textContent=feVins.length?feVins.length+(feVins.length===1?' VIN':' VINs'):'';
-  // Gallery strip: images tagged category='final_edition'
+  // Gallery strip: images flagged is_final_edition=true
   if(strip){
-    var feImgs=(G.imagesAll||[]).filter(function(i){return i.category==='final_edition';});
+    var feImgs=(G.imagesAll||[]).filter(function(i){return i.is_final_edition===true;});
     feImgs.sort(function(a,b){
       var da=a.added_at?new Date(a.added_at).getTime():0;
       var db=b.added_at?new Date(b.added_at).getTime():0;
@@ -4914,7 +4914,7 @@ function renderFinalEdition(){
 
 // Open lightbox from FE strip — passes the FE-tagged subset to the lightbox
 function lbOpenFE(i){
-  var feImgs=(G.imagesAll||[]).filter(function(im){return im.category==='final_edition';});
+  var feImgs=(G.imagesAll||[]).filter(function(im){return im.is_final_edition===true;});
   feImgs.sort(function(a,b){
     var da=a.added_at?new Date(a.added_at).getTime():0;
     var db=b.added_at?new Date(b.added_at).getTime():0;
