@@ -139,19 +139,18 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .ntab-fe.active{border-bottom-color:var(--gold2)!important;}
 /* FE Gallery */
 .fe-hero{background:linear-gradient(160deg,rgba(20,15,5,.95),rgba(10,8,3,.98));border:1px solid rgba(212,175,55,.25);border-radius:12px;padding:28px 24px;margin-bottom:20px;text-align:center;}
-.fe-hero-title{font-family:var(--mono);font-size:22px;color:var(--gold2);letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;}
+.fe-hero-eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:rgba(212,175,55,.65);text-transform:uppercase;margin-bottom:10px;}
+.fe-hero-title{font-family:var(--serif);font-size:30px;font-style:italic;font-weight:400;color:var(--gold2);letter-spacing:.01em;margin-bottom:8px;line-height:1.15;}
 .fe-hero-sub{font-size:13px;color:var(--muted);max-width:520px;margin:0 auto 16px;line-height:1.6;}
 .fe-stat{display:inline-block;margin:0 12px;font-family:var(--mono);}
 .fe-stat-n{font-size:28px;color:var(--gold);display:block;}
 .fe-stat-l{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.1em;}
-.fe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:16px;}
-.fe-card{background:var(--panel);border:1px solid rgba(212,175,55,.18);border-radius:10px;padding:16px;position:relative;overflow:hidden;}
-.fe-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(212,175,55,.04),transparent);pointer-events:none;}
-.fe-card-vin{font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.08em;margin-bottom:6px;}
-.fe-card-year{font-size:18px;font-weight:700;color:var(--gold2);margin-bottom:2px;}
-.fe-card-trim{font-size:12px;color:var(--muted);margin-bottom:10px;}
-.fe-card-badge{display:inline-block;padding:3px 8px;border-radius:4px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;background:rgba(212,175,55,.12);color:var(--gold2);border:1px solid rgba(212,175,55,.3);}
-.fe-coming{color:var(--dim);font-size:11px;font-family:var(--mono);margin-top:8px;}
+.fe-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px;margin-top:8px;}
+.fe-gal-strip{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;margin:6px 0 0;min-height:60px;}
+.fe-gal-tile{position:relative;aspect-ratio:4/3;border-radius:8px;overflow:hidden;background:var(--panel2);cursor:pointer;border:1px solid rgba(212,175,55,.15);transition:border-color .15s,transform .15s;}
+.fe-gal-tile:hover{border-color:rgba(212,175,55,.4);transform:translateY(-1px);}
+.fe-gal-tile img{width:100%;height:100%;object-fit:cover;display:block;}
+.fe-gal-empty{grid-column:1/-1;padding:24px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:11px;border:1px dashed var(--line);border-radius:8px;}
 /* Depreciation Charts */
 .dep-charts-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:14px;margin-top:8px;}
 .dep-chart-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;}
@@ -455,6 +454,12 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .gallery-tile-del{position:absolute;top:6px;right:6px;width:24px;height:24px;border-radius:50%;background:rgba(168,50,50,.92);border:1px solid #c44;color:#fff;font-size:13px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:3;padding:0;font-weight:bold}
 .gallery-tile-del:hover{background:#c44}
 .gallery-tile.mng .gallery-tile-del{display:flex}
+.gallery-tile-fe{position:absolute;top:6px;left:6px;width:24px;height:24px;border-radius:50%;background:rgba(20,15,5,.85);border:1px solid rgba(212,175,55,.5);color:rgba(212,175,55,.5);font-size:11px;line-height:1;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:3;padding:0;}
+.gallery-tile-fe:hover{background:rgba(40,30,10,.95);color:var(--gold);border-color:var(--gold);}
+.gallery-tile.mng .gallery-tile-fe{display:flex}
+.gallery-tile.is-fe{border-color:rgba(212,175,55,.4);}
+.gallery-tile.is-fe .gallery-tile-fe{color:var(--gold2);border-color:var(--gold2);background:rgba(212,175,55,.18);}
+.gallery-tile-fe-flag{position:absolute;top:6px;left:6px;background:rgba(20,15,5,.78);border:1px solid rgba(212,175,55,.4);color:var(--gold2);font-size:10px;padding:2px 6px;border-radius:10px;z-index:2;line-height:1;}
 .gallery-tile.mng{cursor:default}
 .gallery-tile.mng:hover{transform:none}
 .orphan-panel{margin-top:14px;padding:12px;background:#0a0c14;border:1px solid var(--line);border-radius:8px}
@@ -593,8 +598,6 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .gal-stock-save{background:var(--blue);color:var(--bg);border:none;border-radius:5px;font-family:var(--mono);font-size:11px;padding:6px 12px;cursor:pointer;font-weight:600;white-space:nowrap}
 .fchip-yr{font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:14px;background:rgba(255,255,255,.04);border:1px solid var(--line);color:var(--muted);cursor:pointer;transition:all .15s}
 .fchip-yr.active{background:var(--blue);color:var(--bg);border-color:var(--blue)}
-.fchip-fe{font-family:var(--mono);font-size:11px;padding:5px 12px;border-radius:14px;background:rgba(200,169,106,.08);border:1px solid rgba(200,169,106,.3);color:var(--gold2);cursor:pointer;transition:all .15s}
-.fchip-fe.active{background:var(--gold);color:var(--bg);border-color:var(--gold)}
 .notes-file input{display:none}
 .notes-file label{cursor:pointer;color:var(--muted);padding:6px 10px;border:1px dashed var(--line);border-radius:6px;font-size:11px;display:inline-block;transition:all .15s}
 .notes-file label:hover{color:#fff;border-color:var(--gold2)}
@@ -845,7 +848,6 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <div class="tgt-filter-row" style="border-bottom:none;margin:0;padding:0;">
       <span class="tgt-filter-lbl">Year</span>
       <div id="tgt-year-chips" style="display:flex;flex-wrap:wrap;gap:5px;"></div>
-      <button class="fchip-fe" id="tgt-fe-chip" onclick="toggleFEChip(this)" title="Final Edition only">&#11088; Final Edition</button>
     </div>
     <div class="tgt-filter-row" id="tgt-ext-row" style="display:none;border-bottom:none;margin:0;padding:0;">
       <span class="tgt-filter-lbl">Ext</span>
@@ -991,7 +993,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 <div class="page" id="page-finaledition">
 <div class="pp">
   <div class="fe-hero">
-    <div class="fe-hero-title">&#11088; S65 AMG Final Edition</div>
+    <div class="fe-hero-eyebrow">&#11088; The Last V12 S-Class</div>
+    <div class="fe-hero-title">S65 AMG Final Edition</div>
     <div class="fe-hero-sub">The last V12 S-Class ever built. In 2020, Mercedes-AMG produced a farewell run of the W222 S65 — 8 cars for the US market, each identically specified in Obsidian Black Metallic with Exclusive Nappa Leather. This gallery documents every known US example.</div>
     <div style="margin-top:16px;">
       <span class="fe-stat"><span class="fe-stat-n">8</span><span class="fe-stat-l">US Allocation</span></span>
@@ -1001,8 +1004,15 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     </div>
   </div>
   <div style="background:rgba(212,175,55,.08);border:1px solid rgba(212,175,55,.2);border-radius:8px;padding:12px 16px;margin-bottom:20px;font-size:12px;color:var(--muted);font-family:var(--mono);">
-    &#9888;&nbsp; Full provenance profiles, price history, and gallery coming in a future update. VIN cards below reflect current database records.
+    &#9679;&nbsp; Tag images in the main Gallery as Final Edition (manage mode &rarr; &#11088; button) and they will appear in the strip below as well as in the main Gallery.
   </div>
+
+  <!-- FE Gallery strip (images tagged category='final_edition') -->
+  <div class="sec" style="margin-top:0;font-size:13px;"><span>Final Edition Gallery</span><span id="fe-gal-count" style="color:var(--muted);font-family:var(--mono);font-size:11px;"></span></div>
+  <div class="fe-gal-strip" id="fe-gal-strip"><div class="loading">Loading&hellip;</div></div>
+
+  <!-- FE Vehicle Cards (full target-style profiles) -->
+  <div class="sec" style="margin-top:24px;font-size:13px;"><span>Known US Examples</span><span id="fe-card-count" style="color:var(--muted);font-family:var(--mono);font-size:11px;"></span></div>
   <div class="fe-grid" id="fe-grid"><div class="loading">Loading&hellip;</div></div>
 </div>
 </div>
@@ -1076,6 +1086,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <button class="gal-chip" onclick="filterGallery('listing',this)">Listings</button>
     <button class="gal-chip" onclick="filterGallery('stock',this)">Stock</button>
     <button class="gal-chip" onclick="filterGallery('historical',this)">Historical</button>
+    <button class="gal-chip" onclick="filterGallery('final_edition',this)" style="color:var(--gold2);border-color:rgba(212,175,55,.3);">&#11088; Final Edition</button>
     <button class="gal-toggle-mng" id="gal-toggle-mng" onclick="toggleManage()" title="Manage / dedup mode">&#9881; Manage</button>
   </div>
 
@@ -1285,7 +1296,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
         <span class="notes-file-name" id="notes-file-name"></span>
       </div>
       <button onclick="if(NS.vin)openProfileImagePicker(NS.vin);" title="Upload profile image file" style="background:rgba(122,167,220,.08);border:1px solid rgba(122,167,220,.25);border-radius:6px;color:var(--blue2);font-size:12px;cursor:pointer;padding:7px 12px;line-height:1;font-family:var(--mono);margin-right:6px;" aria-label="Upload profile image">&#128247; Profile</button>
-      <button onclick="setProfileFromNotesOrPicker();" title="Set URL in textarea as profile image" class="notes-tag-btn" style="margin-right:6px;" aria-label="Set profile image from URL">[profile_image]</button>
+      <button onclick="notesInsertProfileImage();" title="Insert [profile_image] tag at cursor" class="notes-tag-btn" style="margin-right:6px;" aria-label="Insert [profile_image] tag">[profile_image]</button>
       <button class="notes-save" id="notes-save-btn" onclick="notesSave()">Save</button>
     </div>
   </div>
@@ -1338,7 +1349,35 @@ function formatColor(raw){
   s=s.replace(/\s+METALLIC$/i,'').trim();
   // Title case
   s=s.split(' ').filter(Boolean).map(function(w){return w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();}).join(' ');
+  // US-market name normalization: 890U "Cavansite Blue" (EU/mbdecoder) is "Lunar Blue" in US
+  if(/^Cavansite\b/i.test(s))s=s.replace(/^Cavansite/i,'Lunar');
   return s;
+}
+
+// Base-color family taxonomy. Order matters: Blue before Grey ensures "Anthracite Blue" → Blue, bare "Anthracite" → Grey.
+var COLOR_FAMILIES=[
+  {k:'white', lbl:'White',  idx:1,  re:/white|polar|diamond|cashmere/i},
+  {k:'silver',lbl:'Silver', idx:2,  re:/silver|iridium|palladium/i},
+  {k:'black', lbl:'Black',  idx:3,  re:/black|obsidian|onyx|magnetite|ruby|mocha/i},
+  {k:'blue',  lbl:'Blue',   idx:4,  re:/blue|cavansite|lunar/i},
+  {k:'green', lbl:'Green',  idx:5,  re:/green|emerald/i},
+  {k:'red',   lbl:'Red',    idx:6,  re:/red|patagonia|mars|crystal/i},
+  {k:'brown', lbl:'Brown',  idx:7,  re:/brown|tobacco|bronze|citrine/i},
+  {k:'yellow',lbl:'Yellow', idx:8,  re:/yellow|sunbeam|solar/i},
+  {k:'grey',  lbl:'Grey',   idx:9,  re:/grey|gray|graphite|selenite|alanite|tenorite|anthracite/i},
+  {k:'other', lbl:'Other',  idx:10, re:null}
+];
+function colorFamily(paintName){
+  var p=String(paintName||'').toLowerCase();
+  if(!p)return null;
+  for(var i=0;i<COLOR_FAMILIES.length-1;i++){
+    if(COLOR_FAMILIES[i].re.test(p))return COLOR_FAMILIES[i];
+  }
+  return COLOR_FAMILIES[COLOR_FAMILIES.length-1];
+}
+function colorFamilyForVin(vin){
+  var b=G.build&&G.build[vin];
+  return colorFamily(b&&b.paint_name);
 }
 
 // ── CONFIG ────────────────────────────────────────────────
@@ -1398,6 +1437,58 @@ function qs(path,file){
   }).then(function(r){
     if(!r.ok)return r.text().then(function(t){return Promise.reject(r.status+' '+t);});
     return SB+'/storage/v1/object/public/v12-apex-documents/'+path;
+  });
+}
+
+// ── ROBUSTNESS: defensive coercion helpers ────────────────
+// Use in chart math and KPI calcs where input may be string, null, or undefined.
+// numOrNull('123') === 123 ; numOrNull('foo') === null ; numOrNull(null) === null
+function numOrNull(x){
+  if(x==null||x==='')return null;
+  var n=+x;
+  return isFinite(n)?n:null;
+}
+function numOrZero(x){var n=numOrNull(x);return n==null?0:n;}
+
+// ── ROBUSTNESS: error reporting + global safety nets ──────
+// Lightweight ring buffer of recent errors. Inspect via window._errors in console.
+// Surfaces a one-line warning in the changed-strip so silent failures become visible.
+window._errors=window._errors||[];
+function reportError(context,err){
+  var rec={t:new Date().toISOString(),context:context,err:String(err&&err.message?err.message:err)};
+  window._errors.push(rec);
+  if(window._errors.length>50)window._errors.shift();
+  console.error('['+context+']',err);
+  // Show a brief warning in the changed-strip if it exists and isn't currently mid-sync
+  var strip=document.getElementById('changed-strip');
+  if(strip&&!G.loading){
+    strip.innerHTML='<span class="ch-item" style="color:var(--red);">&#9888; '+esc(context)+' \u2014 '+esc(rec.err.slice(0,80))+' (see console)</span>';
+  }
+}
+
+// Global unhandled-rejection handler — catches promises that escape without .catch()
+window.addEventListener('unhandledrejection',function(ev){
+  reportError('unhandled-rejection',ev.reason);
+});
+
+// Global runtime error handler — catches synchronous throws (skip benign cross-origin script errors)
+window.addEventListener('error',function(ev){
+  if(!ev||!ev.error)return;
+  reportError('runtime-error',ev.error);
+});
+
+// ── ROBUSTNESS: network retry wrapper ─────────────────────
+// Retries qw/qign/qups once on transient network failures (TypeError = fetch rejected before HTTP response).
+// HTTP errors (4xx/5xx) are NOT retried — those are application-level and need user action.
+// Use for write paths that should survive a flaky mobile connection.
+function withRetry(fn){
+  return fn().catch(function(err){
+    var msg=String(err&&err.message?err.message:err);
+    // Only retry actual network failures — fetch throws TypeError when network is unreachable
+    if(/network|failed to fetch|load failed/i.test(msg)){
+      return new Promise(function(resolve){setTimeout(resolve,500);}).then(fn);
+    }
+    return Promise.reject(err);
   });
 }
 
@@ -1682,41 +1773,14 @@ function updateNotesBadges(vin){
 // ── PROFILE FROM NOTES OR PICKER ─────────────────────────
 // If textarea contains an image URL, promote it directly.
 // Otherwise fall back to file picker.
-function setProfileFromNotesOrPicker(){
-  if(!NS.vin)return;
-  var body=document.getElementById('notes-textarea').value.trim();
-  var match=body.match(/https?:\/\/\S+\.(?:jpg|jpeg|png|webp|gif)(\?\S*)?/i);
-  if(match){
-    var profileUrl=match[0];
-    var vin=NS.vin;
-    qw('images?vin=eq.'+encodeURIComponent(vin)+'&is_hero=eq.true','PATCH',{is_hero:false})
-      .catch(function(){})
-      .then(function(){
-        return qw('images','POST',{vin:vin,url:profileUrl,source_type:'listing',is_hero:true,sort_order:0});
-      })
-      .then(function(){
-        return qw('vehicles?vin=eq.'+encodeURIComponent(vin),'PATCH',{image_url:profileUrl});
-      })
-      .then(function(){
-        return fetch(SB+'/rest/v1/images?vin=eq.'+encodeURIComponent(vin)+'&deleted_at=is.null&order=sort_order.asc',{headers:H})
-          .then(function(r){return r.ok?r.json():[];})
-          .then(function(freshImgs){
-            var vObj=G.v&&G.v.find(function(x){return x.vin===vin;});
-            if(vObj)vObj.image_url=profileUrl;
-            G.images=G.images||{};
-            G.images[vin]=freshImgs;
-            if(G.imagesAll){
-              G.imagesAll=G.imagesAll.filter(function(i){return i.vin!==vin;}).concat(freshImgs);
-            }
-            renderTargets();renderMkt();renderDashListings();
-            if(typeof renderDashProspect==='function')renderDashProspect();
-          });
-      })
-      .catch(function(err){alert('Profile image update failed: '+err);});
-  } else {
-    // No URL in textarea — open file picker
-    openProfileImagePicker(NS.vin);
-  }
+function notesInsertProfileImage(){
+  var ta=document.getElementById('notes-textarea');
+  if(!ta)return;
+  var tag='[profile_image] ';
+  var s=ta.selectionStart, e=ta.selectionEnd, v=ta.value;
+  ta.value=v.slice(0,s)+tag+v.slice(e);
+  ta.focus();
+  ta.selectionStart=ta.selectionEnd=s+tag.length;
 }
 
 // ── PROFILE IMAGE PICKER ──────────────────────────────────
@@ -2435,7 +2499,8 @@ function renderMkt(){
 
 // ── RENDER TARGETS ────────────────────────────────────────
 // ── TARGET FILTERS ────────────────────────────────────────
-var TF={ext:'',int:'',equip:[],years:[],feOnly:false};
+// TF.ext is now a base-color family key (e.g. 'black', 'white') — see COLOR_FAMILIES
+var TF={ext:'',int:'',equip:[],years:[]};
 
 function toggleFilterPanel(){
   var panel=document.getElementById('tgt-filter-panel');
@@ -2449,7 +2514,7 @@ function toggleFilterPanel(){
 }
 
 function updateFilterBadge(){
-  var count=(TF.ext?1:0)+(TF.int?1:0)+TF.equip.length+TF.years.length+(TF.feOnly?1:0);
+  var count=(TF.ext?1:0)+(TF.int?1:0)+TF.equip.length+TF.years.length;
   var badge=document.getElementById('tgt-filter-badge');
   var btn=document.getElementById('tgt-filter-btn');
   if(badge){badge.textContent=count;badge.style.display=count?'inline':'none';}
@@ -2458,14 +2523,19 @@ function updateFilterBadge(){
 
 function buildTgtFilters(){
   var targets=G.sortedT||[];
-  var exts={},ints={},years={};
+  var extFamilies={},ints={},years={};
   targets.forEach(function(v){
     var b=(G.build&&G.build[v.vin])||{};
-    if(b.paint_name){var c=formatColor(b.paint_name);if(c)exts[c]=true;}
+    if(b.paint_name){
+      var fam=colorFamily(b.paint_name);
+      if(fam)extFamilies[fam.k]=fam;
+    }
     if(b.upholstery_name){var u=formatColor(b.upholstery_name);if(u)ints[u]=true;}
     if(v.year)years[v.year]=true;
   });
-  var extKeys=Object.keys(exts).sort();
+  // Order ext chips by family idx (matches the sort order)
+  var extList=Object.keys(extFamilies).map(function(k){return extFamilies[k];})
+    .sort(function(a,b){return a.idx-b.idx;});
   var intKeys=Object.keys(ints).sort();
   var yearKeys=Object.keys(years).sort();
   var yrEl=document.getElementById('tgt-year-chips');
@@ -2474,16 +2544,13 @@ function buildTgtFilters(){
       return '<button class="fchip-yr'+(TF.years.indexOf(parseInt(y))>-1?' active':'')+'" onclick="toggleYearChip(this,'+y+')">'+y+'</button>';
     }).join('');
   }
-  // Sync FE chip active state
-  var feBtn=document.getElementById('tgt-fe-chip');
-  if(feBtn)feBtn.classList.toggle('active',TF.feOnly);
   var extRow=document.getElementById('tgt-ext-row');
   var intRow=document.getElementById('tgt-int-row');
   var extEl=document.getElementById('tgt-ext-chips');
   var intEl=document.getElementById('tgt-int-chips');
-  if(extEl&&extKeys.length){
-    extEl.innerHTML=extKeys.map(function(c){
-      return '<button class="fchip'+(TF.ext===c?' active':'')+'" onclick="toggleColorChip(this,\'ext\')">'+c+'</button>';
+  if(extEl&&extList.length){
+    extEl.innerHTML=extList.map(function(f){
+      return '<button class="fchip'+(TF.ext===f.k?' active':'')+'" data-fam="'+f.k+'" onclick="toggleColorChip(this,\'ext\')">'+f.lbl+'</button>';
     }).join('');
     if(extRow)extRow.style.display='flex';
   } else {
@@ -2510,16 +2577,14 @@ function toggleYearChip(btn,year){
   renderTargets();
 }
 
-function toggleFEChip(btn){
-  TF.feOnly=!TF.feOnly;
-  btn.classList.toggle('active',TF.feOnly);
-  updateFilterBadge();
-  renderTargets();
-}
-
 function toggleColorChip(btn,type){
-  var val=btn.textContent.trim();
-  TF[type]=(TF[type]===val)?'':val;
+  if(type==='ext'){
+    var fam=btn.getAttribute('data-fam')||'';
+    TF.ext=(TF.ext===fam)?'':fam;
+  } else {
+    var val=btn.textContent.trim();
+    TF.int=(TF.int===val)?'':val;
+  }
   buildTgtFilters();
   updateFilterBadge();
   renderTargets();
@@ -2671,13 +2736,11 @@ function renderTargets(){
   if(TF.years.length){
     list=list.filter(function(v){return TF.years.indexOf(parseInt(v.year))>-1;});
   }
-  if(TF.feOnly){
-    list=list.filter(function(v){return v.is_final_edition===true||(v.cohort&&v.cohort.indexOf('_FE')>-1);});
-  }
   if(TF.ext){
     list=list.filter(function(v){
       var b=(G.build&&G.build[v.vin])||{};
-      return b.paint_name&&formatColor(b.paint_name)===TF.ext;
+      var fam=colorFamily(b.paint_name);
+      return fam&&fam.k===TF.ext;
     });
   }
   if(TF.int){
@@ -3103,6 +3166,7 @@ function currentGalleryItems(){
   if(GAL.filter==='listing')items=items.filter(function(i){return i.source_type==='listing';});
   else if(GAL.filter==='stock')items=items.filter(function(i){return i.source_type==='stock';});
   else if(GAL.filter==='historical')items=items.filter(function(i){return i.source_type==='historical';});
+  else if(GAL.filter==='final_edition')items=items.filter(function(i){return i.category==='final_edition';});
   if(GAL.manageMode){
     // Sort by URL so duplicate (or near-duplicate) URLs sit adjacent for visual scanning
     items.sort(function(a,b){
@@ -3134,16 +3198,42 @@ function rebuildGallery(){
   }
   var mng=GAL.manageMode;
   grid.innerHTML=items.map(function(img,i){
-    var cls='gallery-tile'+(mng?' mng':'');
+    var cls='gallery-tile'+(mng?' mng':'')+(img.category==='final_edition'?' is-fe':'');
     var clickAttr=mng?'':' onclick="lbOpenGallery('+i+')"';
     var delBtn=mng?'<button class="gallery-tile-del" onclick="event.stopPropagation();hardDeleteImageByIdx('+i+',this)" title="Permanently delete (DB row + storage file)">&times;</button>':'';
+    var feBtn=mng?'<button class="gallery-tile-fe" onclick="event.stopPropagation();toggleImageFE('+img.id+',this)" title="'+(img.category==='final_edition'?'Untag Final Edition':'Tag as Final Edition')+'">&#11088;</button>':'';
+    var feFlag=(!mng&&img.category==='final_edition')?'<div class="gallery-tile-fe-flag" title="Final Edition">&#11088;</div>':'';
     return '<div class="'+cls+'"'+clickAttr+' title="'+esc(img.caption||img.url||'')+'">'+
       '<img src="'+esc(img.url)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'+
       '<div class="gallery-tile-ov"></div>'+
+      feFlag+
+      feBtn+
       delBtn+
     '</div>';
   }).join('');
   rebuildGalleryCarousel(items);
+}
+
+// Toggle Final Edition tag on an image (sets/unsets images.category='final_edition')
+function toggleImageFE(id,btn){
+  var img=(G.imagesAll||[]).find(function(i){return i.id===id;});
+  if(!img)return;
+  var newCat=img.category==='final_edition'?null:'final_edition';
+  qw('images?id=eq.'+encodeURIComponent(id),'PATCH',{category:newCat})
+    .then(function(){
+      img.category=newCat;
+      if(btn){
+        var tile=btn.closest('.gallery-tile');
+        if(tile){
+          if(newCat==='final_edition')tile.classList.add('is-fe');
+          else tile.classList.remove('is-fe');
+        }
+        btn.title=newCat==='final_edition'?'Untag Final Edition':'Tag as Final Edition';
+      }
+      // Refresh FE tab strip if it's currently rendered
+      if(typeof renderFinalEdition==='function')renderFinalEdition();
+    })
+    .catch(function(err){alert('FE tag update failed: '+err);});
 }
 
 function rebuildGalleryCarousel(items){
@@ -3641,18 +3731,15 @@ function renderColorBars(vehicles){
     'Mocha Black':'#2e1f15',
     'Lunar Blue':'#1e3a5f',
     'Anthracite Blue':'#1c2b3a',
-    'Selenite Grey':'#7a8186',
-    'Cavansite Blue':'#1b3d6e'
+    'Selenite Grey':'#7a8186'
   };
   var counts={};
   vehicles.forEach(function(v){
     var b=G.build&&G.build[v.vin];
     var c=b&&b.paint_name;
     if(!c)return;
-    // Normalize: uppercase input like "DIAMOND WHITE - METALLIC PAINT" → "Diamond White"
-    c=c.replace(/\s*-\s*(METALLIC PAINT|METALLIC FINISH|PAINTWORK).*$/i,'').trim();
-    c=c.replace(/\s+METALLIC$/i,'').trim();
-    c=c.split(' ').map(function(w){return w.charAt(0).toUpperCase()+w.slice(1).toLowerCase();}).join(' ');
+    // Normalize via formatColor (handles suffix stripping, title-case, Cavansite→Lunar Blue rename)
+    c=formatColor(c);
     if(c.length>1)counts[c]=(counts[c]||0)+1;
   });
   var arr=Object.keys(counts).map(function(c){return{c:c,n:counts[c]};});
@@ -4138,7 +4225,7 @@ function renderDashProspect(){
   var imgs=G.images&&G.images[v.vin]?G.images[v.vin].slice():[];
   var hero=imgs.filter(function(i){return i.is_hero;})[0]||imgs[0];
   var b=G.build&&G.build[v.vin]||{};
-  var ext=b.paint_name?formatColor(b.paint_name):'Cavansite Blue Metallic';
+  var ext=b.paint_name?formatColor(b.paint_name):'Lunar Blue Metallic';
   var interior=b.upholstery_name?formatColor(b.upholstery_name):'Designo Beige';
   var vm=G.m&&G.m[v.vin]||{};
   var slides=imgs.slice(0,8);
@@ -4539,16 +4626,7 @@ function loadAll(){
     // Market
     renderMkt();
 
-    // Targets
-    // Color family normalizer: White → Black → Grey → Other
-    function colorFamily(vin){
-      var p=((G.build&&G.build[vin]&&G.build[vin].paint_name)||'').toLowerCase();
-      if(/white|polar|diamond/.test(p))  return '1_white';
-      if(/black|obsidian|onyx/.test(p))  return '2_black';
-      if(/grey|gray|silver|graphite|selenite|iridium|anthracite/.test(p)) return '3_grey';
-      if(p) return '4_other';
-      return '5_unknown';
-    }
+    // Targets — sort: Top Prospect → Active → color family → year DESC → miles ASC
     var sortedT=targetV.slice().sort(function(a,b){
       // 1. Top prospect always first
       if(a.is_top_prospect&&!b.is_top_prospect)return -1;
@@ -4556,14 +4634,16 @@ function loadAll(){
       // 2. Active listings before inactive
       var aA=lhMap[a.vin]?0:1,bA=lhMap[b.vin]?0:1;
       if(aA!==bA)return aA-bA;
-      // 3. Final Editions to bottom
-      var aFE=a.is_final_edition?1:0,bFE=b.is_final_edition?1:0;
-      if(aFE!==bFE)return aFE-bFE;
+      // 3. Base color family (White → Silver → Black → Blue → Green → Red → Brown → Yellow → Grey → Other)
+      var aCF=colorFamilyForVin(a.vin),bCF=colorFamilyForVin(b.vin);
+      var aIdx=aCF?aCF.idx:99,bIdx=bCF?bCF.idx:99;
+      if(aIdx!==bIdx)return aIdx-bIdx;
       // 4. Year descending
       if((b.year||0)!==(a.year||0))return (b.year||0)-(a.year||0);
-      // 5. Color family (White → Black → Grey → Other)
-      var aCF=colorFamily(a.vin),bCF=colorFamily(b.vin);
-      return aCF.localeCompare(bCF);
+      // 5. Miles ascending (lower mileage first; missing → end)
+      var aM=(G.m&&G.m[a.vin]&&G.m[a.vin].curr_odo!=null)?G.m[a.vin].curr_odo:Infinity;
+      var bM=(G.m&&G.m[b.vin]&&G.m[b.vin].curr_odo!=null)?G.m[b.vin].curr_odo:Infinity;
+      return aM-bM;
     });
     G.sortedT=sortedT;
     buildTgtFilters();
@@ -4636,6 +4716,8 @@ function loadAll(){
     renderFinalEdition();
     // If the Gallery tab was already opened and showed empty (loaded before images arrived), rebuild it now
     if(galleryLoaded&&typeof rebuildGallery==='function')rebuildGallery();
+    // Post-load data shape validation — catches schema drift / RLS strips early
+    validateLoad();
     G.loading=false;
     if(G.loadingTimeout){clearTimeout(G.loadingTimeout);G.loadingTimeout=null;}
     restoreSyncBtn();
@@ -4656,6 +4738,55 @@ function restoreSyncBtn(){
   b.disabled=false;
   b.style.opacity='';
   b.removeAttribute('aria-busy');
+}
+
+// ── ROBUSTNESS: post-load data shape validation ───────────
+// Runs after every successful loadAll(). Detects schema drift, RLS-stripped columns,
+// and missing data shapes EARLY so they don't silently degrade renders for hours.
+// Warnings → console only. Critical issues → surfaced in changed-strip.
+function validateLoad(){
+  var warnings=[],critical=[];
+  // Core shapes
+  if(!Array.isArray(G.v))critical.push('G.v not an array');
+  if(!G.l||typeof G.l!=='object')critical.push('G.l missing');
+  if(!G.m||typeof G.m!=='object')critical.push('G.m missing');
+  if(!G.build||typeof G.build!=='object')critical.push('G.build missing');
+  if(!G.docs||typeof G.docs!=='object')critical.push('G.docs missing');
+  if(!Array.isArray(G.imagesAll))critical.push('G.imagesAll not an array');
+  if(critical.length){
+    reportError('data-shape',critical.join('; '));
+    return;
+  }
+  // Sample-row sanity: required columns on first vehicle row
+  var sample=G.v[0];
+  if(sample){
+    var requiredCols=['vin','year','trim','car_status','listing_status'];
+    requiredCols.forEach(function(c){
+      if(!(c in sample))warnings.push('vehicles.'+c+' missing from API response (RLS or schema drift?)');
+    });
+  }
+  // Counts vs expected ranges (per memory: ~795 VIN universe, sub-1000 normal)
+  var n=G.v.length;
+  if(n<100)warnings.push('Only '+n+' vehicles loaded — expected 700+');
+  if(n>2000)warnings.push(n+' vehicles loaded — exceeds safety cap, likely API issue');
+  // Targets coverage: every target should have a build row (paint/upholstery)
+  var targets=G.v.filter(function(v){return v.car_status==='target';});
+  var noBuild=targets.filter(function(v){return !G.build[v.vin];});
+  if(noBuild.length)warnings.push(noBuild.length+'/'+targets.length+' targets missing vehicle_build row');
+  // Active listings coverage: every active VIN should have an entry in G.l
+  var actives=G.v.filter(function(v){return v.listing_status==='active';});
+  var noLh=actives.filter(function(v){return !G.l[v.vin];});
+  if(noLh.length)warnings.push(noLh.length+'/'+actives.length+' active vehicles missing listing_history row');
+  // Image data sanity: at least the prospect should have one image
+  if(G.prospect&&G.prospect.vin){
+    var pImgs=(G.images&&G.images[G.prospect.vin])||[];
+    if(!pImgs.length&&!G.prospect.image_url)warnings.push('Top prospect ('+G.prospect.vin.slice(-6)+') has no images');
+  }
+  if(warnings.length){
+    console.warn('[validateLoad] '+warnings.length+' warning(s):');
+    warnings.forEach(function(w){console.warn('  \u2022 '+w);});
+    window._loadWarnings=warnings; // inspect via console
+  }
 }
 
 
@@ -4748,35 +4879,50 @@ function buildDepChart(year,pts){
 }
 
 function renderFinalEdition(){
-  var el=document.getElementById('fe-grid');
-  if(!el)return;
+  var grid=document.getElementById('fe-grid');
+  var cardCount=document.getElementById('fe-card-count');
+  var strip=document.getElementById('fe-gal-strip');
+  var galCount=document.getElementById('fe-gal-count');
   var feVins=(G.v||[]).filter(function(v){return v.is_final_edition===true||(v.cohort&&v.cohort.indexOf('_FE')>-1);});
-  if(!feVins.length){el.innerHTML='<div class="loading">No Final Edition records found.</div>';return;}
   feVins.sort(function(a,b){return (a.vin||'').localeCompare(b.vin||'');});
-  el.innerHTML=feVins.map(function(v){
-    var bld=G.build&&G.build[v.vin];
-    var paint=bld&&bld.paint_name||'Obsidian Black Metallic';
-    var uph=bld&&bld.upholstery_name||'Exclusive Nappa Leather';
-    var mkt=G.m&&G.m[v.vin];
-    var odo=mkt&&mkt.curr_odo?mkt.curr_odo.toLocaleString()+' mi':'—';
-    var owners=mkt&&mkt.total_owners||'—';
-    var state=v.last_title_state||'—';
-    var isCA=(state.length>2&&['AB','BC','MB','NB','NL','NS','NT','NU','ON','PE','QC','SK','YT'].indexOf(state)>-1);
-    return '<div class="fe-card">'+
-      '<div class="fe-card-vin">...'+v.vin.slice(-6)+'</div>'+
-      '<div class="fe-card-year">'+v.year+'</div>'+
-      '<div class="fe-card-trim">S65 AMG Final Edition</div>'+
-      '<div style="font-size:11px;color:var(--muted);margin-bottom:8px;line-height:1.7;">'+
-        '<span style="color:var(--dim);">Paint:</span> '+paint+'<br>'+
-        '<span style="color:var(--dim);">Interior:</span> '+uph+'<br>'+
-        '<span style="color:var(--dim);">Odo:</span> '+odo+' &nbsp;'+
-        '<span style="color:var(--dim);">Owners:</span> '+owners+'<br>'+
-        '<span style="color:var(--dim);">Title:</span> <span style="color:'+(isCA?'var(--red)':'var(--muted)')+';">'+state+(isCA?' &#9888;':' &#9679;')+'</span>'+
-      '</div>'+
-      '<span class="fe-card-badge">&#11088; Final Edition</span>'+
-      '<div class="fe-coming">Full profile coming soon</div>'+
-    '</div>';
-  }).join('');
+  // Cards: reuse renderTarget for full profile (image, history toggle, flags, equip, docs, mini-gallery, listing URL)
+  if(grid){
+    if(!feVins.length){grid.innerHTML='<div class="loading">No Final Edition records found.</div>';}
+    else{grid.innerHTML=feVins.map(function(v){return renderTarget(v,G.m&&G.m[v.vin],G.l&&G.l[v.vin]);}).join('');}
+  }
+  if(cardCount)cardCount.textContent=feVins.length?feVins.length+(feVins.length===1?' VIN':' VINs'):'';
+  // Gallery strip: images tagged category='final_edition'
+  if(strip){
+    var feImgs=(G.imagesAll||[]).filter(function(i){return i.category==='final_edition';});
+    feImgs.sort(function(a,b){
+      var da=a.added_at?new Date(a.added_at).getTime():0;
+      var db=b.added_at?new Date(b.added_at).getTime():0;
+      return db-da;
+    });
+    if(galCount)galCount.textContent=feImgs.length?feImgs.length+(feImgs.length===1?' photo':' photos'):'';
+    if(!feImgs.length){
+      strip.innerHTML='<div class="fe-gal-empty">No images tagged Final Edition yet. Open the main Gallery, click &#9881; Manage, then click the &#11088; button on any tile to tag it.</div>';
+    } else {
+      // Cache global indices into G.imagesAll for lightbox navigation across the FE subset
+      G.feGalIdx=feImgs.map(function(i){return (G.imagesAll||[]).indexOf(i);});
+      strip.innerHTML=feImgs.map(function(img,i){
+        return '<div class="fe-gal-tile" onclick="lbOpenFE('+i+')" title="'+esc(img.caption||img.url||'')+'">'+
+          '<img src="'+esc(img.url)+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">'+
+        '</div>';
+      }).join('');
+    }
+  }
+}
+
+// Open lightbox from FE strip — passes the FE-tagged subset to the lightbox
+function lbOpenFE(i){
+  var feImgs=(G.imagesAll||[]).filter(function(im){return im.category==='final_edition';});
+  feImgs.sort(function(a,b){
+    var da=a.added_at?new Date(a.added_at).getTime():0;
+    var db=b.added_at?new Date(b.added_at).getTime():0;
+    return db-da;
+  });
+  if(feImgs.length)openLightbox(feImgs,i);
 }
 function renderVideos(){
   var vids=getVideos();
