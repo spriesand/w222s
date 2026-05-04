@@ -28,6 +28,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 /* Defensive kill-switch: hide legacy pill markup if rendered from a cached build */
 .lst-chip{display:none !important}
 .lc-dom{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--muted);white-space:nowrap}
+.qs-btn{display:inline-flex;align-items:center;padding:5px 12px;border-radius:20px;font-family:var(--mono);font-size:11px;color:var(--blue2);background:rgba(122,167,220,.07);border:1px solid rgba(122,167,220,.25);text-decoration:none;white-space:nowrap;transition:all .15s;}
+.qs-btn:hover{background:rgba(122,167,220,.18);border-color:var(--blue);color:#fff;}
 /* Rolodex */
 .rolo-card{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;}
 .rolo-name{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink);line-height:1.2;}
@@ -843,6 +845,20 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
     <button class="fbtn" onclick="sMkt('price',this)">Price &#8593;</button>
     <button class="fbtn" onclick="sMkt('miles',this)">Miles &#8593;</button>
     <button class="fbtn active" onclick="sMkt('year',this)">Year &#8595;</button>
+  </div>
+  <!-- Quick Search Strip -->
+  <div style="margin-bottom:14px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;">
+    <div style="display:flex;gap:7px;padding-bottom:4px;min-width:max-content;">
+      <span style="font-family:var(--mono);font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.12em;display:flex;align-items:center;padding-right:4px;white-space:nowrap;">Search:</span>
+      <a href="https://www.cargurus.com/search?srpVariation=DEFAULT_SEARCH&zip=76051&sortType=BEST_MATCH&sortDirection=ASC&distance=50000&makeModelTrimPaths=m43%2Fd82%2Cm43%2Fd82%2FS+65+AMG%2Cm43%2Cm43%2Fd82%2FS+AMG+65+Sedan+RWD%2Cm43%2Fd82%2FS+65+AMG+RWD&isDeliveryEnabled=true&nonShippableBaseline=18&startYear=2015" target="_blank" class="qs-btn">CarGurus</a>
+      <a href="https://www.autotrader.com/cars-for-sale/sedan/12-cylinder/mercedes-benz/s-class/s-65-amg/grapevine-tx?mmt%5B%5D=MB%7CSCLASS%7C&searchRadius=0&startYear=2015&trim=AMG%20S%2065" target="_blank" class="qs-btn">AutoTrader</a>
+      <a href="https://www.cars.com/shopping/results/?year_min=2015&makes%5B%5D=mercedes_benz&models%5B%5D=mercedes_benz-s_class&trims%5B%5D=mercedes_benz-s_class-s_65_amg&zip=76092&maximum_distance=9999&sort=best_match_desc" target="_blank" class="qs-btn">Cars.com</a>
+      <a href="https://www.iseecars.com/cars-for-sale#sort=BestDeal&sortOrder=desc&pf_tab=ISC&Location=76092&Radius=all&Make=Mercedes-Benz&Model=S-Class&Year_min=2015&offset=0&maxResults=20&lfc_t0=MTc3NzkwNDg2ODk2OQ%3D%3D&autoZip=False&Trim=AMG+S+65%2C%2CS+65+AMG" target="_blank" class="qs-btn">iSeeCars</a>
+      <a href="https://www.autotempest.com/results?bodystyle=sedan&cylinders=12&localization=country&make=mercedesbenz&minyear=2015&model=s65amg&zip=76051" target="_blank" class="qs-btn">AutoTempest</a>
+      <a href="https://bringatrailer.com/mercedes-benz/w222-s-class/?search=s65" target="_blank" class="qs-btn">BaT</a>
+      <a href="https://www.classic.com/m/mercedes-benz/s/w222/sedan/s-65-amg/" target="_blank" class="qs-btn">Classic.com</a>
+      <a href="https://www.mbusa.com/en/cpo/inventory/search?zip=76051&bodyStyle=SDN&class=S&inventory=cpo,pre&model=S65V&year=2020" target="_blank" class="qs-btn" style="border-color:rgba(200,169,106,.4);color:var(--gold2);">MBUSA CPO</a>
+    </div>
   </div>
   <div class="mkt-grid" id="market-grid"><div class="loading">Loading&hellip;</div></div>
 </div>
