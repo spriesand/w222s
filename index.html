@@ -1564,10 +1564,9 @@ function mbContactPill(vin){
   var loc=parts[1]||'';
   var phone=parts[2]||'';
   var site=parts[3]||'';
-  var safeVin=vin.replace(/'/g,"\\'");
-  return '<button class="mbc-pill" onclick="event.stopPropagation();mbcShow(this,''+safeVin+'')">&#128222; MB Contact</button>';
+  return '<button class="mbc-pill" data-vin="'+vin+'" onclick="event.stopPropagation();mbcShow(this)">&#128222; MB Contact</button>';
 }
-function mbcShow(btn,vin){
+function mbcShow(btn){var vin=btn.dataset.vin||'';
   var existing=document.getElementById('mbc-pop');
   if(existing){existing.remove();if(existing.dataset.vin===vin)return;}
   var notes=(G.notesByVin&&G.notesByVin[vin])||[];
