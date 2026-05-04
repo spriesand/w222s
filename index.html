@@ -610,6 +610,14 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .notes-pill:hover{background:rgba(255,255,255,.08);border-color:var(--gold2);color:#fff}
 .notes-pill.has-notes{color:var(--gold2);border-color:rgba(200,175,85,.35);background:rgba(200,175,85,.08)}
 .notes-pill-count{font-weight:700}
+/* MB Contact pill */
+.mbc-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(122,167,220,.07);border:1px solid rgba(122,167,220,.28);color:var(--blue2);padding:3px 10px;border-radius:12px;font-size:11px;cursor:pointer;font-family:inherit;transition:all .15s;line-height:1.4;flex-shrink:0;white-space:nowrap}
+.mbc-pill:hover{background:rgba(122,167,220,.15);border-color:var(--blue)}
+.mbc-pop{position:fixed;z-index:500;background:var(--panel2);border:1px solid rgba(122,167,220,.3);border-radius:10px;padding:12px 14px;min-width:220px;max-width:280px;box-shadow:0 8px 32px rgba(0,0,0,.5);font-family:var(--mono);font-size:12px;color:var(--ink2);line-height:1.6}
+.mbc-pop-name{font-size:13px;color:var(--blue2);font-weight:600;margin-bottom:6px}
+.mbc-pop-row{display:flex;align-items:center;gap:6px;color:var(--muted)}
+.mbc-pop a{color:var(--blue2);text-decoration:none}
+.mbc-pop a:hover{text-decoration:underline}
 
 /* Price delta + relist chips */
 .price-delta-inline{display:inline-flex;align-items:baseline;gap:6px;flex-wrap:wrap}
@@ -1545,6 +1553,44 @@ function renderPriceWithDelta(cur,cls,extraStyle){
 // ── NOTES MODULE ──────────────────────────────────────────
 var NS={vin:null,pendingFile:null,saving:false};
 
+function mbContactPill(vin){
+  var notes=(G.notesByVin&&G.notesByVin[vin])||[];
+  var broker=null;
+  for(var i=0;i<notes.length;i++){if(notes[i].body&&notes[i].body.indexOf('[broker]')===0){broker=notes[i].body;break;}}
+  if(!broker)return '';
+  // Parse: [broker] Name | City, ST | (xxx) xxx-xxxx | website.com
+  var parts=broker.replace('[broker]','').trim().split('|').map(function(s){return s.trim();});
+  var name=parts[0]||'MB Dealer';
+  var loc=parts[1]||'';
+  var phone=parts[2]||'';
+  var site=parts[3]||'';
+  var safeVin=vin.replace(/'/g,"\\'");
+  return '<button class="mbc-pill" onclick="event.stopPropagation();mbcShow(this,''+safeVin+'')">&#128222; MB Contact</button>';
+}
+function mbcShow(btn,vin){
+  var existing=document.getElementById('mbc-pop');
+  if(existing){existing.remove();if(existing.dataset.vin===vin)return;}
+  var notes=(G.notesByVin&&G.notesByVin[vin])||[];
+  var broker=null;
+  for(var i=0;i<notes.length;i++){if(notes[i].body&&notes[i].body.indexOf('[broker]')===0){broker=notes[i].body;break;}}
+  if(!broker)return;
+  var parts=broker.replace('[broker]','').trim().split('|').map(function(s){return s.trim();});
+  var name=parts[0]||'MB Dealer';
+  var loc=parts[1]||'';
+  var phone=parts[2]||'';
+  var site=parts[3]||'';
+  var pop=document.createElement('div');
+  pop.id='mbc-pop';pop.dataset.vin=vin;pop.className='mbc-pop';
+  pop.innerHTML='<div class="mbc-pop-name">'+name+'</div>'+
+    (loc?'<div class="mbc-pop-row">&#128205; '+loc+'</div>':'')+
+    (phone?'<div class="mbc-pop-row">&#128222; <a href="tel:'+phone+'">'+phone+'</a></div>':'')+
+    (site?'<div class="mbc-pop-row">&#127760; <a href="https://'+site+'" target="_blank">'+site+'</a></div>':'');
+  var r=btn.getBoundingClientRect();
+  pop.style.top=(r.bottom+6)+'px';
+  pop.style.left=Math.min(r.left,window.innerWidth-290)+'px';
+  document.body.appendChild(pop);
+  setTimeout(function(){document.addEventListener('click',function h(){pop.remove();document.removeEventListener('click',h);},{once:true});},10);
+}
 function notesPillInner(cnt){
   if(!cnt)return '&#128221; Add note';
   return '&#128221; <span class="notes-pill-count">'+cnt+'</span> '+(cnt===1?'note':'notes');
@@ -2433,7 +2479,7 @@ function renderTarget(v,vm,lh){
     '<div class="tc-body">'+
       '<div class="title-row">'+
         '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+'</div>'+
-        notesPill(v.vin)+
+        mbContactPill(v.vin)+notesPill(v.vin)+
       '</div>'+
       '<div class="tc-sub">'+v.vin+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?' &middot; '+formatColor(b.paint_name):'';})()+'</div>'+
       '<div class="tc-stats">'+
