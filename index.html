@@ -28,6 +28,17 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 /* Defensive kill-switch: hide legacy pill markup if rendered from a cached build */
 .lst-chip{display:none !important}
 .lc-dom{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--muted);white-space:nowrap}
+/* Rolodex */
+.rolo-card{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;}
+.rolo-name{font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink);line-height:1.2;}
+.rolo-loc{font-family:var(--mono);font-size:11px;color:var(--muted);}
+.rolo-row{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;color:var(--dim);}
+.rolo-row a{color:var(--blue2);text-decoration:none;}
+.rolo-row a:hover{text-decoration:underline;}
+.rolo-badge{display:inline-flex;align-items:center;height:18px;padding:0 7px;border-radius:10px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;margin-top:4px;width:fit-content;}
+.rolo-badge.mb{background:rgba(122,167,220,.12);color:var(--blue2);border:1px solid rgba(122,167,220,.25);}
+.rolo-badge.listing{background:rgba(76,190,130,.1);color:var(--green);border:1px solid rgba(76,190,130,.22);}
+.rolo-badge.contact{background:rgba(200,169,106,.1);color:var(--gold2);border:1px solid rgba(200,169,106,.22);}
 .lc-dom-edit{background:transparent;border:none;color:var(--dim);cursor:pointer;font-size:11px;padding:1px 3px;line-height:1;opacity:.7;transition:opacity .15s}
 .lc-dom-edit:hover{opacity:1;color:var(--blue2)}
 
@@ -613,6 +624,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 /* MB Contact pill */
 .mbc-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(122,167,220,.07);border:1px solid rgba(122,167,220,.28);color:var(--blue2);padding:3px 10px;border-radius:12px;font-size:11px;cursor:pointer;font-family:inherit;transition:all .15s;line-height:1.4;flex-shrink:0;white-space:nowrap}
 .mbc-pill:hover{background:rgba(122,167,220,.15);border-color:var(--blue)}
+.mbc-pill-active{background:rgba(76,190,130,.07);border-color:rgba(76,190,130,.35);color:var(--green)}
+.mbc-pill-active:hover{background:rgba(76,190,130,.15);border-color:var(--green)}
 .mbc-pop{position:fixed;z-index:500;background:var(--panel2);border:1px solid rgba(122,167,220,.3);border-radius:10px;padding:12px 14px;min-width:220px;max-width:280px;box-shadow:0 8px 32px rgba(0,0,0,.5);font-family:var(--mono);font-size:12px;color:var(--ink2);line-height:1.6}
 .mbc-pop-name{font-size:13px;color:var(--blue2);font-weight:600;margin-bottom:6px}
 .mbc-pop-row{display:flex;align-items:center;gap:6px;color:var(--muted)}
@@ -707,7 +720,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   <div class="ntab" onclick="go('news',this);loadNews()">News</div>
   <div class="ntab" onclick="go('videos',this)">Videos</div>
   <div class="ntab" onclick="go('analytics',this)">Analytics</div>
-  <div class="ntab" onclick="go('resources',this);loadResources()">Resources</div>
+  <div class="ntab" onclick="go('resources',this);loadResources();loadRolodex()">Resources</div>
   <div class="ntab ntab-fe" onclick="go('finaledition',this)">&#127937; Final Edition</div>
 </nav>
 </div><!-- end sticky-header -->
@@ -1164,6 +1177,28 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   <div id="resources-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;">
     <div class="loading">Loading&hellip;</div>
   </div>
+
+  <!-- DEALER ROLODEX -->
+  <div class="sec" style="margin-top:28px;">
+    <span>Dealer Rolodex</span>
+    <a href="https://www.mbusa.com/en/dealers/searchLocation-76051/searchByType-zip/filter-mbdealer" target="_blank" class="mbtn" style="font-size:11px;">&#127760; MBUSA Locator</a>
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+    <input type="text" id="rolodex-search" placeholder="&#128269; Search name, city, state..." oninput="renderRolodex()" style="flex:1 1 220px;background:var(--panel2);border:1px solid var(--line2);border-radius:6px;padding:7px 10px;font-family:var(--mono);font-size:12px;color:var(--ink);outline:none;">
+    <select id="rolodex-type" onchange="renderRolodex()" style="flex:0 0 160px;background:var(--panel2);border:1px solid var(--line2);border-radius:6px;padding:7px 10px;font-family:var(--mono);font-size:12px;color:var(--ink);outline:none;">
+      <option value="">All Types</option>
+      <option value="mb_dealer">MB Dealers</option>
+      <option value="listing_dealer">Listing Dealers</option>
+      <option value="dealer">Contacts</option>
+    </select>
+    <select id="rolodex-state" onchange="renderRolodex()" style="flex:0 0 120px;background:var(--panel2);border:1px solid var(--line2);border-radius:6px;padding:7px 10px;font-family:var(--mono);font-size:12px;color:var(--ink);outline:none;">
+      <option value="">All States</option>
+    </select>
+  </div>
+  <div id="rolodex-count" style="font-family:var(--mono);font-size:11px;color:var(--dim);margin-bottom:10px;"></div>
+  <div id="rolodex-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;">
+    <div class="loading">Loading&hellip;</div>
+  </div>
 </div>
 </div>
 
@@ -1553,18 +1588,15 @@ function renderPriceWithDelta(cur,cls,extraStyle){
 // ── NOTES MODULE ──────────────────────────────────────────
 var NS={vin:null,pendingFile:null,saving:false};
 
-function mbContactPill(vin){
+function mbContactPill(vin,listingStatus){
   var notes=(G.notesByVin&&G.notesByVin[vin])||[];
   var broker=null;
   for(var i=0;i<notes.length;i++){if(notes[i].body&&notes[i].body.indexOf('[broker]')===0){broker=notes[i].body;break;}}
   if(!broker)return '';
-  // Parse: [broker] Name | City, ST | (xxx) xxx-xxxx | website.com
-  var parts=broker.replace('[broker]','').trim().split('|').map(function(s){return s.trim();});
-  var name=parts[0]||'MB Dealer';
-  var loc=parts[1]||'';
-  var phone=parts[2]||'';
-  var site=parts[3]||'';
-  return '<button class="mbc-pill" data-vin="'+vin+'" onclick="event.stopPropagation();mbcShow(this)">&#128222; MB Contact</button>';
+  var isActive=(listingStatus==='active');
+  var label=isActive?'&#128205; Listing Contact':'&#128222; MB Contact';
+  var cls=isActive?'mbc-pill mbc-pill-active':'mbc-pill';
+  return '<button class="'+cls+'" data-vin="'+vin+'" onclick="event.stopPropagation();mbcShow(this)">'+label+'</button>';
 }
 function mbcShow(btn){var vin=btn.dataset.vin||'';
   var existing=document.getElementById('mbc-pop');
@@ -2262,7 +2294,50 @@ function dashCarouselNext(){
 }
 
 // ── RESOURCES ─────────────────────────────────────────────
+var rolodexLoaded=false;
+var G_rolodex=[];
+function loadRolodex(){
+  if(rolodexLoaded)return;
+  rolodexLoaded=true;
+  q('broker_contacts?select=*&order=region.asc,company.asc&limit=500').then(function(rows){
+    G_rolodex=rows||[];
+    // Populate state filter
+    var states=[...new Set(rows.map(function(r){return r.region;}).filter(Boolean))].sort();
+    var sel=document.getElementById('rolodex-state');
+    if(sel){states.forEach(function(s){var o=document.createElement('option');o.value=s;o.textContent=s;sel.appendChild(o);});}
+    renderRolodex();
+  });
+}
+function renderRolodex(){
+  var q=(document.getElementById('rolodex-search')||{}).value||'';
+  var type=(document.getElementById('rolodex-type')||{}).value||'';
+  var state=(document.getElementById('rolodex-state')||{}).value||'';
+  var list=G_rolodex.filter(function(r){
+    if(type && r.contact_type!==type)return false;
+    if(state && r.region!==state)return false;
+    if(q){var s=(r.company+' '+(r.location||'')).toLowerCase();if(s.indexOf(q.toLowerCase())<0)return false;}
+    return true;
+  });
+  var cnt=document.getElementById('rolodex-count');
+  if(cnt)cnt.textContent=list.length+' contacts';
+  var grid=document.getElementById('rolodex-grid');
+  if(!grid)return;
+  if(!list.length){grid.innerHTML='<div class="loading">No contacts match.</div>';return;}
+  grid.innerHTML=list.map(function(r){
+    var badgeCls=r.contact_type==='mb_dealer'?'mb':r.contact_type==='listing_dealer'?'listing':'contact';
+    var badgeLbl=r.contact_type==='mb_dealer'?'MB Dealer':r.contact_type==='listing_dealer'?'Listing Dealer':'Contact';
+    var phone=r.phone?'<div class="rolo-row">&#128222; <a href="tel:'+r.phone+'">'+r.phone+'</a></div>':'';
+    var web=r.website?'<div class="rolo-row">&#127760; <a href="'+r.website+'" target="_blank">'+r.website.replace('https://','').replace('http://','')+'</a></div>':'';
+    return '<div class="rolo-card">'+
+      '<div class="rolo-name">'+esc(r.company)+'</div>'+
+      '<div class="rolo-loc">&#128205; '+(r.location||r.region||'')+'</div>'+
+      phone+web+
+      '<span class="rolo-badge '+badgeCls+'">'+badgeLbl+'</span>'+
+    '</div>';
+  }).join('');
+}
 var resourcesLoaded=false;
+    rolodexLoaded=false;
 function loadResources(){
   if(resourcesLoaded)return;
   resourcesLoaded=true;
@@ -2478,7 +2553,7 @@ function renderTarget(v,vm,lh){
     '<div class="tc-body">'+
       '<div class="title-row">'+
         '<div class="tc-title">'+(v.year||'')+' '+(v.trim||'S65 AMG')+'</div>'+
-        mbContactPill(v.vin)+notesPill(v.vin)+
+        mbContactPill(v.vin,v.listing_status)+notesPill(v.vin)+
       '</div>'+
       '<div class="tc-sub">'+v.vin+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?' &middot; '+formatColor(b.paint_name):'';})()+'</div>'+
       '<div class="tc-stats">'+
