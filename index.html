@@ -24,7 +24,7 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{background:var(--bg)}
-body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% -5%,rgba(122,167,220,.07),transparent 55%),#07090f;color:var(--ink);min-height:100vh;overflow-x:hidden;overflow-x:clip}
+body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% -5%,rgba(122,167,220,.07),transparent 55%),#07090f;color:var(--ink);min-height:100vh;overflow-x:hidden}
 /* Defensive kill-switch: hide legacy pill markup if rendered from a cached build */
 .lst-chip{display:none !important}
 .lc-dom{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--muted);white-space:nowrap}
@@ -45,7 +45,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .lc-dom-edit:hover{opacity:1;color:var(--blue2)}
 
 /* ── MASTHEAD ── */
-.sticky-header{position:sticky;top:0;z-index:200;background:var(--bg);}
+.sticky-header{position:sticky;top:0;z-index:200;background:var(--bg);transform:translateZ(0);-webkit-transform:translateZ(0);will-change:transform;}
 .mast{border-bottom:1px solid var(--line);padding:11px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;background:rgba(7,9,15,.95);backdrop-filter:blur(16px)}
 .brand-name{font-family:var(--serif);font-size:clamp(16px,2.5vw,23px);font-weight:600;color:var(--ink)}
 .brand-name em{font-style:italic;color:var(--gold)}
@@ -679,9 +679,65 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
   .notes-drawer{width:100vw;border-left:none;box-shadow:none}
   .price-modal{width:calc(100vw - 20px)}
 }
+/* ── AUTH GATE ── */
+#auth-gate{position:fixed;inset:0;z-index:99999;background:#07090f;display:flex;align-items:center;justify-content:center;padding:20px}
+#auth-gate.hidden{display:none}
+.auth-box{max-width:380px;width:100%;display:flex;flex-direction:column;gap:14px;text-align:center}
+.auth-title{font-family:var(--serif);font-size:32px;font-weight:600;color:var(--ink);line-height:1}
+.auth-title em{color:var(--blue2);font-style:italic}
+.auth-sub{font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase;margin-bottom:8px}
+.auth-input{width:100%;padding:14px 16px;background:var(--panel2);border:1px solid var(--line2);border-radius:10px;color:var(--ink);font-family:var(--mono);font-size:14px;outline:none;transition:border-color .15s;text-align:center;letter-spacing:.1em}
+.auth-input:focus{border-color:var(--blue)}
+.auth-input.err{border-color:var(--red);animation:authShake .3s}
+@keyframes authShake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.auth-btn{padding:12px 18px;background:var(--blue);color:var(--bg);border:none;border-radius:10px;font-family:var(--sans);font-weight:600;font-size:13px;cursor:pointer;transition:background .15s;letter-spacing:.04em}
+.auth-btn:hover{background:var(--blue2)}
+.auth-err{font-family:var(--mono);font-size:11px;color:var(--red);min-height:14px}
 </style>
 </head>
 <body>
+
+<!-- AUTH GATE -->
+<div id="auth-gate">
+  <div class="auth-box">
+    <div class="auth-title">S65 <em>Playbook</em></div>
+    <div class="auth-sub">Authorized Access</div>
+    <input type="password" id="auth-input" class="auth-input" placeholder="Password" autocomplete="off" autofocus>
+    <button type="button" class="auth-btn" id="auth-btn">Enter</button>
+    <div class="auth-err" id="auth-err"></div>
+  </div>
+</div>
+<script>
+(function(){
+  var KEY='v12_auth_v1', PASS='S65Wanted!';
+  var gate=document.getElementById('auth-gate');
+  var inp=document.getElementById('auth-input');
+  var btn=document.getElementById('auth-btn');
+  var err=document.getElementById('auth-err');
+  function getAuth(){try{return localStorage.getItem(KEY)==='1';}catch(e){return false;}}
+  function setAuth(){try{localStorage.setItem(KEY,'1');}catch(e){}}
+  function clearAuth(){try{localStorage.removeItem(KEY);}catch(e){}}
+  if(getAuth()){gate.classList.add('hidden');}
+  else{setTimeout(function(){inp.focus();},50);}
+  function tryAuth(){
+    if(inp.value===PASS){
+      setAuth();
+      gate.classList.add('hidden');
+      err.textContent='';
+    }else{
+      err.textContent='Incorrect password';
+      inp.classList.add('err');
+      inp.value='';
+      setTimeout(function(){inp.classList.remove('err');},300);
+      inp.focus();
+    }
+  }
+  btn.addEventListener('click',tryAuth);
+  inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();tryAuth();}});
+  // Console helper for logout / re-test
+  window.v12Lock=function(){clearAuth();location.reload();};
+})();
+</script>
 
 <!-- STICKY HEADER WRAPPER -->
 <div class="sticky-header">
