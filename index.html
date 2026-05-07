@@ -348,6 +348,71 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 @media(max-width:768px){.mpd-stats{grid-template-columns:repeat(3,1fr)}}
 @media(max-width:420px){.mpd-stats{grid-template-columns:repeat(2,1fr)}}
 
+/* ── PRICE CALCULATOR ── */
+.tc-calc{margin:6px 0 8px;background:rgba(122,167,220,.04);border:1px solid rgba(122,167,220,.18);border-radius:7px;font-family:var(--mono);font-size:11px;overflow:hidden}
+.tc-calc-summary{display:flex;align-items:center;gap:8px;padding:6px 10px;cursor:pointer;flex-wrap:wrap;line-height:1.4}
+.tc-calc-summary:hover{background:rgba(122,167,220,.08)}
+.tc-calc-tag{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue2);padding:2px 6px;border:1px solid rgba(122,167,220,.3);border-radius:3px;background:rgba(122,167,220,.06);flex:none}
+.tc-calc-range{color:var(--ink);font-weight:500;font-size:11.5px}
+.tc-calc-mid{color:var(--gold2);font-weight:600}
+.tc-calc-delta{font-size:11px}
+.tc-calc-delta.over{color:var(--amber)}
+.tc-calc-delta.under{color:var(--green)}
+.tc-calc-delta.fair{color:var(--blue2)}
+.tc-calc-caret{margin-left:auto;color:var(--dim);font-size:9px;transition:transform .15s;flex:none}
+.tc-calc.expanded .tc-calc-caret{transform:rotate(180deg)}
+.tc-calc-panel{padding:11px 12px 12px;border-top:1px solid rgba(122,167,220,.18);display:none;background:rgba(0,0,0,.2)}
+.tc-calc.expanded .tc-calc-panel{display:block}
+.tc-calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tc-calc-section{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);margin-bottom:7px}
+.tc-calc-input-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.tc-calc-input-row label{color:var(--muted);min-width:84px;font-size:10px}
+.tc-calc-input-row input{flex:1;background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:4px;color:var(--ink);font-family:var(--mono);font-size:11px;padding:4px 7px;outline:none;width:100%}
+.tc-calc-input-row input:focus{border-color:var(--blue2)}
+.tc-calc-toggle{display:flex;align-items:center;gap:6px;font-size:10px;color:var(--muted);cursor:pointer;padding:3px 0;user-select:none}
+.tc-calc-toggle input{accent-color:var(--blue2);cursor:pointer;flex:none}
+.tc-calc-toggle .tc-calc-mult{margin-left:auto;color:var(--dim);font-size:10px}
+.tc-calc-toggle.off{color:var(--dim)}
+.tc-calc-toggle.off .tc-calc-mult{text-decoration:line-through}
+.tc-calc-output{margin-top:11px;padding-top:10px;border-top:1px solid rgba(122,167,220,.15)}
+.tc-calc-bd-row{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);padding:1px 0}
+.tc-calc-bd-row.final{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);color:var(--ink);font-weight:500;font-size:11px}
+.tc-calc-final-range{display:flex;justify-content:center;gap:14px;margin-top:9px;font-family:var(--mono)}
+.tc-calc-final-range span.lo{color:var(--green);font-size:12px}
+.tc-calc-final-range span.mi{color:var(--gold2);font-weight:600;font-size:14px}
+.tc-calc-final-range span.hi{color:var(--amber);font-size:12px}
+.tc-calc-listing{margin-top:10px;padding:7px 9px;background:rgba(255,255,255,.03);border-radius:5px;font-size:10px}
+.tc-calc-listing-row{display:flex;justify-content:space-between;color:var(--muted);padding:2px 0}
+.tc-calc-listing-row.headline{color:var(--ink);font-size:11px;font-weight:500}
+
+/* Generic Calculator (Analytics tab) */
+.gen-calc-wrap{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.gen-calc input,.gen-calc select{background:rgba(255,255,255,.04);border:1px solid var(--line2);border-radius:5px;color:var(--ink);font-family:var(--mono);font-size:12px;padding:6px 9px;outline:none;width:100%}
+.gen-calc input:focus,.gen-calc select:focus{border-color:var(--blue2)}
+.gen-calc-row{display:grid;grid-template-columns:130px 1fr;align-items:center;gap:8px;margin-bottom:8px}
+.gen-calc-row label{color:var(--muted);font-family:var(--mono);font-size:11px}
+.gen-calc-section{font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--blue2);margin:6px 0 10px}
+.gen-calc-toggles{display:flex;flex-direction:column;gap:6px;margin:8px 0 12px;padding:10px 12px;background:rgba(255,255,255,.03);border-radius:6px;border:1px solid var(--line)}
+.gen-calc-result{padding:14px;background:rgba(0,0,0,.25);border:1px solid var(--line);border-radius:8px}
+.gen-calc-mid-display{font-family:var(--serif);font-size:34px;font-weight:600;color:var(--gold2);text-align:center;margin:6px 0 4px;letter-spacing:-.01em}
+.gen-calc-range-display{display:flex;justify-content:center;gap:18px;font-family:var(--mono);font-size:12px;margin-bottom:14px}
+.gen-calc-range-display .lo{color:var(--green)}
+.gen-calc-range-display .hi{color:var(--amber)}
+.gen-calc-bd{font-family:var(--mono);font-size:11px}
+.gen-calc-bd .row{display:flex;justify-content:space-between;color:var(--muted);padding:2px 0}
+.gen-calc-bd .row.final{margin-top:6px;padding-top:6px;border-top:1px solid var(--line);color:var(--ink);font-weight:500}
+.gen-calc-listing{margin-top:14px;padding:10px 12px;background:rgba(122,167,220,.06);border-radius:6px;border:1px solid rgba(122,167,220,.2);font-family:var(--mono);font-size:11px}
+.gen-calc-verdict{font-family:var(--serif);font-size:18px;font-weight:600;text-align:center;margin-bottom:6px}
+.gen-calc-verdict.over{color:var(--amber)}
+.gen-calc-verdict.under{color:var(--green)}
+.gen-calc-verdict.fair{color:var(--blue2)}
+
+@media(max-width:720px){
+  .tc-calc-grid{grid-template-columns:1fr}
+  .gen-calc-wrap{grid-template-columns:1fr}
+  .gen-calc-row{grid-template-columns:1fr;gap:3px}
+}
+
 /* ── NEWS ── */
 .news-ed{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:13px 15px;margin-bottom:14px}
 .ned-lbl{font-family:var(--mono);font-size:11px;color:var(--blue2);text-transform:uppercase;letter-spacing:.14em;margin-bottom:5px}
@@ -1043,6 +1108,72 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
       <div class="mpd-chart" id="mpd-chart"><div class="loading">Loading&hellip;</div></div>
       <div id="mpd-legend" class="mpd-legend"></div>
       <div class="mpd-foot">Spread correction: 2015 &times;0.835 &middot; 2016 &times;0.837 &middot; 2017 &times;0.821 &middot; 2018+ &times;0.830 (fleet) &middot; derived from 46 overlap VINs</div>
+    </div>
+
+    <!-- 1.6 Generic Calculator — Full Width -->
+    <div class="card an-full an-card gen-calc" id="gen-calc-card">
+      <div class="an-title">Pricing Calculator</div>
+      <div class="an-sub">Freehand &middot; model any year/miles/condition combination &middot; same predict engine used on every car card</div>
+
+      <div class="gen-calc-wrap">
+        <div>
+          <div class="gen-calc-section">Vehicle</div>
+          <div class="gen-calc-row"><label>Year</label>
+            <select id="gen-calc-year" onchange="renderGenericCalc()">
+              <option value="2015">2015</option>
+              <option value="2016">2016</option>
+              <option value="2017" selected>2017</option>
+              <option value="2018">2018</option>
+              <option value="2019">2019</option>
+              <option value="2020">2020</option>
+            </select>
+          </div>
+          <div class="gen-calc-row"><label>Miles at sale</label>
+            <input type="number" id="gen-calc-miles" placeholder="e.g. 65000" oninput="renderGenericCalc()">
+          </div>
+          <div class="gen-calc-row"><label>Months forward</label>
+            <input type="number" id="gen-calc-mo" value="0" min="0" max="60" oninput="renderGenericCalc()">
+          </div>
+
+          <div class="gen-calc-section" style="margin-top:14px;">Provenance</div>
+          <div class="gen-calc-row"><label>Accidents</label>
+            <select id="gen-calc-acc" onchange="renderGenericCalc()">
+              <option value="0" selected>0 (clean)</option>
+              <option value="1">1</option>
+              <option value="2">2+</option>
+              <option value="unknown">Unknown</option>
+            </select>
+          </div>
+          <div class="gen-calc-row"><label>Total owners</label>
+            <input type="number" id="gen-calc-own" value="2" min="1" max="10" oninput="renderGenericCalc()">
+          </div>
+          <div class="gen-calc-row"><label>Salvage title</label>
+            <select id="gen-calc-slv" onchange="renderGenericCalc()">
+              <option value="false" selected>Clean</option>
+              <option value="true">Salvage</option>
+            </select>
+          </div>
+
+          <div class="gen-calc-section" style="margin-top:14px;">Comparison (optional)</div>
+          <div class="gen-calc-row"><label>Listing price</label>
+            <input type="number" id="gen-calc-lp" placeholder="e.g. 70000" oninput="renderGenericCalc()">
+          </div>
+
+          <div class="gen-calc-toggles">
+            <div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);margin-bottom:4px;">Toggle Penalties</div>
+            <label class="tc-calc-toggle"><input type="checkbox" id="gen-calc-tgl-acc" checked onchange="renderGenericCalc()"> Apply accident penalty</label>
+            <label class="tc-calc-toggle"><input type="checkbox" id="gen-calc-tgl-own" checked onchange="renderGenericCalc()"> Apply owner penalty</label>
+            <label class="tc-calc-toggle"><input type="checkbox" id="gen-calc-tgl-slv" checked onchange="renderGenericCalc()"> Apply salvage penalty</label>
+            <label class="tc-calc-toggle"><input type="checkbox" id="gen-calc-tgl-tm" checked onchange="renderGenericCalc()"> Apply time decay</label>
+          </div>
+        </div>
+
+        <div>
+          <div class="gen-calc-result" id="gen-calc-result">
+            <div style="text-align:center;color:var(--dim);font-family:var(--mono);font-size:11px;padding:40px 20px;">Loading&hellip;</div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- 2. Cohort Intelligence Table — Full Width -->
@@ -2272,6 +2403,307 @@ function fM(n){return n?Number(n).toLocaleString()+' mi':'--';}
 function fN(n){return (n!==null&&n!==undefined)?Number(n).toLocaleString():'--';}
 function set(id,v){var el=document.getElementById(id);if(el)el.textContent=v;}
 
+// ── PRICE CALCULATOR ──────────────────────────────────────
+// Phase 4 calc: predicts low/mid/high market value from
+// year/miles/provenance with toggleable penalty stack.
+// Constants frozen 2026-05 from v_price_events_corrected analysis.
+var CALC_BASE={
+  2015:{price:74188,miles:33282},
+  2016:{price:75319,miles:34395},
+  2017:{price:97699,miles:22125},
+  2018:{price:115550,miles:21982},
+  2019:{price:115370,miles:18160},
+  2020:{price:147733,miles:17059}
+};
+var CALC_MILEAGE_CURVE=[
+  {miles:14165,price:105210},
+  {miles:31488,price:76900},
+  {miles:51000,price:62624},
+  {miles:69916,price:55110},
+  {miles:90296,price:45045},
+  {miles:103800,price:41750}
+];
+var CALC_ACCIDENT_MULT={0:1.000,1:0.745,2:0.665};
+var CALC_ACCIDENT_UNKNOWN=0.85;
+var CALC_OWNER_MULT={'1-2':1.000,'3-4':0.904,'5+':0.836};
+var CALC_OWNER_UNKNOWN=0.95;
+var CALC_SALVAGE_MULT=0.78;
+var CALC_MONTHLY_DECAY=Math.pow(0.87,1/12); // -13%/yr S65 bear rate
+var CALC_BANDS={2015:0.10,2016:0.10,2017:0.15,2018:0.20,2019:0.20,2020:0.20};
+
+function calcMileagePrice(miles){
+  var c=CALC_MILEAGE_CURVE;
+  if(miles<=c[0].miles)return c[0].price;
+  if(miles>=c[c.length-1].miles)return c[c.length-1].price;
+  for(var i=0;i<c.length-1;i++){
+    if(miles>=c[i].miles&&miles<=c[i+1].miles){
+      var t=(miles-c[i].miles)/(c[i+1].miles-c[i].miles);
+      return c[i].price+t*(c[i+1].price-c[i].price);
+    }
+  }
+  return c[c.length-1].price;
+}
+function calcOwnerBand(o){
+  if(o==null)return null;
+  if(o<=2)return '1-2';
+  if(o<=4)return '3-4';
+  return '5+';
+}
+function calcAccidentMult(a){
+  if(a==null)return CALC_ACCIDENT_UNKNOWN;
+  var n=Math.min(Math.max(parseInt(a,10)||0,0),2);
+  return CALC_ACCIDENT_MULT[n];
+}
+function calcOwnerMult(o){
+  var b=calcOwnerBand(o);
+  if(b==null)return CALC_OWNER_UNKNOWN;
+  return CALC_OWNER_MULT[b];
+}
+
+function calcPredict(input){
+  var year=+input.year;
+  var base=CALC_BASE[year];
+  if(!base)return {error:'Year '+(year||'?')+' not modeled (range 2015-2020)'};
+  var T=Object.assign({accident:true,owner:true,salvage:true,time:true},input.toggles||{});
+  var miles=(input.miles==null||isNaN(+input.miles))?base.miles:+input.miles;
+  var mf=calcMileagePrice(miles)/calcMileagePrice(base.miles);
+  var af=T.accident?calcAccidentMult(input.accidents):1.0;
+  var of=T.owner?calcOwnerMult(input.owners):1.0;
+  var sf=(T.salvage&&input.salvage)?CALC_SALVAGE_MULT:1.0;
+  var months=+input.months_forward||0;
+  var tf=(T.time&&months)?Math.pow(CALC_MONTHLY_DECAY,months):1.0;
+  var mid=Math.round(base.price*mf*af*of*sf*tf);
+  var bp=CALC_BANDS[year]||0.15;
+  var low=Math.round(mid*(1-bp));
+  var high=Math.round(mid*(1+bp));
+  var ld=null;
+  var lp=+input.listingPrice;
+  if(lp&&lp>0&&mid>0){
+    var dollars=lp-mid;
+    var pct=(lp/mid-1)*100;
+    var range=high-low;
+    var positionPct=range>0?Math.round(((lp-low)/range)*100):50;
+    var verdict=pct<-8?'under':pct>8?'over':'fair';
+    ld={dollars:dollars,pct:pct,positionPct:positionPct,verdict:verdict,listingPrice:lp};
+  }
+  return {
+    low:low,mid:mid,high:high,bandPct:bp,
+    factors:{base:base.price,mileage:mf,accident:af,owner:of,salvage:sf,time:tf},
+    listingDelta:ld,
+    inputs:{year:year,miles:miles,accidents:input.accidents,owners:input.owners,salvage:!!input.salvage,months_forward:months,listingPrice:lp}
+  };
+}
+
+// ── CALCULATOR UI HELPERS ────────────────────────────────
+function calcInputsFromVin(v,vm,lh){
+  return {
+    year:v.year,
+    miles:(vm&&vm.curr_odo!=null)?vm.curr_odo:(lh&&lh.miles?lh.miles:null),
+    accidents:vm?vm.accident_count:null,
+    owners:vm?vm.total_owners:null,
+    salvage:vm?!!vm.salvage:false,
+    months_forward:0,
+    listingPrice:lh&&lh.price?lh.price:null
+  };
+}
+
+function calcSummaryInner(r){
+  if(r.error)return '<span class="tc-calc-tag">CALC</span><span style="color:var(--dim);font-size:10px;">'+r.error+'</span><span class="tc-calc-caret">&#9660;</span>';
+  var deltaStr='';
+  if(r.listingDelta){
+    var d=r.listingDelta;
+    var sign=d.dollars>=0?'+':'-';
+    var verdictLabel=d.verdict==='over'?'over fair':d.verdict==='under'?'under fair':'fair';
+    deltaStr='<span class="tc-calc-delta '+d.verdict+'">listed '+sign+'$'+Math.abs(Math.round(d.dollars)).toLocaleString()+' '+verdictLabel+'</span>';
+  }
+  return '<span class="tc-calc-tag">CALC</span>'+
+    '<span class="tc-calc-range">$'+Math.round(r.low/1000)+'k <span class="tc-calc-mid">/ $'+Math.round(r.mid/1000)+'k</span> / $'+Math.round(r.high/1000)+'k</span>'+
+    deltaStr+
+    '<span class="tc-calc-caret">&#9660;</span>';
+}
+
+function calcOutputHTML(r){
+  if(r.error)return '<div style="color:var(--dim);">'+r.error+'</div>';
+  var f=r.factors;
+  function pct(m){return ((m-1)*100).toFixed(1)+'%';}
+  function mult(m){return '\u00d7'+m.toFixed(3);}
+  var bd='<div class="tc-calc-bd-row"><span>Year baseline</span><span>$'+f.base.toLocaleString()+'</span></div>'+
+    '<div class="tc-calc-bd-row"><span>Mileage factor</span><span>'+mult(f.mileage)+' ('+pct(f.mileage)+')</span></div>'+
+    '<div class="tc-calc-bd-row"><span>Accident</span><span>'+mult(f.accident)+'</span></div>'+
+    '<div class="tc-calc-bd-row"><span>Owners</span><span>'+mult(f.owner)+'</span></div>'+
+    '<div class="tc-calc-bd-row"><span>Salvage</span><span>'+mult(f.salvage)+'</span></div>'+
+    '<div class="tc-calc-bd-row"><span>Time decay</span><span>'+mult(f.time)+'</span></div>'+
+    '<div class="tc-calc-bd-row final"><span>Predicted (mid)</span><span>$'+r.mid.toLocaleString()+'</span></div>'+
+    '<div class="tc-calc-final-range"><span class="lo">$'+r.low.toLocaleString()+'</span><span class="mi">$'+r.mid.toLocaleString()+'</span><span class="hi">$'+r.high.toLocaleString()+'</span></div>';
+  if(r.listingDelta){
+    var d=r.listingDelta;
+    var sign=d.dollars>=0?'+':'-';
+    var pctStr=(d.pct>=0?'+':'')+d.pct.toFixed(1)+'%';
+    var posStr;
+    if(d.positionPct<0)posStr='below range';
+    else if(d.positionPct>100)posStr='above range';
+    else posStr=d.positionPct+'% of fair range';
+    bd+='<div class="tc-calc-listing">'+
+      '<div class="tc-calc-listing-row headline"><span>Listed at</span><span>$'+d.listingPrice.toLocaleString()+'</span></div>'+
+      '<div class="tc-calc-listing-row"><span>vs predicted (mid)</span><span class="tc-calc-delta '+d.verdict+'">'+sign+'$'+Math.abs(Math.round(d.dollars)).toLocaleString()+' ('+pctStr+')</span></div>'+
+      '<div class="tc-calc-listing-row"><span>Position</span><span>'+posStr+'</span></div>'+
+    '</div>';
+  }
+  return bd;
+}
+
+function calcPanelHTML(v,vm,lh){
+  var inp=calcInputsFromVin(v,vm,lh);
+  var accLabel=inp.accidents==null?'unknown':inp.accidents+(inp.accidents===1?' accident':' accidents');
+  var ownLabel=inp.owners==null?'unknown':inp.owners+(inp.owners===1?' owner':' owners');
+  var slvLabel=inp.salvage?'salvage title':'clean title';
+  var accMultLbl='\u00d7'+(calcAccidentMult(inp.accidents)).toFixed(3);
+  var ownMultLbl='\u00d7'+(calcOwnerMult(inp.owners)).toFixed(3);
+  var slvMultLbl=inp.salvage?'\u00d70.780':'\u00d71.000';
+  return '<div class="tc-calc-grid">'+
+    '<div>'+
+      '<div class="tc-calc-section">Inputs</div>'+
+      '<div class="tc-calc-input-row"><label>Miles at sale</label><input type="number" id="calc-miles-'+v.vin+'" value="'+(inp.miles||'')+'" oninput="recalcCard(\''+v.vin+'\')"></div>'+
+      '<div class="tc-calc-input-row"><label>Months forward</label><input type="number" id="calc-mo-'+v.vin+'" value="0" min="0" max="60" oninput="recalcCard(\''+v.vin+'\')"></div>'+
+      '<div class="tc-calc-input-row"><label>Listing price</label><input type="number" id="calc-lp-'+v.vin+'" value="'+(inp.listingPrice||'')+'" oninput="recalcCard(\''+v.vin+'\')"></div>'+
+    '</div>'+
+    '<div>'+
+      '<div class="tc-calc-section">Penalties (toggle on/off)</div>'+
+      '<label class="tc-calc-toggle" id="calc-acc-lbl-'+v.vin+'"><input type="checkbox" id="calc-acc-'+v.vin+'" checked onchange="recalcCard(\''+v.vin+'\')"> Accidents: '+accLabel+'<span class="tc-calc-mult">'+accMultLbl+'</span></label>'+
+      '<label class="tc-calc-toggle" id="calc-own-lbl-'+v.vin+'"><input type="checkbox" id="calc-own-'+v.vin+'" checked onchange="recalcCard(\''+v.vin+'\')"> Owners: '+ownLabel+'<span class="tc-calc-mult">'+ownMultLbl+'</span></label>'+
+      '<label class="tc-calc-toggle" id="calc-slv-lbl-'+v.vin+'"><input type="checkbox" id="calc-slv-'+v.vin+'" '+(inp.salvage?'checked':'')+' onchange="recalcCard(\''+v.vin+'\')"> Salvage: '+slvLabel+'<span class="tc-calc-mult">'+slvMultLbl+'</span></label>'+
+      '<label class="tc-calc-toggle" id="calc-tm-lbl-'+v.vin+'"><input type="checkbox" id="calc-tm-'+v.vin+'" checked onchange="recalcCard(\''+v.vin+'\')"> Time decay<span class="tc-calc-mult">\u00d70.989/mo</span></label>'+
+    '</div>'+
+  '</div>'+
+  '<div class="tc-calc-output" id="calc-out-'+v.vin+'"></div>';
+}
+
+function calcStripHTML(v,vm,lh){
+  var inp=calcInputsFromVin(v,vm,lh);
+  inp.toggles={accident:true,owner:true,salvage:true,time:true};
+  var r=calcPredict(inp);
+  return '<div class="tc-calc" id="calc-'+v.vin+'">'+
+    '<div class="tc-calc-summary" onclick="toggleCalcPanel(\''+v.vin+'\')">'+calcSummaryInner(r)+'</div>'+
+    '<div class="tc-calc-panel">'+calcPanelHTML(v,vm,lh)+'</div>'+
+  '</div>';
+}
+
+function toggleCalcPanel(vin){
+  var el=document.getElementById('calc-'+vin);
+  if(!el)return;
+  var nowExpanded=!el.classList.contains('expanded');
+  el.classList.toggle('expanded');
+  if(nowExpanded)recalcCard(vin);
+}
+
+function recalcCard(vin){
+  var v=(G.v||[]).filter(function(x){return x.vin===vin;})[0];
+  if(!v)return;
+  var vm=G.m&&G.m[vin];
+  function gv(id,fb){var e=document.getElementById(id);return e?e.value:fb;}
+  function gc(id){var e=document.getElementById(id);return e?e.checked:true;}
+  var milesRaw=gv('calc-miles-'+vin,'');
+  var moRaw=gv('calc-mo-'+vin,'0');
+  var lpRaw=gv('calc-lp-'+vin,'');
+  var miles=milesRaw===''?null:parseFloat(milesRaw);
+  var months=parseFloat(moRaw)||0;
+  var lp=lpRaw===''?null:parseFloat(lpRaw);
+  var inp={
+    year:v.year,
+    miles:isNaN(miles)?null:miles,
+    accidents:vm?vm.accident_count:null,
+    owners:vm?vm.total_owners:null,
+    salvage:gc('calc-slv-'+vin),
+    months_forward:months,
+    listingPrice:isNaN(lp)?null:lp,
+    toggles:{
+      accident:gc('calc-acc-'+vin),
+      owner:gc('calc-own-'+vin),
+      salvage:gc('calc-slv-'+vin),
+      time:gc('calc-tm-'+vin)
+    }
+  };
+  var r=calcPredict(inp);
+  var sum=document.querySelector('#calc-'+vin+' .tc-calc-summary');
+  if(sum)sum.innerHTML=calcSummaryInner(r);
+  ['acc','own','slv','tm'].forEach(function(k){
+    var lbl=document.getElementById('calc-'+k+'-lbl-'+vin);
+    var chk=document.getElementById('calc-'+k+'-'+vin);
+    if(lbl&&chk)lbl.classList.toggle('off',!chk.checked);
+  });
+  var out=document.getElementById('calc-out-'+vin);
+  if(out)out.innerHTML=calcOutputHTML(r);
+}
+
+// ── GENERIC CALCULATOR (Analytics tab) ──────────────────
+function renderGenericCalc(){
+  var el=document.getElementById('gen-calc-result');
+  if(!el)return;
+  function gv(id,fb){var e=document.getElementById(id);return e?e.value:fb;}
+  function gc(id){var e=document.getElementById(id);return e?e.checked:true;}
+  var year=parseInt(gv('gen-calc-year','2017'),10);
+  var milesRaw=gv('gen-calc-miles','');
+  var miles=milesRaw===''?null:parseFloat(milesRaw);
+  var accStr=gv('gen-calc-acc','0');
+  var accidents=accStr==='unknown'?null:parseInt(accStr,10);
+  var ownersRaw=gv('gen-calc-own','2');
+  var owners=ownersRaw===''?null:parseInt(ownersRaw,10);
+  var salvage=gc('gen-calc-slv');
+  var months=parseFloat(gv('gen-calc-mo','0'))||0;
+  var lpRaw=gv('gen-calc-lp','');
+  var lp=lpRaw===''?null:parseFloat(lpRaw);
+  var inp={
+    year:year,miles:miles,accidents:accidents,owners:owners,
+    salvage:salvage,months_forward:months,listingPrice:lp,
+    toggles:{
+      accident:gc('gen-calc-tgl-acc'),
+      owner:gc('gen-calc-tgl-own'),
+      salvage:gc('gen-calc-tgl-slv'),
+      time:gc('gen-calc-tgl-tm')
+    }
+  };
+  var r=calcPredict(inp);
+  if(r.error){
+    el.innerHTML='<div style="color:var(--red);text-align:center;padding:20px;">'+r.error+'</div>';
+    return;
+  }
+  var f=r.factors;
+  function mult(m){return '\u00d7'+m.toFixed(3);}
+  function pctOf(m){return ((m-1)*100).toFixed(1)+'%';}
+  var verdictBlock='';
+  if(r.listingDelta){
+    var d=r.listingDelta;
+    var sign=d.dollars>=0?'+':'-';
+    var pctStr=(d.pct>=0?'+':'')+d.pct.toFixed(1)+'%';
+    var posStr;
+    if(d.positionPct<0)posStr='below range';
+    else if(d.positionPct>100)posStr='above range';
+    else posStr=d.positionPct+'% of fair range';
+    var verdictLabel=d.verdict==='over'?'OVER FAIR':d.verdict==='under'?'UNDER FAIR':'FAIR PRICE';
+    verdictBlock='<div class="gen-calc-listing">'+
+      '<div class="gen-calc-verdict '+d.verdict+'">'+verdictLabel+'</div>'+
+      '<div class="gen-calc-bd">'+
+        '<div class="row"><span>Listed at</span><span>$'+d.listingPrice.toLocaleString()+'</span></div>'+
+        '<div class="row"><span>vs predicted (mid)</span><span class="tc-calc-delta '+d.verdict+'">'+sign+'$'+Math.abs(Math.round(d.dollars)).toLocaleString()+' ('+pctStr+')</span></div>'+
+        '<div class="row"><span>Position in band</span><span>'+posStr+'</span></div>'+
+      '</div>'+
+    '</div>';
+  }
+  el.innerHTML='<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);text-align:center;">Predicted Market Value</div>'+
+    '<div class="gen-calc-mid-display">$'+r.mid.toLocaleString()+'</div>'+
+    '<div class="gen-calc-range-display"><span class="lo">$'+r.low.toLocaleString()+'</span><span style="color:var(--dim);">&mdash;</span><span class="hi">$'+r.high.toLocaleString()+'</span></div>'+
+    '<div class="gen-calc-bd">'+
+      '<div class="row"><span>Year baseline ('+inp.year+')</span><span>$'+f.base.toLocaleString()+'</span></div>'+
+      '<div class="row"><span>Mileage factor</span><span>'+mult(f.mileage)+' ('+pctOf(f.mileage)+')</span></div>'+
+      '<div class="row"><span>Accident</span><span>'+mult(f.accident)+'</span></div>'+
+      '<div class="row"><span>Owners</span><span>'+mult(f.owner)+'</span></div>'+
+      '<div class="row"><span>Salvage</span><span>'+mult(f.salvage)+'</span></div>'+
+      '<div class="row"><span>Time decay ('+months+' mo)</span><span>'+mult(f.time)+'</span></div>'+
+      '<div class="row final"><span>Predicted mid</span><span>$'+r.mid.toLocaleString()+'</span></div>'+
+    '</div>'+
+    verdictBlock;
+}
+
 // Image placeholder HTML - rotates brand images from gallery, keyed by VIN for consistency
 var PLACEHOLDERS=[
   'https://kevwkxuloxxrevodsukg.supabase.co/storage/v1/object/public/v12-apex-documents/images/17C142_072.jpg',
@@ -2638,6 +3070,7 @@ function renderCompact(v,vm,lh){
         '<div style="display:flex;align-items:center;gap:6px;">'+domBlock+notesPill(v.vin)+'</div>'+
       '</div>'+
       '<div class="lc-meta">'+esc(v.vin)+' &middot; '+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?formatColor(b.paint_name)+' &middot; ':'';})()+esc(loc)+(lh&&lh.seller_name?' &middot; '+esc(lh.seller_name):'')+'</div>'+
+      calcStripHTML(v,vm,lh)+
       '<div class="lc-flags">'+flags(v,vm)+'</div>'+equipChips(v.vin)+renderDocLinks(v.vin)+
       '<div class="lc-row">'+
         priceHTML+priceEditBtn(v.vin,active)+
@@ -2688,6 +3121,7 @@ function renderTarget(v,vm,lh){
         mbContactPill(v.vin,v.listing_status)+notesPill(v.vin)+
       '</div>'+
       '<div class="tc-sub">'+v.vin+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?' &middot; '+formatColor(b.paint_name):'';})()+'</div>'+
+      calcStripHTML(v,vm,lh)+
       '<div class="tc-stats">'+
         '<div class="tc-stat">'+priceHTML+priceEditBtn(v.vin,active)+'<span class="tc-sl">Ask</span></div>'+
         '<div class="tc-stat"><span class="tc-sv">'+miles+'</span><span class="tc-sl">Miles</span></div>'+
@@ -5297,6 +5731,7 @@ function loadAll(){
     renderProductionTimeline(vehicles);
     renderDepreciationCharts();
     renderMarketDistribution(vehicles,allLH);
+    renderGenericCalc();
     renderFinalEdition();
     // If the Gallery tab was already opened and showed empty (loaded before images arrived), rebuild it now
     if(galleryLoaded&&typeof rebuildGallery==='function')rebuildGallery();
