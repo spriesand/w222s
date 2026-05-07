@@ -325,6 +325,29 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .cb-year{font-family:var(--mono);font-size:11px;color:var(--dim)}
 .cb-ct{font-family:var(--mono);font-size:12px;color:var(--muted)}
 
+/* ── MARKET PRICE DISTRIBUTION ── */
+.mpd-tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin-bottom:14px}
+.mpd-tab{padding:8px 16px;font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);background:transparent;border:none;border-bottom:2px solid transparent;margin-bottom:-1px;cursor:pointer;transition:all .15s}
+.mpd-tab:hover{color:var(--blue2)}
+.mpd-tab.active{color:var(--ink);border-bottom-color:var(--blue2);font-weight:500}
+.mpd-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-bottom:14px}
+.mpd-stat{background:rgba(255,255,255,.02);padding:10px 12px}
+.mpd-stat-l{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim)}
+.mpd-stat-v{font-family:var(--serif);font-size:18px;font-weight:500;color:var(--ink);margin-top:2px;letter-spacing:-.01em;line-height:1.1}
+.mpd-controls{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.mpd-toggle{display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);cursor:pointer;user-select:none}
+.mpd-toggle input{accent-color:var(--blue2);cursor:pointer}
+.mpd-chart{background:rgba(0,0,0,.18);border:1px solid var(--line);border-radius:8px;padding:12px;min-height:440px}
+.mpd-chart svg{width:100%;height:auto;display:block}
+.mpd-legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:10px;font-family:var(--mono);font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--dim)}
+.mpd-legend-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mpd-legend-row strong{color:var(--muted);font-weight:500;margin-right:2px}
+.mpd-legend-row > span{display:inline-flex;align-items:center;gap:4px}
+.mpd-legend-dot{width:9px;height:9px;border-radius:50%;display:inline-block}
+.mpd-foot{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--dim);text-transform:uppercase;border-top:1px solid var(--line);padding-top:8px;margin-top:12px}
+@media(max-width:768px){.mpd-stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:420px){.mpd-stats{grid-template-columns:repeat(2,1fr)}}
+
 /* ── NEWS ── */
 .news-ed{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:13px 15px;margin-bottom:14px}
 .ned-lbl{font-family:var(--mono);font-size:11px;color:var(--blue2);text-transform:uppercase;letter-spacing:.14em;margin-bottom:5px}
@@ -983,6 +1006,43 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
         <button class="fchip" data-cohort="S600" onclick="setPHFilter(this)">S600 Only</button>
       </div>
       <div id="price-history-chart" style="overflow-x:auto;-webkit-overflow-scrolling:touch;"><div class="loading">Loading&hellip;</div></div>
+    </div>
+
+    <!-- 1.5 Market Price Distribution — Full Width -->
+    <div class="card an-full an-card" id="mpd-card">
+      <div class="an-title">Market Price Distribution</div>
+      <div class="an-sub">Spread-corrected pricing &middot; S65 universe &middot; auction transactions vs asking prices &middot; classifier &amp; correction baked from <span style="color:var(--blue2);">v_price_events_clean</span></div>
+
+      <div class="mpd-tabs" id="mpd-tabs">
+        <button class="mpd-tab active" data-mpd-tab="mileage" onclick="setMpdTab(this)">Mileage</button>
+        <button class="mpd-tab" data-mpd-tab="years" onclick="setMpdTab(this)">Years</button>
+      </div>
+
+      <div id="mpd-stats" class="mpd-stats">
+        <div class="mpd-stat"><div class="mpd-stat-l">Events</div><div class="mpd-stat-v">--</div></div>
+        <div class="mpd-stat"><div class="mpd-stat-l">Median</div><div class="mpd-stat-v">--</div></div>
+        <div class="mpd-stat"><div class="mpd-stat-l">Average</div><div class="mpd-stat-v">--</div></div>
+        <div class="mpd-stat"><div class="mpd-stat-l">Volume</div><div class="mpd-stat-v">--</div></div>
+        <div class="mpd-stat"><div class="mpd-stat-l">Lowest</div><div class="mpd-stat-v">--</div></div>
+        <div class="mpd-stat"><div class="mpd-stat-l">Highest</div><div class="mpd-stat-v">--</div></div>
+      </div>
+
+      <div class="mpd-controls">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="fchip active" data-mpd-class="all" onclick="setMpdClass(this)">All</button>
+          <button class="fchip" data-mpd-class="auction_event" onclick="setMpdClass(this)">Auctions</button>
+          <button class="fchip" data-mpd-class="confirmed_sale" onclick="setMpdClass(this)">Sales</button>
+          <button class="fchip" data-mpd-class="retail_asking" onclick="setMpdClass(this)">Asks</button>
+        </div>
+        <label class="mpd-toggle">
+          <input type="checkbox" id="mpd-corrected" checked onchange="renderMarketDistribution()">
+          Spread Corrected
+        </label>
+      </div>
+
+      <div class="mpd-chart" id="mpd-chart"><div class="loading">Loading&hellip;</div></div>
+      <div id="mpd-legend" class="mpd-legend"></div>
+      <div class="mpd-foot">Spread correction: 2015 &times;0.835 &middot; 2016 &times;0.837 &middot; 2017 &times;0.821 &middot; 2018+ &times;0.830 (fleet) &middot; derived from 46 overlap VINs</div>
     </div>
 
     <!-- 2. Cohort Intelligence Table — Full Width -->
@@ -3127,6 +3187,329 @@ function renderProductionTimeline(vehicles){
     '<div style="font-family:var(--mono);font-size:11px;color:var(--dim);margin-top:10px;">'+total+' VINs with confirmed dates &middot; '+keys[0]+' to '+keys[keys.length-1]+'</div>';
 }
 
+// ── MARKET PRICE DISTRIBUTION (NEW) ───────────────────────
+// Mirrors v_price_events_clean: classify → spread-correct → per-week dedup → render.
+// State cached in MPD so the corrected-toggle and class-filter chips re-render
+// without re-walking allLH on every interaction.
+var MPD={ events:[], filteredEvents:[], tab:'mileage', classFilter:'all', useCorrected:true };
+
+var MPD_SALVAGE = {'salvagebid':1,'sca_auction':1,'sca.auction':1,'salvageautosauction':1,'salvageautosauction.com':1,'salvagetrucksauction.com':1,'autobidmaster.com':1,'auto4export':1,'usa-auto-online':1,'usa-auto-online.com':1,'bidndrive':1};
+var MPD_AUCTION = {'bringatrailer':1,'bat':1,'mecum':1,'barrett-jackson':1,'cars_bids':1,'auctioncarz':1,'collectingcars':1,'autohunter':1,'classic.com':1,'ebay':1};
+var MPD_ESTIMATE= {'iseecars':1,'kbb':1,'truecar':1,'edmunds':1,'carfax':1,'marketcheck':1,'CarGurus':1,'cargurus':1};
+
+function mpdSpreadFor(year){
+  if(year===2015)return 0.835;
+  if(year===2016)return 0.837;
+  if(year===2017)return 0.821;
+  return 0.830;
+}
+
+function buildMpdEvents(vehicles, allLH){
+  if(!vehicles||!allLH)return [];
+  // S65 only — S600 is reference per current acquisition focus
+  var vMap={};
+  vehicles.forEach(function(v){
+    if(!v.trim||v.trim.indexOf('S65')<0)return;
+    vMap[v.vin]=v;
+  });
+  var events=[];
+  allLH.forEach(function(lh){
+    var v=vMap[lh.vin];
+    if(!v)return;
+    if(!lh.price||!lh.miles)return;
+    if(lh.price<5000||lh.price>300000)return;
+    if(lh.miles<1000||lh.miles>200000)return;
+    var p=(lh.platform||'').toString();
+    var cls;
+    if(MPD_SALVAGE[p])       cls='salvage';
+    else if(p==='sale_history') cls='confirmed_sale';
+    else if(MPD_AUCTION[p])  cls='auction_event';
+    else if(MPD_ESTIMATE[p]) cls='estimate';
+    else                     cls='retail_asking';
+    if(cls==='salvage'||cls==='estimate')return; // exclude from chart universe
+    var ratio=mpdSpreadFor(v.year);
+    var pcorr=cls==='auction_event'?lh.price:Math.round(lh.price*ratio);
+    var dt=lh.first_seen||lh.last_seen||null;
+    events.push({
+      vin:lh.vin, year:v.year, is_fe:!!v.is_final_edition,
+      price:lh.price, price_corrected:pcorr,
+      miles:lh.miles, event_class:cls, event_date:dt, platform:p
+    });
+  });
+  // Per-week dedup: highest price per vin+platform+(week | price-miles fallback for null dates)
+  var keyed={};
+  events.forEach(function(e){
+    var k;
+    if(e.event_date){
+      var d=new Date(e.event_date);
+      if(isNaN(d.getTime())){ k=e.vin+'|'+e.platform+'|nd|'+e.price+'-'+e.miles; }
+      else {
+        d.setHours(0,0,0,0);
+        d.setDate(d.getDate()-d.getDay()); // Sunday-anchored week
+        k=e.vin+'|'+e.platform+'|w'+d.toISOString().slice(0,10);
+      }
+    } else {
+      k=e.vin+'|'+e.platform+'|nd|'+e.price+'-'+e.miles;
+    }
+    if(!keyed[k]||e.price>keyed[k].price)keyed[k]=e;
+  });
+  var out=[];
+  for(var k in keyed)if(keyed.hasOwnProperty(k))out.push(keyed[k]);
+  return out;
+}
+
+function applyMpdFilter(){
+  MPD.filteredEvents=MPD.events.filter(function(e){
+    if(MPD.classFilter!=='all'&&e.event_class!==MPD.classFilter)return false;
+    return true;
+  });
+}
+
+function setMpdTab(btn){
+  document.querySelectorAll('.mpd-tab').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  MPD.tab=btn.dataset.mpdTab;
+  renderMpdChart();
+}
+
+function setMpdClass(btn){
+  document.querySelectorAll('[data-mpd-class]').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  MPD.classFilter=btn.dataset.mpdClass;
+  applyMpdFilter();
+  renderMpdChart();
+}
+
+var MPD_TIERS=[
+  {lo:0,hi:9999,c:'#e8c88a',l:'0-10k'},
+  {lo:10000,hi:24999,c:'#c8a96a',l:'10-25k'},
+  {lo:25000,hi:39999,c:'#a8c8f0',l:'25-40k'},
+  {lo:40000,hi:59999,c:'#7aa7dc',l:'40-60k'},
+  {lo:60000,hi:79999,c:'#00d4c8',l:'60-80k'},
+  {lo:80000,hi:99999,c:'#4cbe82',l:'80-100k'},
+  {lo:100000,hi:1e9,c:'#9eabbe',l:'100k+'}
+];
+function mpdTierColor(mi){
+  for(var i=0;i<MPD_TIERS.length;i++)if(mi>=MPD_TIERS[i].lo&&mi<=MPD_TIERS[i].hi)return MPD_TIERS[i].c;
+  return '#9eabbe';
+}
+
+function mpdRecRadius(dt){
+  if(!dt)return 4;
+  var t=new Date(dt).getTime();
+  if(isNaN(t))return 4;
+  var yrs=(Date.now()-t)/(365.25*86400000);
+  if(yrs<1)return 7;
+  if(yrs<2)return 5;
+  return 4;
+}
+
+function renderMpdMileageScatter(events, useCorrected){
+  var W=900,H=440,PL=60,PR=30,PT=20,PB=50;
+  var maxMi=140000, maxP=250000;
+  function xS(mi){return PL+(Math.min(mi,maxMi)/maxMi)*(W-PL-PR);}
+  function yS(p){return PT+(1-(Math.min(p,maxP)/maxP))*(H-PT-PB);}
+  var CLASS_OP={auction_event:1,confirmed_sale:.85,retail_asking:.5};
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">';
+  // Y grid + labels
+  [0,50000,100000,150000,200000,250000].forEach(function(p){
+    var y=yS(p).toFixed(1);
+    svg+='<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+y+'" y2="'+y+'" stroke="rgba(255,255,255,.05)" stroke-dasharray="2 4"/>';
+    svg+='<text x="'+(PL-6)+'" y="'+(yS(p)+3).toFixed(1)+'" text-anchor="end" font-family="IBM Plex Mono" font-size="10" fill="#6b7585">$'+(p/1000)+'k</text>';
+  });
+  // X grid + labels
+  [0,20000,40000,60000,80000,100000,120000,140000].forEach(function(m){
+    var x=xS(m).toFixed(1);
+    svg+='<line x1="'+x+'" x2="'+x+'" y1="'+PT+'" y2="'+(H-PB)+'" stroke="rgba(255,255,255,.04)" stroke-dasharray="2 4"/>';
+    svg+='<text x="'+x+'" y="'+(H-PB+15)+'" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#6b7585">'+(m/1000)+'k</text>';
+  });
+  // Strike zone (Golden Intersection): 70-100K mi at $30-50K
+  var rx=xS(70000), rx2=xS(100000), ry=yS(50000), ry2=yS(30000);
+  svg+='<rect x="'+rx.toFixed(1)+'" y="'+ry.toFixed(1)+'" width="'+(rx2-rx).toFixed(1)+'" height="'+(ry2-ry).toFixed(1)+'" fill="rgba(0,212,200,.08)" stroke="rgba(0,212,200,.3)" stroke-dasharray="3 3" rx="3"/>';
+  svg+='<text x="'+(rx+5).toFixed(1)+'" y="'+(ry-5).toFixed(1)+'" font-family="IBM Plex Mono" font-size="9" fill="#00d4c8" letter-spacing="1.5">GOLDEN INTERSECTION</text>';
+  // Reference lines
+  var y40=yS(40000).toFixed(1), y75=yS(75000).toFixed(1);
+  svg+='<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+y40+'" y2="'+y40+'" stroke="#c8a96a" stroke-dasharray="4 4" opacity=".5"/>';
+  svg+='<text x="'+(W-PR-4)+'" y="'+(yS(40000)-4).toFixed(1)+'" text-anchor="end" font-family="IBM Plex Mono" font-size="9" fill="#c8a96a">$40K floor</text>';
+  svg+='<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+y75+'" y2="'+y75+'" stroke="#9eabbe" stroke-dasharray="2 4" opacity=".4"/>';
+  svg+='<text x="'+(W-PR-4)+'" y="'+(yS(75000)-4).toFixed(1)+'" text-anchor="end" font-family="IBM Plex Mono" font-size="9" fill="#9eabbe">$75K ceiling</text>';
+  // Dots
+  events.forEach(function(e){
+    var p=useCorrected?e.price_corrected:e.price;
+    var cx=xS(e.miles).toFixed(1), cy=yS(p).toFixed(1);
+    var col=mpdTierColor(e.miles);
+    var op=CLASS_OP[e.event_class]||.7;
+    var r=mpdRecRadius(e.event_date);
+    var stroke=e.event_class==='auction_event'?'#e6edf5':'none';
+    var sw=e.event_class==='auction_event'?1.2:0;
+    svg+='<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="'+col+'" fill-opacity="'+op+'" stroke="'+stroke+'" stroke-width="'+sw+'">';
+    svg+='<title>'+e.year+' S65 '+e.vin.slice(-6)+' \u2022 $'+p.toLocaleString()+' @ '+e.miles.toLocaleString()+' mi \u2022 '+e.event_class.replace('_',' ')+(e.event_date?(' \u2022 '+e.event_date):'')+'</title>';
+    svg+='</circle>';
+  });
+  // Axis titles
+  svg+='<text x="'+(PL-44)+'" y="'+(H/2)+'" font-family="IBM Plex Mono" font-size="10" fill="#9eabbe" text-anchor="middle" letter-spacing="1.2" transform="rotate(-90 '+(PL-44)+' '+(H/2)+')">PRICE USD</text>';
+  svg+='<text x="'+(W/2)+'" y="'+(H-8)+'" font-family="IBM Plex Mono" font-size="10" fill="#9eabbe" text-anchor="middle" letter-spacing="1.2">MILEAGE</text>';
+  svg+='</svg>';
+  return svg;
+}
+
+function renderMpdBoxPlot(events, useCorrected){
+  // Bucket by year, compute percentiles
+  var byYear={}, vinSetByYear={};
+  events.forEach(function(e){
+    if(!byYear[e.year]){byYear[e.year]=[]; vinSetByYear[e.year]={};}
+    byYear[e.year].push(useCorrected?e.price_corrected:e.price);
+    vinSetByYear[e.year][e.vin]=1;
+  });
+  var years=Object.keys(byYear).map(Number).sort(function(a,b){return a-b;});
+  if(!years.length)return '<div class="loading">No data for current filter.</div>';
+  function pct(arr,p){
+    var sorted=arr.slice().sort(function(a,b){return a-b;});
+    var idx=(sorted.length-1)*p;
+    var lo=Math.floor(idx),hi=Math.ceil(idx);
+    if(lo===hi)return sorted[lo];
+    return Math.round(sorted[lo]+(sorted[hi]-sorted[lo])*(idx-lo));
+  }
+  var stats=years.map(function(y){
+    var arr=byYear[y];
+    var nVins=Object.keys(vinSetByYear[y]).length;
+    return {
+      year:y, n:arr.length, vins:nVins,
+      min:Math.min.apply(null,arr), max:Math.max.apply(null,arr),
+      p25:pct(arr,0.25), p50:pct(arr,0.5), p75:pct(arr,0.75)
+    };
+  });
+  var W=900,H=440,PL=70,PR=40,PT=30,PB=70;
+  var maxP=Math.max(250000, Math.ceil(Math.max.apply(null, stats.map(function(s){return s.max;}))/50000)*50000);
+  function yS(p){return PT+(1-(Math.min(p,maxP)/maxP))*(H-PT-PB);}
+  var bandW=(W-PL-PR)/years.length;
+  var boxW=Math.min(bandW*0.45,68);
+  var svg='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">';
+  // Y grid + labels
+  var step=maxP>250000?100000:50000;
+  for(var p=0;p<=maxP;p+=step){
+    var y=yS(p).toFixed(1);
+    svg+='<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+y+'" y2="'+y+'" stroke="rgba(255,255,255,.05)" stroke-dasharray="2 4"/>';
+    svg+='<text x="'+(PL-6)+'" y="'+(yS(p)+3).toFixed(1)+'" text-anchor="end" font-family="IBM Plex Mono" font-size="10" fill="#6b7585">$'+(p/1000)+'k</text>';
+  }
+  // Reference lines
+  svg+='<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+yS(40000).toFixed(1)+'" y2="'+yS(40000).toFixed(1)+'" stroke="#c8a96a" stroke-dasharray="4 4" opacity=".5"/>';
+  svg+='<text x="'+(W-PR-4)+'" y="'+(yS(40000)-4).toFixed(1)+'" text-anchor="end" font-family="IBM Plex Mono" font-size="9" fill="#c8a96a">$40K</text>';
+  svg+='<line x1="'+PL+'" x2="'+(W-PR)+'" y1="'+yS(75000).toFixed(1)+'" y2="'+yS(75000).toFixed(1)+'" stroke="#9eabbe" stroke-dasharray="2 4" opacity=".4"/>';
+  svg+='<text x="'+(W-PR-4)+'" y="'+(yS(75000)-4).toFixed(1)+'" text-anchor="end" font-family="IBM Plex Mono" font-size="9" fill="#9eabbe">$75K</text>';
+  // Boxes
+  stats.forEach(function(s,i){
+    var cx=PL+bandW*i+bandW/2;
+    var thin=s.vins<10;
+    var fill=thin?'rgba(122,167,220,.22)':'rgba(122,167,220,.55)';
+    // Whisker line
+    svg+='<line x1="'+cx.toFixed(1)+'" x2="'+cx.toFixed(1)+'" y1="'+yS(s.min).toFixed(1)+'" y2="'+yS(s.max).toFixed(1)+'" stroke="#9eabbe" stroke-width="1"/>';
+    svg+='<line x1="'+(cx-8).toFixed(1)+'" x2="'+(cx+8).toFixed(1)+'" y1="'+yS(s.min).toFixed(1)+'" y2="'+yS(s.min).toFixed(1)+'" stroke="#9eabbe" stroke-width="1"/>';
+    svg+='<line x1="'+(cx-8).toFixed(1)+'" x2="'+(cx+8).toFixed(1)+'" y1="'+yS(s.max).toFixed(1)+'" y2="'+yS(s.max).toFixed(1)+'" stroke="#9eabbe" stroke-width="1"/>';
+    // Box (p25-p75)
+    svg+='<rect x="'+(cx-boxW/2).toFixed(1)+'" y="'+yS(s.p75).toFixed(1)+'" width="'+boxW.toFixed(1)+'" height="'+(yS(s.p25)-yS(s.p75)).toFixed(1)+'" fill="'+fill+'" stroke="#a8c8f0" stroke-width="1" rx="2"/>';
+    // Median line
+    svg+='<line x1="'+(cx-boxW/2).toFixed(1)+'" x2="'+(cx+boxW/2).toFixed(1)+'" y1="'+yS(s.p50).toFixed(1)+'" y2="'+yS(s.p50).toFixed(1)+'" stroke="#e6edf5" stroke-width="2"/>';
+    svg+='<circle cx="'+cx.toFixed(1)+'" cy="'+yS(s.p50).toFixed(1)+'" r="3.5" fill="#e6edf5"/>';
+    // Median label
+    svg+='<text x="'+cx.toFixed(1)+'" y="'+(yS(s.p50)-9).toFixed(1)+'" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="#e6edf5" font-weight="600">$'+Math.round(s.p50/1000)+'k</text>';
+    // Year + n labels
+    svg+='<text x="'+cx.toFixed(1)+'" y="'+(H-PB+22)+'" text-anchor="middle" font-family="Cormorant Garamond, Georgia, serif" font-size="15" fill="#e6edf5">'+s.year+'</text>';
+    svg+='<text x="'+cx.toFixed(1)+'" y="'+(H-PB+38)+'" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#6b7585">n='+s.n+(thin?(' \u2022 '+s.vins+' vin'+(s.vins===1?'':'s')):'')+'</text>';
+    if(thin){
+      svg+='<text x="'+cx.toFixed(1)+'" y="'+(PT-10)+'" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="#d4884a" letter-spacing="1.5">THIN</text>';
+    }
+  });
+  svg+='<text x="'+(PL-50)+'" y="'+(H/2)+'" font-family="IBM Plex Mono" font-size="10" fill="#9eabbe" text-anchor="middle" letter-spacing="1.2" transform="rotate(-90 '+(PL-50)+' '+(H/2)+')">PRICE USD</text>';
+  svg+='<text x="'+(W/2)+'" y="'+(H-8)+'" font-family="IBM Plex Mono" font-size="10" fill="#9eabbe" text-anchor="middle" letter-spacing="1.2">MODEL YEAR</text>';
+  svg+='</svg>';
+  return svg;
+}
+
+function mpdMileageLegend(){
+  var tiers=MPD_TIERS.map(function(t){return '<span><span class="mpd-legend-dot" style="background:'+t.c+';"></span>'+t.l+'</span>';}).join('');
+  return '<div class="mpd-legend-row"><strong>Mileage:</strong>'+tiers+'</div>'+
+    '<div class="mpd-legend-row"><strong>Recency:</strong>'+
+      '<span><span class="mpd-legend-dot" style="background:#7aa7dc;width:8px;height:8px;"></span>2y+/undated</span>'+
+      '<span><span class="mpd-legend-dot" style="background:#7aa7dc;width:10px;height:10px;"></span>1-2y</span>'+
+      '<span><span class="mpd-legend-dot" style="background:#7aa7dc;width:14px;height:14px;"></span>&lt;1y</span>'+
+    '</div>'+
+    '<div class="mpd-legend-row"><strong>Class:</strong>'+
+      '<span><span class="mpd-legend-dot" style="background:#7aa7dc;border:1.5px solid #e6edf5;"></span>Auction</span>'+
+      '<span><span class="mpd-legend-dot" style="background:#7aa7dc;opacity:.85;"></span>Sale</span>'+
+      '<span><span class="mpd-legend-dot" style="background:#7aa7dc;opacity:.5;"></span>Ask</span>'+
+    '</div>';
+}
+
+function mpdBoxLegend(){
+  return '<div class="mpd-legend-row">'+
+    '<span><span style="display:inline-block;width:14px;height:9px;background:rgba(122,167,220,.55);border:1px solid #a8c8f0;vertical-align:middle;margin-right:5px;"></span>25-75th Percentile</span>'+
+    '<span><span style="display:inline-block;width:14px;height:2px;background:#e6edf5;vertical-align:middle;margin-right:5px;"></span>Median</span>'+
+    '<span><span style="display:inline-block;width:14px;height:1px;background:#9eabbe;vertical-align:middle;margin-right:5px;"></span>Min-Max</span>'+
+    '<span><span style="color:#d4884a;letter-spacing:.1em;font-weight:600;">THIN</span> = n&lt;10 vins</span>'+
+  '</div>';
+}
+
+function updateMpdStats(events){
+  var el=document.getElementById('mpd-stats');
+  if(!el)return;
+  var prices=events.map(function(e){return MPD.useCorrected?e.price_corrected:e.price;});
+  var stats;
+  if(!prices.length){
+    stats={count:0,med:0,avg:0,vol:0,lo:0,hi:0};
+  } else {
+    var sorted=prices.slice().sort(function(a,b){return a-b;});
+    var sum=0;for(var i=0;i<sorted.length;i++)sum+=sorted[i];
+    stats={
+      count:prices.length,
+      med:sorted[Math.floor(sorted.length/2)],
+      avg:Math.round(sum/prices.length),
+      vol:sum,
+      lo:sorted[0],
+      hi:sorted[sorted.length-1]
+    };
+  }
+  function fS(n){return n?'$'+n.toLocaleString():'--';}
+  el.innerHTML=
+    '<div class="mpd-stat"><div class="mpd-stat-l">Events</div><div class="mpd-stat-v">'+stats.count.toLocaleString()+'</div></div>'+
+    '<div class="mpd-stat"><div class="mpd-stat-l">Median</div><div class="mpd-stat-v">'+fS(stats.med)+'</div></div>'+
+    '<div class="mpd-stat"><div class="mpd-stat-l">Average</div><div class="mpd-stat-v">'+fS(stats.avg)+'</div></div>'+
+    '<div class="mpd-stat"><div class="mpd-stat-l">Volume</div><div class="mpd-stat-v">$'+(stats.vol/1e6).toFixed(1)+'m</div></div>'+
+    '<div class="mpd-stat"><div class="mpd-stat-l">Lowest</div><div class="mpd-stat-v">'+fS(stats.lo)+'</div></div>'+
+    '<div class="mpd-stat"><div class="mpd-stat-l">Highest</div><div class="mpd-stat-v">'+fS(stats.hi)+'</div></div>';
+}
+
+function renderMpdChart(){
+  var corrCheckbox=document.getElementById('mpd-corrected');
+  if(corrCheckbox)MPD.useCorrected=corrCheckbox.checked;
+  var chart=document.getElementById('mpd-chart');
+  var legend=document.getElementById('mpd-legend');
+  if(!chart)return;
+  if(!MPD.filteredEvents.length){
+    chart.innerHTML='<div class="loading">No events match current filter.</div>';
+    if(legend)legend.innerHTML='';
+    updateMpdStats([]);
+    return;
+  }
+  if(MPD.tab==='mileage'){
+    chart.innerHTML=renderMpdMileageScatter(MPD.filteredEvents, MPD.useCorrected);
+    if(legend)legend.innerHTML=mpdMileageLegend();
+  } else {
+    chart.innerHTML=renderMpdBoxPlot(MPD.filteredEvents, MPD.useCorrected);
+    if(legend)legend.innerHTML=mpdBoxLegend();
+  }
+  updateMpdStats(MPD.filteredEvents);
+}
+
+function renderMarketDistribution(vehicles, allLH){
+  // First-call form: build cache from data. Subsequent calls (toggle/filter): re-render from cache.
+  if(vehicles && allLH){
+    MPD.events=buildMpdEvents(vehicles, allLH);
+    applyMpdFilter();
+  }
+  renderMpdChart();
+}
+
 // ── SCATTER CHART ─────────────────────────────────────────
 function renderScatter(vehicles,market,listings){
   var W=640,H=200,PL=44,PR=18,PT=14,PB=32;
@@ -4913,6 +5296,7 @@ function loadAll(){
     renderBuildRarity(vehicles);
     renderProductionTimeline(vehicles);
     renderDepreciationCharts();
+    renderMarketDistribution(vehicles,allLH);
     renderFinalEdition();
     // If the Gallery tab was already opened and showed empty (loaded before images arrived), rebuild it now
     if(galleryLoaded&&typeof rebuildGallery==='function')rebuildGallery();
