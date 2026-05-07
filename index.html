@@ -374,6 +374,21 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .tc-calc-toggle .tc-calc-mult{margin-left:auto;color:var(--dim);font-size:10px}
 .tc-calc-toggle.off{color:var(--dim)}
 .tc-calc-toggle.off .tc-calc-mult{text-decoration:line-through}
+
+/* History rows — checkbox-next-to-value layout */
+.tc-prov-row{display:grid;grid-template-columns:80px 1fr 18px 70px;gap:8px;align-items:center;padding:5px 2px;font-family:var(--mono);font-size:11px;border-radius:4px}
+.tc-prov-row + .tc-prov-row{border-top:1px solid rgba(255,255,255,.04)}
+.tc-prov-lbl{color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:.08em}
+.tc-prov-val{color:var(--ink);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tc-prov-row input[type="checkbox"]{accent-color:var(--blue2);cursor:pointer;margin:0;width:14px;height:14px}
+.tc-prov-row input[type="checkbox"]:disabled{cursor:not-allowed;opacity:.4}
+.tc-prov-mult{color:var(--gold2);font-size:10px;text-align:right;font-family:var(--mono)}
+.tc-prov-row.off{opacity:.5}
+.tc-prov-row.off .tc-prov-mult{color:var(--dim);font-style:italic}
+
+/* Reset button */
+.tc-calc-reset{display:inline-block;padding:5px 12px;background:transparent;border:1px solid var(--line2);color:var(--muted);font-family:var(--mono);font-size:9px;border-radius:4px;cursor:pointer;text-transform:uppercase;letter-spacing:.1em;margin-top:10px;transition:all .15s}
+.tc-calc-reset:hover{border-color:var(--amber);color:var(--amber)}
 .tc-calc-output{margin-top:11px;padding-top:10px;border-top:1px solid rgba(122,167,220,.15)}
 .tc-calc-bd-row{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);padding:1px 0}
 .tc-calc-bd-row.final{margin-top:6px;padding-top:6px;border-top:1px solid rgba(255,255,255,.06);color:var(--ink);font-weight:500;font-size:11px}
@@ -1135,7 +1150,7 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
             <input type="number" id="gen-calc-mo" value="0" min="0" max="60" oninput="renderGenericCalc()">
           </div>
 
-          <div class="gen-calc-section" style="margin-top:14px;">Provenance</div>
+          <div class="gen-calc-section" style="margin-top:14px;">History</div>
           <div class="gen-calc-row"><label>Accidents</label>
             <select id="gen-calc-acc" onchange="renderGenericCalc()">
               <option value="0" selected>0 (clean)</option>
@@ -1166,6 +1181,8 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
             <label class="tc-calc-toggle"><input type="checkbox" id="gen-calc-tgl-slv" checked onchange="renderGenericCalc()"> Apply salvage penalty</label>
             <label class="tc-calc-toggle"><input type="checkbox" id="gen-calc-tgl-tm" checked onchange="renderGenericCalc()"> Apply time decay</label>
           </div>
+
+          <button class="tc-calc-reset" onclick="resetGenericCalc()">&#8634; Reset</button>
         </div>
 
         <div>
@@ -1934,7 +1951,7 @@ var NOTE_TAGS=[
   {k:'user',  lbl:'Notes'},
   {k:'research',lbl:'Research'},
   {k:'state_trail',lbl:'State Trail'},
-  {k:'provenance',lbl:'Provenance'},
+  {k:'provenance',lbl:'History'},
   {k:'profile_image',lbl:'Profile Image'}
 ];
 
@@ -2552,59 +2569,78 @@ function calcOutputHTML(r){
   return bd;
 }
 
-function calcPanelHTML(v,vm,lh){
+function calcPanelHTML(v,vm,lh,ctx){
+  ctx=ctx||'x';
   var inp=calcInputsFromVin(v,vm,lh);
+  var k=v.vin+'-'+ctx;
+  var accMult=calcAccidentMult(inp.accidents);
+  var ownMult=calcOwnerMult(inp.owners);
+  var slvMult=inp.salvage?CALC_SALVAGE_MULT:1.0;
   var accLabel=inp.accidents==null?'unknown':inp.accidents+(inp.accidents===1?' accident':' accidents');
   var ownLabel=inp.owners==null?'unknown':inp.owners+(inp.owners===1?' owner':' owners');
   var slvLabel=inp.salvage?'salvage title':'clean title';
-  var accMultLbl='\u00d7'+(calcAccidentMult(inp.accidents)).toFixed(3);
-  var ownMultLbl='\u00d7'+(calcOwnerMult(inp.owners)).toFixed(3);
-  var slvMultLbl=inp.salvage?'\u00d70.780':'\u00d71.000';
+  function rowHTML(slug,name,value,mult,initiallyChecked,initiallyDisabled){
+    var off=mult===1.0;
+    var multTxt=off?'no penalty':'\u00d7'+mult.toFixed(3);
+    return '<div class="tc-prov-row'+(off?' off':'')+'" id="prov-row-'+slug+'-'+k+'">'+
+      '<span class="tc-prov-lbl">'+name+'</span>'+
+      '<span class="tc-prov-val" id="prov-val-'+slug+'-'+k+'">'+value+'</span>'+
+      '<input type="checkbox" id="calc-'+slug+'-'+k+'" '+(initiallyChecked?'checked':'')+' '+(initiallyDisabled?'disabled':'')+' onchange="recalcCard(\''+v.vin+'\',\''+ctx+'\')">'+
+      '<span class="tc-prov-mult" id="prov-mult-'+slug+'-'+k+'">'+multTxt+'</span>'+
+    '</div>';
+  }
   return '<div class="tc-calc-grid">'+
     '<div>'+
-      '<div class="tc-calc-section">Inputs</div>'+
-      '<div class="tc-calc-input-row"><label>Miles at sale</label><input type="number" id="calc-miles-'+v.vin+'" value="'+(inp.miles||'')+'" oninput="recalcCard(\''+v.vin+'\')"></div>'+
-      '<div class="tc-calc-input-row"><label>Months forward</label><input type="number" id="calc-mo-'+v.vin+'" value="0" min="0" max="60" oninput="recalcCard(\''+v.vin+'\')"></div>'+
-      '<div class="tc-calc-input-row"><label>Listing price</label><input type="number" id="calc-lp-'+v.vin+'" value="'+(inp.listingPrice||'')+'" oninput="recalcCard(\''+v.vin+'\')"></div>'+
+      '<div class="tc-calc-section">History</div>'+
+      rowHTML('acc','Accidents',accLabel,accMult,true,accMult===1.0)+
+      rowHTML('own','Owners',ownLabel,ownMult,true,ownMult===1.0)+
+      rowHTML('slv','Salvage',slvLabel,slvMult,inp.salvage,!inp.salvage)+
+      rowHTML('tm','Time decay','0 mo forward',1.0,true,true)+
     '</div>'+
     '<div>'+
-      '<div class="tc-calc-section">Penalties (toggle on/off)</div>'+
-      '<label class="tc-calc-toggle" id="calc-acc-lbl-'+v.vin+'"><input type="checkbox" id="calc-acc-'+v.vin+'" checked onchange="recalcCard(\''+v.vin+'\')"> Accidents: '+accLabel+'<span class="tc-calc-mult">'+accMultLbl+'</span></label>'+
-      '<label class="tc-calc-toggle" id="calc-own-lbl-'+v.vin+'"><input type="checkbox" id="calc-own-'+v.vin+'" checked onchange="recalcCard(\''+v.vin+'\')"> Owners: '+ownLabel+'<span class="tc-calc-mult">'+ownMultLbl+'</span></label>'+
-      '<label class="tc-calc-toggle" id="calc-slv-lbl-'+v.vin+'"><input type="checkbox" id="calc-slv-'+v.vin+'" '+(inp.salvage?'checked':'')+' onchange="recalcCard(\''+v.vin+'\')"> Salvage: '+slvLabel+'<span class="tc-calc-mult">'+slvMultLbl+'</span></label>'+
-      '<label class="tc-calc-toggle" id="calc-tm-lbl-'+v.vin+'"><input type="checkbox" id="calc-tm-'+v.vin+'" checked onchange="recalcCard(\''+v.vin+'\')"> Time decay<span class="tc-calc-mult">\u00d70.989/mo</span></label>'+
+      '<div class="tc-calc-section">Inputs</div>'+
+      '<div class="tc-calc-input-row"><label>Miles at sale</label><input type="number" id="calc-miles-'+k+'" value="'+(inp.miles||'')+'" oninput="recalcCard(\''+v.vin+'\',\''+ctx+'\')"></div>'+
+      '<div class="tc-calc-input-row"><label>Months forward</label><input type="number" id="calc-mo-'+k+'" value="0" min="0" max="60" oninput="recalcCard(\''+v.vin+'\',\''+ctx+'\')"></div>'+
+      '<div class="tc-calc-input-row"><label>Listing price</label><input type="number" id="calc-lp-'+k+'" value="'+(inp.listingPrice||'')+'" oninput="recalcCard(\''+v.vin+'\',\''+ctx+'\')"></div>'+
+      '<button class="tc-calc-reset" onclick="resetCalc(\''+v.vin+'\',\''+ctx+'\')">&#8634; Reset</button>'+
     '</div>'+
   '</div>'+
-  '<div class="tc-calc-output" id="calc-out-'+v.vin+'"></div>';
+  '<div class="tc-calc-output" id="calc-out-'+k+'"></div>';
 }
 
-function calcStripHTML(v,vm,lh){
+function calcStripHTML(v,vm,lh,ctx){
+  ctx=ctx||'x';
   var inp=calcInputsFromVin(v,vm,lh);
   inp.toggles={accident:true,owner:true,salvage:true,time:true};
   var r=calcPredict(inp);
-  return '<div class="tc-calc" id="calc-'+v.vin+'">'+
-    '<div class="tc-calc-summary" onclick="toggleCalcPanel(\''+v.vin+'\')">'+calcSummaryInner(r)+'</div>'+
-    '<div class="tc-calc-panel">'+calcPanelHTML(v,vm,lh)+'</div>'+
+  var k=v.vin+'-'+ctx;
+  return '<div class="tc-calc" id="calc-'+k+'">'+
+    '<div class="tc-calc-summary" onclick="toggleCalcPanel(\''+v.vin+'\',\''+ctx+'\')">'+calcSummaryInner(r)+'</div>'+
+    '<div class="tc-calc-panel">'+calcPanelHTML(v,vm,lh,ctx)+'</div>'+
   '</div>';
 }
 
-function toggleCalcPanel(vin){
-  var el=document.getElementById('calc-'+vin);
+function toggleCalcPanel(vin,ctx){
+  ctx=ctx||'x';
+  var k=vin+'-'+ctx;
+  var el=document.getElementById('calc-'+k);
   if(!el)return;
   var nowExpanded=!el.classList.contains('expanded');
   el.classList.toggle('expanded');
-  if(nowExpanded)recalcCard(vin);
+  if(nowExpanded)recalcCard(vin,ctx);
 }
 
-function recalcCard(vin){
+function recalcCard(vin,ctx){
+  ctx=ctx||'x';
+  var k=vin+'-'+ctx;
   var v=(G.v||[]).filter(function(x){return x.vin===vin;})[0];
   if(!v)return;
   var vm=G.m&&G.m[vin];
   function gv(id,fb){var e=document.getElementById(id);return e?e.value:fb;}
   function gc(id){var e=document.getElementById(id);return e?e.checked:true;}
-  var milesRaw=gv('calc-miles-'+vin,'');
-  var moRaw=gv('calc-mo-'+vin,'0');
-  var lpRaw=gv('calc-lp-'+vin,'');
+  var milesRaw=gv('calc-miles-'+k,'');
+  var moRaw=gv('calc-mo-'+k,'0');
+  var lpRaw=gv('calc-lp-'+k,'');
   var miles=milesRaw===''?null:parseFloat(milesRaw);
   var months=parseFloat(moRaw)||0;
   var lp=lpRaw===''?null:parseFloat(lpRaw);
@@ -2613,26 +2649,79 @@ function recalcCard(vin){
     miles:isNaN(miles)?null:miles,
     accidents:vm?vm.accident_count:null,
     owners:vm?vm.total_owners:null,
-    salvage:gc('calc-slv-'+vin),
+    salvage:gc('calc-slv-'+k),
     months_forward:months,
     listingPrice:isNaN(lp)?null:lp,
     toggles:{
-      accident:gc('calc-acc-'+vin),
-      owner:gc('calc-own-'+vin),
-      salvage:gc('calc-slv-'+vin),
-      time:gc('calc-tm-'+vin)
+      accident:gc('calc-acc-'+k),
+      owner:gc('calc-own-'+k),
+      salvage:gc('calc-slv-'+k),
+      time:gc('calc-tm-'+k)
     }
   };
   var r=calcPredict(inp);
-  var sum=document.querySelector('#calc-'+vin+' .tc-calc-summary');
+  var sum=document.querySelector('#calc-'+k+' .tc-calc-summary');
   if(sum)sum.innerHTML=calcSummaryInner(r);
-  ['acc','own','slv','tm'].forEach(function(k){
-    var lbl=document.getElementById('calc-'+k+'-lbl-'+vin);
-    var chk=document.getElementById('calc-'+k+'-'+vin);
-    if(lbl&&chk)lbl.classList.toggle('off',!chk.checked);
-  });
-  var out=document.getElementById('calc-out-'+vin);
+  // Update history rows: visual on/off + multiplier display
+  function updateRow(slug,mult,toggleOn){
+    var row=document.getElementById('prov-row-'+slug+'-'+k);
+    var multEl=document.getElementById('prov-mult-'+slug+'-'+k);
+    if(!row||!multEl)return;
+    var eff=toggleOn?mult:1.0;
+    var off=eff===1.0;
+    row.classList.toggle('off',off);
+    multEl.textContent=off?'no penalty':'\u00d7'+eff.toFixed(3);
+  }
+  updateRow('acc',calcAccidentMult(inp.accidents),inp.toggles.accident);
+  updateRow('own',calcOwnerMult(inp.owners),inp.toggles.owner);
+  updateRow('slv',(inp.salvage?CALC_SALVAGE_MULT:1.0),inp.toggles.salvage);
+  // Time row: special — value text + checkbox enabled state depend on months input
+  var timeMult=months>0?Math.pow(CALC_MONTHLY_DECAY,months):1.0;
+  var timeChk=document.getElementById('calc-tm-'+k);
+  if(timeChk)timeChk.disabled=(months===0);
+  var timeVal=document.getElementById('prov-val-tm-'+k);
+  if(timeVal)timeVal.textContent=months===0?'0 mo forward':months+' mo forward';
+  updateRow('tm',timeMult,inp.toggles.time);
+  var out=document.getElementById('calc-out-'+k);
   if(out)out.innerHTML=calcOutputHTML(r);
+}
+
+// ── CALCULATOR RESET ──────────────────────────────────────
+function resetCalc(vin,ctx){
+  ctx=ctx||'x';
+  var k=vin+'-'+ctx;
+  var v=(G.v||[]).filter(function(x){return x.vin===vin;})[0];
+  if(!v)return;
+  var vm=G.m&&G.m[vin];
+  var lh=G.l&&G.l[vin];
+  var inp=calcInputsFromVin(v,vm,lh);
+  function setV(id,val){var e=document.getElementById(id);if(e)e.value=val==null?'':val;}
+  function setC(id,val){var e=document.getElementById(id);if(e)e.checked=!!val;}
+  setV('calc-miles-'+k,inp.miles);
+  setV('calc-mo-'+k,'0');
+  setV('calc-lp-'+k,inp.listingPrice);
+  setC('calc-acc-'+k,true);
+  setC('calc-own-'+k,true);
+  setC('calc-slv-'+k,inp.salvage);   // salvage toggle reflects actual title status
+  setC('calc-tm-'+k,true);
+  recalcCard(vin,ctx);
+}
+
+function resetGenericCalc(){
+  function setV(id,val){var e=document.getElementById(id);if(e)e.value=val;}
+  function setC(id,val){var e=document.getElementById(id);if(e)e.checked=!!val;}
+  setV('gen-calc-year','2017');
+  setV('gen-calc-miles','');
+  setV('gen-calc-mo','0');
+  setV('gen-calc-acc','0');
+  setV('gen-calc-own','2');
+  setV('gen-calc-slv','false');
+  setV('gen-calc-lp','');
+  setC('gen-calc-tgl-acc',true);
+  setC('gen-calc-tgl-own',true);
+  setC('gen-calc-tgl-slv',true);
+  setC('gen-calc-tgl-tm',true);
+  renderGenericCalc();
 }
 
 // ── GENERIC CALCULATOR (Analytics tab) ──────────────────
@@ -3070,7 +3159,7 @@ function renderCompact(v,vm,lh){
         '<div style="display:flex;align-items:center;gap:6px;">'+domBlock+notesPill(v.vin)+'</div>'+
       '</div>'+
       '<div class="lc-meta">'+esc(v.vin)+' &middot; '+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?formatColor(b.paint_name)+' &middot; ':'';})()+esc(loc)+(lh&&lh.seller_name?' &middot; '+esc(lh.seller_name):'')+'</div>'+
-      calcStripHTML(v,vm,lh)+
+      calcStripHTML(v,vm,lh,'m')+
       '<div class="lc-flags">'+flags(v,vm)+'</div>'+equipChips(v.vin)+renderDocLinks(v.vin)+
       '<div class="lc-row">'+
         priceHTML+priceEditBtn(v.vin,active)+
@@ -3092,7 +3181,8 @@ function renderCompact(v,vm,lh){
 }
 
 // ── RENDER TARGET CARD ────────────────────────────────────
-function renderTarget(v,vm,lh){
+function renderTarget(v,vm,lh,ctx){
+  ctx=ctx||'t';
   var miles=vm&&vm.curr_odo?fM(vm.curr_odo):(lh&&lh.miles?fM(lh.miles):'--');
   var owners=vm?fN(vm.total_owners):'--';
   var loc=v.last_title_state||(lh&&lh.state)||'--';
@@ -3121,7 +3211,7 @@ function renderTarget(v,vm,lh){
         mbContactPill(v.vin,v.listing_status)+notesPill(v.vin)+
       '</div>'+
       '<div class="tc-sub">'+v.vin+(function(){var b=G.build&&G.build[v.vin];return b&&b.paint_name?' &middot; '+formatColor(b.paint_name):'';})()+'</div>'+
-      calcStripHTML(v,vm,lh)+
+      calcStripHTML(v,vm,lh,ctx)+
       '<div class="tc-stats">'+
         '<div class="tc-stat">'+priceHTML+priceEditBtn(v.vin,active)+'<span class="tc-sl">Ask</span></div>'+
         '<div class="tc-stat"><span class="tc-sv">'+miles+'</span><span class="tc-sl">Miles</span></div>'+
@@ -5907,7 +5997,7 @@ function renderFinalEdition(){
   // Cards: reuse renderTarget for full profile (image, history toggle, flags, equip, docs, mini-gallery, listing URL)
   if(grid){
     if(!feVins.length){grid.innerHTML='<div class="loading">No Final Edition records found.</div>';}
-    else{grid.innerHTML=feVins.map(function(v){return renderTarget(v,G.m&&G.m[v.vin],G.l&&G.l[v.vin]);}).join('');}
+    else{grid.innerHTML=feVins.map(function(v){return renderTarget(v,G.m&&G.m[v.vin],G.l&&G.l[v.vin],'fe');}).join('');}
   }
   if(cardCount)cardCount.textContent=feVins.length?feVins.length+(feVins.length===1?' VIN':' VINs'):'';
   // Gallery strip: images flagged is_final_edition=true
