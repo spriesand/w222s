@@ -2444,6 +2444,21 @@ var CALC_MILEAGE_CURVE=[
   {miles:90296,price:45045},
   {miles:103800,price:41750}
 ];
+// Newer-cohort curve (2018-2020). Different shape: holds 0-25K, plateau 25-55K, cliff 55K+.
+// Derived from S65 (non-FE) sample 2018-2020, n=5-19 per band.
+var CALC_MILEAGE_CURVE_NEW=[
+  {miles:8005, price:132799},
+  {miles:20500,price:127728},
+  {miles:27607,price:103667},
+  {miles:47000,price:105409},
+  {miles:64493,price:82953}
+];
+// Soft price floors per cohort — market psychology that resists pricing below a level
+// regardless of mileage decay (buyer anchoring on "can't have lost THAT much value").
+var CALC_FLOORS={
+  2015:0,2016:0,2017:0,                                  // older cars: no floor, depreciation has run its course
+  2018:90000,2019:90000,2020:98000,'2020FE':160000      // newer cars: market won't believe values below floor
+};
 var CALC_ACCIDENT_MULT={0:1.000,1:0.920,2:0.850};
 var CALC_ACCIDENT_UNKNOWN=1.000;
 var CALC_OWNER_MULT={'1-2':1.000,'3-4':0.950,'5+':0.950};
@@ -2452,8 +2467,8 @@ var CALC_SALVAGE_MULT=0.78;
 var CALC_MONTHLY_DECAY=Math.pow(0.9675,1/12); // -3.25%/yr (was -13%/yr; reduced 75% per calibration)
 var CALC_BANDS={2015:0.10,2016:0.10,2017:0.15,2018:0.20,2019:0.20,2020:0.20};
 
-function calcMileagePrice(miles){
-  var c=CALC_MILEAGE_CURVE;
+function calcMileagePrice(miles,curve){
+  var c=curve||CALC_MILEAGE_CURVE;
   if(miles<=c[0].miles)return c[0].price;
   if(miles>=c[c.length-1].miles)return c[c.length-1].price;
   for(var i=0;i<c.length-1;i++){
@@ -2488,13 +2503,24 @@ function calcPredict(input){
   if(!base)return {error:'Year '+(year||'?')+' not modeled (range 2015-2020)'};
   var T=Object.assign({accident:true,owner:true,salvage:true,time:true},input.toggles||{});
   var miles=(input.miles==null||isNaN(+input.miles))?base.miles:+input.miles;
-  var mf=calcMileagePrice(miles)/calcMileagePrice(base.miles);
+  // Pick mileage curve by cohort: newer cohorts depreciate differently
+  var curve=(year>=2018)?CALC_MILEAGE_CURVE_NEW:CALC_MILEAGE_CURVE;
+  var mf=calcMileagePrice(miles,curve)/calcMileagePrice(base.miles,curve);
   var af=T.accident?calcAccidentMult(input.accidents):1.0;
   var of=T.owner?calcOwnerMult(input.owners):1.0;
   var sf=(T.salvage&&input.salvage)?CALC_SALVAGE_MULT:1.0;
   var months=+input.months_forward||0;
   var tf=(T.time&&months)?Math.pow(CALC_MONTHLY_DECAY,months):1.0;
-  var mid=Math.round(base.price*mf*af*of*sf*tf);
+  var rawMid=Math.round(base.price*mf*af*of*sf*tf);
+  // Apply soft floor — market psychology resists pricing below cohort floor.
+  // Floor is suppressed if salvage penalty applied (salvage cars genuinely break the floor).
+  var floor=CALC_FLOORS[key]||0;
+  var floorActive=false;
+  var mid=rawMid;
+  if(floor>0&&!(T.salvage&&input.salvage)&&rawMid<floor){
+    mid=floor;
+    floorActive=true;
+  }
   var bp=CALC_BANDS[year]||0.15;
   var low=Math.round(mid*(1-bp));
   var high=Math.round(mid*(1+bp));
@@ -2511,6 +2537,7 @@ function calcPredict(input){
   return {
     low:low,mid:mid,high:high,bandPct:bp,
     factors:{base:base.price,mileage:mf,accident:af,owner:of,salvage:sf,time:tf},
+    rawMid:rawMid,floorActive:floorActive,floor:floor,
     listingDelta:ld,
     inputs:{year:year,is_final_edition:!!input.is_final_edition,miles:miles,accidents:input.accidents,owners:input.owners,salvage:!!input.salvage,months_forward:months,listingPrice:lp}
   };
@@ -2561,8 +2588,12 @@ function calcOutputHTML(r){
     '<div class="tc-calc-bd-row"><span>Accident</span><span>'+mult(f.accident)+'</span></div>'+
     '<div class="tc-calc-bd-row"><span>Owners</span><span>'+mult(f.owner)+'</span></div>'+
     '<div class="tc-calc-bd-row"><span>Salvage</span><span>'+mult(f.salvage)+'</span></div>'+
-    '<div class="tc-calc-bd-row"><span>Time decay</span><span>'+mult(f.time)+'</span></div>'+
-    '<div class="tc-calc-bd-row final"><span>Predicted (mid)</span><span>$'+r.mid.toLocaleString()+'</span></div>'+
+    '<div class="tc-calc-bd-row"><span>Time decay</span><span>'+mult(f.time)+'</span></div>';
+  if(r.floorActive){
+    bd+='<div class="tc-calc-bd-row" style="color:var(--gold);"><span>Raw calculation</span><span>$'+r.rawMid.toLocaleString()+'</span></div>'+
+        '<div class="tc-calc-bd-row" style="color:var(--gold);"><span>&#8627; cohort floor applied</span><span>$'+r.floor.toLocaleString()+'</span></div>';
+  }
+  bd+='<div class="tc-calc-bd-row final"><span>Predicted (mid)</span><span>$'+r.mid.toLocaleString()+'</span></div>'+
     '<div class="tc-calc-final-range"><span class="lo">$'+r.low.toLocaleString()+'</span><span class="mi">$'+r.mid.toLocaleString()+'</span><span class="hi">$'+r.high.toLocaleString()+'</span></div>';
   if(r.listingDelta){
     var d=r.listingDelta;
@@ -2793,6 +2824,11 @@ function renderGenericCalc(){
       '</div>'+
     '</div>';
   }
+  var floorRow='';
+  if(r.floorActive){
+    floorRow='<div class="row" style="color:var(--gold);"><span>Raw calculation</span><span>$'+r.rawMid.toLocaleString()+'</span></div>'+
+             '<div class="row" style="color:var(--gold);"><span>&#8627; cohort floor applied</span><span>$'+r.floor.toLocaleString()+'</span></div>';
+  }
   el.innerHTML='<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);text-align:center;">Predicted Market Value'+(inp.is_final_edition?' &middot; <span style="color:var(--gold);">2020 Final Edition</span>':'')+'</div>'+
     '<div class="gen-calc-mid-display">$'+r.mid.toLocaleString()+'</div>'+
     '<div class="gen-calc-range-display"><span class="lo">$'+r.low.toLocaleString()+'</span><span style="color:var(--dim);">&mdash;</span><span class="hi">$'+r.high.toLocaleString()+'</span></div>'+
@@ -2803,6 +2839,7 @@ function renderGenericCalc(){
       '<div class="row"><span>Owners</span><span>'+mult(f.owner)+'</span></div>'+
       '<div class="row"><span>Salvage</span><span>'+mult(f.salvage)+'</span></div>'+
       '<div class="row"><span>Time decay ('+months+' mo)</span><span>'+mult(f.time)+'</span></div>'+
+      floorRow+
       '<div class="row final"><span>Predicted mid</span><span>$'+r.mid.toLocaleString()+'</span></div>'+
     '</div>'+
     verdictBlock;
