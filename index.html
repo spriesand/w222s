@@ -2567,6 +2567,11 @@ function calcInputsFromVin(v,vm,lh){
 // Returns array of human-readable reasons; empty array = data is OK.
 function calcDataQuality(v,vm,lh){
   var reasons=[];
+  // 0) No active listing at all (target card with stale/no current data)
+  if(!lh){
+    reasons.push('No active listing — comparison is hypothetical');
+    // Continue to check vm fields — currOdo may still flag
+  }
   // 1) Stale listing: latest first_seen older than 6 months
   if(lh&&lh.first_seen){
     var d=new Date(lh.first_seen);
