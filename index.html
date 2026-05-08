@@ -2442,10 +2442,10 @@ var CALC_MILEAGE_CURVE=[
 ];
 var CALC_ACCIDENT_MULT={0:1.000,1:0.745,2:0.665};
 var CALC_ACCIDENT_UNKNOWN=0.85;
-var CALC_OWNER_MULT={'1-2':1.000,'3-4':0.904,'5+':0.836};
-var CALC_OWNER_UNKNOWN=0.95;
+var CALC_OWNER_MULT={'1-2':1.000,'3-4':0.9625,'5+':0.940};
+var CALC_OWNER_UNKNOWN=0.975;
 var CALC_SALVAGE_MULT=0.78;
-var CALC_MONTHLY_DECAY=Math.pow(0.87,1/12); // -13%/yr S65 bear rate
+var CALC_MONTHLY_DECAY=Math.pow(0.9675,1/12); // -3.25%/yr (was -13%/yr; reduced 75% per calibration)
 var CALC_BANDS={2015:0.10,2016:0.10,2017:0.15,2018:0.20,2019:0.20,2020:0.20};
 
 function calcMileagePrice(miles){
@@ -2828,6 +2828,10 @@ function flags(v,vm){
   if(vm&&(vm.salvage===true||(typeof vm.salvage==='string'&&vm.salvage.toLowerCase()==='yes')))f.push({c:'fr',l:'SALVAGE'});
   if(vm&&(vm.theft_recovery===true||(typeof vm.theft_recovery==='string'&&vm.theft_recovery.toLowerCase()==='yes')))f.push({c:'fr',l:'THEFT'});
   if(vm&&typeof vm.accident_count==='number'&&vm.accident_count>0)f.push({c:'fa',l:'⚠ '+vm.accident_count+' Accident'+(vm.accident_count>1?'s':'')});
+  if(vm&&typeof vm.total_owners==='number'){
+    if(vm.total_owners>=5)f.push({c:'fr',l:'⚠ '+vm.total_owners+' Owners'});
+    else if(vm.total_owners>=3)f.push({c:'fa',l:vm.total_owners+' Owners'});
+  }
   return f.map(function(x){return '<span class="flag '+x.c+'">'+x.l+'</span>';}).join('');
 }
 
