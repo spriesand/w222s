@@ -1727,7 +1727,9 @@ function qw(ep,method,body){
   });
 }
 
-// Insert-ignore helper — POST with ON CONFLICT DO NOTHING
+// Insert with PostgREST `Prefer: resolution=ignore-duplicates` —
+// suppresses 409 Conflict on any unique constraint that PostgREST detects
+// from the request shape (PK, or any other unique index).
 function qign(table,body){
   return fetch(SB+'/rest/v1/'+table,{
     method:'POST',
@@ -1899,12 +1901,13 @@ function mbcShow(btn){var vin=btn.dataset.vin||'';
   var loc=parts[1]||'';
   var phone=parts[2]||'';
   var site=parts[3]||'';
+  var siteClean=site.replace(/^https?:\/\//i,'').replace(/\/+$/,'');  // strip scheme + trailing slash if present
   var pop=document.createElement('div');
   pop.id='mbc-pop';pop.dataset.vin=vin;pop.className='mbc-pop';
   pop.innerHTML='<div class="mbc-pop-name">'+name+'</div>'+
     (loc?'<div class="mbc-pop-row">&#128205; '+loc+'</div>':'')+
     (phone?'<div class="mbc-pop-row">&#128222; <a href="tel:'+phone+'">'+phone+'</a></div>':'')+
-    (site?'<div class="mbc-pop-row">&#127760; <a href="https://'+site+'" target="_blank">'+site+'</a></div>':'');
+    (siteClean?'<div class="mbc-pop-row">&#127760; <a href="https://'+siteClean+'" target="_blank" rel="noopener noreferrer">'+siteClean+'</a></div>':'');
   var r=btn.getBoundingClientRect();
   pop.style.top=(r.bottom+6)+'px';
   pop.style.left=Math.min(r.left,window.innerWidth-290)+'px';
@@ -2567,11 +2570,6 @@ function calcInputsFromVin(v,vm,lh){
 // Returns array of human-readable reasons; empty array = data is OK.
 function calcDataQuality(v,vm,lh){
   var reasons=[];
-  // 0) No active listing at all (target card with stale/no current data)
-  if(!lh){
-    reasons.push('No active listing — comparison is hypothetical');
-    // Continue to check vm fields — currOdo may still flag
-  }
   // 1) Stale listing: latest first_seen older than 6 months
   if(lh&&lh.first_seen){
     var d=new Date(lh.first_seen);
@@ -2595,6 +2593,26 @@ function calcDataQuality(v,vm,lh){
     }
   }
   return reasons;
+}
+
+// For data-quality checks, fall back to the most recent listing_history row from G.lhAll
+// when G.l[vin] is missing (e.g. inactive VINs whose latest row was filtered out of G.l).
+// This lets the stale/mismatch rules apply correctly to inactive targets like 447860.
+function calcLatestListingForQuality(vin,lh){
+  if(lh)return lh;
+  if(!G.lhAll)return null;
+  var latest=null;
+  for(var i=0;i<G.lhAll.length;i++){
+    var row=G.lhAll[i];
+    if(row.vin!==vin)continue;
+    if(!latest)latest=row;
+    else{
+      var rowDate=row.last_seen||row.first_seen;
+      var latestDate=latest.last_seen||latest.first_seen;
+      if(rowDate&&(!latestDate||rowDate>latestDate))latest=row;
+    }
+  }
+  return latest;
 }
 
 function calcSummaryInner(r,badData){
@@ -2705,7 +2723,8 @@ function calcStripHTML(v,vm,lh,ctx){
   var inp=calcInputsFromVin(v,vm,lh);
   inp.toggles={accident:true,owner:true,salvage:true,time:true};
   var r=calcPredict(inp);
-  var bd=calcDataQuality(v,vm,lh);
+  var lhForQuality=calcLatestListingForQuality(v.vin,lh);
+  var bd=calcDataQuality(v,vm,lhForQuality);
   var k=v.vin+'-'+ctx;
   return '<div class="tc-calc" id="calc-'+k+'">'+
     '<div class="tc-calc-summary" onclick="toggleCalcPanel(\''+v.vin+'\',\''+ctx+'\')">'+calcSummaryInner(r,bd)+'</div>'+
@@ -2755,7 +2774,8 @@ function recalcCard(vin,ctx){
   };
   var r=calcPredict(inp);
   var lh=G.l&&G.l[vin];
-  var bd=calcDataQuality(v,vm,lh);
+  var lhForQuality=calcLatestListingForQuality(vin,lh);
+  var bd=calcDataQuality(v,vm,lhForQuality);
   var sum=document.querySelector('#calc-'+k+' .tc-calc-summary');
   if(sum)sum.innerHTML=calcSummaryInner(r,bd);
   // Update history rows: visual on/off + multiplier display
@@ -5358,10 +5378,56 @@ function proceedSaveNewListing(vin,year,trim,price,miles,seller,platform,city,st
     : Promise.resolve(null);
 
   photoPromise.then(function(imageUrl){
-    // If a photo was uploaded, also create an `images` row so it appears in mini-gallery + main gallery.
-    // Fire-and-forget: don't block the vehicle upsert chain on this.
-    if(imageUrl){
-      qw('images','POST',{vin:vin,url:imageUrl,source_type:'listing',is_hero:true,sort_order:0})
+    // Image-row creation deferred until vehicle/listing chain completes (see end-of-chain step).
+    // We pass imageUrl forward via promise resolution.
+    return qups('vehicles',{
+      vin:vin,year:year,trim:trim,cohort:cohort,
+      car_status:carStatus,listing_status:'active',
+      last_title_state:titleState,is_final_edition:isFE,
+      listing_url:url,image_url:imageUrl||undefined
+    }).then(function(){return imageUrl;});
+  })
+  .then(function(imageUrl){
+    return qups('vehicle_market',{
+      vin:vin,curr_odo:miles,curr_odo_date:today,
+      total_owners:owners,accident_count:accidents,
+      lemon:false,salvage:false,flood:false,
+      theft_reported:false,theft_recovery:false
+    }).then(function(){return imageUrl;});
+  })
+  .then(function(imageUrl){
+    return qups('vehicle_build',{vin:vin}).then(function(){return imageUrl;});
+  })
+  .then(function(imageUrl){
+    return fetch(SB+'/rest/v1/odometer_readings',{
+      method:'POST',
+      headers:Object.assign({},H,{'Prefer':'resolution=ignore-duplicates'}),
+      body:JSON.stringify({vin:vin,reading_date:today,odometer:miles,source:'listing'})
+    }).then(function(r){if(!r.ok&&r.status!==409)return r.text().then(function(t){return Promise.reject(r.status+' '+t);});return imageUrl;});
+  })
+  .then(function(imageUrl){
+    return qw('listing_history','POST',{
+      vin:vin,price:price,miles:miles,
+      seller_name:seller,seller_type:'dealer',
+      city:city,state:state,platform:platform,
+      first_seen:firstSeen||today,last_seen:today
+    }).then(function(){return imageUrl;});
+  })
+  .then(function(imageUrl){
+    // Image-row insert AFTER all primary writes succeed.
+    // Demote any existing is_hero=true rows for this VIN to is_hero=false BEFORE inserting,
+    // then await the new row insert so loadAll() sees consistent data on next sync.
+    if(!imageUrl)return null;
+    var demote=fetch(SB+'/rest/v1/images?vin=eq.'+encodeURIComponent(vin)+'&is_hero=eq.true',{
+      method:'PATCH',
+      headers:Object.assign({},H,{'Prefer':'return=minimal'}),
+      body:JSON.stringify({is_hero:false})
+    }).then(function(r){
+      if(!r.ok)console.warn('hero demote returned',r.status);
+      return null;
+    }).catch(function(e){console.warn('hero demote failed (non-fatal):',e);return null;});
+    return demote.then(function(){
+      return qw('images','POST',{vin:vin,url:imageUrl,source_type:'listing',is_hero:true,sort_order:0})
         .then(function(rows){
           var row=Array.isArray(rows)?rows[0]:rows;
           if(row){
@@ -5371,41 +5437,9 @@ function proceedSaveNewListing(vin,year,trim,price,miles,seller,platform,city,st
             G.imagesAll=G.imagesAll||[];
             G.imagesAll.unshift(row);
           }
+          return null;
         })
-        .catch(function(e){console.warn('images-row insert failed (vehicle still saved):',e);});
-    }
-    // Upsert vehicles (image_url fallback path; preserves prior on update if no new photo)
-    return qups('vehicles',{
-      vin:vin,year:year,trim:trim,cohort:cohort,
-      car_status:carStatus,listing_status:'active',
-      last_title_state:titleState,is_final_edition:isFE,
-      listing_url:url,image_url:imageUrl||undefined
-    });
-  })
-  .then(function(){
-    return qups('vehicle_market',{
-      vin:vin,curr_odo:miles,curr_odo_date:today,
-      total_owners:owners,accident_count:accidents,
-      lemon:false,salvage:false,flood:false,
-      theft_reported:false,theft_recovery:false
-    });
-  })
-  .then(function(){
-    return qups('vehicle_build',{vin:vin});
-  })
-  .then(function(){
-    return fetch(SB+'/rest/v1/odometer_readings',{
-      method:'POST',
-      headers:Object.assign({},H,{'Prefer':'resolution=ignore-duplicates'}),
-      body:JSON.stringify({vin:vin,reading_date:today,odometer:miles,source:'listing'})
-    }).then(function(r){if(!r.ok&&r.status!==409)return r.text().then(function(t){return Promise.reject(r.status+' '+t);});return null;});
-  })
-  .then(function(){
-    return qw('listing_history','POST',{
-      vin:vin,price:price,miles:miles,
-      seller_name:seller,seller_type:'dealer',
-      city:city,state:state,platform:platform,
-      first_seen:firstSeen||today,last_seen:today
+        .catch(function(e){console.warn('images-row insert failed (vehicle still saved):',e);return null;});
     });
   })
   .then(function(){
@@ -5704,6 +5738,7 @@ function loadAll(){
   // We instead rebuild active gallery view at end of loadAll (see below).
   newsLoaded=false;
   resourcesLoaded=false;
+  rolodexLoaded=false;
   // Safety net: if a request hangs >30s, force-clear the lock so user can retry
   if(G.loadingTimeout)clearTimeout(G.loadingTimeout);
   G.loadingTimeout=setTimeout(function(){
