@@ -1143,6 +1143,9 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
               <option value="2020">2020</option>
             </select>
           </div>
+          <div class="gen-calc-row"><label>Final Edition</label>
+            <label class="tc-calc-toggle" style="margin:0;"><input type="checkbox" id="gen-calc-fe" onchange="renderGenericCalc()"> 2020 FE only (+$45K bonus)</label>
+          </div>
           <div class="gen-calc-row"><label>Miles at sale</label>
             <input type="number" id="gen-calc-miles" placeholder="e.g. 65000" oninput="renderGenericCalc()">
           </div>
@@ -2430,7 +2433,8 @@ var CALC_BASE={
   2017:{price:97699,miles:22125},
   2018:{price:115550,miles:21982},
   2019:{price:115370,miles:18160},
-  2020:{price:147733,miles:17059}
+  2020:{price:147733,miles:17059},
+  '2020FE':{price:192733,miles:12000}  // standard 2020 + $45K FE bonus; FE cars cluster lower-mileage
 };
 var CALC_MILEAGE_CURVE=[
   {miles:14165,price:105210},
@@ -2479,7 +2483,8 @@ function calcOwnerMult(o){
 
 function calcPredict(input){
   var year=+input.year;
-  var base=CALC_BASE[year];
+  var key=(input.is_final_edition&&year===2020)?'2020FE':year;
+  var base=CALC_BASE[key];
   if(!base)return {error:'Year '+(year||'?')+' not modeled (range 2015-2020)'};
   var T=Object.assign({accident:true,owner:true,salvage:true,time:true},input.toggles||{});
   var miles=(input.miles==null||isNaN(+input.miles))?base.miles:+input.miles;
@@ -2507,7 +2512,7 @@ function calcPredict(input){
     low:low,mid:mid,high:high,bandPct:bp,
     factors:{base:base.price,mileage:mf,accident:af,owner:of,salvage:sf,time:tf},
     listingDelta:ld,
-    inputs:{year:year,miles:miles,accidents:input.accidents,owners:input.owners,salvage:!!input.salvage,months_forward:months,listingPrice:lp}
+    inputs:{year:year,is_final_edition:!!input.is_final_edition,miles:miles,accidents:input.accidents,owners:input.owners,salvage:!!input.salvage,months_forward:months,listingPrice:lp}
   };
 }
 
@@ -2515,6 +2520,7 @@ function calcPredict(input){
 function calcInputsFromVin(v,vm,lh){
   return {
     year:v.year,
+    is_final_edition:!!v.is_final_edition,
     miles:(vm&&vm.curr_odo!=null)?vm.curr_odo:(lh&&lh.miles?lh.miles:null),
     accidents:vm?vm.accident_count:null,
     owners:vm?vm.total_owners:null,
@@ -2526,6 +2532,9 @@ function calcInputsFromVin(v,vm,lh){
 
 function calcSummaryInner(r){
   if(r.error)return '<span class="tc-calc-tag">CALC</span><span style="color:var(--dim);font-size:10px;">'+r.error+'</span><span class="tc-calc-caret">&#9660;</span>';
+  var feTag=(r.inputs&&r.inputs.is_final_edition&&r.inputs.year===2020)
+    ? '<span class="tc-calc-tag" style="background:rgba(200,169,106,.12);border-color:rgba(200,169,106,.4);color:var(--gold);">FE</span>'
+    : '';
   var deltaStr='';
   if(r.listingDelta){
     var d=r.listingDelta;
@@ -2533,7 +2542,7 @@ function calcSummaryInner(r){
     var verdictLabel=d.verdict==='over'?'over fair':d.verdict==='under'?'under fair':'fair';
     deltaStr='<span class="tc-calc-delta '+d.verdict+'">listed '+sign+'$'+Math.abs(Math.round(d.dollars)).toLocaleString()+' '+verdictLabel+'</span>';
   }
-  return '<span class="tc-calc-tag">CALC</span>'+
+  return '<span class="tc-calc-tag">CALC</span>'+feTag+
     '<span class="tc-calc-range">$'+Math.round(r.low/1000)+'k <span class="tc-calc-mid">/ $'+Math.round(r.mid/1000)+'k</span> / $'+Math.round(r.high/1000)+'k</span>'+
     deltaStr+
     '<span class="tc-calc-caret">&#9660;</span>';
@@ -2542,9 +2551,12 @@ function calcSummaryInner(r){
 function calcOutputHTML(r){
   if(r.error)return '<div style="color:var(--dim);">'+r.error+'</div>';
   var f=r.factors;
+  var baseLabel=r.inputs&&r.inputs.is_final_edition&&r.inputs.year===2020
+    ? 'Year baseline (2020 Final Edition, +$45K bonus)'
+    : 'Year baseline';
   function pct(m){return ((m-1)*100).toFixed(1)+'%';}
   function mult(m){return '\u00d7'+m.toFixed(3);}
-  var bd='<div class="tc-calc-bd-row"><span>Year baseline</span><span>$'+f.base.toLocaleString()+'</span></div>'+
+  var bd='<div class="tc-calc-bd-row"><span>'+baseLabel+'</span><span>$'+f.base.toLocaleString()+'</span></div>'+
     '<div class="tc-calc-bd-row"><span>Mileage factor</span><span>'+mult(f.mileage)+' ('+pct(f.mileage)+')</span></div>'+
     '<div class="tc-calc-bd-row"><span>Accident</span><span>'+mult(f.accident)+'</span></div>'+
     '<div class="tc-calc-bd-row"><span>Owners</span><span>'+mult(f.owner)+'</span></div>'+
@@ -2646,6 +2658,7 @@ function recalcCard(vin,ctx){
   var lp=lpRaw===''?null:parseFloat(lpRaw);
   var inp={
     year:v.year,
+    is_final_edition:!!v.is_final_edition,
     miles:isNaN(miles)?null:miles,
     accidents:vm?vm.accident_count:null,
     owners:vm?vm.total_owners:null,
@@ -2711,6 +2724,7 @@ function resetGenericCalc(){
   function setV(id,val){var e=document.getElementById(id);if(e)e.value=val;}
   function setC(id,val){var e=document.getElementById(id);if(e)e.checked=!!val;}
   setV('gen-calc-year','2017');
+  setC('gen-calc-fe',false);
   setV('gen-calc-miles','');
   setV('gen-calc-mo','0');
   setV('gen-calc-acc','0');
@@ -2731,18 +2745,19 @@ function renderGenericCalc(){
   function gv(id,fb){var e=document.getElementById(id);return e?e.value:fb;}
   function gc(id){var e=document.getElementById(id);return e?e.checked:true;}
   var year=parseInt(gv('gen-calc-year','2017'),10);
+  var isFE=gc('gen-calc-fe')&&year===2020;
   var milesRaw=gv('gen-calc-miles','');
   var miles=milesRaw===''?null:parseFloat(milesRaw);
   var accStr=gv('gen-calc-acc','0');
   var accidents=accStr==='unknown'?null:parseInt(accStr,10);
   var ownersRaw=gv('gen-calc-own','2');
   var owners=ownersRaw===''?null:parseInt(ownersRaw,10);
-  var salvage=gc('gen-calc-slv');
+  var salvage=gv('gen-calc-slv','false')==='true';
   var months=parseFloat(gv('gen-calc-mo','0'))||0;
   var lpRaw=gv('gen-calc-lp','');
   var lp=lpRaw===''?null:parseFloat(lpRaw);
   var inp={
-    year:year,miles:miles,accidents:accidents,owners:owners,
+    year:year,is_final_edition:isFE,miles:miles,accidents:accidents,owners:owners,
     salvage:salvage,months_forward:months,listingPrice:lp,
     toggles:{
       accident:gc('gen-calc-tgl-acc'),
@@ -2778,11 +2793,11 @@ function renderGenericCalc(){
       '</div>'+
     '</div>';
   }
-  el.innerHTML='<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);text-align:center;">Predicted Market Value</div>'+
+  el.innerHTML='<div style="font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--dim);text-align:center;">Predicted Market Value'+(inp.is_final_edition?' &middot; <span style="color:var(--gold);">2020 Final Edition</span>':'')+'</div>'+
     '<div class="gen-calc-mid-display">$'+r.mid.toLocaleString()+'</div>'+
     '<div class="gen-calc-range-display"><span class="lo">$'+r.low.toLocaleString()+'</span><span style="color:var(--dim);">&mdash;</span><span class="hi">$'+r.high.toLocaleString()+'</span></div>'+
     '<div class="gen-calc-bd">'+
-      '<div class="row"><span>Year baseline ('+inp.year+')</span><span>$'+f.base.toLocaleString()+'</span></div>'+
+      '<div class="row"><span>Year baseline ('+(inp.is_final_edition?'2020 FE +$45K':inp.year)+')</span><span>$'+f.base.toLocaleString()+'</span></div>'+
       '<div class="row"><span>Mileage factor</span><span>'+mult(f.mileage)+' ('+pctOf(f.mileage)+')</span></div>'+
       '<div class="row"><span>Accident</span><span>'+mult(f.accident)+'</span></div>'+
       '<div class="row"><span>Owners</span><span>'+mult(f.owner)+'</span></div>'+
