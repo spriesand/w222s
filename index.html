@@ -2575,7 +2575,7 @@ function calcDataQuality(v,vm,lh){
     var d=new Date(lh.first_seen);
     if(!isNaN(d.getTime())){
       var monthsAgo=(Date.now()-d.getTime())/(30.44*86400000);
-      if(monthsAgo>24){
+      if(monthsAgo>60){
         reasons.push('Last listing seen '+Math.round(monthsAgo)+' months ago');
       }
     }
