@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>S65 Playbook</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⭐</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -802,6 +802,115 @@ body{font-family:var(--sans);background:radial-gradient(ellipse 110% 55% at 50% 
 .auth-btn{padding:12px 18px;background:var(--blue);color:var(--bg);border:none;border-radius:10px;font-family:var(--sans);font-weight:600;font-size:13px;cursor:pointer;transition:background .15s;letter-spacing:.04em}
 .auth-btn:hover{background:var(--blue2)}
 .auth-err{font-family:var(--mono);font-size:11px;color:var(--red);min-height:14px}
+
+/* ═══════════════════════════════════════════════
+   MOBILE PASS — kill iOS auto-zoom, stabilize layout, larger tap targets
+   Three breakpoints: 768px (tablet), 540px (large phone), 420px (small phone)
+   ═══════════════════════════════════════════════ */
+
+/* iOS auto-zoom kill: any input/select/textarea below 16px font triggers
+   Safari's "helpful" 1.5x zoom on focus. Force ≥16px on mobile widths.
+   This is the single most impactful mobile fix. */
+@media (max-width:768px){
+  input,
+  input[type="text"],
+  input[type="number"],
+  input[type="email"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="date"],
+  textarea,
+  select{
+    font-size:16px !important;
+    /* Visual size stays compact via padding, only the font has to be 16px */
+  }
+}
+
+/* Bottom nav: enforce ≥44px tap targets (Apple HIG minimum)
+   Existing 64px height divided across 4 items = ~25%/64 = enough vertically,
+   but the .bi items had no explicit min-height. Lock it. */
+@media (max-width:640px){
+  .bi{min-height:44px;padding:6px 4px}
+  .bi-icon{font-size:19px}
+  .bi-lbl{font-size:10px}
+  /* "More" drawer rows also need bigger targets */
+  .mdr{padding:14px 20px;min-height:48px}
+}
+
+/* Top tab bar: when bnav takes over (≤640px), .nav-tabs is hidden by existing CSS.
+   But on 641-768px (tablets), tabs remain visible — make them scrollable horizontally
+   to prevent wrap/squeeze. */
+@media (max-width:768px) and (min-width:641px){
+  .nav-tabs{
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+    flex-wrap:nowrap;
+  }
+  .nav-tabs::-webkit-scrollbar{display:none}
+  .ntab{flex-shrink:0;font-size:12px;padding:9px 12px}
+}
+
+/* Calc panel: collapse from 2-column to 1-column at phone widths
+   (was at 720px, but two cramped columns at 540-720px is worse than one) */
+@media (max-width:540px){
+  .tc-calc-grid{grid-template-columns:1fr;gap:18px}
+  .gen-calc-wrap{grid-template-columns:1fr}
+  .gen-calc-row{grid-template-columns:1fr;gap:3px}
+  /* Inputs in calc deserve a bit more vertical space when forced to 16px */
+  .tc-calc-input-row input{padding:7px 9px}
+  .tc-calc-input-row label{min-width:0;flex:0 0 auto;font-size:11px}
+}
+
+/* Drawers (notes, diary, listing-history): on phones, full-width slide
+   instead of 420/440px right panel that gets cramped. */
+@media (max-width:540px){
+  .notes-drawer,
+  .diary-drawer{width:100vw;max-width:100vw}
+}
+
+/* Modals: prevent overflow + better keyboard behavior on mobile */
+@media (max-width:540px){
+  .modal-content,
+  .add-listing-modal,
+  .price-edit-modal{
+    max-width:100vw;
+    max-height:90vh;
+    margin:5vh auto;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+}
+
+/* Stop tab bar fixed-positioning shift when iOS keyboard appears.
+   Bottom-fixed elements on iOS will jump up with the keyboard. Use
+   sticky-bottom + transform fallback so the nav stays put. */
+@media (max-width:640px){
+  .bnav{
+    /* keep position:fixed but ensure transform context isolates it */
+    will-change:transform;
+    transform:translateZ(0);
+  }
+  /* Push body padding to clear bnav AND any safe-area offset on notched phones */
+  body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+}
+
+/* Card actions (mb contact, notes button, etc.) — ≥36px tap targets */
+@media (max-width:540px){
+  .mbtn,
+  .tc-calc-reset,
+  .fchip,
+  .qs-btn{min-height:36px;display:inline-flex;align-items:center}
+}
+
+/* Calc summary (collapsed strip) — make tap target larger on mobile */
+@media (max-width:540px){
+  .tc-calc-summary{padding:9px 11px;min-height:40px}
+  .tc-calc-summary > *{flex-shrink:0}
+  .tc-calc-summary{flex-wrap:wrap;gap:6px}
+}
+
 </style>
 </head>
 <body>
